@@ -5,6 +5,7 @@ import { post as ruralAccessPost } from './rural-mental-health-access';
 import { post as ruralPrivacyPost } from './rural-privacy-digital-therapy';
 import { post as ruralSpecializedSupportPost } from './rural-stress-specialized-support';
 import { post as betweenSessionSupportPost } from './between-session-therapy-support';
+import { post as crisisManagementPost } from './crisis-management-between-therapy';
 
 // Export all posts in an array
 export const blogPosts = [
@@ -15,6 +16,7 @@ export const blogPosts = [
   ruralPrivacyPost,
   ruralSpecializedSupportPost,
   betweenSessionSupportPost,
+  crisisManagementPost,
   // Add more posts here as they are created
 ];
 
@@ -27,6 +29,7 @@ export {
   ruralPrivacyPost,
   ruralSpecializedSupportPost,
   betweenSessionSupportPost,
+  crisisManagementPost,
 };
 
 // Helper function to get a post by slug
