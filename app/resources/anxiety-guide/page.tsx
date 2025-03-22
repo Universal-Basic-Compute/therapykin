@@ -5,6 +5,7 @@ import Link from "next/link";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import ShareButtons from "../../components/ShareButtons";
+import PDFDownloadButton from "../../components/PDFDownloadButton";
 
 export default function AnxietyGuide() {
   // State for active section (for mobile accordion view)
@@ -65,7 +66,7 @@ export default function AnxietyGuide() {
           
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Main Content */}
-            <div className="lg:w-2/3">
+            <div id="anxiety-guide-content" className="lg:w-2/3">
               {/* Resource Header */}
               <div className="mb-8">
                 <span className="px-3 py-1 bg-[var(--primary)]/10 text-[var(--primary)] rounded-full text-sm font-medium">
@@ -1070,9 +1071,13 @@ export default function AnxietyGuide() {
                 <p className="text-sm text-foreground/70 mb-4">
                   Get a PDF version of this guide to read offline or share with others.
                 </p>
-                <button className="w-full btn-primary text-sm py-2">
-                  Download PDF
-                </button>
+                <PDFDownloadButton
+                  title="Understanding Anxiety: A Comprehensive Guide"
+                  subtitle="TherapyKin Resource Library"
+                  filename="TherapyKin-Anxiety-Guide.pdf"
+                  contentId="anxiety-guide-content"
+                  className="w-full btn-primary text-sm py-2"
+                />
               </div>
               
               {/* Need Help? */}
