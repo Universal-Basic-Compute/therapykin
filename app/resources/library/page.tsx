@@ -226,7 +226,7 @@ export default function Library() {
                       <h3 className="text-xl font-semibold mb-2">{resource.title}</h3>
                       <p className="text-foreground/70 mb-4">{resource.description}</p>
                       <Link 
-                        href={resource.id === 1 ? "/resources/anxiety-guide" : resource.url}
+                        href={resource.id === 1 ? "/resources/anxiety-guide" : resource.id === 12 ? "/resources/depression-guide" : resource.url}
                         className="btn-primary text-sm px-4 py-2"
                       >
                         View Resource
