@@ -203,10 +203,18 @@ export default function Library() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {featuredResources.map(resource => (
                   <div key={resource.id} className="card overflow-hidden shadow-depth">
-                    <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10">
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
-                        <span className="text-[var(--primary)] font-medium">Resource Image</span>
-                      </div>
+                    <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10 relative overflow-hidden">
+                      {resource.imageUrl ? (
+                        <img 
+                          src={resource.imageUrl} 
+                          alt={resource.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
+                          <span className="text-[var(--primary)] font-medium">Resource Image</span>
+                        </div>
+                      )}
                     </div>
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-3">
