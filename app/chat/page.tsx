@@ -18,13 +18,7 @@ interface ChatMessage {
 export default function ChatSession() {
   const { user, loading } = useAuth();
   const [message, setMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
-    { 
-      role: 'assistant', 
-      content: 'Hello! I\'m TherapyKin, your therapeutic companion. How are you feeling today?',
-      id: 'initial'
-    }
-  ]);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [voiceMode, setVoiceMode] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlayingId, setCurrentPlayingId] = useState<string | null>(null);
@@ -184,12 +178,23 @@ export default function ChatSession() {
               setSessionStartTime(startTime);
               setMinutesActive(0);
               
-              // Reset chat history for the new session
+              // Send the "New session started" message to the API
+              const welcomeMessage = `New ${sessionLength} minute session started`;
+              const response = await sendMessageToKinOS(
+                welcomeMessage,
+                user.firstName,
+                user.lastName,
+                [], // attachments
+                [], // images
+                'session_opening' // Use session_opening mode
+              );
+              
+              // Set chat history with the welcome message and response
               setChatHistory([
                 { 
                   role: 'assistant', 
-                  content: 'Hello! I\'m TherapyKin, your therapeutic companion. How are you feeling today?',
-                  id: 'initial'
+                  content: response,
+                  id: 'initial-' + Date.now()
                 }
               ]);
               
@@ -202,6 +207,27 @@ export default function ChatSession() {
             const startTime = new Date(session.createdAt);
             setSessionStartTime(startTime);
             setMinutesActive(0);
+            
+            // Send the "New session started" message to the API
+            const welcomeMessage = `New ${sessionLength} minute session started`;
+            const response = await sendMessageToKinOS(
+              welcomeMessage,
+              user.firstName,
+              user.lastName,
+              [], // attachments
+              [], // images
+              'session_opening' // Use session_opening mode
+            );
+            
+            // Set chat history with the welcome message and response
+            setChatHistory([
+              { 
+                role: 'assistant', 
+                content: response,
+                id: 'initial-' + Date.now()
+              }
+            ]);
+            
             console.log('New session created:', session.id, 'at', startTime);
           }
         } catch (error) {
@@ -238,19 +264,6 @@ export default function ChatSession() {
               content: msg.content,
               id: `${msg.role}-${index}-${new Date(msg.timestamp).getTime()}`
             }));
-            
-            // Add the initial greeting if it's not already in the messages
-            const hasGreeting = formattedMessages.some(msg => 
-              msg.role === 'assistant' && msg.content.includes('Hello! I\'m TherapyKin')
-            );
-            
-            if (!hasGreeting) {
-              formattedMessages.unshift({ 
-                role: 'assistant', 
-                content: 'Hello! I\'m TherapyKin, your therapeutic companion. How are you feeling today?',
-                id: 'initial'
-              });
-            }
             
             // Update chat history with fetched messages
             setChatHistory(formattedMessages);
