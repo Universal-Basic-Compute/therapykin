@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { sendMessageToKinOS, fetchMessagesFromKinOS } from '../utils/kinos';
 import { createSession, getOngoingSession } from '../utils/airtable';
 
@@ -808,7 +807,6 @@ export default function ChatSession() {
             <p>Loading your session...</p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -875,8 +873,6 @@ export default function ChatSession() {
             </div>
           </div>
         </main>
-        
-        <Footer />
       </div>
     );
   }
@@ -1159,8 +1155,6 @@ export default function ChatSession() {
           </form>
         </div>
       </main>
-      
-      <Footer />
       
       {/* Settings Modal */}
       {showSettings && (
