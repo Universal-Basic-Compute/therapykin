@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
           status: 'active',
           isAnnual: false,
           currentPeriodEnd: null,
-          sessionsRemaining: 3,
+          sessionsRemaining: 0,  // Changed from 3 to 0
           totalSessions: 0,
           daysActive: 1
         }
@@ -41,13 +41,19 @@ export async function GET(request: NextRequest) {
     const userRecord = records[0];
     console.log('Found user record in Airtable:', userRecord.id);
     
+    // Get the actual sessions remaining from the user record
+    // If it's not set, default to 0 instead of 3
+    const sessionsRemaining = typeof userRecord.fields.SessionsRemaining === 'number' 
+      ? userRecord.fields.SessionsRemaining 
+      : 0;  // Changed from 3 to 0
+    
     // Extract subscription details with fallbacks for missing fields
     const subscriptionData = {
       plan: userRecord.fields.Plan || 'free',
       status: userRecord.fields.SubscriptionStatus || 'active',
       isAnnual: userRecord.fields.IsAnnual === true,
       currentPeriodEnd: userRecord.fields.CurrentPeriodEnd || null,
-      sessionsRemaining: userRecord.fields.SessionsRemaining || 3,
+      sessionsRemaining: sessionsRemaining,
       totalSessions: userRecord.fields.TotalSessions || 0,
       daysActive: userRecord.fields.DaysActive || 1
     };
@@ -63,7 +69,7 @@ export async function GET(request: NextRequest) {
         status: 'active',
         isAnnual: false,
         currentPeriodEnd: null,
-        sessionsRemaining: 3,
+        sessionsRemaining: 0,  // Changed from 3 to 0
         totalSessions: 0,
         daysActive: 1
       }
