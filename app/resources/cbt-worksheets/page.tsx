@@ -338,7 +338,7 @@ const cognitiveDistortions = [
   },
   {
     name: "Discounting the Positive",
-    description: "Rejecting positive experiences by insisting they "don't count"",
+    description: "Rejecting positive experiences by insisting they \"don't count\"",
     example: "My boss complimented my work, but she was just being nice.",
     reframe: "My boss is busy and wouldn't take time to give insincere compliments. I should accept that my work was genuinely good."
   },
