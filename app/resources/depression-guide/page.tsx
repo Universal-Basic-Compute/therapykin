@@ -1287,7 +1287,7 @@ export default function DepressionGuide() {
             {/* Sidebar */}
             <div className="lg:w-1/3">
               {/* Table of Contents */}
-              <div className="card p-6 mb-6 sticky top-24">
+              <div className="card p-6 mb-6">
                 <h3 className="text-lg font-semibold mb-4">In This Guide</h3>
                 <nav className="space-y-2">
                   <a 
