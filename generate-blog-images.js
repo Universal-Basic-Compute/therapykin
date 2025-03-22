@@ -12,47 +12,42 @@ if (!IDEOGRAM_API_KEY) {
   process.exit(1);
 }
 
-// Get blog posts data from the blog page file
-const getBlogPosts = () => {
-  const blogPagePath = path.join(process.cwd(), 'app', 'blog', 'page.tsx');
-  const blogPageContent = fs.readFileSync(blogPagePath, 'utf8');
-  
-  // Extract the blogPosts array using regex
-  const blogPostsMatch = blogPageContent.match(/const blogPosts = \[([\s\S]*?)\];/);
-  if (!blogPostsMatch) {
-    throw new Error('Could not find blogPosts array in blog page file');
-  }
-  
-  // Evaluate the array to get the actual data
-  // This is a simplified approach - in a real-world scenario, you might want to use a proper parser
-  const blogPostsString = `[${blogPostsMatch[1]}]`;
-  // Replace single quotes with double quotes for JSON parsing
-  const jsonCompatible = blogPostsString
-    .replace(/'/g, '"')
-    .replace(/(\w+):/g, '"$1":')
-    .replace(/\/\/.+/g, ''); // Remove comments
-  
-  try {
-    return JSON.parse(jsonCompatible);
-  } catch (error) {
-    console.error('Error parsing blog posts:', error);
-    // Fallback: return empty array
-    return [];
-  }
+// Get all blog post files
+const getBlogPostFiles = () => {
+  const blogPostsDir = path.join(process.cwd(), 'app', 'data', 'blog-posts');
+  return fs.readdirSync(blogPostsDir)
+    .filter(file => file.endsWith('.tsx') && file !== 'index.ts')
+    .map(file => path.join(blogPostsDir, file));
 };
 
-// Get blog post content from the slug page file
-const getBlogPostContent = (slug) => {
-  const slugPagePath = path.join(process.cwd(), 'app', 'blog', '[slug]', 'page.tsx');
-  const slugPageContent = fs.readFileSync(slugPagePath, 'utf8');
-  
-  // Find the blog post with the matching slug
-  const contentMatch = slugPageContent.match(new RegExp(`slug: ['"]${slug}['"]([\\s\\S]*?)content: \`([\\s\\S]*?)\``, 'i'));
-  if (!contentMatch) {
+// Extract blog post data from a file
+const extractBlogPostData = (filePath) => {
+  try {
+    const content = fs.readFileSync(filePath, 'utf8');
+    
+    // Extract the post object
+    const postMatch = content.match(/export const post = ({[\s\S]*?});/);
+    if (!postMatch) return null;
+    
+    // Extract key properties we need
+    const titleMatch = content.match(/title:\s*["'](.+?)["']/);
+    const slugMatch = content.match(/slug:\s*["'](.+?)["']/);
+    const imageUrlMatch = content.match(/imageUrl:\s*["'](.+?)["']/);
+    const contentMatch = content.match(/content:\s*`([\s\S]*?)`\s*(?:};|}\);)/);
+    
+    if (!titleMatch || !slugMatch) return null;
+    
+    return {
+      title: titleMatch[1],
+      slug: slugMatch[1],
+      imageUrl: imageUrlMatch ? imageUrlMatch[1] : null,
+      content: contentMatch ? contentMatch[1] : null,
+      filePath
+    };
+  } catch (error) {
+    console.error(`Error extracting data from ${filePath}:`, error);
     return null;
   }
-  
-  return contentMatch[2].trim();
 };
 
 // Ask Claude to generate a Midjourney prompt
@@ -139,66 +134,82 @@ const generateImageWithIdeogram = async (prompt, slug) => {
   }
 };
 
-// Update blog posts with new image paths
-const updateBlogPosts = (updatedPosts) => {
-  const blogPagePath = path.join(process.cwd(), 'app', 'blog', 'page.tsx');
-  let blogPageContent = fs.readFileSync(blogPagePath, 'utf8');
-  
-  // Format the updated blog posts array as a string
-  const updatedPostsString = JSON.stringify(updatedPosts, null, 2)
-    .replace(/"([^"]+)":/g, '$1:') // Convert "key": to key:
-    .replace(/"/g, "'"); // Convert double quotes to single quotes
-  
-  // Replace the existing blog posts array with the updated one
-  blogPageContent = blogPageContent.replace(
-    /const blogPosts = \[([\s\S]*?)\];/,
-    `const blogPosts = ${updatedPostsString};`
-  );
-  
-  // Write the updated content back to the file
-  fs.writeFileSync(blogPagePath, blogPageContent);
-  console.log('Blog page updated with new image paths');
+// Update the blog post file with the new image URL
+const updateBlogPostFile = (filePath, newImageUrl) => {
+  try {
+    let content = fs.readFileSync(filePath, 'utf8');
+    
+    // Check if imageUrl already exists
+    const imageUrlMatch = content.match(/imageUrl:\s*["'](.+?)["']/);
+    
+    if (imageUrlMatch) {
+      // Replace existing imageUrl
+      content = content.replace(
+        /(imageUrl:\s*["'])(.+?)(["'])/,
+        `$1${newImageUrl}$3`
+      );
+    } else {
+      // Add imageUrl property after slug
+      content = content.replace(
+        /(slug:\s*["'].+?["'],)/,
+        `$1\n  imageUrl: '${newImageUrl}',`
+      );
+    }
+    
+    fs.writeFileSync(filePath, content);
+    console.log(`Updated imageUrl in ${filePath}`);
+    return true;
+  } catch (error) {
+    console.error(`Error updating ${filePath}:`, error);
+    return false;
+  }
 };
 
 // Main function
 const main = async () => {
   try {
-    // Get blog posts
-    const blogPosts = getBlogPosts();
-    let updatedPosts = false;
+    // Get all blog post files
+    const blogPostFiles = getBlogPostFiles();
+    console.log(`Found ${blogPostFiles.length} blog post files`);
     
-    // Process each blog post
-    for (const post of blogPosts) {
-      // Check if the post already has an image
-      const imagePath = path.join(process.cwd(), 'public', post.imageUrl);
+    // Process each blog post file
+    for (const filePath of blogPostFiles) {
+      const post = extractBlogPostData(filePath);
       
-      if (!fs.existsSync(imagePath)) {
-        console.log(`Generating image for post: ${post.title}`);
+      if (!post) {
+        console.log(`Could not extract data from ${filePath}, skipping`);
+        continue;
+      }
+      
+      console.log(`Processing post: ${post.title} (${post.slug})`);
+      
+      // Check if the post already has an image
+      if (post.imageUrl) {
+        const imagePath = path.join(process.cwd(), 'public', post.imageUrl);
         
-        // Get the blog post content
-        const content = getBlogPostContent(post.slug);
-        if (!content) {
-          console.log(`Could not find content for post with slug: ${post.slug}`);
+        if (fs.existsSync(imagePath)) {
+          console.log(`Image already exists at ${imagePath}, skipping`);
           continue;
         }
-        
-        // Generate a prompt with Claude
-        const prompt = await generatePromptWithClaude(post.title, content);
-        console.log(`Generated prompt: ${prompt}`);
-        
-        // Generate an image with Ideogram
-        const newImageUrl = await generateImageWithIdeogram(prompt, post.slug);
-        if (newImageUrl) {
-          // Update the post's image URL
-          post.imageUrl = newImageUrl;
-          updatedPosts = true;
-        }
       }
-    }
-    
-    // Update the blog posts in the file if any changes were made
-    if (updatedPosts) {
-      updateBlogPosts(blogPosts);
+      
+      // If we don't have content, we can't generate a good prompt
+      if (!post.content) {
+        console.log(`No content found for post ${post.slug}, skipping`);
+        continue;
+      }
+      
+      // Generate a prompt with Claude
+      const prompt = await generatePromptWithClaude(post.title, post.content);
+      console.log(`Generated prompt: ${prompt}`);
+      
+      // Generate an image with Ideogram
+      const newImageUrl = await generateImageWithIdeogram(prompt, post.slug);
+      
+      if (newImageUrl) {
+        // Update the post file with the new image URL
+        updateBlogPostFile(post.filePath, newImageUrl);
+      }
     }
     
     console.log('Image generation complete');
