@@ -109,7 +109,7 @@ export default function Blog() {
           {/* Blog Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {filteredPosts.slice(1).map((post) => (
-              <div key={post.id} className="card overflow-hidden hover:shadow-depth transition-all">
+              <div key={post.slug} className="card overflow-hidden hover:shadow-depth transition-all">
                 <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10">
                   {/* In a real implementation, you would use actual images */}
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10">
