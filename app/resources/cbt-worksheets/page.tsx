@@ -784,8 +784,8 @@ export default function CBTWorksheets() {
                                   <div>
                                     <p className="mb-2"><strong>Evaluation of Solutions:</strong></p>
                                     <ul className="list-disc pl-5 space-y-1">
-                                      {worksheet.example.evaluation.map((eval, index) => (
-                                        <li key={index}>{eval}</li>
+                                      {worksheet.example.evaluation.map((evalItem, index) => (
+                                        <li key={index}>{evalItem}</li>
                                       ))}
                                     </ul>
                                   </div>
