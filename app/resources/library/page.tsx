@@ -120,15 +120,6 @@ const resources: Resource[] = [
     url: "/resources/trauma-guide"
   },
   {
-    id: 9,
-    title: "Mindful Breathing Techniques - Video Tutorial",
-    description: "A 10-minute video demonstrating different breathing exercises to reduce anxiety and increase present-moment awareness.",
-    category: "mindfulness",
-    type: "video",
-    imageUrl: "/resources/breathing-techniques.jpg",
-    url: "/resources/breathing-techniques-video"
-  },
-  {
     id: 10,
     title: "Managing Workplace Stress Infographic",
     description: "A visual guide to identifying and addressing common sources of workplace stress.",
