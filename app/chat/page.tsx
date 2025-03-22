@@ -82,6 +82,9 @@ export default function ChatSession() {
     };
   }, []);
   
+  // Add a state to track if preferences have been loaded
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
+
   // Check if user has sessions remaining and fetch preferred session length
   useEffect(() => {
     async function checkRemainingSession() {
@@ -98,6 +101,7 @@ export default function ChatSession() {
         }
         
         const data = await response.json();
+        console.log('Subscription data received:', data);
         
         if (data.subscription) {
           // If premium plan, they always have sessions
@@ -110,6 +114,13 @@ export default function ChatSession() {
             const hasRemaining = sessionsRemaining > 0;
             console.log(`User has ${sessionsRemaining} sessions remaining. Can start session: ${hasRemaining}`);
             setHasSessionsRemaining(hasRemaining);
+            
+            // Force a re-render if no sessions remaining
+            if (!hasRemaining) {
+              console.log('No sessions remaining, forcing re-render');
+              // This will cause the component to re-render with the "out of sessions" UI
+              setSessionId(null);
+            }
           }
         } else {
           console.error('No subscription data found');
@@ -132,6 +143,7 @@ export default function ChatSession() {
       if (!user) return;
       
       try {
+        console.log('Fetching user preferences...');
         const response = await fetch('/api/users/preferences');
         
         if (response.ok) {
@@ -149,9 +161,15 @@ export default function ChatSession() {
               console.log(`Loaded user's preferred voice: ${data.preferences.preferredVoice}`);
             }
           }
+        } else {
+          console.error('Failed to fetch user preferences:', response.status);
         }
       } catch (error) {
         console.error('Error fetching user preferences:', error);
+      } finally {
+        // Mark preferences as loaded, even if there was an error
+        setPreferencesLoaded(true);
+        console.log('Preferences loading complete');
       }
     }
     
@@ -164,6 +182,12 @@ export default function ChatSession() {
       // Add an explicit check here to prevent session creation if no sessions remain
       if (!user) {
         console.log('Cannot initialize session: user is null');
+        return;
+      }
+      
+      // Wait for preferences to be loaded
+      if (!preferencesLoaded) {
+        console.log('Waiting for preferences to be loaded before initializing session');
         return;
       }
       
@@ -289,10 +313,12 @@ export default function ChatSession() {
       console.log('New session created:', session.id, 'at', startTime);
     }
 
-    if (user && hasSessionsRemaining !== null) {
+    // Only run initializeSession when user, hasSessionsRemaining, and preferencesLoaded are all set
+    if (user && hasSessionsRemaining !== null && preferencesLoaded) {
+      console.log('All conditions met, initializing session');
       initializeSession();
     }
-  }, [user, sessionId, hasSessionsRemaining]); // Removed sessionLength from dependencies
+  }, [user, sessionId, hasSessionsRemaining, preferencesLoaded]); // Add preferencesLoaded as a dependency
   
   // Fetch previous messages when entering an existing session
   useEffect(() => {
