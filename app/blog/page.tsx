@@ -78,7 +78,7 @@ export default function Blog() {
             /* Featured Post */
             <div className="mb-16">
               <div className="relative rounded-xl overflow-hidden shadow-depth">
-                <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10">
+                <div className="aspect-w-3 aspect-h-2 bg-[var(--primary)]/10 max-h-[500px]">
                   {featuredPost.imageUrl ? (
                     <img 
                       src={featuredPost.imageUrl} 
