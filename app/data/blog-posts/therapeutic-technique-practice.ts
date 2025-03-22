@@ -27,7 +27,7 @@ export const post = {
     },
     {
       id: 5,
-      text: "Fitzpatrick, M., Nedeljkovic, M., Abbott, J., Kyrios, M., & Moulding, R. (2020). "Blended" therapy: The development and pilot evaluation of an internet-facilitated cognitive behavioral intervention to supplement face-to-face therapy for hoarding disorder. Internet Interventions, 19, 100301."
+      text: "Fitzpatrick, M., Nedeljkovic, M., Abbott, J., Kyrios, M., & Moulding, R. (2020). \"Blended\" therapy: The development and pilot evaluation of an internet-facilitated cognitive behavioral intervention to supplement face-to-face therapy for hoarding disorder. Internet Interventions, 19, 100301."
     }
   ],
   content: `
