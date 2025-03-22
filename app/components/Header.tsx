@@ -4,11 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import DarkModeToggle from "./DarkModeToggle";
 
 export default function Header() {
   const { user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-[var(--background)] border-b border-black/5 dark:border-white/5">
@@ -61,12 +63,20 @@ export default function Header() {
                 >
                   Account
                 </Link>
-                <Link 
-                  href="/chat" 
-                  className="ml-4 btn-primary text-sm px-4 py-2"
-                >
-                  Start Session
-                </Link>
+                {pathname === '/chat' ? (
+                  <button 
+                    className="ml-4 btn-primary text-sm px-4 py-2 cursor-default opacity-75"
+                  >
+                    Current Session
+                  </button>
+                ) : (
+                  <Link 
+                    href="/chat" 
+                    className="ml-4 btn-primary text-sm px-4 py-2"
+                  >
+                    Start Session
+                  </Link>
+                )}
               </>
             ) : (
               <>
@@ -161,6 +171,21 @@ export default function Header() {
                 >
                   Account
                 </Link>
+                {pathname === '/chat' ? (
+                  <span 
+                    className="text-foreground/70 block px-3 py-2 text-base font-medium"
+                  >
+                    Current Session
+                  </span>
+                ) : (
+                  <Link 
+                    href="/chat" 
+                    className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Start Session
+                  </Link>
+                )}
               </>
             ) : (
               <Link 
