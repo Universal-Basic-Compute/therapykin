@@ -410,15 +410,18 @@ export default function ChatSession() {
   useEffect(() => {
     if (!user || !sessionStartTime || sessionEnded) return;
     
-    // Set initial last message time if not set
-    if (!lastUserMessageTime && chatHistory.length > 0) {
+    // Initialize the last message time if not set
+    if (!lastUserMessageTime) {
       // Find the last user message
       const userMessages = chatHistory.filter(msg => msg.role === 'user');
       if (userMessages.length > 0) {
+        // If there are user messages, use the current time (assuming we just loaded existing messages)
         setLastUserMessageTime(new Date());
+        console.log('Set initial last message time based on existing messages');
       } else {
-        // If no user messages yet, set to current time
-        setLastUserMessageTime(new Date());
+        // If no user messages yet, set to session start time
+        setLastUserMessageTime(sessionStartTime);
+        console.log('Set initial last message time to session start time');
       }
     }
     
@@ -428,6 +431,8 @@ export default function ChatSession() {
       
       const now = new Date();
       const silenceDuration = (now.getTime() - lastUserMessageTime.getTime()) / 1000; // in seconds
+      
+      console.log(`Checking silence: ${silenceDuration.toFixed(0)} seconds since last user message`);
       
       // If user has been silent for 2 minutes (120 seconds)
       if (silenceDuration >= 120) {
@@ -456,7 +461,7 @@ export default function ChatSession() {
     }, 30000); // Check every 30 seconds
     
     return () => clearInterval(silenceCheckInterval);
-  }, [user, sessionStartTime, lastUserMessageTime, silenceMessageSent, sessionEnded, chatHistory]);
+  }, [user, sessionStartTime, sessionEnded, lastUserMessageTime, silenceMessageSent]);
 
   // Add a session-ended message to the chat when the session ends
   useEffect(() => {
@@ -786,6 +791,10 @@ export default function ChatSession() {
           ...prev,
           { role: 'user', content: data.text, id: userMessageId }
         ]);
+        
+        // Reset silence timer
+        setLastUserMessageTime(new Date());
+        setSilenceMessageSent(false);
         
         // Reset silence timer
         setLastUserMessageTime(new Date());
