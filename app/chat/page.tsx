@@ -42,6 +42,7 @@ export default function ChatSession() {
   const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
   const [isUpdatingPreference, setIsUpdatingPreference] = useState(false);
   const [halfwayMessageSent, setHalfwayMessageSent] = useState(false);
+  const [isInitialMessageLoading, setIsInitialMessageLoading] = useState(false);
   
   // Voice options
   const voiceOptions = [
@@ -180,6 +181,17 @@ export default function ChatSession() {
               setMinutesActive(0);
               setHalfwayMessageSent(false); // Reset the halfway message flag
               
+              // Show loading indicator
+              setIsInitialMessageLoading(true);
+              setChatHistory([
+                { 
+                  role: 'assistant', 
+                  content: '...', 
+                  id: 'initial-loading',
+                  loading: true
+                }
+              ]);
+              
               // Send the "New session started" message to the API
               const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
               const response = await sendMessageToKinOS(
@@ -191,7 +203,8 @@ export default function ChatSession() {
                 'session_opening' // Use session_opening mode
               );
               
-              // Set chat history with the welcome message and response
+              // Update chat history with the response
+              setIsInitialMessageLoading(false);
               setChatHistory([
                 { 
                   role: 'assistant', 
@@ -211,6 +224,17 @@ export default function ChatSession() {
             setMinutesActive(0);
             setHalfwayMessageSent(false); // Reset the halfway message flag
             
+            // Show loading indicator
+            setIsInitialMessageLoading(true);
+            setChatHistory([
+              { 
+                role: 'assistant', 
+                content: '...', 
+                id: 'initial-loading',
+                loading: true
+              }
+            ]);
+            
             // Send the "New session started" message to the API
             const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
             const response = await sendMessageToKinOS(
@@ -222,7 +246,8 @@ export default function ChatSession() {
               'session_opening' // Use session_opening mode
             );
             
-            // Set chat history with the welcome message and response
+            // Update chat history with the response
+            setIsInitialMessageLoading(false);
             setChatHistory([
               { 
                 role: 'assistant', 
