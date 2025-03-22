@@ -42,10 +42,24 @@ export async function GET(request: NextRequest) {
     console.log('Found user record in Airtable:', userRecord.id);
     
     // Get the actual sessions remaining from the user record
-    // If it's not set, default to 0 instead of 3
-    const sessionsRemaining = typeof userRecord.fields.SessionsRemaining === 'number' 
-      ? userRecord.fields.SessionsRemaining 
-      : 0;  // Changed from 3 to 0
+    // Log the raw value to help debug
+    console.log('Raw SessionsRemaining value from Airtable:', userRecord.fields.SessionsRemaining);
+
+    // Check if the value exists and is a number
+    let sessionsRemaining = 0;
+    if (userRecord.fields.SessionsRemaining !== undefined) {
+      if (typeof userRecord.fields.SessionsRemaining === 'number') {
+        sessionsRemaining = userRecord.fields.SessionsRemaining;
+      } else {
+        // Try to convert to number if it's a string
+        const parsedValue = Number(userRecord.fields.SessionsRemaining);
+        if (!isNaN(parsedValue)) {
+          sessionsRemaining = parsedValue;
+        }
+      }
+    }
+
+    console.log('Processed sessionsRemaining value:', sessionsRemaining);
     
     // Extract subscription details with fallbacks for missing fields
     const subscriptionData = {
