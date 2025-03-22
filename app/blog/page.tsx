@@ -210,9 +210,9 @@ export default function Blog() {
                 <p className="text-foreground/70 mb-4">
                   Watch guided tutorials on therapeutic techniques, mindfulness exercises, and stress management.
                 </p>
-                <Link href="/resources/videos" className="text-[var(--primary)] font-medium hover:underline">
-                  Watch Videos →
-                </Link>
+                <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
+                  Coming Soon
+                </div>
               </div>
               
               <div className="card p-6 hover:shadow-depth transition-all">
@@ -225,9 +225,9 @@ export default function Blog() {
                 <p className="text-foreground/70 mb-4">
                   Join our live webinars featuring mental health experts discussing various topics and answering questions.
                 </p>
-                <Link href="/resources/webinars" className="text-[var(--primary)] font-medium hover:underline">
-                  View Schedule →
-                </Link>
+                <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
+                  Coming Soon
+                </div>
               </div>
             </div>
           </div>
