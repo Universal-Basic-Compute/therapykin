@@ -638,31 +638,31 @@ export default function CBTWorksheets() {
                               {worksheet.id === 'basic-thought-record' && (
                                 <div className="space-y-3 text-foreground/70">
                                   {hasProperty(worksheet.example, 'situation') && (
-                                    <p><strong>Situation:</strong> {worksheet.example.situation}</p>
+                                    <p><strong>Situation:</strong> {String(worksheet.example.situation)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'automaticThoughts') && (
-                                    <p><strong>Automatic Thoughts:</strong> {worksheet.example.automaticThoughts}</p>
+                                    <p><strong>Automatic Thoughts:</strong> {String(worksheet.example.automaticThoughts)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'beliefRating') && (
-                                    <p><strong>Belief Rating:</strong> {worksheet.example.beliefRating}</p>
+                                    <p><strong>Belief Rating:</strong> {String(worksheet.example.beliefRating)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'emotions') && (
-                                    <p><strong>Emotions:</strong> {worksheet.example.emotions}</p>
+                                    <p><strong>Emotions:</strong> {String(worksheet.example.emotions)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'supportingEvidence') && (
-                                    <p><strong>Evidence Supporting Thoughts:</strong> {worksheet.example.supportingEvidence}</p>
+                                    <p><strong>Evidence Supporting Thoughts:</strong> {String(worksheet.example.supportingEvidence)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'contradictingEvidence') && (
-                                    <p><strong>Evidence Contradicting Thoughts:</strong> {worksheet.example.contradictingEvidence}</p>
+                                    <p><strong>Evidence Contradicting Thoughts:</strong> {String(worksheet.example.contradictingEvidence)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'alternativeThought') && (
-                                    <p><strong>Alternative Thought:</strong> {worksheet.example.alternativeThought}</p>
+                                    <p><strong>Alternative Thought:</strong> {String(worksheet.example.alternativeThought)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'newBeliefRating') && (
-                                    <p><strong>New Belief Rating:</strong> {worksheet.example.newBeliefRating}</p>
+                                    <p><strong>New Belief Rating:</strong> {String(worksheet.example.newBeliefRating)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'newEmotionRating') && (
-                                    <p><strong>New Emotion Ratings:</strong> {worksheet.example.newEmotionRating}</p>
+                                    <p><strong>New Emotion Ratings:</strong> {String(worksheet.example.newEmotionRating)}</p>
                                   )}
                                 </div>
                               )}
@@ -670,7 +670,7 @@ export default function CBTWorksheets() {
                               {worksheet.id === 'cognitive-distortions' && (
                                 <div className="space-y-3 text-foreground/70">
                                   {hasProperty(worksheet.example, 'negativeThought') && (
-                                    <p><strong>Negative Thought:</strong> {worksheet.example.negativeThought}</p>
+                                    <p><strong>Negative Thought:</strong> {String(worksheet.example.negativeThought)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'distortions') && (
                                     <div>
@@ -683,7 +683,7 @@ export default function CBTWorksheets() {
                                     </div>
                                   )}
                                   {hasProperty(worksheet.example, 'reframedThought') && (
-                                    <p><strong>Reframed Thought:</strong> {worksheet.example.reframedThought}</p>
+                                    <p><strong>Reframed Thought:</strong> {String(worksheet.example.reframedThought)}</p>
                                   )}
                                 </div>
                               )}
@@ -691,22 +691,22 @@ export default function CBTWorksheets() {
                               {worksheet.id === 'evidence-worksheet' && (
                                 <div className="space-y-3 text-foreground/70">
                                   {hasProperty(worksheet.example, 'troublingThought') && (
-                                    <p><strong>Troubling Thought:</strong> {worksheet.example.troublingThought}</p>
+                                    <p><strong>Troubling Thought:</strong> {String(worksheet.example.troublingThought)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'supportingEvidence') && (
-                                    <p><strong>Evidence Supporting This Thought:</strong> {worksheet.example.supportingEvidence}</p>
+                                    <p><strong>Evidence Supporting This Thought:</strong> {String(worksheet.example.supportingEvidence)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'contradictingEvidence') && (
-                                    <p><strong>Evidence Contradicting This Thought:</strong> {worksheet.example.contradictingEvidence}</p>
+                                    <p><strong>Evidence Contradicting This Thought:</strong> {String(worksheet.example.contradictingEvidence)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'balancedThought') && (
-                                    <p><strong>Balanced Thought:</strong> {worksheet.example.balancedThought}</p>
+                                    <p><strong>Balanced Thought:</strong> {String(worksheet.example.balancedThought)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'originalBeliefRating') && (
-                                    <p><strong>Original Belief Rating:</strong> {worksheet.example.originalBeliefRating}</p>
+                                    <p><strong>Original Belief Rating:</strong> {String(worksheet.example.originalBeliefRating)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'newBeliefRating') && (
-                                    <p><strong>New Belief Rating:</strong> {worksheet.example.newBeliefRating}</p>
+                                    <p><strong>New Belief Rating:</strong> {String(worksheet.example.newBeliefRating)}</p>
                                   )}
                                 </div>
                               )}
@@ -724,13 +724,13 @@ export default function CBTWorksheets() {
                                     </div>
                                   )}
                                   {hasProperty(worksheet.example, 'schedule') && (
-                                    <p><strong>Weekly Schedule:</strong> {worksheet.example.schedule}</p>
+                                    <p><strong>Weekly Schedule:</strong> {String(worksheet.example.schedule)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'moodRatings') && (
-                                    <p><strong>Mood Ratings:</strong> {worksheet.example.moodRatings}</p>
+                                    <p><strong>Mood Ratings:</strong> {String(worksheet.example.moodRatings)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'reflection') && (
-                                    <p><strong>Reflection:</strong> {worksheet.example.reflection}</p>
+                                    <p><strong>Reflection:</strong> {String(worksheet.example.reflection)}</p>
                                   )}
                                 </div>
                               )}
@@ -749,10 +749,10 @@ export default function CBTWorksheets() {
                                     </div>
                                   )}
                                   {hasProperty(worksheet.example, 'selectedActivities') && (
-                                    <p><strong>Selected Activities for the Week:</strong> {worksheet.example.selectedActivities}</p>
+                                    <p><strong>Selected Activities for the Week:</strong> {String(worksheet.example.selectedActivities)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'reflection') && (
-                                    <p><strong>Reflection:</strong> {worksheet.example.reflection}</p>
+                                    <p><strong>Reflection:</strong> {String(worksheet.example.reflection)}</p>
                                   )}
                                 </div>
                               )}
@@ -760,7 +760,7 @@ export default function CBTWorksheets() {
                               {worksheet.id === 'belief-identification' && (
                                 <div className="space-y-3 text-foreground/70">
                                   {hasProperty(worksheet.example, 'recurringThought') && (
-                                    <p><strong>Recurring Negative Thought:</strong> {worksheet.example.recurringThought}</p>
+                                    <p><strong>Recurring Negative Thought:</strong> {String(worksheet.example.recurringThought)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'downwardArrow') && (
                                     <div>
@@ -773,10 +773,10 @@ export default function CBTWorksheets() {
                                     </div>
                                   )}
                                   {hasProperty(worksheet.example, 'coreBeliefIdentified') && (
-                                    <p><strong>Core Belief Identified:</strong> {worksheet.example.coreBeliefIdentified}</p>
+                                    <p><strong>Core Belief Identified:</strong> {String(worksheet.example.coreBeliefIdentified)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'beliefRating') && (
-                                    <p><strong>Belief Rating:</strong> {worksheet.example.beliefRating}</p>
+                                    <p><strong>Belief Rating:</strong> {String(worksheet.example.beliefRating)}</p>
                                   )}
                                 </div>
                               )}
@@ -784,22 +784,22 @@ export default function CBTWorksheets() {
                               {worksheet.id === 'belief-challenging' && (
                                 <div className="space-y-3 text-foreground/70">
                                   {hasProperty(worksheet.example, 'coreBeliefToChallenge') && (
-                                    <p><strong>Core Belief to Challenge:</strong> {worksheet.example.coreBeliefToChallenge}</p>
+                                    <p><strong>Core Belief to Challenge:</strong> {String(worksheet.example.coreBeliefToChallenge)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'supportingEvidence') && (
-                                    <p><strong>Evidence That Appears to Support This Belief:</strong> {worksheet.example.supportingEvidence}</p>
+                                    <p><strong>Evidence That Appears to Support This Belief:</strong> {String(worksheet.example.supportingEvidence)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'criticalExamination') && (
-                                    <p><strong>Critical Examination of Evidence:</strong> {worksheet.example.criticalExamination}</p>
+                                    <p><strong>Critical Examination of Evidence:</strong> {String(worksheet.example.criticalExamination)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'contradictingEvidence') && (
-                                    <p><strong>Evidence That Contradicts This Belief:</strong> {worksheet.example.contradictingEvidence}</p>
+                                    <p><strong>Evidence That Contradicts This Belief:</strong> {String(worksheet.example.contradictingEvidence)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'newBeliefDeveloped') && (
-                                    <p><strong>New, More Balanced Belief:</strong> {worksheet.example.newBeliefDeveloped}</p>
+                                    <p><strong>New, More Balanced Belief:</strong> {String(worksheet.example.newBeliefDeveloped)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'reinforcementPlan') && (
-                                    <p><strong>Plan to Reinforce New Belief:</strong> {worksheet.example.reinforcementPlan}</p>
+                                    <p><strong>Plan to Reinforce New Belief:</strong> {String(worksheet.example.reinforcementPlan)}</p>
                                   )}
                                 </div>
                               )}
@@ -829,7 +829,7 @@ export default function CBTWorksheets() {
                                     </>
                                   )}
                                   {hasProperty(worksheet.example, 'patterns') && (
-                                    <p><strong>Patterns Identified:</strong> {worksheet.example.patterns}</p>
+                                    <p><strong>Patterns Identified:</strong> {String(worksheet.example.patterns)}</p>
                                   )}
                                 </div>
                               )}
@@ -857,10 +857,10 @@ export default function CBTWorksheets() {
                                     </div>
                                   )}
                                   {hasProperty(worksheet.example, 'personalPlan') && (
-                                    <p><strong>Personal Distress Tolerance Plan:</strong> {worksheet.example.personalPlan}</p>
+                                    <p><strong>Personal Distress Tolerance Plan:</strong> {String(worksheet.example.personalPlan)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'effectiveness') && (
-                                    <p><strong>Effectiveness Reflection:</strong> {worksheet.example.effectiveness}</p>
+                                    <p><strong>Effectiveness Reflection:</strong> {String(worksheet.example.effectiveness)}</p>
                                   )}
                                 </div>
                               )}
@@ -868,7 +868,7 @@ export default function CBTWorksheets() {
                               {worksheet.id === 'problem-solving-steps' && (
                                 <div className="space-y-3 text-foreground/70">
                                   {hasProperty(worksheet.example, 'problemDefinition') && (
-                                    <p><strong>Problem Definition:</strong> {worksheet.example.problemDefinition}</p>
+                                    <p><strong>Problem Definition:</strong> {String(worksheet.example.problemDefinition)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'possibleSolutions') && (
                                     <div>
@@ -891,13 +891,13 @@ export default function CBTWorksheets() {
                                     </div>
                                   )}
                                   {hasProperty(worksheet.example, 'selectedSolution') && (
-                                    <p><strong>Selected Solution:</strong> {worksheet.example.selectedSolution}</p>
+                                    <p><strong>Selected Solution:</strong> {String(worksheet.example.selectedSolution)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'implementationPlan') && (
-                                    <p><strong>Implementation Plan:</strong> {worksheet.example.implementationPlan}</p>
+                                    <p><strong>Implementation Plan:</strong> {String(worksheet.example.implementationPlan)}</p>
                                   )}
                                   {hasProperty(worksheet.example, 'outcome') && (
-                                    <p><strong>Outcome Evaluation:</strong> {worksheet.example.outcome}</p>
+                                    <p><strong>Outcome Evaluation:</strong> {String(worksheet.example.outcome)}</p>
                                   )}
                                 </div>
                               )}
