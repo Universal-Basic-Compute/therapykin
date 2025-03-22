@@ -174,16 +174,16 @@ const commonObstacles = [
     description: "Experiencing intense feelings like anxiety, sadness, or anger during practice.",
     solutions: [
       "Remember that mindfulness includes acknowledging all experiences, including difficult emotions.",
-      "Try labeling the emotion silently (e.g., "anxiety," "sadness") to create some space from it.",
+      "Try labeling the emotion silently (e.g., \"anxiety,\" \"sadness\") to create some space from it.",
       "If the emotion feels overwhelming, shift your attention to a neutral anchor like the sensation of your feet on the floor.",
       "Consider seeking guidance from a qualified mindfulness teacher if difficult emotions consistently arise."
     ]
   },
   {
     obstacle: "Self-Judgment",
-    description: "Being critical of yourself for not "doing it right" or not experiencing immediate benefits.",
+    description: "Being critical of yourself for not \"doing it right\" or not experiencing immediate benefits.",
     solutions: [
-      "Remind yourself that there is no "perfect" way to practice mindfulness—it's a continual process of beginning again.",
+      "Remind yourself that there is no \"perfect\" way to practice mindfulness—it's a continual process of beginning again.",
       "Set realistic expectations—mindfulness is a skill that develops gradually over time.",
       "Practice self-compassion by acknowledging your effort rather than focusing on perceived results.",
       "Remember that even experienced meditators face challenges in their practice."
