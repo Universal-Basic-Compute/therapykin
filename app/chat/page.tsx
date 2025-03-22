@@ -42,6 +42,7 @@ export default function ChatSession() {
   const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
   const [isUpdatingPreference, setIsUpdatingPreference] = useState(false);
   const [halfwayMessageSent, setHalfwayMessageSent] = useState(false);
+  const [closingMessageSent, setClosingMessageSent] = useState(false);
   const [isInitialMessageLoading, setIsInitialMessageLoading] = useState(false);
   
   // Voice options
@@ -180,6 +181,7 @@ export default function ChatSession() {
               setSessionStartTime(startTime);
               setMinutesActive(0);
               setHalfwayMessageSent(false); // Reset the halfway message flag
+              setClosingMessageSent(false); // Reset the closing message flag
               
               // Show loading indicator
               setIsInitialMessageLoading(true);
@@ -223,6 +225,7 @@ export default function ChatSession() {
             setSessionStartTime(startTime);
             setMinutesActive(0);
             setHalfwayMessageSent(false); // Reset the halfway message flag
+            setClosingMessageSent(false); // Reset the closing message flag
             
             // Show loading indicator
             setIsInitialMessageLoading(true);
@@ -328,6 +331,9 @@ export default function ChatSession() {
       // Check if we're at the halfway point (within a small margin to avoid missing it)
       const isAtHalfway = sessionDuration >= halfwayPoint - 0.5 && sessionDuration <= halfwayPoint + 0.5;
       
+      // Check if we're at the closing phase start (within a small margin)
+      const isAtClosingPhase = sessionDuration >= closingPhaseStart - 0.5 && sessionDuration <= closingPhaseStart + 0.5;
+      
       // Send halfway message if we're at the halfway point and haven't sent it yet
       if (isAtHalfway && !halfwayMessageSent && !sessionEnded) {
         console.log(`Sending halfway message at ${sessionDuration.toFixed(1)} minutes`);
@@ -345,6 +351,26 @@ export default function ChatSession() {
           setHalfwayMessageSent(true);
         }).catch(error => {
           console.error("Error sending halfway message:", error);
+        });
+      }
+      
+      // Send closing message if we're at the closing phase start and haven't sent it yet
+      if (isAtClosingPhase && !closingMessageSent && !sessionEnded) {
+        console.log(`Sending closing message at ${sessionDuration.toFixed(1)} minutes`);
+        
+        // Send the closing message
+        sendMessageToKinOS(
+          "<system>Info: Session is closing soon</system>",
+          user.firstName,
+          user.lastName,
+          [], // attachments
+          [], // images
+          "journey" // Use journey mode
+        ).then(() => {
+          console.log("Closing message sent successfully");
+          setClosingMessageSent(true);
+        }).catch(error => {
+          console.error("Error sending closing message:", error);
         });
       }
       
@@ -376,7 +402,7 @@ export default function ChatSession() {
     const intervalId = setInterval(updateSessionMode, 30000); // check every 30 seconds
     
     return () => clearInterval(intervalId);
-  }, [sessionStartTime, sessionLength, halfwayMessageSent, user, sessionEnded]); // Add halfwayMessageSent and user as dependencies
+  }, [sessionStartTime, sessionLength, halfwayMessageSent, closingMessageSent, user, sessionEnded]); // Add closingMessageSent as a dependency
 
   // Add a session-ended message to the chat when the session ends
   useEffect(() => {
