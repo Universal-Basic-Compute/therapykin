@@ -103,10 +103,12 @@ export default function ChatSession() {
           // If premium plan, they always have sessions
           if (data.subscription.plan.toLowerCase() === 'premium') {
             setHasSessionsRemaining(true);
+            console.log('User has premium plan with unlimited sessions');
           } else {
-            // Explicitly check if sessionsRemaining is greater than 0
-            const hasRemaining = data.subscription.sessionsRemaining > 0;
-            console.log(`User has ${data.subscription.sessionsRemaining} sessions remaining. Can start session: ${hasRemaining}`);
+            // For non-premium plans, explicitly check if sessionsRemaining is greater than 0
+            const sessionsRemaining = data.subscription.sessionsRemaining || 0;
+            const hasRemaining = sessionsRemaining > 0;
+            console.log(`User has ${sessionsRemaining} sessions remaining. Can start session: ${hasRemaining}`);
             setHasSessionsRemaining(hasRemaining);
           }
         } else {
@@ -160,8 +162,14 @@ export default function ChatSession() {
   useEffect(() => {
     async function initializeSession() {
       // Add an explicit check here to prevent session creation if no sessions remain
-      if (!user || !hasSessionsRemaining) {
-        console.log('Cannot initialize session: user is null or no sessions remaining');
+      if (!user) {
+        console.log('Cannot initialize session: user is null');
+        return;
+      }
+      
+      // Strict check for sessions remaining
+      if (hasSessionsRemaining !== true) {
+        console.log('Cannot initialize session: no sessions remaining');
         return;
       }
       
@@ -197,7 +205,7 @@ export default function ChatSession() {
               console.log(`Previous session expired (${elapsedMinutes} minutes elapsed, limit was ${sessionLengthValue})`);
               
               // Double-check that the user still has sessions remaining before creating a new one
-              if (hasSessionsRemaining) {
+              if (hasSessionsRemaining === true) {
                 await createNewSession();
               } else {
                 console.log('Cannot create new session: no sessions remaining');
@@ -205,7 +213,7 @@ export default function ChatSession() {
             }
           } else {
             // No previous session found, create a new one
-            if (hasSessionsRemaining) {
+            if (hasSessionsRemaining === true) {
               await createNewSession();
             } else {
               console.log('Cannot create new session: no sessions remaining');
@@ -225,8 +233,8 @@ export default function ChatSession() {
         return;
       }
       
-      // Add an additional check for sessions remaining
-      if (!hasSessionsRemaining) {
+      // Add a strict check for sessions remaining
+      if (hasSessionsRemaining !== true) {
         console.error('Cannot create session: no sessions remaining');
         return;
       }
