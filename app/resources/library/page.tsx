@@ -381,7 +381,10 @@ export default function Library() {
                           {resourceTypes.find(t => t.id === resource.type)?.name}
                         </span>
                         <Link 
-                          href={resource.url}
+                          href={resource.id === 1 ? "/resources/anxiety-guide" : 
+                               resource.id === 4 ? "/resources/stress-science" :
+                               resource.id === 12 ? "/resources/depression-guide" : 
+                               resource.url}
                           className="text-[var(--primary)] text-sm font-medium hover:underline"
                         >
                           View Resource →
