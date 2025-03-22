@@ -209,6 +209,12 @@ export default function Library() {
                           src={resource.imageUrl} 
                           alt={resource.title}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // If image fails to load, replace with a gradient background
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement.style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)';
+                            e.currentTarget.parentElement.innerHTML += `<div class="w-full h-full flex items-center justify-center text-white font-medium p-4 text-center">${resource.title}</div>`;
+                          }}
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
@@ -341,6 +347,12 @@ export default function Library() {
                           src={resource.imageUrl} 
                           alt={resource.title}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // If image fails to load, replace with a gradient background
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement.style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)';
+                            e.currentTarget.parentElement.innerHTML += `<div class="w-full h-full flex items-center justify-center text-white font-medium p-4 text-center">${resource.title}</div>`;
+                          }}
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">

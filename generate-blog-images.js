@@ -291,6 +291,57 @@ const generateResourceImages = async () => {
   }
 };
 
+// Generate specific missing resource images
+const generateMissingResourceImages = async () => {
+  try {
+    const missingResources = [
+      {
+        slug: "muscle-relaxation-audio",
+        title: "Guided Progressive Muscle Relaxation",
+        description: "A 15-minute audio guide to progressive muscle relaxation, a proven technique for reducing physical tension."
+      },
+      {
+        slug: "workplace-stress-infographic",
+        title: "Managing Workplace Stress Infographic",
+        description: "A visual guide to identifying and addressing common sources of workplace stress."
+      }
+    ];
+    
+    for (const resource of missingResources) {
+      // Check if the image already exists
+      const imagePath = path.join(process.cwd(), 'public', 'resources', `${resource.slug}.jpg`);
+      const imageDir = path.join(process.cwd(), 'public', 'resources');
+      
+      if (!fs.existsSync(imageDir)) {
+        fs.mkdirSync(imageDir, { recursive: true });
+      }
+      
+      if (fs.existsSync(imagePath)) {
+        console.log(`Image already exists at ${imagePath}, skipping`);
+        continue;
+      }
+      
+      // Generate a prompt with Claude
+      const prompt = await generatePromptWithClaude(
+        resource.title, 
+        resource.description || resource.title
+      );
+      console.log(`Generated prompt for resource: ${prompt}`);
+      
+      // Generate an image with Ideogram
+      const imageUrl = await generateImageWithIdeogram(prompt, resource.slug, true);
+      
+      if (imageUrl) {
+        console.log(`Generated image for resource: ${resource.slug}`);
+      }
+    }
+    
+    console.log('Missing resource image generation complete');
+  } catch (error) {
+    console.error('Error generating missing resource images:', error);
+  }
+};
+
 // Main function
 const main = async () => {
   try {
@@ -342,6 +393,9 @@ const main = async () => {
     
     // Generate resource images
     await generateResourceImages();
+    
+    // Generate specific missing resource images
+    await generateMissingResourceImages();
     
   } catch (error) {
     console.error('Error in main function:', error);
