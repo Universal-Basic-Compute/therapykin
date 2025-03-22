@@ -7,8 +7,15 @@ require('dotenv').config();
 
 // Configuration
 const IDEOGRAM_API_KEY = process.env.IDEOGRAM_API_KEY;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+
 if (!IDEOGRAM_API_KEY) {
   console.error('Error: IDEOGRAM_API_KEY not found in .env file');
+  process.exit(1);
+}
+
+if (!ANTHROPIC_API_KEY) {
+  console.error('Error: ANTHROPIC_API_KEY not found in .env file');
   process.exit(1);
 }
 
@@ -50,40 +57,52 @@ const extractBlogPostData = (filePath) => {
   }
 };
 
-// Ask Claude to generate a Midjourney prompt
+// Ask Claude to generate a Midjourney prompt using Anthropic API
 const generatePromptWithClaude = async (title, content) => {
   try {
-    // Use a temporary file to store Claude's response
-    const tempFile = path.join(process.cwd(), 'temp_claude_response.txt');
+    // Extract a brief summary from the content (first 1000 characters)
+    const summary = content.substring(0, 1000).replace(/<[^>]*>/g, '');
     
-    // Create a prompt for Claude
-    const claudePrompt = `I need to create a visual for a blog article titled "${title}". 
-Here's the content of the article:
+    // Create the prompt for Claude
+    const prompt = `I need to create a visual for a blog article titled "${title}". 
+Here's a summary of the article:
 
-${content}
+${summary}
 
 Think about what would make a compelling, professional 4:3 aspect ratio image for this article. 
 Please respond ONLY with a Midjourney prompt that would create an appropriate image. 
 The prompt should be detailed and descriptive, focusing on creating a professional, editorial-style image 
 that would work well for a mental health/therapy blog. Do not include any explanations or additional text.`;
-    
-    // Write the prompt to a file
-    fs.writeFileSync('claude_prompt.txt', claudePrompt);
-    
-    // Call Claude CLI (assuming it's installed)
-    const execPromise = util.promisify(exec);
-    const { stdout } = await execPromise('claude-cli claude_prompt.txt -o temp_claude_response.txt');
-    
-    // Read Claude's response
-    const response = fs.readFileSync(tempFile, 'utf8').trim();
-    
-    // Clean up temporary files
-    fs.unlinkSync('claude_prompt.txt');
-    fs.unlinkSync(tempFile);
-    
-    return response;
+
+    // Make the API call to Claude
+    const response = await axios.post(
+      'https://api.anthropic.com/v1/messages',
+      {
+        model: "claude-3-haiku-20240307",
+        max_tokens: 300,
+        messages: [
+          { role: "user", content: prompt }
+        ]
+      },
+      {
+        headers: {
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json'
+        }
+      }
+    );
+
+    // Extract the generated prompt from Claude's response
+    if (response.data && response.data.content && response.data.content.length > 0) {
+      const generatedPrompt = response.data.content[0].text.trim();
+      console.log('Claude generated prompt:', generatedPrompt);
+      return generatedPrompt;
+    } else {
+      throw new Error('Unexpected response format from Claude API');
+    }
   } catch (error) {
-    console.error('Error generating prompt with Claude:', error);
+    console.error('Error generating prompt with Claude API:', error.message);
     // Fallback to a generic prompt based on the title
     return `Professional editorial image for a mental health article about ${title}, 4:3 aspect ratio, clean modern style, soft colors, therapeutic atmosphere`;
   }
