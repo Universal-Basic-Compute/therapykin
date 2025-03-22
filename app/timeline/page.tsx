@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
@@ -15,14 +15,17 @@ interface TimelineEntry {
   type: 'conversation' | 'milestone' | 'technique' | 'implementation' | 'reflection';
   emotion?: 'positive' | 'neutral' | 'negative';
   expanded?: boolean;
+  isPlaying?: boolean;
 }
 
 export default function Timeline() {
   const { user, loading } = useAuth();
   const [filter, setFilter] = useState<string>('all');
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentlyPlayingId, setCurrentlyPlayingId] = useState<string | null>(null);
   
   // Mock timeline data - in a real app, this would come from your backend
-  const [timelineData] = useState<TimelineEntry[]>([
+  const [timelineData, setTimelineData] = useState<TimelineEntry[]>([
     {
       id: '1',
       date: new Date(2023, 6, 15),
@@ -239,6 +242,85 @@ export default function Timeline() {
     });
   };
 
+  // Play text-to-speech for an entry
+  const playTTS = async (entry: TimelineEntry) => {
+    try {
+      // If already playing this entry, stop it
+      if (currentlyPlayingId === entry.id) {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
+        setCurrentlyPlayingId(null);
+        
+        // Update entry state
+        setTimelineData(prevData => 
+          prevData.map(item => 
+            item.id === entry.id ? { ...item, isPlaying: false } : item
+          )
+        );
+        return;
+      }
+      
+      // Stop any currently playing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      
+      // Update all entries to not playing
+      setTimelineData(prevData => 
+        prevData.map(item => ({ ...item, isPlaying: item.id === entry.id }))
+      );
+      
+      // Set currently playing ID
+      setCurrentlyPlayingId(entry.id);
+      
+      // Prepare text for TTS
+      const text = `${entry.title}. ${entry.content}`;
+      
+      // Call TTS API
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate speech');
+      }
+      
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      // Play the audio
+      if (!audioRef.current) {
+        audioRef.current = new Audio();
+      }
+      
+      audioRef.current.src = audioUrl;
+      audioRef.current.onended = () => {
+        setCurrentlyPlayingId(null);
+        setTimelineData(prevData => 
+          prevData.map(item => 
+            item.id === entry.id ? { ...item, isPlaying: false } : item
+          )
+        );
+      };
+      
+      audioRef.current.play();
+    } catch (error) {
+      console.error('Error playing TTS:', error);
+      setCurrentlyPlayingId(null);
+      setTimelineData(prevData => 
+        prevData.map(item => ({ ...item, isPlaying: false }))
+      );
+      alert('Failed to play audio. Please try again.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -341,6 +423,29 @@ export default function Timeline() {
                             
                             {/* Action buttons */}
                             <div className="mt-4 flex justify-end space-x-2">
+                              <button 
+                                className={`btn-secondary text-sm flex items-center ${entry.isPlaying ? 'bg-[var(--primary)]/20' : ''}`}
+                                onClick={() => playTTS(entry)}
+                                aria-label={entry.isPlaying ? "Stop speaking" : "Speak entry"}
+                              >
+                                {entry.isPlaying ? (
+                                  <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                    </svg>
+                                    Stop
+                                  </>
+                                ) : (
+                                  <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
+                                    </svg>
+                                    Listen
+                                  </>
+                                )}
+                              </button>
+                              
                               {entry.type === 'reflection' && (
                                 <button className="btn-secondary text-sm">
                                   Respond
@@ -388,6 +493,9 @@ export default function Timeline() {
       </main>
       
       <Footer />
+      
+      {/* Hidden audio element for accessibility */}
+      <audio ref={audioRef} className="hidden" />
     </div>
   );
 }
