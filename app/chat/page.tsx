@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
+import Link from 'next/link';
 import { sendMessageToKinOS, fetchMessagesFromKinOS } from '../utils/kinos';
 import { createSession, getOngoingSession } from '../utils/airtable';
 
