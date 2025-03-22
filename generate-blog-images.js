@@ -69,7 +69,7 @@ Here's a summary of the article:
 
 ${summary}
 
-Think about what would make a compelling, professional 4:3 aspect ratio image for this article. 
+Think about what would make a compelling, professional 3:2 aspect ratio image for this article. 
 Please respond ONLY with a Midjourney prompt that would create an appropriate image. 
 The prompt should be detailed and descriptive, focusing on creating a professional, editorial-style image 
 that would work well for a mental health/therapy blog. Do not include any explanations or additional text.`;
@@ -116,7 +116,7 @@ const generateImageWithIdeogram = async (prompt, slug) => {
       {
         image_request: {
           prompt: prompt,
-          aspect_ratio: "ASPECT_4_3", // 4:3 aspect ratio
+          aspect_ratio: "ASPECT_3_2", // 3:2 aspect ratio
           model: "V_2",
           magic_prompt_option: "AUTO"
         }

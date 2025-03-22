@@ -117,7 +117,7 @@ export default function Blog() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {filteredPosts.slice(1).map((post) => (
               <div key={post.slug} className="card overflow-hidden hover:shadow-depth transition-all">
-                <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10">
+                <div className="aspect-w-3 aspect-h-2 bg-[var(--primary)]/10">
                   {post.imageUrl ? (
                     <img 
                       src={post.imageUrl} 
