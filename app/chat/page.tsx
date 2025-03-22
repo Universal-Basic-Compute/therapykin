@@ -104,9 +104,13 @@ export default function ChatSession() {
           if (data.subscription.plan.toLowerCase() === 'premium') {
             setHasSessionsRemaining(true);
           } else {
-            setHasSessionsRemaining(data.subscription.sessionsRemaining > 0);
+            // Explicitly check if sessionsRemaining is greater than 0
+            const hasRemaining = data.subscription.sessionsRemaining > 0;
+            console.log(`User has ${data.subscription.sessionsRemaining} sessions remaining. Can start session: ${hasRemaining}`);
+            setHasSessionsRemaining(hasRemaining);
           }
         } else {
+          console.error('No subscription data found');
           setHasSessionsRemaining(false);
         }
       } catch (error) {
@@ -155,7 +159,13 @@ export default function ChatSession() {
   // Create a session when the component mounts
   useEffect(() => {
     async function initializeSession() {
-      if (user && !sessionId && hasSessionsRemaining) {
+      // Add an explicit check here to prevent session creation if no sessions remain
+      if (!user || !hasSessionsRemaining) {
+        console.log('Cannot initialize session: user is null or no sessions remaining');
+        return;
+      }
+      
+      if (!sessionId) {
         try {
           // First, check if there's an ongoing session
           const ongoingSession = await getOngoingSession(user.email);
@@ -185,11 +195,21 @@ export default function ChatSession() {
             } else {
               // Session has expired, create a new one
               console.log(`Previous session expired (${elapsedMinutes} minutes elapsed, limit was ${sessionLengthValue})`);
-              await createNewSession();
+              
+              // Double-check that the user still has sessions remaining before creating a new one
+              if (hasSessionsRemaining) {
+                await createNewSession();
+              } else {
+                console.log('Cannot create new session: no sessions remaining');
+              }
             }
           } else {
             // No previous session found, create a new one
-            await createNewSession();
+            if (hasSessionsRemaining) {
+              await createNewSession();
+            } else {
+              console.log('Cannot create new session: no sessions remaining');
+            }
           }
         } catch (error) {
           console.error('Failed to initialize session:', error);
@@ -202,6 +222,12 @@ export default function ChatSession() {
       // Add null check for user
       if (!user) {
         console.error('Cannot create session: user is null');
+        return;
+      }
+      
+      // Add an additional check for sessions remaining
+      if (!hasSessionsRemaining) {
+        console.error('Cannot create session: no sessions remaining');
         return;
       }
       
