@@ -23,7 +23,7 @@ if (!ANTHROPIC_API_KEY) {
 const getBlogPostFiles = () => {
   const blogPostsDir = path.join(process.cwd(), 'app', 'data', 'blog-posts');
   return fs.readdirSync(blogPostsDir)
-    .filter(file => file.endsWith('.tsx') && file !== 'index.ts')
+    .filter(file => (file.endsWith('.tsx') || file.endsWith('.ts')) && file !== 'index.ts')
     .map(file => path.join(blogPostsDir, file));
 };
 
