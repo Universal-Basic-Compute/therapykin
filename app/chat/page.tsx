@@ -182,6 +182,17 @@ export default function ChatSession() {
               setSessionId(session.id);
               const startTime = new Date(session.createdAt);
               setSessionStartTime(startTime);
+              setMinutesActive(0);
+              
+              // Reset chat history for the new session
+              setChatHistory([
+                { 
+                  role: 'assistant', 
+                  content: 'Hello! I\'m TherapyKin, your therapeutic companion. How are you feeling today?',
+                  id: 'initial'
+                }
+              ]);
+              
               console.log('New session created:', session.id, 'at', startTime);
             }
           } else {
@@ -190,6 +201,7 @@ export default function ChatSession() {
             setSessionId(session.id);
             const startTime = new Date(session.createdAt);
             setSessionStartTime(startTime);
+            setMinutesActive(0);
             console.log('New session created:', session.id, 'at', startTime);
           }
         } catch (error) {
