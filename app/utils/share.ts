@@ -23,9 +23,9 @@ export function shareOnLinkedIn(title: string, url: string) {
 }
 
 // Share via Email
-export function shareViaEmail(title: string, url: string) {
+export function shareViaEmail(title: string, url: string, additionalText: string = '') {
   const subject = encodeURIComponent(title);
-  const body = encodeURIComponent(`I thought you might be interested in this article: ${title}\n\n${url}`);
+  const body = encodeURIComponent(`I thought you might be interested in this article: ${title}\n\n${url}${additionalText ? '\n\n' + additionalText : ''}`);
   window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
 }
 

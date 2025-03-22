@@ -582,6 +582,40 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 }
 
+/* Citation styling */
+sup {
+  font-size: 0.65em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+sup a {
+  color: var(--primary);
+  text-decoration: none;
+  padding: 0 1px;
+}
+
+sup a:hover {
+  text-decoration: underline;
+}
+
+.blog-content a[href^="#ref-"] {
+  color: var(--primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.blog-content a[href^="#ref-"]:hover {
+  text-decoration: underline;
+}
+
+/* References section styling */
+.blog-content ol li:target {
+  background-color: var(--primary)/10;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
 /* Dark mode adjustments for blog content */
 @media (prefers-color-scheme: dark) {
   .blog-content .bg-red-100 {

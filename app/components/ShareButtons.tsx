@@ -7,9 +7,10 @@ interface ShareButtonsProps {
   title: string;
   url: string;
   className?: string;
+  sources?: Array<{id: number; text: string; url?: string}>;
 }
 
-export default function ShareButtons({ title, url, className = '' }: ShareButtonsProps) {
+export default function ShareButtons({ title, url, className = '', sources = [] }: ShareButtonsProps) {
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
   
   // Handle copy link
@@ -21,11 +22,45 @@ export default function ShareButtons({ title, url, className = '' }: ShareButton
     }
   };
   
+  // Format sources for sharing
+  const formatSourcesForSharing = () => {
+    if (!sources || sources.length === 0) return '';
+    
+    return '\n\nSources:\n' + sources.map(source => 
+      `[${source.id}] ${source.text}${source.url ? ` - ${source.url}` : ''}`
+    ).join('\n');
+  };
+  
+  // Share with sources
+  const shareWithSources = (platform: string) => {
+    const sourcesText = formatSourcesForSharing();
+    const fullText = title + (sourcesText ? sourcesText : '');
+    
+    switch (platform) {
+      case 'twitter':
+        shareOnTwitter(fullText, url);
+        break;
+      case 'linkedin':
+        shareOnLinkedIn(fullText, url);
+        break;
+      case 'email':
+        shareViaEmail(title, url, sourcesText);
+        break;
+      default:
+        // For platforms that don't support text customization like Facebook
+        if (platform === 'facebook') {
+          shareOnFacebook(url);
+        } else if (platform === 'copy') {
+          copyToClipboard(url + (sourcesText ? '\n\n' + sourcesText : ''));
+        }
+    }
+  };
+  
   return (
     <div className={`flex flex-wrap gap-4 ${className}`}>
       <button 
         className="p-2 rounded-full bg-[#1DA1F2]/10 text-[#1DA1F2] hover:bg-[#1DA1F2]/20 transition-all"
-        onClick={() => shareOnTwitter(title, url)}
+        onClick={() => shareWithSources('twitter')}
         aria-label="Share on Twitter"
       >
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -34,7 +69,7 @@ export default function ShareButtons({ title, url, className = '' }: ShareButton
       </button>
       <button 
         className="p-2 rounded-full bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 transition-all"
-        onClick={() => shareOnFacebook(url)}
+        onClick={() => shareWithSources('facebook')}
         aria-label="Share on Facebook"
       >
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -43,7 +78,7 @@ export default function ShareButtons({ title, url, className = '' }: ShareButton
       </button>
       <button 
         className="p-2 rounded-full bg-[#0A66C2]/10 text-[#0A66C2] hover:bg-[#0A66C2]/20 transition-all"
-        onClick={() => shareOnLinkedIn(title, url)}
+        onClick={() => shareWithSources('linkedin')}
         aria-label="Share on LinkedIn"
       >
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -52,7 +87,7 @@ export default function ShareButtons({ title, url, className = '' }: ShareButton
       </button>
       <button 
         className="p-2 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)]/20 transition-all"
-        onClick={() => shareViaEmail(title, url)}
+        onClick={() => shareWithSources('email')}
         aria-label="Share via Email"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -61,7 +96,7 @@ export default function ShareButtons({ title, url, className = '' }: ShareButton
       </button>
       <button 
         className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all relative"
-        onClick={handleCopyLink}
+        onClick={() => shareWithSources('copy')}
         aria-label="Copy Link"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
