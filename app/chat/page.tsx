@@ -42,6 +42,8 @@ export default function ChatSession() {
   const [sessionMode, setSessionMode] = useState<string | null>(null);
   const [minutesActive, setMinutesActive] = useState(0);
   const [sessionEnded, setSessionEnded] = useState(false);
+  const [sessionLength, setSessionLength] = useState<number>(60); // Default to 60 minutes
+  const [showSettings, setShowSettings] = useState<boolean>(false); // For settings modal
   
   // Voice options
   const voiceOptions = [
@@ -125,20 +127,24 @@ export default function ChatSession() {
       const now = new Date();
       const sessionDuration = (now.getTime() - sessionStartTime.getTime()) / 1000 / 60; // in minutes
       
-      // Session is one hour (60 minutes)
-      const SESSION_DURATION = 60;
+      // Use the dynamic session length
+      const SESSION_DURATION = sessionLength;
       
-      // First 5 minutes of the session
-      if (sessionDuration <= 5) {
+      // Scale opening and closing phases based on session length
+      const openingPhaseEnd = Math.max(1, Math.floor(SESSION_DURATION * 0.08)); // ~8% of session
+      const closingPhaseStart = Math.floor(SESSION_DURATION * 0.92); // ~92% of session
+      
+      // First part of the session
+      if (sessionDuration <= openingPhaseEnd) {
         setSessionMode('session_opening');
         setSessionEnded(false);
       } 
-      // Last 5 minutes of the session
-      else if (sessionDuration >= (SESSION_DURATION - 5) && sessionDuration < SESSION_DURATION) {
+      // Last part of the session
+      else if (sessionDuration >= closingPhaseStart && sessionDuration < SESSION_DURATION) {
         setSessionMode('session_closing');
         setSessionEnded(false);
       }
-      // Session has ended (60+ minutes)
+      // Session has ended
       else if (sessionDuration >= SESSION_DURATION) {
         setSessionMode('session_ended');
         setSessionEnded(true);
@@ -155,7 +161,7 @@ export default function ChatSession() {
     const intervalId = setInterval(updateSessionMode, 60000); // check every minute
     
     return () => clearInterval(intervalId);
-  }, [sessionStartTime]);
+  }, [sessionStartTime, sessionLength]); // Add sessionLength as a dependency
 
   // Add a session-ended message to the chat when the session ends
   useEffect(() => {
@@ -170,13 +176,13 @@ export default function ChatSession() {
           ...prev,
           { 
             role: 'assistant', 
-            content: "Our session time has ended for today. I hope our conversation was helpful. You can review our discussion, but new messages can't be sent until your next session. I look forward to continuing our conversation in your next session!",
+            content: `Our ${sessionLength}-minute session time has ended for today. I hope our conversation was helpful. You can review our discussion, but new messages can't be sent until your next session. I look forward to continuing our conversation in your next session!`,
             id: 'session-ended-message'
           }
         ]);
       }
     }
-  }, [sessionEnded, chatHistory]);
+  }, [sessionEnded, chatHistory, sessionLength]); // Add sessionLength as a dependency
 
   // Track and update minutes active
   useEffect(() => {
@@ -248,18 +254,24 @@ export default function ChatSession() {
     };
   }, [message]); // Re-run when message changes
   
-  // Helper function to determine the session phase
+  // Helper function to determine the session phase based on dynamic session length
   const getSessionPhase = (startTime: Date) => {
     const now = new Date();
     const elapsedMinutes = Math.floor((now.getTime() - startTime.getTime()) / (60 * 1000));
+    const totalLength = sessionLength;
     
-    if (elapsedMinutes <= 5) {
+    // Scale the phase transitions based on session length
+    const openingPhaseEnd = Math.max(1, Math.floor(totalLength * 0.08)); // ~8% of session
+    const firstHalfEnd = Math.floor(totalLength * 0.5); // 50% of session
+    const closingPhaseStart = Math.floor(totalLength * 0.92); // ~92% of session
+    
+    if (elapsedMinutes <= openingPhaseEnd) {
       return { phase: "Session Opening", color: "bg-[var(--accent)]/10 text-[var(--accent)]" };
-    } else if (elapsedMinutes < 30) {
+    } else if (elapsedMinutes < firstHalfEnd) {
       return { phase: "First Half", color: "bg-[var(--primary)]/10 text-[var(--primary)]" };
-    } else if (elapsedMinutes < 55) {
+    } else if (elapsedMinutes < closingPhaseStart) {
       return { phase: "Second Half", color: "bg-[var(--primary-dark)]/10 text-[var(--primary-dark)]" };
-    } else if (elapsedMinutes < 60) {
+    } else if (elapsedMinutes < totalLength) {
       return { phase: "Session Closing", color: "bg-[var(--warm)]/10 text-[var(--warm)]" };
     } else {
       return { phase: "Session Ended", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300" };
@@ -726,7 +738,10 @@ export default function ChatSession() {
                 </select>
               )}
               
-              <button className="btn-secondary text-sm">
+              <button 
+                className="btn-secondary text-sm"
+                onClick={() => setShowSettings(true)}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -867,6 +882,56 @@ export default function ChatSession() {
       </main>
       
       <Footer />
+      
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-[var(--card-bg)] rounded-lg p-6 max-w-md w-full shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Session Settings</h2>
+              <button 
+                onClick={() => setShowSettings(false)}
+                className="p-2 rounded-full hover:bg-[var(--background-alt)]"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">Session Length</label>
+              <div className="grid grid-cols-3 gap-2">
+                {[15, 30, 45].map((length) => (
+                  <button
+                    key={length}
+                    onClick={() => setSessionLength(length)}
+                    className={`p-3 rounded-lg border ${
+                      sessionLength === length 
+                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
+                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                    }`}
+                  >
+                    {length} minutes
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-foreground/60 mt-2">
+                Changing the session length will apply to your current session.
+              </p>
+            </div>
+            
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowSettings(false)}
+                className="btn-primary"
+              >
+                Save Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
