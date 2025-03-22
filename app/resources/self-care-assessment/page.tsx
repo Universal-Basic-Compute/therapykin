@@ -105,6 +105,9 @@ const ratingOptions = [
 ];
 
 export default function SelfCareAssessment() {
+  // Check if we're in the browser
+  const isBrowser = typeof window !== 'undefined';
+  
   // State for active section (for mobile accordion view)
   const [activeSection, setActiveSection] = useState<string | null>("introduction");
   

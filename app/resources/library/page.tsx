@@ -203,8 +203,11 @@ export default function Library() {
                           onError={(e) => {
                             // If image fails to load, replace with a gradient background
                             e.currentTarget.style.display = 'none';
-                            e.currentTarget.parentElement.style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)';
-                            e.currentTarget.parentElement.innerHTML += `<div class="w-full h-full flex items-center justify-center text-white font-medium p-4 text-center">${resource.title}</div>`;
+                            const parentElement = e.currentTarget.parentElement;
+                            if (parentElement) {
+                              parentElement.style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)';
+                              parentElement.innerHTML += `<div class="w-full h-full flex items-center justify-center text-white font-medium p-4 text-center">${resource.title}</div>`;
+                            }
                           }}
                         />
                       ) : (
@@ -341,8 +344,11 @@ export default function Library() {
                           onError={(e) => {
                             // If image fails to load, replace with a gradient background
                             e.currentTarget.style.display = 'none';
-                            e.currentTarget.parentElement.style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)';
-                            e.currentTarget.parentElement.innerHTML += `<div class="w-full h-full flex items-center justify-center text-white font-medium p-4 text-center">${resource.title}</div>`;
+                            const parentElement = e.currentTarget.parentElement;
+                            if (parentElement) {
+                              parentElement.style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)';
+                              parentElement.innerHTML += `<div class="w-full h-full flex items-center justify-center text-white font-medium p-4 text-center">${resource.title}</div>`;
+                            }
                           }}
                         />
                       ) : (

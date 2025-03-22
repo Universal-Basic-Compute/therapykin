@@ -1,12 +1,12 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { usePDFGenerator } from '../utils/pdfGenerator';
 
 // Dynamically import the PDF generator to avoid SSR issues
 const PDFGenerator = dynamic(
-  () => import('../utils/pdfGenerator').then(mod => ({ default: mod.usePDFGenerator })),
+  () => import('../utils/pdfGenerator').then(mod => mod.usePDFGenerator),
   { ssr: false }
 );
 
@@ -49,12 +49,17 @@ export default function PDFDownloadButton({
       console.error('PDF generation failed:', err);
       
       // Provide a more specific error message
-      if (err.message && err.message.includes('oklab')) {
-        setErrorMessage('Sorry, we encountered an issue with color formatting when creating your PDF. We\'ve noted this issue and will fix it soon. Please try again later.');
-      } else if (err.message && err.message.includes('html2canvas')) {
-        setErrorMessage('Sorry, we had trouble capturing the content for your PDF. This might be due to complex formatting. Please try again later.');
+      if (err && typeof err === 'object' && 'message' in err) {
+        const errorMessage = String(err.message);
+        if (errorMessage.includes('oklab')) {
+          setErrorMessage('Sorry, we encountered an issue with color formatting when creating your PDF. We\'ve noted this issue and will fix it soon. Please try again later.');
+        } else if (errorMessage.includes('html2canvas')) {
+          setErrorMessage('Sorry, we had trouble capturing the content for your PDF. This might be due to complex formatting. Please try again later.');
+        } else {
+          setErrorMessage('Sorry, we encountered an issue creating your PDF. This might be due to browser compatibility. Please try a different browser or contact support.');
+        }
       } else {
-        setErrorMessage('Sorry, we encountered an issue creating your PDF. This might be due to browser compatibility. Please try a different browser or contact support.');
+        setErrorMessage('Sorry, we encountered an unknown issue creating your PDF. Please try again later or contact support.');
       }
     }
   };

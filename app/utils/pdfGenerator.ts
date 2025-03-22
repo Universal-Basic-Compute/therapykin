@@ -266,7 +266,7 @@ async function generatePDFWithHtml2Canvas({
       pdf.save(filename);
     } catch (error) {
       console.error('Error capturing content with html2canvas:', error);
-      throw new Error(`PDF generation failed: ${error.message || 'Unknown error with html2canvas'}`);
+      throw new Error(`PDF generation failed: ${error && typeof error === 'object' && 'message' in error ? String(error.message) : 'Unknown error with html2canvas'}`);
     }
   } catch (error) {
     console.error('Error in html2canvas PDF generation:', error);
@@ -349,7 +349,7 @@ export function usePDFGenerator() {
       return true;
     } catch (error) {
       console.error('PDF generation failed:', error);
-      setError(error.message || 'Unknown error generating PDF');
+      setError(error && typeof error === 'object' && 'message' in error ? String(error.message) : 'Unknown error generating PDF');
       return false;
     } finally {
       setIsGenerating(false);
