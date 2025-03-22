@@ -14,37 +14,38 @@ function applyPDFCompatibleStyles(): void {
   const styleElement = document.createElement('style');
   styleElement.setAttribute('id', 'pdf-generation-styles');
   
-  // Add styles that override problematic CSS
+  // Add more comprehensive styles that override problematic CSS
   styleElement.textContent = `
-    /* Override oklab colors with standard colors */
-    [style*="oklab"] {
-      color: #333333 !important;
-      background-color: transparent !important;
-    }
-    
-    /* Fix any other problematic styles for PDF generation */
+    /* Override all gradient text and backgrounds */
     * {
+      background-image: none !important;
       -webkit-print-color-adjust: exact !important;
       color-adjust: exact !important;
     }
     
-    /* Override gradient text that might cause issues */
-    [class*="bg-gradient"] {
-      background: none !important;
-      color: currentColor !important;
-      -webkit-text-fill-color: currentColor !important;
-    }
-    
-    /* Ensure text is visible */
-    .text-transparent {
-      color: currentColor !important;
-      -webkit-text-fill-color: currentColor !important;
-    }
-    
-    /* Fix background-clip issues */
-    .bg-clip-text {
+    /* Fix text with background-clip */
+    .text-transparent, [class*="bg-gradient"], [class*="bg-clip-text"] {
       background-clip: unset !important;
       -webkit-background-clip: unset !important;
+      color: currentColor !important;
+      -webkit-text-fill-color: currentColor !important;
+    }
+    
+    /* Override any oklab colors */
+    [style*="oklab"], [class*="from-"], [class*="to-"], [class*="via-"] {
+      color: #333333 !important;
+      background-color: transparent !important;
+    }
+    
+    /* Fix TherapyKin logo specifically */
+    nav a span.text-transparent.bg-clip-text {
+      color: #00c5bc !important;
+      -webkit-text-fill-color: #00c5bc !important;
+    }
+    
+    /* Fix SVG elements */
+    svg {
+      fill: currentColor !important;
     }
   `;
   
@@ -76,6 +77,7 @@ export async function generatePDF({
   try {
     // Apply PDF-compatible styles before generation
     applyPDFCompatibleStyles();
+    
     // Create a new jsPDF instance
     const pdf = new jsPDF('p', 'mm', 'a4');
     
@@ -84,11 +86,7 @@ export async function generatePDF({
       title: title,
     });
     
-    // Get all sections to include in the PDF
-    const sections = contentElement.querySelectorAll('section');
-    const totalSections = sections.length;
-    
-    // Add the title and description
+    // Add the title and description to the PDF
     pdf.setFontSize(22);
     pdf.text(title, 20, 20);
     
@@ -99,55 +97,77 @@ export async function generatePDF({
     
     let yPosition = subtitle ? 40 : 30;
     
-    // Process each section
-    for (let i = 0; i < totalSections; i++) {
-      const section = sections[i];
-      
+    // Instead of processing sections, let's capture the entire content at once
+    try {
       // Update progress
-      onProgress((i / totalSections) * 100);
+      onProgress(10);
       
-      // Capture the section as an image
-      const canvas = await html2canvas(section, {
-        scale: 2,
+      // Capture the entire content as an image
+      const canvas = await html2canvas(contentElement, {
+        scale: 1.5, // Lower scale for better performance
         useCORS: true,
         logging: false,
+        allowTaint: true, // Allow tainted canvas
+        foreignObjectRendering: false, // Disable foreignObject rendering which can cause issues
+        removeContainer: true, // Remove the cloned container after rendering
       });
       
-      // Convert the canvas to an image
-      const imgData = canvas.toDataURL('image/jpeg', 0.7);
+      // Update progress
+      onProgress(70);
       
-      // Calculate the image width and height to fit on the PDF page
-      const imgWidth = 170;
+      // Convert the canvas to an image
+      const imgData = canvas.toDataURL('image/jpeg', 0.8);
+      
+      // Calculate the image width to fit on the PDF page
+      const imgWidth = 170; // A4 width minus margins
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
-      // Add a new page if the content won't fit on the current page
-      if (yPosition + imgHeight > 280) {
+      // Split the image into multiple pages if needed
+      const pageHeight = 250; // A4 height minus margins and header
+      let heightLeft = imgHeight;
+      let position = yPosition;
+      
+      // Add the first part of the image
+      pdf.addImage(imgData, 'JPEG', 20, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      
+      // Add additional pages if the content is too long
+      while (heightLeft > 0) {
+        position = 20; // Reset position for new page
         pdf.addPage();
-        yPosition = 20;
+        pdf.addImage(
+          imgData, 
+          'JPEG', 
+          20, 
+          position - (imgHeight - heightLeft), // Negative offset to show the next part
+          imgWidth, 
+          imgHeight
+        );
+        heightLeft -= pageHeight;
       }
       
-      // Add the image to the PDF
-      pdf.addImage(imgData, 'JPEG', 20, yPosition, imgWidth, imgHeight);
+      // Update progress
+      onProgress(90);
       
-      // Update the Y position for the next section
-      yPosition += imgHeight + 10;
+      // Add footer with website URL
+      const pageCount = pdf.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(10);
+        pdf.setTextColor(100, 100, 100);
+        pdf.text('www.therapykin.ai', 20, 287);
+        pdf.text(`Page ${i} of ${pageCount}`, pdf.internal.pageSize.width - 40, 287);
+      }
+      
+      // Complete progress
+      onProgress(100);
+      
+      // Save the PDF
+      pdf.save(filename);
+    } catch (error) {
+      console.error('Error capturing content:', error);
+      throw error;
     }
-    
-    // Add footer with website URL
-    const pageCount = pdf.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      pdf.setPage(i);
-      pdf.setFontSize(10);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text('www.therapykin.ai', 20, 287);
-      pdf.text(`Page ${i} of ${pageCount}`, pdf.internal.pageSize.width - 40, 287);
-    }
-    
-    // Complete progress
-    onProgress(100);
-    
-    // Save the PDF
-    pdf.save(filename);
   } catch (error) {
     console.error('Error generating PDF:', error);
     throw error;

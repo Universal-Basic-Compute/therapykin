@@ -31,11 +31,18 @@ export default function PDFDownloadButton({
   // Handle the download button click
   const handleDownload = async () => {
     try {
+      setIsGenerating(true);
+      setProgress(0);
+      
+      // Add a small delay to allow the UI to update
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       const success = await generatePDF({
         title,
         subtitle,
         filename,
         contentId,
+        onProgress: setProgress
       });
       
       if (!success) {
@@ -44,7 +51,15 @@ export default function PDFDownloadButton({
       }
     } catch (error) {
       console.error('PDF generation failed:', error);
-      alert('Sorry, we encountered an issue creating your PDF. This might be due to browser compatibility. Please try a different browser or contact support.');
+      
+      // Provide a more specific error message
+      if (error.message && error.message.includes('oklab')) {
+        alert('Sorry, we encountered an issue with color formatting when creating your PDF. We\'ve noted this issue and will fix it soon. Please try again later.');
+      } else {
+        alert('Sorry, we encountered an issue creating your PDF. This might be due to browser compatibility. Please try a different browser or contact support.');
+      }
+    } finally {
+      setIsGenerating(false);
     }
   };
   
