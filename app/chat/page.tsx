@@ -179,7 +179,7 @@ export default function ChatSession() {
               setMinutesActive(0);
               
               // Send the "New session started" message to the API
-              const welcomeMessage = `New ${sessionLength} minute session started`;
+              const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
               const response = await sendMessageToKinOS(
                 welcomeMessage,
                 user.firstName,
@@ -209,7 +209,7 @@ export default function ChatSession() {
             setMinutesActive(0);
             
             // Send the "New session started" message to the API
-            const welcomeMessage = `New ${sessionLength} minute session started`;
+            const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
             const response = await sendMessageToKinOS(
               welcomeMessage,
               user.firstName,
