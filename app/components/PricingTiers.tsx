@@ -81,7 +81,7 @@ export default function PricingTiers() {
               </ul>
             </div>
             <Link 
-              href="/signup?plan=free" 
+              href="/auth/register?plan=free" 
               className="mt-auto btn-secondary w-full text-center cursor-pointer hover:cursor-pointer"
             >
               Get Started
