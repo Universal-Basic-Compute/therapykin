@@ -1,0 +1,25 @@
+import { post as briefSessionsPost } from './30-minute-mental-health-solution';
+import { post as mentalAgilityPost } from './mental-agility-top-performers';
+
+// Export all posts in an array
+export const blogPosts = [
+  briefSessionsPost,
+  mentalAgilityPost,
+  // Add more posts here as they are created
+];
+
+// Export individual posts for direct access
+export {
+  briefSessionsPost,
+  mentalAgilityPost,
+};
+
+// Helper function to get a post by slug
+export function getPostBySlug(slug: string) {
+  return blogPosts.find(post => post.slug === slug);
+}
+
+// Helper function to get posts by persona
+export function getPostsByPersona(persona: string) {
+  return blogPosts.filter(post => post.persona === persona);
+}
