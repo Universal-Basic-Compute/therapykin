@@ -44,6 +44,8 @@ export default function ChatSession() {
   const [halfwayMessageSent, setHalfwayMessageSent] = useState(false);
   const [closingMessageSent, setClosingMessageSent] = useState(false);
   const [isInitialMessageLoading, setIsInitialMessageLoading] = useState(false);
+  const [lastUserMessageTime, setLastUserMessageTime] = useState<Date | null>(null);
+  const [silenceMessageSent, setSilenceMessageSent] = useState(false);
   
   // Voice options
   const voiceOptions = [
@@ -403,6 +405,58 @@ export default function ChatSession() {
     
     return () => clearInterval(intervalId);
   }, [sessionStartTime, sessionLength, halfwayMessageSent, closingMessageSent, user, sessionEnded]); // Add closingMessageSent as a dependency
+  
+  // Add effect to monitor user silence
+  useEffect(() => {
+    if (!user || !sessionStartTime || sessionEnded) return;
+    
+    // Set initial last message time if not set
+    if (!lastUserMessageTime && chatHistory.length > 0) {
+      // Find the last user message
+      const userMessages = chatHistory.filter(msg => msg.role === 'user');
+      if (userMessages.length > 0) {
+        setLastUserMessageTime(new Date());
+      } else {
+        // If no user messages yet, set to current time
+        setLastUserMessageTime(new Date());
+      }
+    }
+    
+    // Check for silence every 30 seconds
+    const silenceCheckInterval = setInterval(() => {
+      if (!lastUserMessageTime || silenceMessageSent) return;
+      
+      const now = new Date();
+      const silenceDuration = (now.getTime() - lastUserMessageTime.getTime()) / 1000; // in seconds
+      
+      // If user has been silent for 2 minutes (120 seconds)
+      if (silenceDuration >= 120) {
+        console.log(`User has been silent for ${silenceDuration.toFixed(0)} seconds, sending silence notification`);
+        
+        // Send the silence message
+        sendMessageToKinOS(
+          "<system>Info: The user stayed silent</system>",
+          user.firstName,
+          user.lastName,
+          [], // attachments
+          [], // images
+          "journey" // Use journey mode
+        ).then(() => {
+          console.log("Silence notification sent successfully");
+          setSilenceMessageSent(true);
+          
+          // Reset after 1 minute to allow another silence message if needed
+          setTimeout(() => {
+            setSilenceMessageSent(false);
+          }, 60000);
+        }).catch(error => {
+          console.error("Error sending silence notification:", error);
+        });
+      }
+    }, 30000); // Check every 30 seconds
+    
+    return () => clearInterval(silenceCheckInterval);
+  }, [user, sessionStartTime, lastUserMessageTime, silenceMessageSent, sessionEnded, chatHistory]);
 
   // Add a session-ended message to the chat when the session ends
   useEffect(() => {
@@ -733,6 +787,10 @@ export default function ChatSession() {
           { role: 'user', content: data.text, id: userMessageId }
         ]);
         
+        // Reset silence timer
+        setLastUserMessageTime(new Date());
+        setSilenceMessageSent(false);
+        
         // Set loading state for assistant response
         const loadingId = Date.now().toString();
         setChatHistory(prev => [
@@ -978,6 +1036,10 @@ export default function ChatSession() {
     // Add user message to chat
     const userMessageId = `user-${Date.now()}`;
     setChatHistory([...chatHistory, { role: 'user', content: message, id: userMessageId }]);
+    
+    // Reset silence timer
+    setLastUserMessageTime(new Date());
+    setSilenceMessageSent(false);
     
     // Store the message to clear the input field
     const userMessage = message;
