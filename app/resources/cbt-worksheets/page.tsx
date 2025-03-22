@@ -362,7 +362,7 @@ const cognitiveDistortions = [
   },
   {
     name: "Should Statements",
-    description: "Having rigid rules about how you or others "should" behave",
+    description: "Having rigid rules about how you or others \"should\" behave",
     example: "I should never make mistakes. I should always be productive.",
     reframe: "It's unrealistic to expect perfection. Making mistakes is part of being human, and rest is necessary for wellbeing."
   },
