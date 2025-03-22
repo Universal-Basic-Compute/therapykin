@@ -29,7 +29,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
-              href="/signup?plan=free" 
+              href="/register" 
               className="btn-primary bg-white text-[#00c5bc] hover:bg-opacity-90 shadow-lg"
             >
               Get 3 Free Sessions
@@ -164,7 +164,7 @@ export default function Home() {
           <p className="text-xl mb-10 font-medium drop-shadow-sm">Start Your Journey Today</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
-              href="/signup?plan=free" 
+              href="/register" 
               className="rounded-full bg-white text-[#00c5bc] px-8 py-3 font-medium hover:bg-opacity-90 transition-all shadow-lg"
             >
               Get 3 Free Sessions
