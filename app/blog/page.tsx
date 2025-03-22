@@ -8,7 +8,6 @@ import { blogPosts } from "../data/blog-posts";
 
 export default function Blog() {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [activeFilter, setActiveFilter] = useState("all");
   
   // Filter posts based on active filter
   const filteredPosts = activeFilter === "all" 
