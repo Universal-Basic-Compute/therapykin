@@ -27,6 +27,27 @@ const getBlogPostFiles = () => {
     .map(file => path.join(blogPostsDir, file));
 };
 
+// Get all resource files
+const getResourceFiles = () => {
+  const resourcesDir = path.join(process.cwd(), 'app', 'resources');
+  const resourceDirs = fs.readdirSync(resourcesDir)
+    .filter(dir => {
+      const stats = fs.statSync(path.join(resourcesDir, dir));
+      return stats.isDirectory() && dir !== 'library';
+    });
+  
+  return resourceDirs.map(dir => {
+    const pagePath = path.join(resourcesDir, dir, 'page.tsx');
+    if (fs.existsSync(pagePath)) {
+      return {
+        slug: dir,
+        filePath: pagePath
+      };
+    }
+    return null;
+  }).filter(Boolean);
+};
+
 // Extract blog post data from a file
 const extractBlogPostData = (filePath) => {
   try {
@@ -49,6 +70,31 @@ const extractBlogPostData = (filePath) => {
       slug: slugMatch[1],
       imageUrl: imageUrlMatch ? imageUrlMatch[1] : null,
       content: contentMatch ? contentMatch[1] : null,
+      filePath
+    };
+  } catch (error) {
+    console.error(`Error extracting data from ${filePath}:`, error);
+    return null;
+  }
+};
+
+// Extract resource data from a file
+const extractResourceData = (filePath) => {
+  try {
+    const content = fs.readFileSync(filePath, 'utf8');
+    
+    // Extract the title
+    const titleMatch = content.match(/<h1[^>]*>(.*?)<\/h1>/s);
+    
+    // Extract description/subtitle
+    const descriptionMatch = content.match(/<p className="text-xl text-foreground\/70[^>]*>(.*?)<\/p>/s);
+    
+    if (!titleMatch) return null;
+    
+    return {
+      title: titleMatch[1].replace(/<[^>]*>/g, '').trim(),
+      description: descriptionMatch ? descriptionMatch[1].replace(/<[^>]*>/g, '').trim() : '',
+      slug: path.basename(path.dirname(filePath)),
       filePath
     };
   } catch (error) {
@@ -109,7 +155,7 @@ that would work well for a mental health/therapy blog. Do not include any explan
 };
 
 // Generate image with Ideogram API
-const generateImageWithIdeogram = async (prompt, slug) => {
+const generateImageWithIdeogram = async (prompt, slug, isResource = false) => {
   try {
     const response = await axios.post(
       'https://api.ideogram.ai/generate',
@@ -136,7 +182,8 @@ const generateImageWithIdeogram = async (prompt, slug) => {
     const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
     
     // Create directory if it doesn't exist
-    const imageDir = path.join(process.cwd(), 'public', 'blog');
+    const folderName = isResource ? 'resources' : 'blog';
+    const imageDir = path.join(process.cwd(), 'public', folderName);
     if (!fs.existsSync(imageDir)) {
       fs.mkdirSync(imageDir, { recursive: true });
     }
@@ -146,7 +193,7 @@ const generateImageWithIdeogram = async (prompt, slug) => {
     fs.writeFileSync(imagePath, imageResponse.data);
     
     console.log(`Image saved to ${imagePath}`);
-    return `/blog/${slug}.jpg`;
+    return `/${folderName}/${slug}.jpg`;
   } catch (error) {
     console.error('Error generating image with Ideogram:', error);
     return null;
@@ -184,10 +231,62 @@ const updateBlogPostFile = (filePath, newImageUrl) => {
   }
 };
 
+// Generate resource images
+const generateResourceImages = async () => {
+  try {
+    // Get all resource files
+    const resourceFiles = getResourceFiles();
+    console.log(`Found ${resourceFiles.length} resource files`);
+    
+    // Process each resource file
+    for (const resource of resourceFiles) {
+      const resourceData = extractResourceData(resource.filePath);
+      
+      if (!resourceData) {
+        console.log(`Could not extract data from ${resource.filePath}, skipping`);
+        continue;
+      }
+      
+      console.log(`Processing resource: ${resourceData.title} (${resourceData.slug})`);
+      
+      // Check if the image already exists
+      const imagePath = path.join(process.cwd(), 'public', 'resources', `${resourceData.slug}.jpg`);
+      const imageDir = path.join(process.cwd(), 'public', 'resources');
+      
+      if (!fs.existsSync(imageDir)) {
+        fs.mkdirSync(imageDir, { recursive: true });
+      }
+      
+      if (fs.existsSync(imagePath)) {
+        console.log(`Image already exists at ${imagePath}, skipping`);
+        continue;
+      }
+      
+      // Generate a prompt with Claude
+      const prompt = await generatePromptWithClaude(
+        resourceData.title, 
+        resourceData.description || resourceData.title
+      );
+      console.log(`Generated prompt for resource: ${prompt}`);
+      
+      // Generate an image with Ideogram
+      const imageUrl = await generateImageWithIdeogram(prompt, resourceData.slug, true);
+      
+      if (imageUrl) {
+        console.log(`Generated image for resource: ${resourceData.slug}`);
+      }
+    }
+    
+    console.log('Resource image generation complete');
+  } catch (error) {
+    console.error('Error generating resource images:', error);
+  }
+};
+
 // Main function
 const main = async () => {
   try {
-    // Get all blog post files
+    // Generate blog post images
     const blogPostFiles = getBlogPostFiles();
     console.log(`Found ${blogPostFiles.length} blog post files`);
     
@@ -231,7 +330,11 @@ const main = async () => {
       }
     }
     
-    console.log('Image generation complete');
+    console.log('Blog image generation complete');
+    
+    // Generate resource images
+    await generateResourceImages();
+    
   } catch (error) {
     console.error('Error in main function:', error);
   }
