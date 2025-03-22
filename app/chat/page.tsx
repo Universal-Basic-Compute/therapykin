@@ -92,6 +92,23 @@ export default function ChatSession() {
       
       setIsCheckingSubscription(true);
       try {
+        // First, fetch the session stats to get the accurate count of used sessions
+        const statsResponse = await fetch('/api/sessions/stats');
+        
+        if (!statsResponse.ok) {
+          console.error('Failed to fetch session stats:', statsResponse.status, statsResponse.statusText);
+          setHasSessionsRemaining(false);
+          return;
+        }
+        
+        const statsData = await statsResponse.json();
+        console.log('Session stats received:', statsData);
+        
+        // Get the total sessions used from the stats
+        const totalSessionsUsed = statsData.stats?.totalSessions || 0;
+        console.log('Total sessions used according to stats:', totalSessionsUsed);
+        
+        // Then fetch the subscription data
         const response = await fetch('/api/users/subscription');
         
         if (!response.ok) {
@@ -121,10 +138,8 @@ export default function ChatSession() {
             // Get total sessions allowed for the plan
             const totalAllowed = sessionsPerPlan[data.subscription.plan.toLowerCase()] || 0;
             
-            // Get total sessions used
-            const totalSessionsUsed = data.subscription.totalSessions || 0;
-            
             // Calculate remaining sessions using the same logic as the dashboard
+            // but with the accurate totalSessionsUsed from the stats API
             let remainingSessions = 0;
             if (data.subscription.plan.toLowerCase() === 'free') {
               remainingSessions = Math.max(0, totalAllowed - totalSessionsUsed);
