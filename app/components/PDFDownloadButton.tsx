@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { usePDFGenerator } from '../utils/pdfGenerator';
 
@@ -31,18 +30,12 @@ export default function PDFDownloadButton({
   // Handle the download button click
   const handleDownload = async () => {
     try {
-      setIsGenerating(true);
-      setProgress(0);
-      
-      // Add a small delay to allow the UI to update
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
+      // The generatePDF function from the hook internally manages state
       const success = await generatePDF({
         title,
         subtitle,
         filename,
         contentId,
-        onProgress: setProgress
       });
       
       if (!success) {
@@ -58,8 +51,6 @@ export default function PDFDownloadButton({
       } else {
         alert('Sorry, we encountered an issue creating your PDF. This might be due to browser compatibility. Please try a different browser or contact support.');
       }
-    } finally {
-      setIsGenerating(false);
     }
   };
   
