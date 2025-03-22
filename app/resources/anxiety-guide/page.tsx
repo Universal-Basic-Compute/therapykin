@@ -974,7 +974,7 @@ export default function AnxietyGuide() {
             {/* Sidebar */}
             <div className="lg:w-1/3">
               {/* Table of Contents */}
-              <div className="card p-6 mb-6 sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
+              <div className="card p-6 mb-6">
                 <h3 className="text-lg font-semibold mb-4">In This Guide</h3>
                 <nav className="space-y-2">
                   <a href="#overview" className="block text-foreground/70 hover:text-[var(--primary)] py-1 border-l-2 border-transparent hover:border-[var(--primary)] pl-3 transition-all">
