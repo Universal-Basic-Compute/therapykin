@@ -605,6 +605,34 @@ export default function ChatSession() {
   const toggleVoiceMode = () => {
     setVoiceMode(!voiceMode);
   };
+  
+  // Update session length
+  const updateSessionLength = async (length: number) => {
+    if (!sessionId) return;
+    
+    try {
+      const response = await fetch('/api/sessions/update-length', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          sessionLength: length,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update session length: ${response.status}`);
+      }
+      
+      console.log(`Session length updated to ${length} minutes`);
+      setSessionLength(length);
+    } catch (error) {
+      console.error('Error updating session length:', error);
+      // Optionally show an error message to the user
+    }
+  };
 
   // Add cleanup for recording resources
   useEffect(() => {
@@ -1013,7 +1041,7 @@ export default function ChatSession() {
                 {[15, 30, 45].map((length) => (
                   <button
                     key={length}
-                    onClick={() => setSessionLength(length)}
+                    onClick={() => updateSessionLength(length)}
                     className={`p-3 rounded-lg border ${
                       sessionLength === length 
                         ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
@@ -1034,7 +1062,7 @@ export default function ChatSession() {
                 onClick={() => setShowSettings(false)}
                 className="btn-primary"
               >
-                Save Settings
+                Close Settings
               </button>
             </div>
           </div>
