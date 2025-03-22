@@ -116,9 +116,17 @@ Here's a summary of the article:
 ${summary}
 
 Think about what would make a compelling, professional 3:2 aspect ratio image for this article. 
-Please respond ONLY with a Midjourney prompt that would create an appropriate image. 
+Please respond ONLY with a Midjourney prompt that would create an appropriate image.
 The prompt should be detailed and descriptive, focusing on creating a professional, editorial-style image 
-that would work well for a mental health/therapy blog. Do not include any explanations or additional text.`;
+that would work well for a mental health/therapy blog.
+
+Important style requirements:
+- Use a soothing pencil style illustration
+- Incorporate the site's color palette: white, teal, light green, purple, violet, yellow, and orange
+- Keep the style clean, modern, and therapeutic
+- Ensure the image feels calming and supportive
+
+Do not include any explanations or additional text.`;
 
     // Make the API call to Claude
     const response = await axios.post(
@@ -150,7 +158,7 @@ that would work well for a mental health/therapy blog. Do not include any explan
   } catch (error) {
     console.error('Error generating prompt with Claude API:', error.message);
     // Fallback to a generic prompt based on the title
-    return `Professional editorial image for a mental health article about ${title}, 4:3 aspect ratio, clean modern style, soft colors, therapeutic atmosphere`;
+    return `Professional editorial image for a mental health article about ${title}, 3:2 aspect ratio, soothing pencil style illustration, color palette of white, teal, light green, purple, violet, yellow, and orange, clean modern therapeutic atmosphere`;
   }
 };
 
