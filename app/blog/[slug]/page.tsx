@@ -173,7 +173,10 @@ export default function BlogPost() {
           </div>
           
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div 
+            className="prose prose-lg max-w-none mb-12 blog-content" 
+            dangerouslySetInnerHTML={{ __html: post.content }} 
+          />
           
           {/* Author Bio */}
           <div className="card p-6 mb-12">
