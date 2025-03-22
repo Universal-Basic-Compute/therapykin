@@ -154,20 +154,39 @@ export default function ChatSession() {
           const ongoingSession = await getOngoingSession(user.email);
           
           if (ongoingSession) {
-            // Use the existing session
-            setSessionId(ongoingSession.id);
+            // Check if the session is still active based on its creation time and length
             const startTime = new Date(ongoingSession.createdAt);
-            setSessionStartTime(startTime);
-            console.log('Using existing session:', ongoingSession.id, 'started at', startTime);
-            
-            // Calculate how many minutes have already passed
             const now = new Date();
             const elapsedMinutes = Math.floor((now.getTime() - startTime.getTime()) / (60 * 1000));
-            setMinutesActive(elapsedMinutes);
-            console.log(`Session already active for ${elapsedMinutes} minutes`);
+            const sessionLengthValue = ongoingSession.sessionLength || sessionLength;
+            
+            // If the session is still active (hasn't exceeded its length)
+            if (elapsedMinutes < sessionLengthValue) {
+              // Use the existing session
+              setSessionId(ongoingSession.id);
+              setSessionStartTime(startTime);
+              console.log('Using existing session:', ongoingSession.id, 'started at', startTime);
+              
+              // Set the session length from the ongoing session
+              if (ongoingSession.sessionLength) {
+                setSessionLength(ongoingSession.sessionLength);
+              }
+              
+              // Calculate how many minutes have already passed
+              setMinutesActive(elapsedMinutes);
+              console.log(`Session already active for ${elapsedMinutes} minutes of ${sessionLengthValue} minutes total`);
+            } else {
+              // Session has expired, create a new one
+              console.log(`Previous session expired (${elapsedMinutes} minutes elapsed, limit was ${sessionLengthValue})`);
+              const session = await createSession(user.email, sessionLength);
+              setSessionId(session.id);
+              const startTime = new Date(session.createdAt);
+              setSessionStartTime(startTime);
+              console.log('New session created:', session.id, 'at', startTime);
+            }
           } else {
-            // Create a new session
-            const session = await createSession(user.email);
+            // No previous session found, create a new one
+            const session = await createSession(user.email, sessionLength);
             setSessionId(session.id);
             const startTime = new Date(session.createdAt);
             setSessionStartTime(startTime);
@@ -182,7 +201,7 @@ export default function ChatSession() {
     if (user && hasSessionsRemaining !== null) {
       initializeSession();
     }
-  }, [user, sessionId, hasSessionsRemaining]);
+  }, [user, sessionId, hasSessionsRemaining, sessionLength]);
 
   // Update the session mode based on timing
   useEffect(() => {
@@ -194,6 +213,9 @@ export default function ChatSession() {
       
       // Use the dynamic session length (default 30 minutes)
       const SESSION_DURATION = sessionLength;
+      
+      // Log the current session status
+      console.log(`Session status: ${sessionDuration.toFixed(1)}/${SESSION_DURATION} minutes elapsed`);
       
       // Scale opening and closing phases based on session length
       const openingPhaseEnd = Math.max(1, Math.floor(SESSION_DURATION * 0.08)); // ~8% of session
@@ -213,6 +235,7 @@ export default function ChatSession() {
       else if (sessionDuration >= SESSION_DURATION) {
         setSessionMode('session_ended');
         setSessionEnded(true);
+        console.log(`Session has ended after ${sessionDuration.toFixed(1)} minutes (limit: ${SESSION_DURATION} minutes)`);
       }
       // Middle of the session
       else {

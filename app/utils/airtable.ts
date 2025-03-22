@@ -21,31 +21,32 @@ const usersTable = base('USERS');
 export const sessionsTable = base('SESSIONS');
 
 // Check for an ongoing session
-export async function getOngoingSession(email: string): Promise<{ id: string, createdAt: string } | null> {
+export async function getOngoingSession(email: string): Promise<{ id: string, createdAt: string, sessionLength?: number } | null> {
   try {
-    const now = new Date();
-    const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000); // 1 hour ago
-    
-    // Format the date for Airtable formula
-    const formattedDate = oneHourAgo.toISOString();
-    
-    // Query for sessions created in the last hour for this user
+    // Get the most recent session for this user
     const records = await sessionsTable.select({
-      filterByFormula: `AND({Email} = '${email}', {CreatedAt} > '${formattedDate}')`,
+      filterByFormula: `{Email} = '${email}'`,
       sort: [{ field: 'CreatedAt', direction: 'desc' }],
       maxRecords: 1
     }).firstPage();
     
-    if (records.length > 0) {
-      const session = records[0];
-      console.log(`Found ongoing session: ${session.id} created at ${session.fields.CreatedAt}`);
-      return {
-        id: session.id,
-        createdAt: session.fields.CreatedAt as string
-      };
+    if (records.length === 0) {
+      return null;
     }
     
-    return null;
+    const record = records[0];
+    const createdAt = record.fields.CreatedAt as string;
+    
+    if (!createdAt) {
+      return null;
+    }
+    
+    // Return the session with its details
+    return {
+      id: record.id,
+      createdAt: createdAt,
+      sessionLength: record.fields.SessionLength as number || 30 // Default to 30 if not set
+    };
   } catch (error) {
     console.error('Error checking for ongoing session:', error);
     return null;
@@ -53,7 +54,7 @@ export async function getOngoingSession(email: string): Promise<{ id: string, cr
 }
 
 // Create a new session
-export async function createSession(email: string): Promise<{ id: string, createdAt: string }> {
+export async function createSession(email: string, sessionLength: number = 30): Promise<{ id: string, createdAt: string, sessionLength: number }> {
   try {
     const createdAt = new Date().toISOString();
     
@@ -62,6 +63,7 @@ export async function createSession(email: string): Promise<{ id: string, create
         fields: {
           Email: email,
           CreatedAt: createdAt,
+          SessionLength: sessionLength,
         },
       },
     ]);
@@ -70,6 +72,7 @@ export async function createSession(email: string): Promise<{ id: string, create
     return {
       id: newSession.id,
       createdAt: newSession.fields.CreatedAt as string,
+      sessionLength: newSession.fields.SessionLength as number || sessionLength,
     };
   } catch (error) {
     console.error('Error creating session:', error);
