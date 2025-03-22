@@ -697,14 +697,8 @@ export default function ChatSession() {
             <h1 className="text-2xl font-bold">Therapy Session</h1>
             <div className="flex items-center gap-2">
               {sessionStartTime && (
-                <div className={`text-sm font-medium px-3 py-1 rounded-full ${
-                  sessionEnded 
-                    ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' 
-                    : getSessionPhase(sessionStartTime).color
-                }`}>
-                  {sessionEnded 
-                    ? 'Session Ended' 
-                    : getSessionPhase(sessionStartTime).phase}
+                <div className={`text-sm font-medium px-3 py-1 rounded-full ${getSessionPhase(sessionStartTime).color}`}>
+                  {getSessionPhase(sessionStartTime).phase}
                 </div>
               )}
               <button 
