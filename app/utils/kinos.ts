@@ -4,6 +4,40 @@ interface KinOSResponse {
   response?: string;
 }
 
+// Function to fetch messages from KinOS
+export async function fetchMessagesFromKinOS(
+  firstName: string,
+  lastName: string,
+  since?: string
+): Promise<Array<{role: string, content: string, timestamp: string}>> {
+  try {
+    console.log(`Fetching messages for ${firstName} ${lastName}${since ? ` since ${since}` : ''}`);
+    
+    // Build the URL with query parameters
+    let url = `/api/kinos/messages?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}`;
+    if (since) {
+      url += `&since=${encodeURIComponent(since)}`;
+    }
+    
+    // Call our API endpoint
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error fetching messages:', errorData);
+      throw new Error(errorData.error || `API request failed with status ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log(`Fetched ${data.messages?.length || 0} messages from KinOS`);
+    
+    return data.messages || [];
+  } catch (error) {
+    console.error('Error fetching messages from KinOS:', error);
+    return []; // Return empty array on error
+  }
+}
+
 export async function sendMessageToKinOS(
   content: string, 
   firstName: string, 

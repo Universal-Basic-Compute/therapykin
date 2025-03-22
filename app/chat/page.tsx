@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { sendMessageToKinOS } from '../utils/kinos';
+import { sendMessageToKinOS, fetchMessagesFromKinOS } from '../utils/kinos';
 import { createSession, getOngoingSession } from '../utils/airtable';
 
 interface ChatMessage {
@@ -214,6 +214,56 @@ export default function ChatSession() {
       initializeSession();
     }
   }, [user, sessionId, hasSessionsRemaining, sessionLength]);
+  
+  // Fetch previous messages when entering an existing session
+  useEffect(() => {
+    async function fetchPreviousMessages() {
+      if (!user || !sessionId || !sessionStartTime) return;
+      
+      try {
+        // Only fetch messages if this is an existing session (not a new one)
+        if (minutesActive > 0) {
+          console.log('Fetching previous messages for existing session...');
+          
+          // Get messages from KinOS
+          const messages = await fetchMessagesFromKinOS(
+            user.firstName,
+            user.lastName
+          );
+          
+          if (messages.length > 0) {
+            // Convert KinOS messages to our chat format
+            const formattedMessages: ChatMessage[] = messages.map((msg, index) => ({
+              role: msg.role as 'user' | 'assistant',
+              content: msg.content,
+              id: `${msg.role}-${index}-${new Date(msg.timestamp).getTime()}`
+            }));
+            
+            // Add the initial greeting if it's not already in the messages
+            const hasGreeting = formattedMessages.some(msg => 
+              msg.role === 'assistant' && msg.content.includes('Hello! I\'m TherapyKin')
+            );
+            
+            if (!hasGreeting) {
+              formattedMessages.unshift({ 
+                role: 'assistant', 
+                content: 'Hello! I\'m TherapyKin, your therapeutic companion. How are you feeling today?',
+                id: 'initial'
+              });
+            }
+            
+            // Update chat history with fetched messages
+            setChatHistory(formattedMessages);
+            console.log(`Loaded ${formattedMessages.length} messages from previous session`);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching previous messages:', error);
+      }
+    }
+    
+    fetchPreviousMessages();
+  }, [user, sessionId, sessionStartTime, minutesActive]);
 
   // Update the session mode based on timing
   useEffect(() => {
