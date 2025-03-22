@@ -286,7 +286,7 @@ export default function Blog() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Mental Health Library</h3>
                 <p className="text-foreground/70 mb-4">
-                  Access our comprehensive collection of articles, guides, and research on various mental health topics.
+                  Access our comprehensive collection of guides, worksheets, videos, and other resources on various mental health topics.
                 </p>
                 <Link href="/resources/library" className="text-[var(--primary)] font-medium hover:underline">
                   Browse Library →
