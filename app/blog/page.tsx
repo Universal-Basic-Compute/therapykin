@@ -79,10 +79,17 @@ export default function Blog() {
             <div className="mb-16">
               <div className="relative rounded-xl overflow-hidden shadow-depth">
                 <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10">
-                  {/* In a real implementation, you would use actual images */}
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
-                    <span className="text-[var(--primary)] font-medium">Featured Article Image</span>
-                  </div>
+                  {featuredPost.imageUrl ? (
+                    <img 
+                      src={featuredPost.imageUrl} 
+                      alt={featuredPost.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
+                      <span className="text-[var(--primary)] font-medium">Featured Article Image</span>
+                    </div>
+                  )}
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6 text-white">
                   <div className="mb-2">
@@ -111,10 +118,17 @@ export default function Blog() {
             {filteredPosts.slice(1).map((post) => (
               <div key={post.slug} className="card overflow-hidden hover:shadow-depth transition-all">
                 <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10">
-                  {/* In a real implementation, you would use actual images */}
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10">
-                    <span className="text-[var(--primary)] font-medium">Article Image</span>
-                  </div>
+                  {post.imageUrl ? (
+                    <img 
+                      src={post.imageUrl} 
+                      alt={post.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10">
+                      <span className="text-[var(--primary)] font-medium">Article Image</span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-6">
                   <div className="mb-3">
