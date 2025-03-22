@@ -383,6 +383,7 @@ export default function Library() {
                         <Link 
                           href={resource.id === 1 ? "/resources/anxiety-guide" : 
                                resource.id === 4 ? "/resources/stress-science" :
+                               resource.id === 6 ? "/resources/relationship-communication" :
                                resource.id === 12 ? "/resources/depression-guide" : 
                                resource.url}
                           className="text-[var(--primary)] text-sm font-medium hover:underline"
