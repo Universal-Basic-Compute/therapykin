@@ -109,11 +109,32 @@ export default function ChatSession() {
             setHasSessionsRemaining(true);
             console.log('User has premium plan with unlimited sessions');
           } else {
-            // For non-premium plans, use the sessionsRemaining value directly
-            // This is the same approach used in the dashboard
-            const sessionsRemaining = data.subscription.sessionsRemaining;
-            const hasRemaining = sessionsRemaining > 0;
-            console.log(`User has ${sessionsRemaining} sessions remaining. Can start session: ${hasRemaining}`);
+            // For non-premium plans, use the same calculation as in the dashboard
+            // Define sessions per plan
+            const sessionsPerPlan: {[key: string]: number} = {
+              'free': 3,
+              'basic': 8,
+              'standard': 30,
+              'premium': Infinity
+            };
+            
+            // Get total sessions allowed for the plan
+            const totalAllowed = sessionsPerPlan[data.subscription.plan.toLowerCase()] || 0;
+            
+            // Get total sessions used
+            const totalSessionsUsed = data.subscription.totalSessions || 0;
+            
+            // For free plan, it's a one-time allocation
+            let remainingSessions = 0;
+            if (data.subscription.plan.toLowerCase() === 'free') {
+              remainingSessions = Math.max(0, totalAllowed - totalSessionsUsed);
+            } else {
+              // For paid plans, it's a monthly allocation
+              remainingSessions = Math.max(0, totalAllowed);
+            }
+            
+            const hasRemaining = remainingSessions > 0;
+            console.log(`User has ${remainingSessions} sessions remaining. Can start session: ${hasRemaining}`);
             setHasSessionsRemaining(hasRemaining);
             
             // Force a re-render if no sessions remaining
