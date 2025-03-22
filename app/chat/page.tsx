@@ -185,116 +185,74 @@ export default function ChatSession() {
             } else {
               // Session has expired, create a new one
               console.log(`Previous session expired (${elapsedMinutes} minutes elapsed, limit was ${sessionLengthValue})`);
-              const session = await createSession(user.email, sessionLength);
-              setSessionId(session.id);
-              const startTime = new Date(session.createdAt);
-              setSessionStartTime(startTime);
-              setMinutesActive(0);
-              setHalfwayMessageSent(false); // Reset the halfway message flag
-              setClosingMessageSent(false); // Reset the closing message flag
-              
-              // Show loading indicator
-              setIsInitialMessageLoading(true);
-              setChatHistory([
-                { 
-                  role: 'assistant', 
-                  content: '...', 
-                  id: 'initial-loading',
-                  loading: true
-                }
-              ]);
-              
-              // Send the "New session started" message to the API
-              const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
-              const response = await sendMessageToKinOS(
-                welcomeMessage,
-                user.firstName,
-                user.lastName,
-                [], // attachments
-                [], // images
-                'session_opening' // Use session_opening mode
-              );
-              
-              // Update chat history with the response
-              setIsInitialMessageLoading(false);
-              const audioUrl = voiceMode ? await textToSpeech(response) : '';
-              setChatHistory([
-                { 
-                  role: 'assistant', 
-                  content: response,
-                  id: 'initial-' + Date.now(),
-                  audio: audioUrl
-                }
-              ]);
-              
-              // Play audio if voice mode is enabled
-              if (voiceMode && audioUrl) {
-                playAudio(audioUrl, 'initial-' + Date.now());
-              }
-              
-              console.log('New session created:', session.id, 'at', startTime);
+              await createNewSession();
             }
           } else {
             // No previous session found, create a new one
-            const session = await createSession(user.email, sessionLength);
-            setSessionId(session.id);
-            const startTime = new Date(session.createdAt);
-            setSessionStartTime(startTime);
-            setMinutesActive(0);
-            setHalfwayMessageSent(false); // Reset the halfway message flag
-            setClosingMessageSent(false); // Reset the closing message flag
-            
-            // Show loading indicator
-            setIsInitialMessageLoading(true);
-            setChatHistory([
-              { 
-                role: 'assistant', 
-                content: '...', 
-                id: 'initial-loading',
-                loading: true
-              }
-            ]);
-            
-            // Send the "New session started" message to the API
-            const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
-            const response = await sendMessageToKinOS(
-              welcomeMessage,
-              user.firstName,
-              user.lastName,
-              [], // attachments
-              [], // images
-              'session_opening' // Use session_opening mode
-            );
-            
-            // Update chat history with the response
-            setIsInitialMessageLoading(false);
-            const audioUrl = voiceMode ? await textToSpeech(response) : '';
-            setChatHistory([
-              { 
-                role: 'assistant', 
-                content: response,
-                id: 'initial-' + Date.now(),
-                audio: audioUrl
-              }
-            ]);
-              
-            // Play audio if voice mode is enabled
-            if (voiceMode && audioUrl) {
-              playAudio(audioUrl, 'initial-' + Date.now());
-            }
-            
-            console.log('New session created:', session.id, 'at', startTime);
+            await createNewSession();
           }
         } catch (error) {
           console.error('Failed to initialize session:', error);
         }
       }
     }
+    
+    // Extract the new session creation logic to a separate function
+    async function createNewSession() {
+      const session = await createSession(user.email, sessionLength);
+      setSessionId(session.id);
+      const startTime = new Date(session.createdAt);
+      setSessionStartTime(startTime);
+      setMinutesActive(0);
+      setHalfwayMessageSent(false); // Reset the halfway message flag
+      setClosingMessageSent(false); // Reset the closing message flag
+      
+      // Show loading indicator
+      setIsInitialMessageLoading(true);
+      setChatHistory([
+        { 
+          role: 'assistant', 
+          content: '...', 
+          id: 'initial-loading',
+          loading: true
+        }
+      ]);
+      
+      // Send the "New session started" message to the API
+      const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
+      const response = await sendMessageToKinOS(
+        welcomeMessage,
+        user.firstName,
+        user.lastName,
+        [], // attachments
+        [], // images
+        'session_opening' // Use session_opening mode
+      );
+      
+      // Update chat history with the response
+      setIsInitialMessageLoading(false);
+      const audioUrl = voiceMode ? await textToSpeech(response) : '';
+      setChatHistory([
+        { 
+          role: 'assistant', 
+          content: response,
+          id: 'initial-' + Date.now(),
+          audio: audioUrl
+        }
+      ]);
+        
+      // Play audio if voice mode is enabled
+      if (voiceMode && audioUrl) {
+        playAudio(audioUrl, 'initial-' + Date.now());
+      }
+      
+      console.log('New session created:', session.id, 'at', startTime);
+    }
 
     if (user && hasSessionsRemaining !== null) {
       initializeSession();
     }
-  }, [user, sessionId, hasSessionsRemaining, sessionLength]);
+  }, [user, sessionId, hasSessionsRemaining]); // Removed sessionLength from dependencies
   
   // Fetch previous messages when entering an existing session
   useEffect(() => {
