@@ -217,13 +217,20 @@ export default function ChatSession() {
               
               // Update chat history with the response
               setIsInitialMessageLoading(false);
+              const audioUrl = voiceMode ? await textToSpeech(response) : '';
               setChatHistory([
                 { 
                   role: 'assistant', 
                   content: response,
-                  id: 'initial-' + Date.now()
+                  id: 'initial-' + Date.now(),
+                  audio: audioUrl
                 }
               ]);
+              
+              // Play audio if voice mode is enabled
+              if (voiceMode && audioUrl) {
+                playAudio(audioUrl, 'initial-' + Date.now());
+              }
               
               console.log('New session created:', session.id, 'at', startTime);
             }
@@ -261,13 +268,20 @@ export default function ChatSession() {
             
             // Update chat history with the response
             setIsInitialMessageLoading(false);
+            const audioUrl = voiceMode ? await textToSpeech(response) : '';
             setChatHistory([
               { 
                 role: 'assistant', 
                 content: response,
-                id: 'initial-' + Date.now()
+                id: 'initial-' + Date.now(),
+                audio: audioUrl
               }
             ]);
+              
+            // Play audio if voice mode is enabled
+            if (voiceMode && audioUrl) {
+              playAudio(audioUrl, 'initial-' + Date.now());
+            }
             
             console.log('New session created:', session.id, 'at', startTime);
           }
@@ -347,7 +361,7 @@ export default function ChatSession() {
       // Send halfway message if we're at the halfway point and haven't sent it yet
       if (isAtHalfway && !halfwayMessageSent && !sessionEnded) {
         console.log(`Sending halfway message at ${sessionDuration.toFixed(1)} minutes`);
-        
+          
         // Send the halfway message
         sendMessageToKinOS(
           "<system>Info: Session halfway</system>",
@@ -356,9 +370,33 @@ export default function ChatSession() {
           [], // attachments
           [], // images
           "journey" // Use journey mode
-        ).then(() => {
+        ).then(async (response) => {
           console.log("Halfway message sent successfully");
           setHalfwayMessageSent(true);
+            
+          // If the response is visible to the user, add it to chat and play TTS
+          if (!response.includes("<system>")) {
+            const messageId = `halfway-${Date.now()}`;
+            let audioUrl = '';
+            if (voiceMode) {
+              audioUrl = await textToSpeech(response);
+            }
+              
+            setChatHistory(prev => [
+              ...prev,
+              { 
+                role: 'assistant', 
+                content: response,
+                id: messageId,
+                audio: audioUrl
+              }
+            ]);
+              
+            // Play audio if voice mode is enabled
+            if (voiceMode && audioUrl) {
+              playAudio(audioUrl, messageId);
+            }
+          }
         }).catch(error => {
           console.error("Error sending halfway message:", error);
         });
@@ -367,7 +405,7 @@ export default function ChatSession() {
       // Send closing message if we're at the closing phase start and haven't sent it yet
       if (isAtClosingPhase && !closingMessageSent && !sessionEnded) {
         console.log(`Sending closing message at ${sessionDuration.toFixed(1)} minutes`);
-        
+          
         // Send the closing message
         sendMessageToKinOS(
           "<system>Info: Session is closing soon</system>",
@@ -376,9 +414,33 @@ export default function ChatSession() {
           [], // attachments
           [], // images
           "journey" // Use journey mode
-        ).then(() => {
+        ).then(async (response) => {
           console.log("Closing message sent successfully");
           setClosingMessageSent(true);
+            
+          // If the response is visible to the user, add it to chat and play TTS
+          if (!response.includes("<system>")) {
+            const messageId = `closing-${Date.now()}`;
+            let audioUrl = '';
+            if (voiceMode) {
+              audioUrl = await textToSpeech(response);
+            }
+              
+            setChatHistory(prev => [
+              ...prev,
+              { 
+                role: 'assistant', 
+                content: response,
+                id: messageId,
+                audio: audioUrl
+              }
+            ]);
+              
+            // Play audio if voice mode is enabled
+            if (voiceMode && audioUrl) {
+              playAudio(audioUrl, messageId);
+            }
+          }
         }).catch(error => {
           console.error("Error sending closing message:", error);
         });
@@ -454,9 +516,33 @@ export default function ChatSession() {
           [], // attachments
           [], // images
           "journey" // Use journey mode
-        ).then(() => {
+        ).then(async (response) => {
           console.log("Silence notification sent successfully");
           setSilenceMessageSent(true);
+          
+          // If the response is visible to the user, add it to chat and play TTS
+          if (!response.includes("<system>")) {
+            const messageId = `silence-${Date.now()}`;
+            let audioUrl = '';
+            if (voiceMode) {
+              audioUrl = await textToSpeech(response);
+            }
+            
+            setChatHistory(prev => [
+              ...prev,
+              { 
+                role: 'assistant', 
+                content: response,
+                id: messageId,
+                audio: audioUrl
+              }
+            ]);
+            
+            // Play audio if voice mode is enabled
+            if (voiceMode && audioUrl) {
+              playAudio(audioUrl, messageId);
+            }
+          }
           
           // Reset after 1 minute to allow another silence message if needed
           setTimeout(() => {
@@ -480,17 +566,33 @@ export default function ChatSession() {
       );
       
       if (!hasEndMessage) {
-        setChatHistory(prev => [
-          ...prev,
-          { 
-            role: 'assistant', 
-            content: `Our ${sessionLength}-minute session time has ended for today. I hope our conversation was helpful. You can review our discussion, but new messages can't be sent until your next session. I look forward to continuing our conversation in your next session!`,
-            id: 'session-ended-message'
+        const endMessage = `Our ${sessionLength}-minute session time has ended for today. I hope our conversation was helpful. You can review our discussion, but new messages can't be sent until your next session. I look forward to continuing our conversation in your next session!`;
+        
+        // Generate audio for the end message if voice mode is on
+        (async () => {
+          let audioUrl = '';
+          if (voiceMode) {
+            audioUrl = await textToSpeech(endMessage);
           }
-        ]);
+          
+          setChatHistory(prev => [
+            ...prev,
+            { 
+              role: 'assistant', 
+              content: endMessage,
+              id: 'session-ended-message',
+              audio: audioUrl
+            }
+          ]);
+          
+          // Play audio if voice mode is enabled
+          if (voiceMode && audioUrl) {
+            playAudio(audioUrl, 'session-ended-message');
+          }
+        })();
       }
     }
-  }, [sessionEnded, chatHistory, sessionLength]); // Add sessionLength as a dependency
+  }, [sessionEnded, chatHistory, sessionLength, voiceMode]); // Add voiceMode as a dependency
 
   // Track and update minutes active
   useEffect(() => {
