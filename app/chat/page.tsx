@@ -1,0 +1,878 @@
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { sendMessageToKinOS } from '../utils/kinos';
+import { createSession, getOngoingSession } from '../utils/airtable';
+
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  id?: string;
+  loading?: boolean;
+  audio?: string; // Add this to store audio URL
+}
+
+export default function ChatSession() {
+  const { user, loading } = useAuth();
+  const [message, setMessage] = useState('');
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
+    { 
+      role: 'assistant', 
+      content: 'Hello! I\'m TherapyKin, your therapeutic companion. How are you feeling today?',
+      id: 'initial'
+    }
+  ]);
+  const [voiceMode, setVoiceMode] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentPlayingId, setCurrentPlayingId] = useState<string | null>(null);
+  const [selectedVoice, setSelectedVoice] = useState('UgBBYS2sOqTuMpoF3BR0'); // Default to Mark - Natural
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const recordingTimerRef = useRef<number | null>(null); // Change to number type for browser compatibility
+  
+  // Session tracking
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
+  const [sessionMode, setSessionMode] = useState<string | null>(null);
+  const [minutesActive, setMinutesActive] = useState(0);
+  const [sessionEnded, setSessionEnded] = useState(false);
+  
+  // Voice options
+  const voiceOptions = [
+    { id: 'UgBBYS2sOqTuMpoF3BR0', name: 'Mark - Natural (default)' },
+    { id: 'g6xIsTj2HwM6VR4iXFCw', name: 'Jessica' },
+    { id: 'TbMNBJ27fH2U0VgpSNko', name: 'Lori - Happy & Sweet' },
+    { id: 'OYTbf65OHHFELVut7v2H', name: 'Hope - Natural' },
+    { id: 'L0Dsvb3SLTyegXwtm47J', name: 'Archer - Calm British' },
+    { id: 'kENkNtk0xyzG09WW40xE', name: 'Marcel - French' },
+    { id: 'IKne3meq5aSn9XLyUdCD', name: 'Sara - Spanish' }
+  ];
+  
+  // Add a ref for the chat container
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Initialize audio element
+  useEffect(() => {
+    audioRef.current = new Audio();
+    audioRef.current.onplay = () => setIsPlaying(true);
+    audioRef.current.onended = () => {
+      setIsPlaying(false);
+      setCurrentPlayingId(null);
+    };
+    audioRef.current.onerror = () => {
+      setIsPlaying(false);
+      setCurrentPlayingId(null);
+    };
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+  
+  // Create a session when the component mounts
+  useEffect(() => {
+    async function initializeSession() {
+      if (user && !sessionId) {
+        try {
+          // First, check if there's an ongoing session
+          const ongoingSession = await getOngoingSession(user.email);
+          
+          if (ongoingSession) {
+            // Use the existing session
+            setSessionId(ongoingSession.id);
+            const startTime = new Date(ongoingSession.createdAt);
+            setSessionStartTime(startTime);
+            console.log('Using existing session:', ongoingSession.id, 'started at', startTime);
+            
+            // Calculate how many minutes have already passed
+            const now = new Date();
+            const elapsedMinutes = Math.floor((now.getTime() - startTime.getTime()) / (60 * 1000));
+            setMinutesActive(elapsedMinutes);
+            console.log(`Session already active for ${elapsedMinutes} minutes`);
+          } else {
+            // Create a new session
+            const session = await createSession(user.email);
+            setSessionId(session.id);
+            const startTime = new Date(session.createdAt);
+            setSessionStartTime(startTime);
+            console.log('New session created:', session.id, 'at', startTime);
+          }
+        } catch (error) {
+          console.error('Failed to initialize session:', error);
+        }
+      }
+    }
+
+    if (user) {
+      initializeSession();
+    }
+  }, [user, sessionId]);
+
+  // Update the session mode based on timing
+  useEffect(() => {
+    if (!sessionStartTime) return;
+
+    const updateSessionMode = () => {
+      const now = new Date();
+      const sessionDuration = (now.getTime() - sessionStartTime.getTime()) / 1000 / 60; // in minutes
+      
+      // Session is one hour (60 minutes)
+      const SESSION_DURATION = 60;
+      
+      // First 5 minutes of the session
+      if (sessionDuration <= 5) {
+        setSessionMode('session_opening');
+        setSessionEnded(false);
+      } 
+      // Last 5 minutes of the session
+      else if (sessionDuration >= (SESSION_DURATION - 5) && sessionDuration < SESSION_DURATION) {
+        setSessionMode('session_closing');
+        setSessionEnded(false);
+      }
+      // Session has ended (60+ minutes)
+      else if (sessionDuration >= SESSION_DURATION) {
+        setSessionMode('session_ended');
+        setSessionEnded(true);
+      }
+      // Middle of the session
+      else {
+        setSessionMode(null);
+        setSessionEnded(false);
+      }
+    };
+
+    // Update immediately and then every minute
+    updateSessionMode();
+    const intervalId = setInterval(updateSessionMode, 60000); // check every minute
+    
+    return () => clearInterval(intervalId);
+  }, [sessionStartTime]);
+
+  // Add a session-ended message to the chat when the session ends
+  useEffect(() => {
+    if (sessionEnded) {
+      // Only add the message if it doesn't already exist
+      const hasEndMessage = chatHistory.some(msg => 
+        msg.role === 'assistant' && msg.id === 'session-ended-message'
+      );
+      
+      if (!hasEndMessage) {
+        setChatHistory(prev => [
+          ...prev,
+          { 
+            role: 'assistant', 
+            content: "Our session time has ended for today. I hope our conversation was helpful. You can review our discussion, but new messages can't be sent until your next session. I look forward to continuing our conversation in your next session!",
+            id: 'session-ended-message'
+          }
+        ]);
+      }
+    }
+  }, [sessionEnded, chatHistory]);
+
+  // Track and update minutes active
+  useEffect(() => {
+    if (!sessionId) return;
+    
+    // Initialize minutes counter
+    setMinutesActive(0);
+    
+    // Set up interval to increment minutes and update Airtable
+    const minuteInterval = setInterval(async () => {
+      const newMinutes = minutesActive + 1;
+      setMinutesActive(newMinutes);
+      
+      // Update the session in Airtable
+      try {
+        await fetch('/api/sessions/update-minutes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId,
+            minutesActive: newMinutes,
+          }),
+        });
+        console.log(`Updated session minutes: ${newMinutes}`);
+      } catch (error) {
+        console.error('Failed to update session minutes:', error);
+      }
+    }, 60000); // Run every minute (60000 ms)
+    
+    // Clean up interval on unmount
+    return () => clearInterval(minuteInterval);
+  }, [sessionId, minutesActive]); // Re-run when sessionId changes or minutesActive updates
+
+  // Auto-scroll to bottom when chat history changes
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      const scrollOptions: ScrollIntoViewOptions = {
+        behavior: 'smooth',
+        block: 'end',
+      };
+      
+      // Use setTimeout to ensure the DOM has updated
+      setTimeout(() => {
+        chatContainerRef.current?.scrollIntoView(scrollOptions);
+      }, 100);
+    }
+  }, [chatHistory]);
+  
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    const textarea = document.querySelector('textarea');
+    if (!textarea) return;
+
+    const resizeTextarea = () => {
+      textarea.style.height = 'auto';
+      const scrollHeight = textarea.scrollHeight;
+      textarea.style.height = `${Math.min(scrollHeight, 150)}px`; // Cap at 150px
+    };
+
+    textarea.addEventListener('input', resizeTextarea);
+    
+    // Initial resize
+    resizeTextarea();
+    
+    return () => {
+      textarea.removeEventListener('input', resizeTextarea);
+    };
+  }, [message]); // Re-run when message changes
+  
+  // Helper function to determine the session phase
+  const getSessionPhase = (startTime: Date) => {
+    const now = new Date();
+    const elapsedMinutes = Math.floor((now.getTime() - startTime.getTime()) / (60 * 1000));
+    
+    if (elapsedMinutes <= 5) {
+      return { phase: "Session Opening", color: "bg-[var(--accent)]/10 text-[var(--accent)]" };
+    } else if (elapsedMinutes < 30) {
+      return { phase: "First Half", color: "bg-[var(--primary)]/10 text-[var(--primary)]" };
+    } else if (elapsedMinutes < 55) {
+      return { phase: "Second Half", color: "bg-[var(--primary-dark)]/10 text-[var(--primary-dark)]" };
+    } else if (elapsedMinutes < 60) {
+      return { phase: "Session Closing", color: "bg-[var(--warm)]/10 text-[var(--warm)]" };
+    } else {
+      return { phase: "Session Ended", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300" };
+    }
+  };
+
+  // Function to convert text to speech using our proxy API
+  const textToSpeech = async (text: string): Promise<string> => {
+    try {
+      console.log(`Requesting TTS for text: "${text.substring(0, 30)}..."`);
+      console.log(`Sending TTS request with voiceId: ${selectedVoice}`);
+      
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text,
+          voiceId: selectedVoice, // Use the selected voice
+          model: 'eleven_flash_v2_5'
+        })
+      });
+      
+      // Check if the response is JSON (error) or binary (audio)
+      const contentType = response.headers.get('content-type');
+      console.log(`TTS response content type: ${contentType}`);
+      
+      if (contentType && contentType.includes('application/json')) {
+        // This is an error response
+        const errorData = await response.json();
+        console.error('TTS API returned JSON instead of audio:', errorData);
+        throw new Error(errorData.error || 'Failed to get audio');
+      }
+      
+      if (!response.ok) {
+        throw new Error(`TTS request failed with status ${response.status}`);
+      }
+      
+      const blob = await response.blob();
+      console.log(`Received blob of size: ${blob.size} bytes, type: ${blob.type}`);
+      
+      if (blob.size === 0) {
+        throw new Error('Received empty audio response');
+      }
+      
+      // Create a URL for the blob
+      const audioUrl = URL.createObjectURL(blob);
+      console.log(`Created audio URL: ${audioUrl}`);
+      
+      return audioUrl;
+    } catch (error) {
+      console.error('Error converting text to speech:', error);
+      // Return empty string but show a notification to the user
+      alert(`Voice playback error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return '';
+    }
+  };
+
+  // Function to play audio
+  const playAudio = (audioUrl: string, messageId: string) => {
+    if (audioRef.current) {
+      // Stop any currently playing audio
+      audioRef.current.pause();
+      audioRef.current.src = audioUrl;
+      setCurrentPlayingId(messageId);
+      audioRef.current.play().catch(err => {
+        console.error('Error playing audio:', err);
+        setIsPlaying(false);
+        setCurrentPlayingId(null);
+      });
+    }
+  };
+
+  // Function to start recording
+  const startRecording = async () => {
+    try {
+      // Reset audio chunks
+      audioChunksRef.current = [];
+      
+      // Request microphone access
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      // Create media recorder
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      
+      // Set up event handlers
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+      
+      mediaRecorder.onstop = handleRecordingStop;
+      
+      // Start recording
+      mediaRecorder.start();
+      setIsRecording(true);
+      
+      // Reset recording time
+      setRecordingTime(0);
+      
+      // Clear any existing timer
+      if (recordingTimerRef.current) {
+        window.clearInterval(recordingTimerRef.current);
+      }
+      
+      // Start a new timer using window.setInterval
+      // Store the interval ID as a number
+      recordingTimerRef.current = window.setInterval(() => {
+        setRecordingTime((prevTime) => prevTime + 1);
+      }, 1000);
+      
+      console.log('Recording started with new timer');
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      alert('Could not access microphone. Please check permissions and try again.');
+    }
+  };
+
+  // Function to stop recording
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+      
+      // Stop all tracks in the stream
+      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      
+      // Clear timer
+      if (recordingTimerRef.current) {
+        window.clearInterval(recordingTimerRef.current);
+        recordingTimerRef.current = null;
+      }
+      
+      console.log('Recording stopped, timer cleared');
+    }
+  };
+
+  // Function to handle recording stop event
+  const handleRecordingStop = async () => {
+    try {
+      setIsRecording(false);
+      // Reset recording time after we're done processing
+      const recordedTime = recordingTime;
+      setRecordingTime(0);
+      
+      // Create audio blob from chunks
+      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+      console.log(`Audio recording complete, size: ${audioBlob.size} bytes`);
+      
+      if (audioBlob.size > 0) {
+        // Send to STT API
+        await sendAudioForTranscription(audioBlob);
+      }
+    } catch (error) {
+      console.error('Error handling recording stop:', error);
+    }
+  };
+
+  // Function to send audio to STT API
+  const sendAudioForTranscription = async (audioBlob: Blob) => {
+    try {
+      // Create form data
+      const formData = new FormData();
+      formData.append('file', audioBlob, 'recording.webm');
+      formData.append('model', 'whisper-1');
+      formData.append('language', 'en'); // Default to English
+      
+      // Show loading message
+      setChatHistory(prev => [
+        ...prev,
+        { 
+          role: 'user', 
+          content: 'Transcribing audio...', 
+          id: 'transcribing-' + Date.now(),
+          loading: true 
+        }
+      ]);
+      
+      console.log('Sending audio for transcription...');
+      
+      // Send to STT API
+      const response = await fetch('/api/stt', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error(`STT API returned status ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Transcription received:', data);
+      
+      if (data.text && data.text.trim()) {
+        // Remove the loading message
+        setChatHistory(prev => prev.filter(msg => !msg.id?.startsWith('transcribing-')));
+        
+        // Create a user message with the transcribed text
+        const userMessageId = `user-${Date.now()}`;
+        setChatHistory(prev => [
+          ...prev,
+          { role: 'user', content: data.text, id: userMessageId }
+        ]);
+        
+        // Set loading state for assistant response
+        const loadingId = Date.now().toString();
+        setChatHistory(prev => [
+          ...prev,
+          { role: 'assistant', content: '...', id: loadingId, loading: true }
+        ]);
+        
+        try {
+          // Send message to KinOS API
+          const response = await sendMessageToKinOS(
+            data.text,
+            user?.firstName || 'Guest',
+            user?.lastName || 'User',
+            [], // attachments
+            [], // images
+            sessionMode // Add session mode
+          );
+          
+          // If voice mode is enabled, convert response to speech
+          let audioUrl = '';
+          if (voiceMode) {
+            audioUrl = await textToSpeech(response);
+          }
+          
+          // Update chat history with the response
+          setChatHistory(prev => 
+            prev.map(msg => 
+              msg.id === loadingId 
+                ? { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
+                : msg
+            )
+          );
+          
+          // Play audio if voice mode is enabled
+          if (voiceMode && audioUrl) {
+            playAudio(audioUrl, loadingId);
+          }
+          
+          // Save the conversation to local storage or your backend if needed
+          saveConversation([
+            ...chatHistory,
+            { role: 'user', content: data.text, id: userMessageId },
+            { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
+          ]);
+        } catch (error) {
+          console.error('Error getting response:', error);
+          
+          // Update with error message
+          setChatHistory(prev => 
+            prev.map(msg => 
+              msg.id === loadingId 
+                ? { role: 'assistant', content: "I'm sorry, I encountered an error. Please try again.", id: loadingId, loading: false }
+                : msg
+            )
+          );
+        }
+      } else {
+        // If no text was transcribed or it was empty
+        setChatHistory(prev => prev.filter(msg => !msg.id?.startsWith('transcribing-')));
+        alert('No speech detected. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error transcribing audio:', error);
+      
+      // Remove the loading message and show error
+      setChatHistory(prev => [
+        ...prev.filter(msg => !msg.id?.startsWith('transcribing-')),
+        { 
+          role: 'assistant', 
+          content: 'Sorry, I couldn\'t transcribe your audio. Please try again or type your message.',
+          id: 'error-' + Date.now()
+        }
+      ]);
+    }
+  };
+
+  // Format recording time as MM:SS
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const secs = (seconds % 60).toString().padStart(2, '0');
+    return `${mins}:${secs}`;
+  };
+
+  // Toggle voice mode
+  const toggleVoiceMode = () => {
+    setVoiceMode(!voiceMode);
+  };
+
+  // Add cleanup for recording resources
+  useEffect(() => {
+    return () => {
+      // Stop recording if component unmounts while recording
+      if (isRecording && mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+        
+        // Stop all tracks in the stream
+        if (mediaRecorderRef.current.stream) {
+          mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+        }
+      }
+      
+      // Clear any timers
+      if (recordingTimerRef.current) {
+        window.clearInterval(recordingTimerRef.current);
+        recordingTimerRef.current = null;
+      }
+    };
+  }, [isRecording]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p>Loading your session...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!message.trim() || sessionEnded) return;
+    
+    // Add user message to chat
+    const userMessageId = `user-${Date.now()}`;
+    setChatHistory([...chatHistory, { role: 'user', content: message, id: userMessageId }]);
+    
+    // Store the message to clear the input field
+    const userMessage = message;
+    setMessage('');
+    
+    // Set loading state
+    const loadingId = Date.now().toString();
+    setChatHistory(prev => [
+      ...prev,
+      { role: 'assistant', content: '...', id: loadingId, loading: true }
+    ]);
+    
+    try {
+      // Send message to KinOS API
+      const response = await sendMessageToKinOS(
+        userMessage,
+        user?.firstName || 'Guest',
+        user?.lastName || 'User',
+        [], // attachments
+        [], // images
+        sessionMode // Add session mode
+      );
+      
+      // If voice mode is enabled, convert response to speech
+      let audioUrl = '';
+      if (voiceMode) {
+        audioUrl = await textToSpeech(response);
+      }
+      
+      // Update chat history with the response
+      setChatHistory(prev => 
+        prev.map(msg => 
+          msg.id === loadingId 
+            ? { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
+            : msg
+        )
+      );
+      
+      // Play audio if voice mode is enabled
+      if (voiceMode && audioUrl) {
+        playAudio(audioUrl, loadingId);
+      }
+      
+      // Save the conversation to local storage or your backend if needed
+      saveConversation([
+        ...chatHistory.filter(msg => msg.id !== loadingId),
+        { role: 'user', content: userMessage, id: userMessageId },
+        { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
+      ]);
+    } catch (error) {
+      console.error('Error getting response:', error);
+      
+      // Update with error message
+      setChatHistory(prev => 
+        prev.map(msg => 
+          msg.id === loadingId 
+            ? { role: 'assistant', content: "I'm sorry, I encountered an error. Please try again.", id: loadingId, loading: false }
+            : msg
+        )
+      );
+    }
+  };
+
+  // Helper function to save conversations (you can implement this as needed)
+  const saveConversation = (conversation: ChatMessage[]) => {
+    // This is a placeholder - implement as needed
+  };
+
+  // Function to play audio for a specific message
+  const playMessageAudio = async (msg: ChatMessage) => {
+    if (msg.audio) {
+      playAudio(msg.audio, msg.id || 'unknown');
+    } else if (msg.role === 'assistant' && !msg.loading) {
+      // Generate audio on-demand if not already available
+      const audioUrl = await textToSpeech(msg.content);
+      if (audioUrl) {
+        // Update the message with the audio URL
+        setChatHistory(prev => 
+          prev.map(m => 
+            m.id === msg.id 
+              ? { ...m, audio: audioUrl }
+              : m
+          )
+        );
+        playAudio(audioUrl, msg.id || 'unknown');
+      }
+    }
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      
+      <main className="flex-grow pt-24 pb-24 px-4 relative">
+        <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-200px)]">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">Therapy Session</h1>
+            <div className="flex items-center gap-2">
+              {sessionStartTime && (
+                <div className={`text-sm font-medium px-3 py-1 rounded-full ${
+                  sessionEnded 
+                    ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' 
+                    : getSessionPhase(sessionStartTime).color
+                }`}>
+                  {sessionEnded 
+                    ? 'Session Ended' 
+                    : getSessionPhase(sessionStartTime).phase}
+                </div>
+              )}
+              <button 
+                className={`btn-secondary mr-2 text-sm ${voiceMode ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30' : ''}`}
+                onClick={toggleVoiceMode}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                {voiceMode ? 'Voice Mode: On' : 'Voice Mode: Off'}
+              </button>
+              
+              {/* Voice selector dropdown */}
+              {voiceMode && (
+                <select
+                  className="mr-2 p-2 text-sm border border-black/10 dark:border-white/10 rounded-lg bg-[var(--background)]"
+                  value={selectedVoice}
+                  onChange={(e) => setSelectedVoice(e.target.value)}
+                >
+                  {voiceOptions.map(voice => (
+                    <option key={voice.id} value={voice.id}>
+                      {voice.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+              
+              <button className="btn-secondary text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Settings
+              </button>
+            </div>
+          </div>
+          
+          {/* Chat history */}
+          <div className="flex-grow card overflow-hidden">
+            <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
+              <div className="space-y-4">
+                {chatHistory.map((msg) => (
+                  <div key={msg.id || Math.random()} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div 
+                      className={`max-w-[80%] p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
+                        msg.role === 'user' 
+                          ? 'user-message-bubble rounded-br-none' 
+                          : 'assistant-message-bubble rounded-bl-none'
+                      }`}
+                    >
+                      {msg.loading ? (
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
+                          {msg.role === 'assistant' && (
+                            <div className="mt-2 flex justify-end">
+                              {currentPlayingId === msg.id ? (
+                                <button 
+                                  onClick={() => {
+                                    if (audioRef.current) {
+                                      audioRef.current.pause();
+                                      setIsPlaying(false);
+                                      setCurrentPlayingId(null);
+                                    }
+                                  }}
+                                  className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                  </svg>
+                                  Stop
+                                </button>
+                              ) : (
+                                <button 
+                                  onClick={() => playMessageAudio(msg)}
+                                  className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  Listen
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {/* Add an invisible element at the bottom to scroll to */}
+                <div ref={chatContainerRef} />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Message input - fixed to bottom */}
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--background)] border-t border-black/10 dark:border-white/10 z-10">
+          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex shadow-sm rounded-lg overflow-hidden border border-black/10 dark:border-white/10 hover:shadow-md transition-shadow duration-200">
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                // Submit on Ctrl+Enter or Cmd+Enter
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !sessionEnded) {
+                  e.preventDefault();
+                  handleSubmit(e as any);
+                }
+              }}
+              placeholder={sessionEnded 
+                ? "This session has ended. Please return for your next session." 
+                : "Type your message here... (Ctrl+Enter to send)"}
+              className={`flex-grow p-3 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] bg-[var(--card-bg)] resize-none min-h-[50px] max-h-[150px] overflow-y-auto ${
+                sessionEnded ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              style={{ height: 'auto' }}
+              rows={1}
+              disabled={isRecording || sessionEnded}
+            />
+            
+            {/* Microphone button */}
+            <button 
+              type="button"
+              onClick={isRecording ? stopRecording : startRecording}
+              className={`p-3 self-end transition-colors ${
+                isRecording 
+                  ? 'bg-[var(--primary-dark)] text-white animate-pulse' 
+                  : 'bg-[var(--background-alt)] text-foreground/70 hover:bg-[var(--primary)]/10'
+              } ${sessionEnded ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={sessionEnded}
+            >
+              {isRecording ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+              )}
+            </button>
+            
+            {/* Send button */}
+            <button 
+              type="submit" 
+              className={`bg-[var(--primary)] text-white p-3 hover:opacity-90 transition-opacity self-end ${
+                sessionEnded ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              disabled={isRecording || sessionEnded}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+}
