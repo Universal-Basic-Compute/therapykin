@@ -46,6 +46,7 @@ export default function ChatSession() {
   const [showSettings, setShowSettings] = useState<boolean>(false); // For settings modal
   const [hasSessionsRemaining, setHasSessionsRemaining] = useState<boolean | null>(null);
   const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
+  const [isUpdatingPreference, setIsUpdatingPreference] = useState(false);
   
   // Voice options
   const voiceOptions = [
@@ -82,7 +83,7 @@ export default function ChatSession() {
     };
   }, []);
   
-  // Check if user has sessions remaining
+  // Check if user has sessions remaining and fetch preferred session length
   useEffect(() => {
     async function checkRemainingSession() {
       if (!user) return;
@@ -118,6 +119,30 @@ export default function ChatSession() {
     }
 
     checkRemainingSession();
+  }, [user]);
+  
+  // Fetch user's preferred session length
+  useEffect(() => {
+    async function fetchPreferredSessionLength() {
+      if (!user) return;
+      
+      try {
+        const response = await fetch('/api/users/preferences');
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.preferences && data.preferences.preferredSessionLength) {
+            // Set the session length to the user's preference
+            setSessionLength(data.preferences.preferredSessionLength);
+            console.log(`Loaded user's preferred session length: ${data.preferences.preferredSessionLength} minutes`);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user preferences:', error);
+      }
+    }
+    
+    fetchPreferredSessionLength();
   }, [user]);
 
   // Create a session when the component mounts
@@ -606,12 +631,15 @@ export default function ChatSession() {
     setVoiceMode(!voiceMode);
   };
   
-  // Update session length
+  // Update session length and save as preference
   const updateSessionLength = async (length: number) => {
     if (!sessionId) return;
     
+    setIsUpdatingPreference(true);
+    
     try {
-      const response = await fetch('/api/sessions/update-length', {
+      // First update the current session length
+      const sessionResponse = await fetch('/api/sessions/update-length', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -622,15 +650,32 @@ export default function ChatSession() {
         }),
       });
       
-      if (!response.ok) {
-        throw new Error(`Failed to update session length: ${response.status}`);
+      if (!sessionResponse.ok) {
+        throw new Error(`Failed to update session length: ${sessionResponse.status}`);
       }
       
-      console.log(`Session length updated to ${length} minutes`);
+      // Then update the user's preference
+      const preferenceResponse = await fetch('/api/users/preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          preferredSessionLength: length,
+        }),
+      });
+      
+      if (!preferenceResponse.ok) {
+        throw new Error(`Failed to update preference: ${preferenceResponse.status}`);
+      }
+      
+      console.log(`Session length updated to ${length} minutes and saved as preference`);
       setSessionLength(length);
     } catch (error) {
-      console.error('Error updating session length:', error);
+      console.error('Error updating session length or preference:', error);
       // Optionally show an error message to the user
+    } finally {
+      setIsUpdatingPreference(false);
     }
   };
 
@@ -1036,25 +1081,32 @@ export default function ChatSession() {
             </div>
             
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Session Length</label>
+              <label className="block text-sm font-medium mb-2">Preferred Session Length</label>
               <div className="grid grid-cols-3 gap-2">
                 {[15, 30, 45].map((length) => (
                   <button
                     key={length}
                     onClick={() => updateSessionLength(length)}
+                    disabled={isUpdatingPreference}
                     className={`p-3 rounded-lg border ${
                       sessionLength === length 
                         ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
                         : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                    }`}
+                    } ${isUpdatingPreference ? 'opacity-50 cursor-wait' : ''}`}
                   >
                     {length} minutes
                   </button>
                 ))}
               </div>
               <p className="text-xs text-foreground/60 mt-2">
-                Changing the session length will apply to your current session.
+                This will be your default session length and will apply to your current session.
               </p>
+              {isUpdatingPreference && (
+                <div className="text-xs text-foreground/60 mt-2 flex items-center">
+                  <div className="w-3 h-3 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Saving your preference...
+                </div>
+              )}
             </div>
             
             <div className="flex justify-end">
