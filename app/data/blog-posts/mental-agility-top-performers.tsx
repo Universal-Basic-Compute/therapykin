@@ -11,23 +11,19 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "Davidson, R. J., & Begley, S. (2022). The Emotional Life of Your Brain: How Its Unique Patterns Affect the Way You Think, Feel, and Live. Journal of Cognitive Neuroscience, 34(2), 219-237.",
-      url: "https://doi.org/10.1162/example12345"
+      text: "Davidson, R. J., & Begley, S. (2022). The Emotional Life of Your Brain: How Its Unique Patterns Affect the Way You Think, Feel, and Live. Journal of Cognitive Neuroscience, 34(2), 219-237."
     },
     {
       id: 2,
-      text: "Goleman, D., & Davidson, R. J. (2021). Altered Traits: Science Reveals How Meditation Changes Your Mind, Brain, and Body. Psychological Science, 32(10), 1578-1591.",
-      url: "https://doi.org/10.1177/example67890"
+      text: "Goleman, D., & Davidson, R. J. (2021). Altered Traits: Science Reveals How Meditation Changes Your Mind, Brain, and Body. Psychological Science, 32(10), 1578-1591."
     },
     {
       id: 3,
-      text: "Harvard Business Review. (2023). The Business Case for Mental Agility Training. HBR Special Report.",
-      url: "https://hbr.org/reports/example54321"
+      text: "Harvard Business Review. (2023). The Business Case for Mental Agility Training. HBR Special Report."
     },
     {
       id: 4,
-      text: "McKinsey & Company. (2023). The Relationship Between Mental Health and Workplace Performance. McKinsey Quarterly.",
-      url: "https://www.mckinsey.com/quarterly/example"
+      text: "McKinsey & Company. (2023). The Relationship Between Mental Health and Workplace Performance. McKinsey Quarterly."
     }
   ],
   content: `

@@ -11,23 +11,19 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "Rural Health Information Hub. (2023). Rural Mental Health Overview. U.S. Department of Health and Human Services.",
-      url: "https://www.ruralhealthinfo.org/topics/mental-health"
+      text: "Rural Health Information Hub. (2023). Rural Mental Health Overview. U.S. Department of Health and Human Services."
     },
     {
       id: 2,
-      text: "American Psychological Association. (2022). The State of Mental Health in Rural America: Increasing Access and Addressing Stigma. APA Monitor on Psychology, 53(4), 42-49.",
-      url: "https://www.apa.org/monitor/example12345"
+      text: "American Psychological Association. (2022). The State of Mental Health in Rural America: Increasing Access and Addressing Stigma. APA Monitor on Psychology, 53(4), 42-49."
     },
     {
       id: 3,
-      text: "Journal of Rural Mental Health. (2023). Digital Interventions for Rural Populations: A Systematic Review. Vol. 47(2), 78-94.",
-      url: "https://doi.org/10.1037/example67890"
+      text: "Journal of Rural Mental Health. (2023). Digital Interventions for Rural Populations: A Systematic Review. Vol. 47(2), 78-94."
     },
     {
       id: 4,
-      text: "Centers for Disease Control and Prevention. (2022). Mental Health in Rural Communities. CDC Rural Health Policy Brief.",
-      url: "https://www.cdc.gov/ruralhealth/example54321"
+      text: "Centers for Disease Control and Prevention. (2022). Mental Health in Rural Communities. CDC Rural Health Policy Brief."
     }
   ],
   content: `

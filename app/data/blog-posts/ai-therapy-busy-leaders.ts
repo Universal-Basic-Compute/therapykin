@@ -11,23 +11,19 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "World Health Organization. (2023). Mental Health in the Workplace: Global Challenges and Opportunities. WHO Technical Report.",
-      url: "https://www.who.int/publications/example12345"
+      text: "World Health Organization. (2023). Mental Health in the Workplace: Global Challenges and Opportunities. WHO Technical Report."
     },
     {
       id: 2,
-      text: "Deloitte. (2022). Mental Health and Executives: A Global Leadership Crisis. Deloitte Global Human Capital Trends.",
-      url: "https://www2.deloitte.com/insights/example67890"
+      text: "Deloitte. (2022). Mental Health and Executives: A Global Leadership Crisis. Deloitte Global Human Capital Trends."
     },
     {
       id: 3,
-      text: "Journal of Occupational Health. (2023). AI-Assisted Mental Health Interventions: A Systematic Review. Vol 65(3), 234-251.",
-      url: "https://doi.org/10.1539/example54321"
+      text: "Journal of Occupational Health. (2023). AI-Assisted Mental Health Interventions: A Systematic Review. Vol 65(3), 234-251."
     },
     {
       id: 4,
-      text: "Harvard Business Review. (2023). The Hidden Mental Health Crisis in Leadership. HBR Digital Article.",
-      url: "https://hbr.org/example98765"
+      text: "Harvard Business Review. (2023). The Hidden Mental Health Crisis in Leadership. HBR Digital Article."
     }
   ],
   content: `

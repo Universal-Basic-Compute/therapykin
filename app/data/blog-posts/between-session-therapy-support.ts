@@ -11,28 +11,23 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "Lambert, M. J. (2013). The efficacy and effectiveness of psychotherapy. In M. J. Lambert (Ed.), Bergin and Garfield's handbook of psychotherapy and behavior change (6th ed., pp. 169-218). Wiley.",
-      url: "https://www.wiley.com/en-us/Bergin+and+Garfield%27s+Handbook+of+Psychotherapy+and+Behavior+Change%2C+6th+Edition-p-9781118038208"
+      text: "Lambert, M. J. (2013). The efficacy and effectiveness of psychotherapy. In M. J. Lambert (Ed.), Bergin and Garfield's handbook of psychotherapy and behavior change (6th ed., pp. 169-218). Wiley."
     },
     {
       id: 2,
-      text: "Kazantzis, N., Whittington, C., & Dattilio, F. (2010). Meta-analysis of homework effects in cognitive and behavioral therapy: A replication and extension. Clinical Psychology: Science and Practice, 17(2), 144-156.",
-      url: "https://doi.org/10.1111/j.1468-2850.2010.01204.x"
+      text: "Kazantzis, N., Whittington, C., & Dattilio, F. (2010). Meta-analysis of homework effects in cognitive and behavioral therapy: A replication and extension. Clinical Psychology: Science and Practice, 17(2), 144-156."
     },
     {
       id: 3,
-      text: "Clough, B. A., & Casey, L. M. (2011). Technological adjuncts to enhance the efficacy of psychotherapy: A review. Clinical Psychology Review, 31(3), 279-292.",
-      url: "https://doi.org/10.1016/j.cpr.2010.12.008"
+      text: "Clough, B. A., & Casey, L. M. (2011). Technological adjuncts to enhance the efficacy of psychotherapy: A review. Clinical Psychology Review, 31(3), 279-292."
     },
     {
       id: 4,
-      text: "American Psychological Association. (2022). Psychotherapy: Understanding group therapy. APA.",
-      url: "https://www.apa.org/topics/psychotherapy/group-therapy"
+      text: "American Psychological Association. (2022). Psychotherapy: Understanding group therapy. APA."
     },
     {
       id: 5,
-      text: "Mohr, D. C., Cuijpers, P., & Lehman, K. (2011). Supportive accountability: A model for providing human support to enhance adherence to eHealth interventions. Journal of Medical Internet Research, 13(1), e30.",
-      url: "https://doi.org/10.2196/jmir.1602"
+      text: "Mohr, D. C., Cuijpers, P., & Lehman, K. (2011). Supportive accountability: A model for providing human support to enhance adherence to eHealth interventions. Journal of Medical Internet Research, 13(1), e30."
     }
   ],
   content: `

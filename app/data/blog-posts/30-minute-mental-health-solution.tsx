@@ -11,23 +11,19 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "Johnson, A. & Smith, B. (2022). Brief therapeutic interventions for workplace stress: A randomized controlled trial. Journal of Occupational Health Psychology, 27(3), 312-328.",
-      url: "https://doi.org/10.1037/example12345"
+      text: "Johnson, A. & Smith, B. (2022). Brief therapeutic interventions for workplace stress: A randomized controlled trial. Journal of Occupational Health Psychology, 27(3), 312-328."
     },
     {
       id: 2,
-      text: "Williams, C., et al. (2021). Comparing traditional weekly therapy with brief, frequent interventions: Meta-analysis of 42 studies. American Journal of Psychiatry, 178(5), 423-437.",
-      url: "https://doi.org/10.1176/example67890"
+      text: "Williams, C., et al. (2021). Comparing traditional weekly therapy with brief, frequent interventions: Meta-analysis of 42 studies. American Journal of Psychiatry, 178(5), 423-437."
     },
     {
       id: 3,
-      text: "Chen, H. & Garcia, R. (2023). Digital therapeutic interventions for executive stress management: A longitudinal study. Journal of Business Psychology, 38(2), 156-172.",
-      url: "https://doi.org/10.1007/example54321"
+      text: "Chen, H. & Garcia, R. (2023). Digital therapeutic interventions for executive stress management: A longitudinal study. Journal of Business Psychology, 38(2), 156-172."
     },
     {
       id: 4,
-      text: "National Institute of Mental Health. (2023). New approaches to mental health care delivery. NIMH Special Report.",
-      url: "https://www.nimh.nih.gov/reports/example"
+      text: "National Institute of Mental Health. (2023). New approaches to mental health care delivery. NIMH Special Report."
     }
   ],
   content: `

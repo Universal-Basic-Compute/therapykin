@@ -11,23 +11,19 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "National Rural Health Association. (2023). Mental Health in Rural Communities: Challenges and Opportunities. Rural Health Quarterly, 42(3), 115-128.",
-      url: "https://www.ruralhealth.org/publications/example12345"
+      text: "National Rural Health Association. (2023). Mental Health in Rural Communities: Challenges and Opportunities. Rural Health Quarterly, 42(3), 115-128."
     },
     {
       id: 2,
-      text: "Journal of Rural Mental Health. (2022). Privacy Concerns and Help-Seeking Behavior in Rural Communities. Vol. 46(1), 32-47.",
-      url: "https://doi.org/10.1037/example67890"
+      text: "Journal of Rural Mental Health. (2022). Privacy Concerns and Help-Seeking Behavior in Rural Communities. Vol. 46(1), 32-47."
     },
     {
       id: 3,
-      text: "American Psychological Association. (2023). Digital Privacy in Mental Health Services: Best Practices and Guidelines. APA Practice Guidelines.",
-      url: "https://www.apa.org/practice/guidelines/example54321"
+      text: "American Psychological Association. (2023). Digital Privacy in Mental Health Services: Best Practices and Guidelines. APA Practice Guidelines."
     },
     {
       id: 4,
-      text: "Rural Health Information Hub. (2023). Stigma and Mental Health in Rural Areas. U.S. Department of Health and Human Services.",
-      url: "https://www.ruralhealthinfo.org/topics/mental-health/stigma"
+      text: "Rural Health Information Hub. (2023). Stigma and Mental Health in Rural Areas. U.S. Department of Health and Human Services."
     }
   ],
   content: `

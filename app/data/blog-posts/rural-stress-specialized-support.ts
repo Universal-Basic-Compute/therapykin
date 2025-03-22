@@ -11,23 +11,19 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "National Rural Health Association. (2023). The State of Rural Mental Health: Challenges and Opportunities. Rural Health Quarterly, 42(3), 115-128.",
-      url: "https://www.ruralhealth.us/example12345"
+      text: "National Rural Health Association. (2023). The State of Rural Mental Health: Challenges and Opportunities. Rural Health Quarterly, 42(3), 115-128."
     },
     {
       id: 2,
-      text: "American Psychological Association. (2022). Cultural Competence in Rural Mental Health Care. APA Rural Psychology Task Force Report.",
-      url: "https://www.apa.org/rural/example67890"
+      text: "American Psychological Association. (2022). Cultural Competence in Rural Mental Health Care. APA Rural Psychology Task Force Report."
     },
     {
       id: 3,
-      text: "Journal of Rural Mental Health. (2023). Specialized Approaches for Rural Mental Health Treatment: A Meta-Analysis. Vol. 47(3), 112-129.",
-      url: "https://doi.org/10.1037/rmh0000123"
+      text: "Journal of Rural Mental Health. (2023). Specialized Approaches for Rural Mental Health Treatment: A Meta-Analysis. Vol. 47(3), 112-129."
     },
     {
       id: 4,
-      text: "Centers for Disease Control and Prevention. (2022). Rural-Urban Disparities in Mental Health Treatment. CDC Health Policy Brief.",
-      url: "https://www.cdc.gov/ruralhealth/example98765"
+      text: "Centers for Disease Control and Prevention. (2022). Rural-Urban Disparities in Mental Health Treatment. CDC Health Policy Brief."
     }
   ],
   content: `

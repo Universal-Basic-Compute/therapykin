@@ -11,28 +11,23 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "Kazantzis, N., Whittington, C., & Dattilio, F. (2022). Meta-Analysis of Homework Effects in Cognitive and Behavioral Therapy: A Replication and Extension. Clinical Psychology: Science and Practice, 17(2), 144-156.",
-      url: "https://doi.org/10.1111/cpsp.12173"
+      text: "Kazantzis, N., Whittington, C., & Dattilio, F. (2022). Meta-Analysis of Homework Effects in Cognitive and Behavioral Therapy: A Replication and Extension. Clinical Psychology: Science and Practice, 17(2), 144-156."
     },
     {
       id: 2,
-      text: "Clear, J. (2018). Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones. Avery Publishing Group.",
-      url: "https://jamesclear.com/atomic-habits"
+      text: "Clear, J. (2018). Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones. Avery Publishing Group."
     },
     {
       id: 3,
-      text: "Mohr, D. C., Cuijpers, P., & Lehman, K. (2021). Supportive Accountability: A Model for Providing Human Support to Enhance Adherence to eHealth Interventions. Journal of Medical Internet Research, 13(1), e30.",
-      url: "https://doi.org/10.2196/jmir.1602"
+      text: "Mohr, D. C., Cuijpers, P., & Lehman, K. (2021). Supportive Accountability: A Model for Providing Human Support to Enhance Adherence to eHealth Interventions. Journal of Medical Internet Research, 13(1), e30."
     },
     {
       id: 4,
-      text: "Hays, P. A. (2019). Addressing Cultural Complexities in Practice: Assessment, Diagnosis, and Therapy (3rd ed.). American Psychological Association.",
-      url: "https://doi.org/10.1037/0000131-000"
+      text: "Hays, P. A. (2019). Addressing Cultural Complexities in Practice: Assessment, Diagnosis, and Therapy (3rd ed.). American Psychological Association."
     },
     {
       id: 5,
-      text: "Fitzpatrick, M., Nedeljkovic, M., Abbott, J., Kyrios, M., & Moulding, R. (2020). "Blended" therapy: The development and pilot evaluation of an internet-facilitated cognitive behavioral intervention to supplement face-to-face therapy for hoarding disorder. Internet Interventions, 19, 100301.",
-      url: "https://doi.org/10.1016/j.invent.2019.100301"
+      text: "Fitzpatrick, M., Nedeljkovic, M., Abbott, J., Kyrios, M., & Moulding, R. (2020). "Blended" therapy: The development and pilot evaluation of an internet-facilitated cognitive behavioral intervention to supplement face-to-face therapy for hoarding disorder. Internet Interventions, 19, 100301."
     }
   ],
   content: `
@@ -742,24 +737,19 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          Kazantzis, N., Whittington, C., & Dattilio, F. (2022). Meta-Analysis of Homework Effects in Cognitive and Behavioral Therapy: A Replication and Extension. <em>Clinical Psychology: Science and Practice, 17</em>(2), 144-156. 
-          <a href="https://doi.org/10.1111/cpsp.12173" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1111/cpsp.12173</a>
+          Kazantzis, N., Whittington, C., & Dattilio, F. (2022). Meta-Analysis of Homework Effects in Cognitive and Behavioral Therapy: A Replication and Extension. <em>Clinical Psychology: Science and Practice, 17</em>(2), 144-156.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          Clear, J. (2018). <em>Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones</em>. Avery Publishing Group. 
-          <a href="https://jamesclear.com/atomic-habits" class="text-[var(--primary)] hover:underline" target="_blank">https://jamesclear.com/atomic-habits</a>
+          Clear, J. (2018). <em>Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones</em>. Avery Publishing Group.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          Mohr, D. C., Cuijpers, P., & Lehman, K. (2021). Supportive Accountability: A Model for Providing Human Support to Enhance Adherence to eHealth Interventions. <em>Journal of Medical Internet Research, 13</em>(1), e30. 
-          <a href="https://doi.org/10.2196/jmir.1602" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.2196/jmir.1602</a>
+          Mohr, D. C., Cuijpers, P., & Lehman, K. (2021). Supportive Accountability: A Model for Providing Human Support to Enhance Adherence to eHealth Interventions. <em>Journal of Medical Internet Research, 13</em>(1), e30.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          Hays, P. A. (2019). <em>Addressing Cultural Complexities in Practice: Assessment, Diagnosis, and Therapy</em> (3rd ed.). American Psychological Association. 
-          <a href="https://doi.org/10.1037/0000131-000" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1037/0000131-000</a>
+          Hays, P. A. (2019). <em>Addressing Cultural Complexities in Practice: Assessment, Diagnosis, and Therapy</em> (3rd ed.). American Psychological Association.
         </li>
         <li id="ref-5" class="text-sm text-foreground/70">
-          Fitzpatrick, M., Nedeljkovic, M., Abbott, J., Kyrios, M., & Moulding, R. (2020). "Blended" therapy: The development and pilot evaluation of an internet-facilitated cognitive behavioral intervention to supplement face-to-face therapy for hoarding disorder. <em>Internet Interventions, 19</em>, 100301. 
-          <a href="https://doi.org/10.1016/j.invent.2019.100301" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1016/j.invent.2019.100301</a>
+          Fitzpatrick, M., Nedeljkovic, M., Abbott, J., Kyrios, M., & Moulding, R. (2020). "Blended" therapy: The development and pilot evaluation of an internet-facilitated cognitive behavioral intervention to supplement face-to-face therapy for hoarding disorder. <em>Internet Interventions, 19</em>, 100301.
         </li>
       </ol>
     </div>

@@ -11,23 +11,19 @@ export const post = {
   sources: [
     {
       id: 1,
-      text: "National Institute of Mental Health. (2023). Crisis Resources and Suicide Prevention. U.S. Department of Health and Human Services.",
-      url: "https://www.nimh.nih.gov/health/topics/suicide-prevention"
+      text: "National Institute of Mental Health. (2023). Crisis Resources and Suicide Prevention. U.S. Department of Health and Human Services."
     },
     {
       id: 2,
-      text: "American Psychological Association. (2022). Crisis Management Between Sessions: Best Practices for Therapists and Clients. APA Clinical Practice Guidelines.",
-      url: "https://www.apa.org/practice/guidelines/example12345"
+      text: "American Psychological Association. (2022). Crisis Management Between Sessions: Best Practices for Therapists and Clients. APA Clinical Practice Guidelines."
     },
     {
       id: 3,
-      text: "Journal of Clinical Psychology. (2023). Digital Interventions for Crisis Support: A Meta-Analysis. Vol. 79(3), 245-261.",
-      url: "https://doi.org/10.1002/example67890"
+      text: "Journal of Clinical Psychology. (2023). Digital Interventions for Crisis Support: A Meta-Analysis. Vol. 79(3), 245-261."
     },
     {
       id: 4,
-      text: "Substance Abuse and Mental Health Services Administration. (2022). Crisis Services: Effectiveness, Cost-Effectiveness, and Funding Strategies. SAMHSA Publication.",
-      url: "https://www.samhsa.gov/resource/example54321"
+      text: "Substance Abuse and Mental Health Services Administration. (2022). Crisis Services: Effectiveness, Cost-Effectiveness, and Funding Strategies. SAMHSA Publication."
     }
   ],
   content: `
