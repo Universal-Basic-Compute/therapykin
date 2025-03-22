@@ -677,20 +677,16 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          National Rural Health Association. (2023). The State of Rural Mental Health: Challenges and Opportunities. <em>Rural Health Quarterly, 42</em>(3), 115-128. 
-          <a href="https://www.ruralhealth.us/example12345" class="text-[var(--primary)] hover:underline" target="_blank">https://www.ruralhealth.us/example12345</a>
+          National Rural Health Association. (2023). The State of Rural Mental Health: Challenges and Opportunities. <em>Rural Health Quarterly, 42</em>(3), 115-128.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          American Psychological Association. (2022). Cultural Competence in Rural Mental Health Care. <em>APA Rural Psychology Task Force Report</em>. 
-          <a href="https://www.apa.org/rural/example67890" class="text-[var(--primary)] hover:underline" target="_blank">https://www.apa.org/rural/example67890</a>
+          American Psychological Association. (2022). Cultural Competence in Rural Mental Health Care. <em>APA Rural Psychology Task Force Report</em>.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          Journal of Rural Mental Health. (2023). Specialized Approaches for Rural Mental Health Treatment: A Meta-Analysis. <em>Vol. 47</em>(3), 112-129. 
-          <a href="https://doi.org/10.1037/rmh0000123" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1037/rmh0000123</a>
+          Journal of Rural Mental Health. (2023). Specialized Approaches for Rural Mental Health Treatment: A Meta-Analysis. <em>Vol. 47</em>(3), 112-129.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          Centers for Disease Control and Prevention. (2022). Rural-Urban Disparities in Mental Health Treatment. <em>CDC Health Policy Brief</em>. 
-          <a href="https://www.cdc.gov/ruralhealth/example98765" class="text-[var(--primary)] hover:underline" target="_blank">https://www.cdc.gov/ruralhealth/example98765</a>
+          Centers for Disease Control and Prevention. (2022). Rural-Urban Disparities in Mental Health Treatment. <em>CDC Health Policy Brief</em>.
         </li>
       </ol>
     </div>

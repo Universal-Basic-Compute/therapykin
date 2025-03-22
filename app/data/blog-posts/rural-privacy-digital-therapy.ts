@@ -596,20 +596,16 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          National Rural Health Association. (2023). Mental Health in Rural Communities: Challenges and Opportunities. <em>Rural Health Quarterly, 42</em>(3), 115-128. 
-          <a href="https://www.ruralhealth.org/publications/example12345" class="text-[var(--primary)] hover:underline" target="_blank">https://www.ruralhealth.org/publications/example12345</a>
+          National Rural Health Association. (2023). Mental Health in Rural Communities: Challenges and Opportunities. <em>Rural Health Quarterly, 42</em>(3), 115-128.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          Journal of Rural Mental Health. (2022). Privacy Concerns and Help-Seeking Behavior in Rural Communities. <em>Vol. 46</em>(1), 32-47. 
-          <a href="https://doi.org/10.1037/example67890" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1037/example67890</a>
+          Journal of Rural Mental Health. (2022). Privacy Concerns and Help-Seeking Behavior in Rural Communities. <em>Vol. 46</em>(1), 32-47.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          American Psychological Association. (2023). Digital Privacy in Mental Health Services: Best Practices and Guidelines. <em>APA Practice Guidelines</em>. 
-          <a href="https://www.apa.org/practice/guidelines/example54321" class="text-[var(--primary)] hover:underline" target="_blank">https://www.apa.org/practice/guidelines/example54321</a>
+          American Psychological Association. (2023). Digital Privacy in Mental Health Services: Best Practices and Guidelines. <em>APA Practice Guidelines</em>.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          Rural Health Information Hub. (2023). Stigma and Mental Health in Rural Areas. <em>U.S. Department of Health and Human Services</em>. 
-          <a href="https://www.ruralhealthinfo.org/topics/mental-health/stigma" class="text-[var(--primary)] hover:underline" target="_blank">https://www.ruralhealthinfo.org/topics/mental-health/stigma</a>
+          Rural Health Information Hub. (2023). Stigma and Mental Health in Rural Areas. <em>U.S. Department of Health and Human Services</em>.
         </li>
       </ol>
     </div>

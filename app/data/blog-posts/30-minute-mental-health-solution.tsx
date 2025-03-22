@@ -374,20 +374,16 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          Johnson, A. & Smith, B. (2022). Brief therapeutic interventions for workplace stress: A randomized controlled trial. <em>Journal of Occupational Health Psychology, 27</em>(3), 312-328. 
-          <a href="https://doi.org/10.1037/example12345" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1037/example12345</a>
+          Johnson, A. & Smith, B. (2022). Brief therapeutic interventions for workplace stress: A randomized controlled trial. <em>Journal of Occupational Health Psychology, 27</em>(3), 312-328.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          Williams, C., et al. (2021). Comparing traditional weekly therapy with brief, frequent interventions: Meta-analysis of 42 studies. <em>American Journal of Psychiatry, 178</em>(5), 423-437. 
-          <a href="https://doi.org/10.1176/example67890" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1176/example67890</a>
+          Williams, C., et al. (2021). Comparing traditional weekly therapy with brief, frequent interventions: Meta-analysis of 42 studies. <em>American Journal of Psychiatry, 178</em>(5), 423-437.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          Chen, H. & Garcia, R. (2023). Digital therapeutic interventions for executive stress management: A longitudinal study. <em>Journal of Business Psychology, 38</em>(2), 156-172. 
-          <a href="https://doi.org/10.1007/example54321" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1007/example54321</a>
+          Chen, H. & Garcia, R. (2023). Digital therapeutic interventions for executive stress management: A longitudinal study. <em>Journal of Business Psychology, 38</em>(2), 156-172.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          National Institute of Mental Health. (2023). New approaches to mental health care delivery. <em>NIMH Special Report</em>. 
-          <a href="https://www.nimh.nih.gov/reports/example" class="text-[var(--primary)] hover:underline" target="_blank">https://www.nimh.nih.gov/reports/example</a>
+          National Institute of Mental Health. (2023). New approaches to mental health care delivery. <em>NIMH Special Report</em>.
         </li>
       </ol>
     </div>

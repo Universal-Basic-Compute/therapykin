@@ -535,24 +535,19 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          Lambert, M. J. (2013). The efficacy and effectiveness of psychotherapy. In M. J. Lambert (Ed.), Bergin and Garfield's handbook of psychotherapy and behavior change (6th ed., pp. 169-218). Wiley. 
-          <a href="https://www.wiley.com/en-us/Bergin+and+Garfield%27s+Handbook+of+Psychotherapy+and+Behavior+Change%2C+6th+Edition-p-9781118038208" class="text-[var(--primary)] hover:underline" target="_blank">https://www.wiley.com/en-us/Bergin+and+Garfield%27s+Handbook+of+Psychotherapy+and+Behavior+Change%2C+6th+Edition-p-9781118038208</a>
+          Lambert, M. J. (2013). The efficacy and effectiveness of psychotherapy. In M. J. Lambert (Ed.), Bergin and Garfield's handbook of psychotherapy and behavior change (6th ed., pp. 169-218). Wiley.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          Kazantzis, N., Whittington, C., & Dattilio, F. (2010). Meta-analysis of homework effects in cognitive and behavioral therapy: A replication and extension. Clinical Psychology: Science and Practice, 17(2), 144-156. 
-          <a href="https://doi.org/10.1111/j.1468-2850.2010.01204.x" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1111/j.1468-2850.2010.01204.x</a>
+          Kazantzis, N., Whittington, C., & Dattilio, F. (2010). Meta-analysis of homework effects in cognitive and behavioral therapy: A replication and extension. Clinical Psychology: Science and Practice, 17(2), 144-156.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          Clough, B. A., & Casey, L. M. (2011). Technological adjuncts to enhance the efficacy of psychotherapy: A review. Clinical Psychology Review, 31(3), 279-292. 
-          <a href="https://doi.org/10.1016/j.cpr.2010.12.008" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1016/j.cpr.2010.12.008</a>
+          Clough, B. A., & Casey, L. M. (2011). Technological adjuncts to enhance the efficacy of psychotherapy: A review. Clinical Psychology Review, 31(3), 279-292.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          American Psychological Association. (2022). Psychotherapy: Understanding group therapy. APA. 
-          <a href="https://www.apa.org/topics/psychotherapy/group-therapy" class="text-[var(--primary)] hover:underline" target="_blank">https://www.apa.org/topics/psychotherapy/group-therapy</a>
+          American Psychological Association. (2022). Psychotherapy: Understanding group therapy. APA.
         </li>
         <li id="ref-5" class="text-sm text-foreground/70">
-          Mohr, D. C., Cuijpers, P., & Lehman, K. (2011). Supportive accountability: A model for providing human support to enhance adherence to eHealth interventions. Journal of Medical Internet Research, 13(1), e30. 
-          <a href="https://doi.org/10.2196/jmir.1602" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.2196/jmir.1602</a>
+          Mohr, D. C., Cuijpers, P., & Lehman, K. (2011). Supportive accountability: A model for providing human support to enhance adherence to eHealth interventions. Journal of Medical Internet Research, 13(1), e30.
         </li>
       </ol>
     </div>

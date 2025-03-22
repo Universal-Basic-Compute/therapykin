@@ -533,20 +533,16 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          Rural Health Information Hub. (2023). Rural Mental Health Overview. <em>U.S. Department of Health and Human Services</em>. 
-          <a href="https://www.ruralhealthinfo.org/topics/mental-health" class="text-[var(--primary)] hover:underline" target="_blank">https://www.ruralhealthinfo.org/topics/mental-health</a>
+          Rural Health Information Hub. (2023). Rural Mental Health Overview. <em>U.S. Department of Health and Human Services</em>.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          American Psychological Association. (2022). The State of Mental Health in Rural America: Increasing Access and Addressing Stigma. <em>APA Monitor on Psychology, 53</em>(4), 42-49. 
-          <a href="https://www.apa.org/monitor/example12345" class="text-[var(--primary)] hover:underline" target="_blank">https://www.apa.org/monitor/example12345</a>
+          American Psychological Association. (2022). The State of Mental Health in Rural America: Increasing Access and Addressing Stigma. <em>APA Monitor on Psychology, 53</em>(4), 42-49.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          Journal of Rural Mental Health. (2023). Digital Interventions for Rural Populations: A Systematic Review. <em>Vol. 47</em>(2), 78-94. 
-          <a href="https://doi.org/10.1037/example67890" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1037/example67890</a>
+          Journal of Rural Mental Health. (2023). Digital Interventions for Rural Populations: A Systematic Review. <em>Vol. 47</em>(2), 78-94.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          Centers for Disease Control and Prevention. (2022). Mental Health in Rural Communities. <em>CDC Rural Health Policy Brief</em>. 
-          <a href="https://www.cdc.gov/ruralhealth/example54321" class="text-[var(--primary)] hover:underline" target="_blank">https://www.cdc.gov/ruralhealth/example54321</a>
+          Centers for Disease Control and Prevention. (2022). Mental Health in Rural Communities. <em>CDC Rural Health Policy Brief</em>.
         </li>
       </ol>
     </div>

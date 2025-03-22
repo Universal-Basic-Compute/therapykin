@@ -500,20 +500,16 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          World Health Organization. (2023). Mental Health in the Workplace: Global Challenges and Opportunities. <em>WHO Technical Report</em>. 
-          <a href="https://www.who.int/publications/example12345" class="text-[var(--primary)] hover:underline" target="_blank">https://www.who.int/publications/example12345</a>
+          World Health Organization. (2023). Mental Health in the Workplace: Global Challenges and Opportunities. <em>WHO Technical Report</em>.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          Deloitte. (2022). Mental Health and Executives: A Global Leadership Crisis. <em>Deloitte Global Human Capital Trends</em>. 
-          <a href="https://www2.deloitte.com/insights/example67890" class="text-[var(--primary)] hover:underline" target="_blank">https://www2.deloitte.com/insights/example67890</a>
+          Deloitte. (2022). Mental Health and Executives: A Global Leadership Crisis. <em>Deloitte Global Human Capital Trends</em>.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          Journal of Occupational Health. (2023). AI-Assisted Mental Health Interventions: A Systematic Review. <em>Vol 65</em>(3), 234-251. 
-          <a href="https://doi.org/10.1539/example54321" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1539/example54321</a>
+          Journal of Occupational Health. (2023). AI-Assisted Mental Health Interventions: A Systematic Review. <em>Vol 65</em>(3), 234-251.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          Harvard Business Review. (2023). The Hidden Mental Health Crisis in Leadership. <em>HBR Digital Article</em>. 
-          <a href="https://hbr.org/example98765" class="text-[var(--primary)] hover:underline" target="_blank">https://hbr.org/example98765</a>
+          Harvard Business Review. (2023). The Hidden Mental Health Crisis in Leadership. <em>HBR Digital Article</em>.
         </li>
       </ol>
     </div>

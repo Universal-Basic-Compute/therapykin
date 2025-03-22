@@ -406,20 +406,16 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          Davidson, R. J., & Begley, S. (2022). The Emotional Life of Your Brain: How Its Unique Patterns Affect the Way You Think, Feel, and Live. <em>Journal of Cognitive Neuroscience, 34</em>(2), 219-237. 
-          <a href="https://doi.org/10.1162/example12345" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1162/example12345</a>
+          Davidson, R. J., & Begley, S. (2022). The Emotional Life of Your Brain: How Its Unique Patterns Affect the Way You Think, Feel, and Live. <em>Journal of Cognitive Neuroscience, 34</em>(2), 219-237.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          Goleman, D., & Davidson, R. J. (2021). Altered Traits: Science Reveals How Meditation Changes Your Mind, Brain, and Body. <em>Psychological Science, 32</em>(10), 1578-1591. 
-          <a href="https://doi.org/10.1177/example67890" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1177/example67890</a>
+          Goleman, D., & Davidson, R. J. (2021). Altered Traits: Science Reveals How Meditation Changes Your Mind, Brain, and Body. <em>Psychological Science, 32</em>(10), 1578-1591.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          Harvard Business Review. (2023). The Business Case for Mental Agility Training. <em>HBR Special Report</em>. 
-          <a href="https://hbr.org/reports/example54321" class="text-[var(--primary)] hover:underline" target="_blank">https://hbr.org/reports/example54321</a>
+          Harvard Business Review. (2023). The Business Case for Mental Agility Training. <em>HBR Special Report</em>.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          McKinsey & Company. (2023). The Relationship Between Mental Health and Workplace Performance. <em>McKinsey Quarterly</em>. 
-          <a href="https://www.mckinsey.com/quarterly/example" class="text-[var(--primary)] hover:underline" target="_blank">https://www.mckinsey.com/quarterly/example</a>
+          McKinsey & Company. (2023). The Relationship Between Mental Health and Workplace Performance. <em>McKinsey Quarterly</em>.
         </li>
       </ol>
     </div>

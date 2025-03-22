@@ -674,20 +674,16 @@ export const post = {
       <h2 class="text-2xl font-bold mb-6">References</h2>
       <ol class="list-decimal pl-5 space-y-4">
         <li id="ref-1" class="text-sm text-foreground/70">
-          National Institute of Mental Health. (2023). Crisis Resources and Suicide Prevention. <em>U.S. Department of Health and Human Services</em>. 
-          <a href="https://www.nimh.nih.gov/health/topics/suicide-prevention" class="text-[var(--primary)] hover:underline" target="_blank">https://www.nimh.nih.gov/health/topics/suicide-prevention</a>
+          National Institute of Mental Health. (2023). Crisis Resources and Suicide Prevention. <em>U.S. Department of Health and Human Services</em>.
         </li>
         <li id="ref-2" class="text-sm text-foreground/70">
-          American Psychological Association. (2022). Crisis Management Between Sessions: Best Practices for Therapists and Clients. <em>APA Clinical Practice Guidelines</em>. 
-          <a href="https://www.apa.org/practice/guidelines/example12345" class="text-[var(--primary)] hover:underline" target="_blank">https://www.apa.org/practice/guidelines/example12345</a>
+          American Psychological Association. (2022). Crisis Management Between Sessions: Best Practices for Therapists and Clients. <em>APA Clinical Practice Guidelines</em>.
         </li>
         <li id="ref-3" class="text-sm text-foreground/70">
-          Journal of Clinical Psychology. (2023). Digital Interventions for Crisis Support: A Meta-Analysis. <em>Vol. 79</em>(3), 245-261. 
-          <a href="https://doi.org/10.1002/example67890" class="text-[var(--primary)] hover:underline" target="_blank">https://doi.org/10.1002/example67890</a>
+          Journal of Clinical Psychology. (2023). Digital Interventions for Crisis Support: A Meta-Analysis. <em>Vol. 79</em>(3), 245-261.
         </li>
         <li id="ref-4" class="text-sm text-foreground/70">
-          Substance Abuse and Mental Health Services Administration. (2022). Crisis Services: Effectiveness, Cost-Effectiveness, and Funding Strategies. <em>SAMHSA Publication</em>. 
-          <a href="https://www.samhsa.gov/resource/example54321" class="text-[var(--primary)] hover:underline" target="_blank">https://www.samhsa.gov/resource/example54321</a>
+          Substance Abuse and Mental Health Services Administration. (2022). Crisis Services: Effectiveness, Cost-Effectiveness, and Funding Strategies. <em>SAMHSA Publication</em>.
         </li>
       </ol>
     </div>
