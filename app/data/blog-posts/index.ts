@@ -1,10 +1,12 @@
 import { post as briefSessionsPost } from './30-minute-mental-health-solution';
 import { post as mentalAgilityPost } from './mental-agility-top-performers';
+import { post as aiTherapyPost } from './ai-therapy-busy-leaders';
 
 // Export all posts in an array
 export const blogPosts = [
   briefSessionsPost,
   mentalAgilityPost,
+  aiTherapyPost,
   // Add more posts here as they are created
 ];
 
@@ -12,6 +14,7 @@ export const blogPosts = [
 export {
   briefSessionsPost,
   mentalAgilityPost,
+  aiTherapyPost,
 };
 
 // Helper function to get a post by slug
