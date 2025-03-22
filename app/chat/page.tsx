@@ -120,9 +120,9 @@ export default function ChatSession() {
     checkRemainingSession();
   }, [user]);
   
-  // Fetch user's preferred session length
+  // Fetch user's preferences
   useEffect(() => {
-    async function fetchPreferredSessionLength() {
+    async function fetchUserPreferences() {
       if (!user) return;
       
       try {
@@ -130,10 +130,18 @@ export default function ChatSession() {
         
         if (response.ok) {
           const data = await response.json();
-          if (data.preferences && data.preferences.preferredSessionLength) {
+          if (data.preferences) {
             // Set the session length to the user's preference
-            setSessionLength(data.preferences.preferredSessionLength);
-            console.log(`Loaded user's preferred session length: ${data.preferences.preferredSessionLength} minutes`);
+            if (data.preferences.preferredSessionLength) {
+              setSessionLength(data.preferences.preferredSessionLength);
+              console.log(`Loaded user's preferred session length: ${data.preferences.preferredSessionLength} minutes`);
+            }
+            
+            // Set the voice to the user's preference
+            if (data.preferences.preferredVoice) {
+              setSelectedVoice(data.preferences.preferredVoice);
+              console.log(`Loaded user's preferred voice: ${data.preferences.preferredVoice}`);
+            }
           }
         }
       } catch (error) {
@@ -141,7 +149,7 @@ export default function ChatSession() {
       }
     }
     
-    fetchPreferredSessionLength();
+    fetchUserPreferences();
   }, [user]);
 
   // Create a session when the component mounts
@@ -935,6 +943,32 @@ export default function ChatSession() {
       setIsUpdatingPreference(false);
     }
   };
+  
+  // Update preferred voice
+  const updatePreferredVoice = async (voiceId: string) => {
+    try {
+      setSelectedVoice(voiceId);
+      
+      // Update the user's preference
+      const response = await fetch('/api/users/preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          preferredVoice: voiceId,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update voice preference: ${response.status}`);
+      }
+      
+      console.log(`Voice preference updated to: ${voiceId}`);
+    } catch (error) {
+      console.error('Error updating voice preference:', error);
+    }
+  };
 
   // Add cleanup for recording resources
   useEffect(() => {
@@ -1167,7 +1201,7 @@ export default function ChatSession() {
                 <select
                   className="mr-2 p-2 text-sm border border-black/10 dark:border-white/10 rounded-lg bg-[var(--background)]"
                   value={selectedVoice}
-                  onChange={(e) => setSelectedVoice(e.target.value)}
+                  onChange={(e) => updatePreferredVoice(e.target.value)}
                 >
                   {voiceOptions.map(voice => (
                     <option key={voice.id} value={voice.id}>
