@@ -351,47 +351,49 @@ export default function ChatSession() {
   useEffect(() => {
     if (!sessionId || !sessionStartTime) return;
     
-    // Calculate initial minutes active based on session start time
-    const now = new Date();
-    const initialMinutes = Math.floor((now.getTime() - sessionStartTime.getTime()) / (60 * 1000));
+    // Calculate elapsed minutes based on session start time
+    const calculateElapsedMinutes = () => {
+      const now = new Date();
+      return Math.floor((now.getTime() - sessionStartTime.getTime()) / (60 * 1000));
+    };
+    
+    // Set initial minutes
+    const initialMinutes = calculateElapsedMinutes();
     setMinutesActive(initialMinutes);
     
     console.log(`Initial minutes active: ${initialMinutes}`);
     
-    // Set up interval to increment minutes and update Airtable
+    // Set up interval to recalculate minutes directly from the start time
     const minuteInterval = setInterval(async () => {
-      setMinutesActive(prevMinutes => {
-        const newMinutes = prevMinutes + 1;
-        
-        // Update the session in Airtable
-        try {
-          fetch('/api/sessions/update-minutes', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              sessionId,
-              minutesActive: newMinutes,
-            }),
-          }).then(response => {
-            if (!response.ok) {
-              console.error(`Failed to update session minutes: ${response.status}`);
-            } else {
-              console.log(`Updated session minutes: ${newMinutes}`);
-            }
-          });
-        } catch (error) {
-          console.error('Failed to update session minutes:', error);
-        }
-        
-        return newMinutes;
-      });
+      const currentMinutes = calculateElapsedMinutes();
+      setMinutesActive(currentMinutes);
+      
+      // Update the session in Airtable
+      try {
+        fetch('/api/sessions/update-minutes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId,
+            minutesActive: currentMinutes,
+          }),
+        }).then(response => {
+          if (!response.ok) {
+            console.error(`Failed to update session minutes: ${response.status}`);
+          } else {
+            console.log(`Updated session minutes: ${currentMinutes}`);
+          }
+        });
+      } catch (error) {
+        console.error('Failed to update session minutes:', error);
+      }
     }, 60000); // Run every minute (60000 ms)
     
     // Clean up interval on unmount
     return () => clearInterval(minuteInterval);
-  }, [sessionId, sessionStartTime]); // Only depend on sessionId and sessionStartTime, not minutesActive
+  }, [sessionId, sessionStartTime]); // Only depend on sessionId and sessionStartTime
 
   // Auto-scroll to bottom when chat history changes
   useEffect(() => {
