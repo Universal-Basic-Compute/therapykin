@@ -67,7 +67,7 @@ export default function Header() {
                   <button 
                     className="ml-4 btn-primary text-sm px-4 py-2 cursor-default opacity-75"
                   >
-                    Current Session
+                    In Session
                   </button>
                 ) : (
                   <Link 
@@ -175,7 +175,7 @@ export default function Header() {
                   <span 
                     className="text-foreground/70 block px-3 py-2 text-base font-medium"
                   >
-                    Current Session
+                    In Session
                   </span>
                 ) : (
                   <Link 
