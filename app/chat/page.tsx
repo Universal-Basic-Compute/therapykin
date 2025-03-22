@@ -44,6 +44,8 @@ export default function ChatSession() {
   const [sessionEnded, setSessionEnded] = useState(false);
   const [sessionLength, setSessionLength] = useState<number>(30); // Default to 30 minutes
   const [showSettings, setShowSettings] = useState<boolean>(false); // For settings modal
+  const [hasSessionsRemaining, setHasSessionsRemaining] = useState<boolean | null>(null);
+  const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
   
   // Voice options
   const voiceOptions = [
@@ -80,10 +82,48 @@ export default function ChatSession() {
     };
   }, []);
   
+  // Check if user has sessions remaining
+  useEffect(() => {
+    async function checkRemainingSession() {
+      if (!user) return;
+      
+      setIsCheckingSubscription(true);
+      try {
+        const response = await fetch('/api/users/subscription');
+        
+        if (!response.ok) {
+          console.error('Failed to fetch subscription data:', response.status, response.statusText);
+          setHasSessionsRemaining(false);
+          return;
+        }
+        
+        const data = await response.json();
+        
+        if (data.subscription) {
+          // If premium plan, they always have sessions
+          if (data.subscription.plan.toLowerCase() === 'premium') {
+            setHasSessionsRemaining(true);
+          } else {
+            setHasSessionsRemaining(data.subscription.sessionsRemaining > 0);
+          }
+        } else {
+          setHasSessionsRemaining(false);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription data:', error);
+        setHasSessionsRemaining(false);
+      } finally {
+        setIsCheckingSubscription(false);
+      }
+    }
+
+    checkRemainingSession();
+  }, [user]);
+
   // Create a session when the component mounts
   useEffect(() => {
     async function initializeSession() {
-      if (user && !sessionId) {
+      if (user && !sessionId && hasSessionsRemaining) {
         try {
           // First, check if there's an ongoing session
           const ongoingSession = await getOngoingSession(user.email);
@@ -114,10 +154,10 @@ export default function ChatSession() {
       }
     }
 
-    if (user) {
+    if (user && hasSessionsRemaining !== null) {
       initializeSession();
     }
-  }, [user, sessionId]);
+  }, [user, sessionId, hasSessionsRemaining]);
 
   // Update the session mode based on timing
   useEffect(() => {
@@ -587,7 +627,7 @@ export default function ChatSession() {
     };
   }, [isRecording]);
 
-  if (loading) {
+  if (loading || isCheckingSubscription) {
     return (
       <div className="flex flex-col min-h-screen">
         <Header />
@@ -597,6 +637,74 @@ export default function ChatSession() {
             <p>Loading your session...</p>
           </div>
         </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show "out of sessions" message if user has no sessions remaining
+  if (hasSessionsRemaining === false) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        
+        <main className="flex-grow pt-24 pb-16 px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="card p-8 text-center">
+              <div className="w-20 h-20 mx-auto mb-6 bg-[var(--background-alt)] rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              
+              <h1 className="text-3xl font-bold mb-4">You're Out of Sessions</h1>
+              
+              <p className="text-foreground/70 mb-6 max-w-2xl mx-auto">
+                You've used all your available therapy sessions for this period. Upgrade your plan to continue your therapeutic journey and unlock additional sessions.
+              </p>
+              
+              <div className="mb-8 p-6 bg-[var(--background-alt)] rounded-lg max-w-xl mx-auto">
+                <h2 className="text-xl font-semibold mb-3">Why Upgrade Your TherapyKin Plan?</h2>
+                <ul className="text-left space-y-3">
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span><strong>Continuous Support:</strong> Access therapy whenever you need it, without session limits</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span><strong>Deeper Relationship:</strong> TherapyKin learns and adapts to you with each session</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span><strong>Progress Tracking:</strong> Visualize your therapeutic journey and growth over time</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span><strong>Privacy-First:</strong> All plans include our core privacy and security features</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Link href="/pricing" className="btn-primary px-8 py-3">
+                  Upgrade My Plan
+                </Link>
+                <Link href="/dashboard" className="btn-secondary px-8 py-3">
+                  Return to Dashboard
+                </Link>
+              </div>
+            </div>
+          </div>
+        </main>
+        
         <Footer />
       </div>
     );
