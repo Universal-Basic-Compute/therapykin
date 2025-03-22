@@ -510,7 +510,7 @@ export default function ChatSession() {
         
         // Send the silence message
         sendMessageToKinOS(
-          "<system>Info: The user stayed silent</system>",
+          "<system>Info: The user stayed silent, maybe try to drive the conversation elsewhere? (make sure you don't repeat yourself)</system>",
           user.firstName,
           user.lastName,
           [], // attachments
