@@ -4,11 +4,8 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { usePDFGenerator } from '../utils/pdfGenerator';
 
-// Dynamically import the PDF generator to avoid SSR issues
-const PDFGenerator = dynamic(
-  () => import('../utils/pdfGenerator').then(mod => mod.usePDFGenerator),
-  { ssr: false }
-);
+// We don't need this dynamic import since we're directly using the hook below
+// The usePDFGenerator hook is already imported at the top of the file
 
 interface PDFDownloadButtonProps {
   title: string;
