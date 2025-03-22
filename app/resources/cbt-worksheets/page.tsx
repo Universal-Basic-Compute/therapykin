@@ -399,6 +399,9 @@ export default function CBTWorksheets() {
     }
   };
   
+  // Safe check for window object to avoid SSR issues
+  const isBrowser = typeof window !== 'undefined';
+  
   // Toggle worksheet expansion
   const toggleWorksheet = (worksheetId: string) => {
     if (expandedWorksheet === worksheetId) {
@@ -418,9 +421,7 @@ export default function CBTWorksheets() {
   };
   
   // Get the current URL for sharing
-  const currentUrl = typeof window !== 'undefined' 
-    ? window.location.href 
-    : 'https://therapykin.ai/resources/cbt-worksheets';
+  const currentUrl = 'https://therapykin.ai/resources/cbt-worksheets';
   
   return (
     <div className="flex flex-col min-h-screen">

@@ -430,7 +430,7 @@ export default function SelfCareAssessment() {
                           </svg>
                         </button>
                         
-                        {(activeSection === category.id || window.innerWidth >= 1024) && (
+                        {(activeSection === category.id || (isBrowser && window.innerWidth >= 1024)) && (
                           <div className="mt-4">
                             <p className="text-foreground/70 mb-4">{category.description}</p>
                             
