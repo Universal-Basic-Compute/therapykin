@@ -41,6 +41,7 @@ export default function ChatSession() {
   const [hasSessionsRemaining, setHasSessionsRemaining] = useState<boolean | null>(null);
   const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
   const [isUpdatingPreference, setIsUpdatingPreference] = useState(false);
+  const [halfwayMessageSent, setHalfwayMessageSent] = useState(false);
   
   // Voice options
   const voiceOptions = [
@@ -177,6 +178,7 @@ export default function ChatSession() {
               const startTime = new Date(session.createdAt);
               setSessionStartTime(startTime);
               setMinutesActive(0);
+              setHalfwayMessageSent(false); // Reset the halfway message flag
               
               // Send the "New session started" message to the API
               const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
@@ -207,6 +209,7 @@ export default function ChatSession() {
             const startTime = new Date(session.createdAt);
             setSessionStartTime(startTime);
             setMinutesActive(0);
+            setHalfwayMessageSent(false); // Reset the halfway message flag
             
             // Send the "New session started" message to the API
             const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
@@ -280,7 +283,7 @@ export default function ChatSession() {
 
   // Update the session mode based on timing
   useEffect(() => {
-    if (!sessionStartTime) return;
+    if (!sessionStartTime || !user) return;
 
     const updateSessionMode = () => {
       const now = new Date();
@@ -294,7 +297,31 @@ export default function ChatSession() {
       
       // Scale opening and closing phases based on session length
       const openingPhaseEnd = Math.max(1, Math.floor(SESSION_DURATION * 0.08)); // ~8% of session
+      const halfwayPoint = SESSION_DURATION / 2; // 50% of session
       const closingPhaseStart = Math.floor(SESSION_DURATION * 0.92); // ~92% of session
+      
+      // Check if we're at the halfway point (within a small margin to avoid missing it)
+      const isAtHalfway = sessionDuration >= halfwayPoint - 0.5 && sessionDuration <= halfwayPoint + 0.5;
+      
+      // Send halfway message if we're at the halfway point and haven't sent it yet
+      if (isAtHalfway && !halfwayMessageSent && !sessionEnded) {
+        console.log(`Sending halfway message at ${sessionDuration.toFixed(1)} minutes`);
+        
+        // Send the halfway message
+        sendMessageToKinOS(
+          "<system>Info: Session halfway</system>",
+          user.firstName,
+          user.lastName,
+          [], // attachments
+          [], // images
+          "journey" // Use journey mode
+        ).then(() => {
+          console.log("Halfway message sent successfully");
+          setHalfwayMessageSent(true);
+        }).catch(error => {
+          console.error("Error sending halfway message:", error);
+        });
+      }
       
       // First part of the session
       if (sessionDuration <= openingPhaseEnd) {
@@ -319,12 +346,12 @@ export default function ChatSession() {
       }
     };
 
-    // Update immediately and then every minute
+    // Update immediately and then every 30 seconds to ensure we don't miss the halfway point
     updateSessionMode();
-    const intervalId = setInterval(updateSessionMode, 60000); // check every minute
+    const intervalId = setInterval(updateSessionMode, 30000); // check every 30 seconds
     
     return () => clearInterval(intervalId);
-  }, [sessionStartTime, sessionLength]); // Add sessionLength as a dependency
+  }, [sessionStartTime, sessionLength, halfwayMessageSent, user, sessionEnded]); // Add halfwayMessageSent and user as dependencies
 
   // Add a session-ended message to the chat when the session ends
   useEffect(() => {
