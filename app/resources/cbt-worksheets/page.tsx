@@ -1,6 +1,10 @@
 'use client';
 
 import React, { useState } from "react";
+// Type guard helper function
+const hasProperty = <T extends object, K extends string>(obj: T, key: K): obj is T & Record<K, unknown> => {
+  return key in obj;
+};
 import Link from "next/link";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -633,165 +637,268 @@ export default function CBTWorksheets() {
                               <h4 className="font-semibold mb-3">Example:</h4>
                               {worksheet.id === 'basic-thought-record' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <p><strong>Situation:</strong> {worksheet.example.situation}</p>
-                                  <p><strong>Automatic Thoughts:</strong> {worksheet.example.automaticThoughts}</p>
-                                  <p><strong>Belief Rating:</strong> {worksheet.example.beliefRating}</p>
-                                  <p><strong>Emotions:</strong> {worksheet.example.emotions}</p>
-                                  <p><strong>Evidence Supporting Thoughts:</strong> {worksheet.example.supportingEvidence}</p>
-                                  <p><strong>Evidence Contradicting Thoughts:</strong> {worksheet.example.contradictingEvidence}</p>
-                                  <p><strong>Alternative Thought:</strong> {worksheet.example.alternativeThought}</p>
-                                  <p><strong>New Belief Rating:</strong> {worksheet.example.newBeliefRating}</p>
-                                  <p><strong>New Emotion Ratings:</strong> {worksheet.example.newEmotionRating}</p>
+                                  {hasProperty(worksheet.example, 'situation') && (
+                                    <p><strong>Situation:</strong> {worksheet.example.situation}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'automaticThoughts') && (
+                                    <p><strong>Automatic Thoughts:</strong> {worksheet.example.automaticThoughts}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'beliefRating') && (
+                                    <p><strong>Belief Rating:</strong> {worksheet.example.beliefRating}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'emotions') && (
+                                    <p><strong>Emotions:</strong> {worksheet.example.emotions}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'supportingEvidence') && (
+                                    <p><strong>Evidence Supporting Thoughts:</strong> {worksheet.example.supportingEvidence}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'contradictingEvidence') && (
+                                    <p><strong>Evidence Contradicting Thoughts:</strong> {worksheet.example.contradictingEvidence}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'alternativeThought') && (
+                                    <p><strong>Alternative Thought:</strong> {worksheet.example.alternativeThought}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'newBeliefRating') && (
+                                    <p><strong>New Belief Rating:</strong> {worksheet.example.newBeliefRating}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'newEmotionRating') && (
+                                    <p><strong>New Emotion Ratings:</strong> {worksheet.example.newEmotionRating}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'cognitive-distortions' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <p><strong>Negative Thought:</strong> {worksheet.example.negativeThought}</p>
-                                  <div>
-                                    <p className="mb-2"><strong>Cognitive Distortions Identified:</strong></p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                      {worksheet.example.distortions.map((distortion, index) => (
-                                        <li key={index}>{distortion}</li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                  <p><strong>Reframed Thought:</strong> {worksheet.example.reframedThought}</p>
+                                  {hasProperty(worksheet.example, 'negativeThought') && (
+                                    <p><strong>Negative Thought:</strong> {worksheet.example.negativeThought}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'distortions') && (
+                                    <div>
+                                      <p className="mb-2"><strong>Cognitive Distortions Identified:</strong></p>
+                                      <ul className="list-disc pl-5 space-y-1">
+                                        {(worksheet.example.distortions as string[]).map((distortion, index) => (
+                                          <li key={index}>{distortion}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {hasProperty(worksheet.example, 'reframedThought') && (
+                                    <p><strong>Reframed Thought:</strong> {worksheet.example.reframedThought}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'evidence-worksheet' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <p><strong>Troubling Thought:</strong> {worksheet.example.troublingThought}</p>
-                                  <p><strong>Evidence Supporting This Thought:</strong> {worksheet.example.supportingEvidence}</p>
-                                  <p><strong>Evidence Contradicting This Thought:</strong> {worksheet.example.contradictingEvidence}</p>
-                                  <p><strong>Balanced Thought:</strong> {worksheet.example.balancedThought}</p>
-                                  <p><strong>Original Belief Rating:</strong> {worksheet.example.originalBeliefRating}</p>
-                                  <p><strong>New Belief Rating:</strong> {worksheet.example.newBeliefRating}</p>
+                                  {hasProperty(worksheet.example, 'troublingThought') && (
+                                    <p><strong>Troubling Thought:</strong> {worksheet.example.troublingThought}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'supportingEvidence') && (
+                                    <p><strong>Evidence Supporting This Thought:</strong> {worksheet.example.supportingEvidence}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'contradictingEvidence') && (
+                                    <p><strong>Evidence Contradicting This Thought:</strong> {worksheet.example.contradictingEvidence}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'balancedThought') && (
+                                    <p><strong>Balanced Thought:</strong> {worksheet.example.balancedThought}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'originalBeliefRating') && (
+                                    <p><strong>Original Belief Rating:</strong> {worksheet.example.originalBeliefRating}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'newBeliefRating') && (
+                                    <p><strong>New Belief Rating:</strong> {worksheet.example.newBeliefRating}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'activity-scheduling' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <div>
-                                    <p className="mb-2"><strong>Activities (with Pleasure and Mastery Ratings):</strong></p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                      {worksheet.example.activities.map((activity, index) => (
-                                        <li key={index}>{activity}</li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                  <p><strong>Weekly Schedule:</strong> {worksheet.example.schedule}</p>
-                                  <p><strong>Mood Ratings:</strong> {worksheet.example.moodRatings}</p>
-                                  <p><strong>Reflection:</strong> {worksheet.example.reflection}</p>
+                                  {hasProperty(worksheet.example, 'activities') && (
+                                    <div>
+                                      <p className="mb-2"><strong>Activities (with Pleasure and Mastery Ratings):</strong></p>
+                                      <ul className="list-disc pl-5 space-y-1">
+                                        {(worksheet.example.activities as string[]).map((activity, index) => (
+                                          <li key={index}>{activity}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {hasProperty(worksheet.example, 'schedule') && (
+                                    <p><strong>Weekly Schedule:</strong> {worksheet.example.schedule}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'moodRatings') && (
+                                    <p><strong>Mood Ratings:</strong> {worksheet.example.moodRatings}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'reflection') && (
+                                    <p><strong>Reflection:</strong> {worksheet.example.reflection}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'values-activities' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <div>
-                                    <p className="mb-2"><strong>Core Values and Related Activities:</strong></p>
-                                    {worksheet.example.values.map((value, index) => (
-                                      <div key={index} className="mb-3">
-                                        <p><strong>{value.value}</strong> (Consistency: {value.consistencyRating})</p>
-                                        <p className="pl-4">Activities: {value.activities}</p>
-                                      </div>
-                                    ))}
-                                  </div>
-                                  <p><strong>Selected Activities for the Week:</strong> {worksheet.example.selectedActivities}</p>
-                                  <p><strong>Reflection:</strong> {worksheet.example.reflection}</p>
+                                  {hasProperty(worksheet.example, 'values') && (
+                                    <div>
+                                      <p className="mb-2"><strong>Core Values and Related Activities:</strong></p>
+                                      {(worksheet.example.values as Array<{value: string, consistencyRating: string, activities: string}>).map((value, index) => (
+                                        <div key={index} className="mb-3">
+                                          <p><strong>{value.value}</strong> (Consistency: {value.consistencyRating})</p>
+                                          <p className="pl-4">Activities: {value.activities}</p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                  {hasProperty(worksheet.example, 'selectedActivities') && (
+                                    <p><strong>Selected Activities for the Week:</strong> {worksheet.example.selectedActivities}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'reflection') && (
+                                    <p><strong>Reflection:</strong> {worksheet.example.reflection}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'belief-identification' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <p><strong>Recurring Negative Thought:</strong> {worksheet.example.recurringThought}</p>
-                                  <div>
-                                    <p className="mb-2"><strong>Downward Arrow Technique:</strong></p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                      {worksheet.example.downwardArrow.map((step, index) => (
-                                        <li key={index}>{step}</li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                  <p><strong>Core Belief Identified:</strong> {worksheet.example.coreBeliefIdentified}</p>
-                                  <p><strong>Belief Rating:</strong> {worksheet.example.beliefRating}</p>
+                                  {hasProperty(worksheet.example, 'recurringThought') && (
+                                    <p><strong>Recurring Negative Thought:</strong> {worksheet.example.recurringThought}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'downwardArrow') && (
+                                    <div>
+                                      <p className="mb-2"><strong>Downward Arrow Technique:</strong></p>
+                                      <ul className="list-disc pl-5 space-y-1">
+                                        {(worksheet.example.downwardArrow as string[]).map((step, index) => (
+                                          <li key={index}>{step}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {hasProperty(worksheet.example, 'coreBeliefIdentified') && (
+                                    <p><strong>Core Belief Identified:</strong> {worksheet.example.coreBeliefIdentified}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'beliefRating') && (
+                                    <p><strong>Belief Rating:</strong> {worksheet.example.beliefRating}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'belief-challenging' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <p><strong>Core Belief to Challenge:</strong> {worksheet.example.coreBeliefToChallenge}</p>
-                                  <p><strong>Evidence That Appears to Support This Belief:</strong> {worksheet.example.supportingEvidence}</p>
-                                  <p><strong>Critical Examination of Evidence:</strong> {worksheet.example.criticalExamination}</p>
-                                  <p><strong>Evidence That Contradicts This Belief:</strong> {worksheet.example.contradictingEvidence}</p>
-                                  <p><strong>New, More Balanced Belief:</strong> {worksheet.example.newBeliefDeveloped}</p>
-                                  <p><strong>Plan to Reinforce New Belief:</strong> {worksheet.example.reinforcementPlan}</p>
+                                  {hasProperty(worksheet.example, 'coreBeliefToChallenge') && (
+                                    <p><strong>Core Belief to Challenge:</strong> {worksheet.example.coreBeliefToChallenge}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'supportingEvidence') && (
+                                    <p><strong>Evidence That Appears to Support This Belief:</strong> {worksheet.example.supportingEvidence}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'criticalExamination') && (
+                                    <p><strong>Critical Examination of Evidence:</strong> {worksheet.example.criticalExamination}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'contradictingEvidence') && (
+                                    <p><strong>Evidence That Contradicts This Belief:</strong> {worksheet.example.contradictingEvidence}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'newBeliefDeveloped') && (
+                                    <p><strong>New, More Balanced Belief:</strong> {worksheet.example.newBeliefDeveloped}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'reinforcementPlan') && (
+                                    <p><strong>Plan to Reinforce New Belief:</strong> {worksheet.example.reinforcementPlan}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'emotion-tracking' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <p className="mb-2"><strong>Sample Emotion Log Entries:</strong></p>
-                                  {worksheet.example.entries.map((entry, index) => (
-                                    <div key={index} className="p-3 bg-[var(--background)] rounded-lg mb-3">
-                                      <p><strong>Time:</strong> {entry.time}</p>
-                                      <p><strong>Situation:</strong> {entry.situation}</p>
-                                      <p><strong>Emotions:</strong> {entry.emotions}</p>
-                                      <p><strong>Physical Sensations:</strong> {entry.physicalSensations}</p>
-                                      <p><strong>Thoughts:</strong> {entry.thoughts}</p>
-                                      <p><strong>Response:</strong> {entry.response}</p>
-                                    </div>
-                                  ))}
-                                  <p><strong>Patterns Identified:</strong> {worksheet.example.patterns}</p>
+                                  {hasProperty(worksheet.example, 'entries') && (
+                                    <>
+                                      <p className="mb-2"><strong>Sample Emotion Log Entries:</strong></p>
+                                      {(worksheet.example.entries as Array<{
+                                        time: string;
+                                        situation: string;
+                                        emotions: string;
+                                        physicalSensations: string;
+                                        thoughts: string;
+                                        response: string;
+                                      }>).map((entry, index) => (
+                                        <div key={index} className="p-3 bg-[var(--background)] rounded-lg mb-3">
+                                          <p><strong>Time:</strong> {entry.time}</p>
+                                          <p><strong>Situation:</strong> {entry.situation}</p>
+                                          <p><strong>Emotions:</strong> {entry.emotions}</p>
+                                          <p><strong>Physical Sensations:</strong> {entry.physicalSensations}</p>
+                                          <p><strong>Thoughts:</strong> {entry.thoughts}</p>
+                                          <p><strong>Response:</strong> {entry.response}</p>
+                                        </div>
+                                      ))}
+                                    </>
+                                  )}
+                                  {hasProperty(worksheet.example, 'patterns') && (
+                                    <p><strong>Patterns Identified:</strong> {worksheet.example.patterns}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'distress-tolerance' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <div>
-                                    <p className="mb-2"><strong>Emotional Distress Triggers:</strong></p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                      {worksheet.example.triggers.map((trigger, index) => (
-                                        <li key={index}>{trigger}</li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                  <div>
-                                    <p className="mb-2"><strong>Coping Strategies:</strong></p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                      {worksheet.example.copingStrategies.map((strategy, index) => (
-                                        <li key={index}>{strategy}</li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                  <p><strong>Personal Distress Tolerance Plan:</strong> {worksheet.example.personalPlan}</p>
-                                  <p><strong>Effectiveness Reflection:</strong> {worksheet.example.effectiveness}</p>
+                                  {hasProperty(worksheet.example, 'triggers') && (
+                                    <div>
+                                      <p className="mb-2"><strong>Emotional Distress Triggers:</strong></p>
+                                      <ul className="list-disc pl-5 space-y-1">
+                                        {(worksheet.example.triggers as string[]).map((trigger, index) => (
+                                          <li key={index}>{trigger}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {hasProperty(worksheet.example, 'copingStrategies') && (
+                                    <div>
+                                      <p className="mb-2"><strong>Coping Strategies:</strong></p>
+                                      <ul className="list-disc pl-5 space-y-1">
+                                        {(worksheet.example.copingStrategies as string[]).map((strategy, index) => (
+                                          <li key={index}>{strategy}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {hasProperty(worksheet.example, 'personalPlan') && (
+                                    <p><strong>Personal Distress Tolerance Plan:</strong> {worksheet.example.personalPlan}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'effectiveness') && (
+                                    <p><strong>Effectiveness Reflection:</strong> {worksheet.example.effectiveness}</p>
+                                  )}
                                 </div>
                               )}
                               
                               {worksheet.id === 'problem-solving-steps' && (
                                 <div className="space-y-3 text-foreground/70">
-                                  <p><strong>Problem Definition:</strong> {worksheet.example.problemDefinition}</p>
-                                  <div>
-                                    <p className="mb-2"><strong>Possible Solutions:</strong></p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                      {worksheet.example.possibleSolutions.map((solution, index) => (
-                                        <li key={index}>{solution}</li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                  <div>
-                                    <p className="mb-2"><strong>Evaluation of Solutions:</strong></p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                      {worksheet.example.evaluation.map((evalItem, index) => (
-                                        <li key={index}>{evalItem}</li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                  <p><strong>Selected Solution:</strong> {worksheet.example.selectedSolution}</p>
-                                  <p><strong>Implementation Plan:</strong> {worksheet.example.implementationPlan}</p>
-                                  <p><strong>Outcome Evaluation:</strong> {worksheet.example.outcome}</p>
+                                  {hasProperty(worksheet.example, 'problemDefinition') && (
+                                    <p><strong>Problem Definition:</strong> {worksheet.example.problemDefinition}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'possibleSolutions') && (
+                                    <div>
+                                      <p className="mb-2"><strong>Possible Solutions:</strong></p>
+                                      <ul className="list-disc pl-5 space-y-1">
+                                        {(worksheet.example.possibleSolutions as string[]).map((solution, index) => (
+                                          <li key={index}>{solution}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {hasProperty(worksheet.example, 'evaluation') && (
+                                    <div>
+                                      <p className="mb-2"><strong>Evaluation of Solutions:</strong></p>
+                                      <ul className="list-disc pl-5 space-y-1">
+                                        {(worksheet.example.evaluation as string[]).map((evalItem, index) => (
+                                          <li key={index}>{evalItem}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {hasProperty(worksheet.example, 'selectedSolution') && (
+                                    <p><strong>Selected Solution:</strong> {worksheet.example.selectedSolution}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'implementationPlan') && (
+                                    <p><strong>Implementation Plan:</strong> {worksheet.example.implementationPlan}</p>
+                                  )}
+                                  {hasProperty(worksheet.example, 'outcome') && (
+                                    <p><strong>Outcome Evaluation:</strong> {worksheet.example.outcome}</p>
+                                  )}
                                 </div>
                               )}
                             </div>
