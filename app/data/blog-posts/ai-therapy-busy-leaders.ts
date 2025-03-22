@@ -5,7 +5,7 @@ export const post = {
   date: "2023-10-25",
   author: "TherapyKin Team",
   category: "Technology",
-  imageUrl: "/blog/ai-therapy.jpg",
+  imageUrl: "/blog/ai-therapy-busy-leaders.jpg",
   slug: "ai-therapy-busy-leaders",
   persona: "busy-professional",
   sources: [

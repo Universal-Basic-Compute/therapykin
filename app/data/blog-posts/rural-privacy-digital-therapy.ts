@@ -5,7 +5,7 @@ export const post = {
   date: "2023-11-05",
   author: "TherapyKin Team",
   category: "Rural Access",
-  imageUrl: "/blog/rural-privacy.jpg",
+  imageUrl: "/blog/rural-privacy-digital-therapy.jpg",
   slug: "rural-privacy-digital-therapy",
   persona: "rural-resident",
   sources: [

@@ -5,7 +5,7 @@ export const post = {
   date: "2023-11-15",
   author: "TherapyKin Team",
   category: "Therapeutic Approaches",
-  imageUrl: "/blog/between-sessions.jpg",
+  imageUrl: "/blog/between-session-therapy-support.jpg",
   slug: "between-session-therapy-support",
   persona: "supplemental-seeker",
   sources: [

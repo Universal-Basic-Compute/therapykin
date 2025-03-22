@@ -5,7 +5,7 @@ export const post = {
   date: "2023-11-08",
   author: "TherapyKin Team",
   category: "Workplace Performance",
-  imageUrl: "/blog/mental-agility.jpg",
+  imageUrl: "/blog/mental-agility-top-performers.jpg",
   slug: "mental-agility-top-performers",
   persona: "busy-professional",
   sources: [

@@ -1,32 +1,7 @@
-export const post = {
-  id: 1,
-  title: "The 30-Minute Mental Health Solution: How Brief Therapeutic Check-ins Outperform Weekly Sessions",
-  excerpt: "Research shows that brief, consistent interventions can be more effective than traditional weekly therapy sessions for busy professionals.",
-  date: "2023-11-15",
-  author: "TherapyKin Team",
-  category: "Busy Professionals",
-  imageUrl: "/blog/30-minute-mental-health-solution.jpg",
-  slug: "30-minute-mental-health-solution",
-  persona: "busy-professional",
-  sources: [
-    {
-      id: 1,
-      text: "Johnson, A. & Smith, B. (2022). Brief therapeutic interventions for workplace stress: A randomized controlled trial. Journal of Occupational Health Psychology, 27(3), 312-328."
-    },
-    {
-      id: 2,
-      text: "Williams, C., et al. (2021). Comparing traditional weekly therapy with brief, frequent interventions: Meta-analysis of 42 studies. American Journal of Psychiatry, 178(5), 423-437."
-    },
-    {
-      id: 3,
-      text: "Chen, H. & Garcia, R. (2023). Digital therapeutic interventions for executive stress management: A longitudinal study. Journal of Business Psychology, 38(2), 156-172."
-    },
-    {
-      id: 4,
-      text: "National Institute of Mental Health. (2023). New approaches to mental health care delivery. NIMH Special Report."
-    }
-  ],
-  content: `
+I need to create a visual for a blog article titled "The 30-Minute Mental Health Solution: How Brief Therapeutic Check-ins Outperform Weekly Sessions". 
+Here's the content of the article:
+
+
     <p class="lead">For busy professionals, finding time for traditional weekly therapy sessions can feel impossible. But what if shorter, more frequent check-ins could actually be <em>more effective</em> than the standard approach?<sup><a href="#ref-1">1</a></sup></p>
     
     <div class="my-8 p-6 bg-[var(--primary)]/5 rounded-xl">
@@ -383,5 +358,9 @@ export const post = {
         </li>
       </ol>
     </div>
-  `
-};
+  
+
+Think about what would make a compelling, professional 4:3 aspect ratio image for this article. 
+Please respond ONLY with a Midjourney prompt that would create an appropriate image. 
+The prompt should be detailed and descriptive, focusing on creating a professional, editorial-style image 
+that would work well for a mental health/therapy blog. Do not include any explanations or additional text.

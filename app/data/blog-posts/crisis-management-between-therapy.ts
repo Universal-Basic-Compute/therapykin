@@ -5,7 +5,7 @@ export const post = {
   date: "2023-11-15",
   author: "TherapyKin Team",
   category: "Self-Care",
-  imageUrl: "/blog/crisis-management.jpg",
+  imageUrl: "/blog/crisis-management-between-therapy.jpg",
   slug: "crisis-management-between-therapy",
   persona: "supplemental-seeker",
   sources: [

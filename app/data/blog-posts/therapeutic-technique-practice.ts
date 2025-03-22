@@ -5,7 +5,7 @@ export const post = {
   date: "2023-11-15",
   author: "TherapyKin Team",
   category: "Therapeutic Skills",
-  imageUrl: "/blog/therapeutic-practice.jpg",
+  imageUrl: "/blog/therapeutic-technique-practice.jpg",
   slug: "therapeutic-technique-practice",
   persona: "supplemental-seeker",
   sources: [
