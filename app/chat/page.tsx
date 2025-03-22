@@ -504,8 +504,8 @@ export default function ChatSession() {
       
       console.log(`Checking silence: ${silenceDuration.toFixed(0)} seconds since last user message`);
       
-      // If user has been silent for 2 minutes (120 seconds)
-      if (silenceDuration >= 120) {
+      // If user has been silent for 2:30 minutes (150 seconds)
+      if (silenceDuration >= 150) {
         console.log(`User has been silent for ${silenceDuration.toFixed(0)} seconds, sending silence notification`);
         
         // Send the silence message
