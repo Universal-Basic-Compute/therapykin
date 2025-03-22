@@ -42,7 +42,7 @@ export default function ChatSession() {
   const [sessionMode, setSessionMode] = useState<string | null>(null);
   const [minutesActive, setMinutesActive] = useState(0);
   const [sessionEnded, setSessionEnded] = useState(false);
-  const [sessionLength, setSessionLength] = useState<number>(60); // Default to 60 minutes
+  const [sessionLength, setSessionLength] = useState<number>(30); // Default to 30 minutes
   const [showSettings, setShowSettings] = useState<boolean>(false); // For settings modal
   
   // Voice options
@@ -127,7 +127,7 @@ export default function ChatSession() {
       const now = new Date();
       const sessionDuration = (now.getTime() - sessionStartTime.getTime()) / 1000 / 60; // in minutes
       
-      // Use the dynamic session length
+      // Use the dynamic session length (default 30 minutes)
       const SESSION_DURATION = sessionLength;
       
       // Scale opening and closing phases based on session length
