@@ -199,6 +199,12 @@ export default function ChatSession() {
     
     // Extract the new session creation logic to a separate function
     async function createNewSession() {
+      // Add null check for user
+      if (!user) {
+        console.error('Cannot create session: user is null');
+        return;
+      }
+      
       const session = await createSession(user.email, sessionLength);
       setSessionId(session.id);
       const startTime = new Date(session.createdAt);
