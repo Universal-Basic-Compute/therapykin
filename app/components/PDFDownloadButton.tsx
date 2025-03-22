@@ -30,15 +30,21 @@ export default function PDFDownloadButton({
   
   // Handle the download button click
   const handleDownload = async () => {
-    const success = await generatePDF({
-      title,
-      subtitle,
-      filename,
-      contentId,
-    });
-    
-    if (!success) {
-      alert('There was an error generating the PDF. Please try again later.');
+    try {
+      const success = await generatePDF({
+        title,
+        subtitle,
+        filename,
+        contentId,
+      });
+      
+      if (!success) {
+        console.log('PDF generation returned false');
+        alert('There was an error generating the PDF. Please try again later.');
+      }
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      alert('Sorry, we encountered an issue creating your PDF. This might be due to browser compatibility. Please try a different browser or contact support.');
     }
   };
   

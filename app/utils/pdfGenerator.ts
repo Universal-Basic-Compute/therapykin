@@ -9,6 +9,57 @@ interface GeneratePDFOptions {
   onProgress?: (progress: number) => void;
 }
 
+function applyPDFCompatibleStyles(): void {
+  // Create a temporary style element
+  const styleElement = document.createElement('style');
+  styleElement.setAttribute('id', 'pdf-generation-styles');
+  
+  // Add styles that override problematic CSS
+  styleElement.textContent = `
+    /* Override oklab colors with standard colors */
+    [style*="oklab"] {
+      color: #333333 !important;
+      background-color: transparent !important;
+    }
+    
+    /* Fix any other problematic styles for PDF generation */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    /* Override gradient text that might cause issues */
+    [class*="bg-gradient"] {
+      background: none !important;
+      color: currentColor !important;
+      -webkit-text-fill-color: currentColor !important;
+    }
+    
+    /* Ensure text is visible */
+    .text-transparent {
+      color: currentColor !important;
+      -webkit-text-fill-color: currentColor !important;
+    }
+    
+    /* Fix background-clip issues */
+    .bg-clip-text {
+      background-clip: unset !important;
+      -webkit-background-clip: unset !important;
+    }
+  `;
+  
+  // Append the style element to the document head
+  document.head.appendChild(styleElement);
+}
+
+function removePDFStyles(): void {
+  // Remove the temporary style element
+  const styleElement = document.getElementById('pdf-generation-styles');
+  if (styleElement) {
+    styleElement.remove();
+  }
+}
+
 export async function generatePDF({
   title,
   subtitle = '',
@@ -23,6 +74,8 @@ export async function generatePDF({
   }
   
   try {
+    // Apply PDF-compatible styles before generation
+    applyPDFCompatibleStyles();
     // Create a new jsPDF instance
     const pdf = new jsPDF('p', 'mm', 'a4');
     
@@ -98,6 +151,9 @@ export async function generatePDF({
   } catch (error) {
     console.error('Error generating PDF:', error);
     throw error;
+  } finally {
+    // Remove the temporary styles
+    removePDFStyles();
   }
 }
 
