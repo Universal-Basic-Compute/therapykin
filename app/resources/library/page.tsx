@@ -145,7 +145,8 @@ const resources: Resource[] = [
     category: "self-care",
     type: "research",
     imageUrl: "/resources/sleep-mental-health.jpg",
-    url: "/resources/sleep-mental-health"
+    url: "/resources/sleep-mental-health",
+    new: true
   },
   {
     id: 12,
