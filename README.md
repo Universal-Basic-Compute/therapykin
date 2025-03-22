@@ -56,10 +56,12 @@ therapykin/
 │   ├── layout.tsx        # Root layout component
 │   └── page.tsx          # Home page
 ├── public/               # Static assets
+│   └── blog/             # Blog post images
 ├── next.config.ts        # Next.js configuration
 ├── package.json          # Project dependencies and scripts
 ├── postcss.config.mjs    # PostCSS configuration
-└── tsconfig.json         # TypeScript configuration
+├── tsconfig.json         # TypeScript configuration
+└── generate-blog-images.js # Script to generate blog images
 ```
 
 ## Key Components
@@ -101,6 +103,32 @@ The site includes comprehensive legal documentation:
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## Blog Image Generation
+
+The project includes a script to automatically generate images for blog posts:
+
+```bash
+# Install required dependencies
+npm install axios
+
+# Run the script with your Ideogram API key
+IDEOGRAM_API_KEY=your_api_key_here node generate-blog-images.js
+```
+
+The script:
+1. Extracts blog post data from the blog page
+2. For each post without an image:
+   - Gets the full content from the slug page
+   - Uses Claude to generate a Midjourney prompt based on the content
+   - Calls Ideogram API to create an image
+   - Saves the image to public/blog/[slug].jpg
+   - Updates the imageUrl in the blog posts array
+3. Updates the blog page file with the new image URLs
+
+Requirements:
+- Claude CLI installed (or modify to use Claude API directly)
+- Ideogram API key
 
 ## License
 
