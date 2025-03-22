@@ -3,11 +3,12 @@ const path = require('path');
 const axios = require('axios');
 const { exec } = require('child_process');
 const util = require('util');
+require('dotenv').config();
 
 // Configuration
 const IDEOGRAM_API_KEY = process.env.IDEOGRAM_API_KEY;
 if (!IDEOGRAM_API_KEY) {
-  console.error('Error: IDEOGRAM_API_KEY environment variable is not set');
+  console.error('Error: IDEOGRAM_API_KEY not found in .env file');
   process.exit(1);
 }
 
