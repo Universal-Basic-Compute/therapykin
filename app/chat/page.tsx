@@ -110,9 +110,15 @@ export default function ChatSession() {
             console.log('User has premium plan with unlimited sessions');
           } else {
             // For non-premium plans, explicitly check if sessionsRemaining is greater than 0
-            const sessionsRemaining = data.subscription.sessionsRemaining || 0;
+            // Make sure we're using the exact same logic as the dashboard
+            // Force to number and ensure it's not NaN
+            const sessionsRemaining = Number(data.subscription.sessionsRemaining || 0);
+            
+            // Explicitly check if it's greater than 0
             const hasRemaining = sessionsRemaining > 0;
             console.log(`User has ${sessionsRemaining} sessions remaining. Can start session: ${hasRemaining}`);
+            
+            // Set the state based on the actual value
             setHasSessionsRemaining(hasRemaining);
             
             // Force a re-render if no sessions remaining
