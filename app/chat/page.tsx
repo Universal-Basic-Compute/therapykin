@@ -1045,15 +1045,17 @@ export default function ChatSession() {
           <div className="flex-grow card overflow-hidden">
             <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
               <div className="space-y-4">
-                {chatHistory.map((msg) => (
-                  <div key={msg.id || Math.random()} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div 
-                      className={`max-w-[80%] p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
-                        msg.role === 'user' 
-                          ? 'user-message-bubble rounded-br-none' 
-                          : 'assistant-message-bubble rounded-bl-none'
-                      }`}
-                    >
+                {chatHistory
+                  .filter(msg => !msg.content.includes('<system>')) // Filter out system messages
+                  .map((msg) => (
+                    <div key={msg.id || Math.random()} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      <div 
+                        className={`max-w-[80%] p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
+                          msg.role === 'user' 
+                            ? 'user-message-bubble rounded-br-none' 
+                            : 'assistant-message-bubble rounded-bl-none'
+                        }`}
+                      >
                       {msg.loading ? (
                         <div className="flex items-center space-x-2">
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
