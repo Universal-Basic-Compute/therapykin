@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import DarkModeToggle from "./DarkModeToggle";
 
 export default function Header() {
   const { user } = useAuth();
@@ -94,9 +93,6 @@ export default function Header() {
                 </Link>
               </>
             )}
-          
-            {/* Dark mode toggle */}
-            <DarkModeToggle />
           
             {/* Mobile menu button */}
             <button 
