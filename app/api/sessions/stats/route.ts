@@ -45,11 +45,30 @@ export async function GET(request: NextRequest) {
     });
     const daysActive = uniqueDays.size || 1; // Minimum 1 day
     
+    // Calculate ongoing sessions (where CreatedAt + SessionLength > now)
+    const now = new Date();
+    const ongoingSessions = records.filter(session => {
+      if (!session.fields.CreatedAt || !session.fields.SessionLength) return false;
+      
+      const sessionStartTime = new Date(session.fields.CreatedAt as string);
+      const sessionLengthMinutes = session.fields.SessionLength as number || 30; // Default to 30 minutes
+      
+      // Calculate when the session ends
+      const sessionEndTime = new Date(sessionStartTime);
+      sessionEndTime.setMinutes(sessionEndTime.getMinutes() + sessionLengthMinutes);
+      
+      // Session is ongoing if end time is in the future
+      return sessionEndTime > now;
+    }).length;
+    
+    console.log(`${ongoingSessions} sessions are currently ongoing`);
+    
     // Return the statistics
     return NextResponse.json({
       stats: {
         totalSessions,
-        daysActive
+        daysActive,
+        ongoingSessions
       }
     });
   } catch (error) {
