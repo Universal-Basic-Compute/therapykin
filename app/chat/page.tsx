@@ -1684,15 +1684,20 @@ function ChatSessionWithSearchParams() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => {
-                // Submit on Ctrl+Enter or Cmd+Enter
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !sessionEnded) {
+                // Send on Enter, but allow Shift+Enter for newlines
+                if (e.key === 'Enter' && !e.shiftKey && !sessionEnded) {
+                  e.preventDefault();
+                  handleSubmit(e as any);
+                }
+                // Keep the existing Ctrl+Enter or Cmd+Enter functionality as an alternative
+                else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !sessionEnded) {
                   e.preventDefault();
                   handleSubmit(e as any);
                 }
               }}
               placeholder={sessionEnded 
                 ? "This session has ended. Please return for your next session." 
-                : "Type your message here... (Ctrl+Enter to send)"}
+                : "Type your message here... (Enter to send, Shift+Enter for new line)"}
               className={`flex-grow p-3 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] bg-[var(--card-bg)] resize-none min-h-[50px] max-h-[150px] overflow-y-auto ${
                 sessionEnded ? 'opacity-50 cursor-not-allowed' : ''
               }`}
