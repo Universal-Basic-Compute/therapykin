@@ -1407,7 +1407,7 @@ export default function ChatSession() {
           
           <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
             {/* Main Chat Area - Takes full width when settings are collapsed */}
-            <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'md:w-full' : 'md:w-2/3'}`}>
+            <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'w-full md:w-full' : 'md:w-2/3'}`}>
             
             {/* Chat history */}
             <div className="flex-grow card overflow-hidden">
@@ -1514,7 +1514,7 @@ export default function ChatSession() {
           
           {/* Settings Sidebar - Hidden when collapsed */}
           <div className={`md:w-1/3 md:max-w-xs transition-all duration-300 ${
-            settingsCollapsed ? 'md:hidden' : 'md:block'
+            settingsCollapsed ? 'hidden md:hidden' : 'md:block'
           }`}>
             <div className="card p-4 h-full overflow-y-auto bg-[var(--background-alt)]/50 border-l border-[var(--primary)]/10" style={{ maxHeight: 'calc(100vh - 200px)' }}>
               <h2 className="text-lg font-semibold mb-4 text-[var(--primary)]">Session Settings</h2>
