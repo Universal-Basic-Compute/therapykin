@@ -1500,27 +1500,7 @@ export default function ChatSession() {
             <div className="card p-4 h-full overflow-y-auto bg-[var(--background-alt)]/50 border-l border-[var(--primary)]/10" style={{ maxHeight: 'calc(100vh - 200px)' }}>
               <h2 className="text-lg font-semibold mb-4 text-[var(--primary)]">Session Settings</h2>
               
-              {/* Session Phase Box - Add it here at the top of the settings */}
-              {sessionStartTime && (
-                <div className="mb-6">
-                  <h3 className="text-sm font-medium mb-2">Session Phase</h3>
-                  <div className={`w-full p-3 rounded-lg text-center font-medium ${getSessionPhase(sessionStartTime).color}`}>
-                    {getSessionPhase(sessionStartTime).phase}
-                  </div>
-                  <div className="w-full bg-[var(--background)] rounded-full h-2 mt-2">
-                    <div 
-                      className="bg-[var(--primary)] h-2 rounded-full" 
-                      style={{ width: `${Math.min(100, (minutesActive / sessionLength) * 100)}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-xs mt-1 text-foreground/70">
-                    <span>{minutesActive} min</span>
-                    <span>{sessionLength} min</span>
-                  </div>
-                </div>
-              )}
-              
-              {/* Specialist Selection - Second setting now */}
+              {/* Specialist Selection - First setting now */}
               <div className="mb-6">
                 <h3 className="text-sm font-medium mb-2">Specialist Type</h3>
                 <div className="grid grid-cols-2 gap-2">
