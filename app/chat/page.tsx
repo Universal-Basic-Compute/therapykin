@@ -38,7 +38,7 @@ export default function ChatSession() {
   const [sessionEnded, setSessionEnded] = useState(false);
   const [sessionLength, setSessionLength] = useState<number>(30); // Default to 30 minutes
   const [showSettings, setShowSettings] = useState<boolean>(false); // For settings modal
-  const [settingsCollapsed, setSettingsCollapsed] = useState(false); // For collapsible sidebar
+  const [settingsCollapsed, setSettingsCollapsed] = useState(true); // Default to collapsed
   const [hasSessionsRemaining, setHasSessionsRemaining] = useState<boolean | null>(null);
   const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
   const [isUpdatingPreference, setIsUpdatingPreference] = useState(false);
@@ -1414,7 +1414,7 @@ export default function ChatSession() {
               {/* Add settings toggle button */}
               <button 
                 onClick={() => setSettingsCollapsed(!settingsCollapsed)}
-                className="absolute top-4 right-4 md:right-8 z-20 p-2 rounded-full bg-[var(--background-alt)] hover:bg-[var(--primary)]/10 transition-colors"
+                className="absolute top-4 right-4 md:right-8 z-20 p-2 rounded-full bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 transition-colors"
                 aria-label={settingsCollapsed ? "Show settings" : "Hide settings"}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1497,8 +1497,8 @@ export default function ChatSession() {
           <div className={`md:w-1/3 md:max-w-xs transition-all duration-300 ${
             settingsCollapsed ? 'md:hidden' : 'md:block'
           }`}>
-            <div className="card p-4 h-full overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
-              <h2 className="text-lg font-semibold mb-4">Session Settings</h2>
+            <div className="card p-4 h-full overflow-y-auto bg-[var(--background-alt)]/50 border-l border-[var(--primary)]/10" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+              <h2 className="text-lg font-semibold mb-4 text-[var(--primary)]">Session Settings</h2>
               
               {/* Session Phase Box - Add it here at the top of the settings */}
               {sessionStartTime && (
@@ -1635,7 +1635,7 @@ export default function ChatSession() {
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--background)] border-t border-black/10 dark:border-white/10 z-10">
           <div className="max-w-7xl mx-auto flex">
             {/* This div creates the same layout as the chat area above */}
-            <div className={`flex-grow ${settingsCollapsed ? 'md:w-full' : 'md:w-2/3'}`}>
+            <div className={`flex-grow ${settingsCollapsed ? 'md:w-full' : 'md:w-2/3 pr-4'}`}>
               <form onSubmit={handleSubmit} className="w-full flex shadow-sm rounded-lg overflow-hidden border border-black/10 dark:border-white/10 hover:shadow-md transition-shadow duration-200">
             <textarea
               value={message}
