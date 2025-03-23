@@ -1982,7 +1982,7 @@ export default function CryptoTradingPsychology() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link 
-                    href="/signup?plan=free" 
+                    href="/chat?specialist=crypto" 
                     className="btn-primary px-8 py-3"
                   >
                     Get 3 Free Sessions
