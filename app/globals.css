@@ -1,0 +1,643 @@
+@import "tailwindcss";
+
+:root {
+  /* Primary brand color - colors from logo gradient */
+  --primary: #00c5bc; /* Darker teal */
+  --primary-light: #8ced7d; /* Green from logo */
+  --primary-dark: #a571ff; /* Adjusted purple */
+  
+  /* Secondary accent - colors from logo gradient */
+  --accent: #ffde45; /* Adjusted yellow */
+  --accent-light: #ff9d76; /* Adjusted pink/orange */
+  
+  /* Neutral backgrounds - less stark white, more subtle tones */
+  --background: #f8fafc;
+  --background-alt: #f1f5f9;
+  --foreground: #1e293b;
+  
+  /* UI elements */
+  --border: rgba(0, 0, 0, 0.08);
+  --card-bg: #ffffff;
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
+  
+  /* Additional colors for visual interest */
+  --highlight: #8b5cf6;
+  --highlight-light: #a78bfa;
+  --warm: #f97316;
+  --warm-light: #fb923c;
+  --cool: #06b6d4;
+  --cool-light: #22d3ee;
+  
+  /* Legacy variables for compatibility */
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  
+  /* RGB variables for glow effects */
+  --primary-rgb: 0, 197, 188; /* Teal */
+  --accent-rgb: 255, 222, 69; /* Yellow */
+  --primary-dark-rgb: 165, 113, 255; /* Purple */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Update dark mode colors to match logo gradient with dark blue theme */
+    --primary: #00e1d5; /* Adjusted teal */
+    --primary-light: #6aff6a; /* Brighter green */
+    --primary-dark: #a571ff; /* Adjusted purple */
+    
+    --accent: #ffde45; /* Brighter yellow */
+    --accent-light: #ff9d76; /* Brighter orange/pink */
+    
+    /* Darker, richer backgrounds with dark blue theme */
+    --background: #0a1929; /* Dark blue background */
+    --background-alt: #132f4c; /* Slightly lighter dark blue */
+    --foreground: #f1f5f9;
+    
+    --border: rgba(255, 255, 255, 0.1);
+    --card-bg: #132f4c; /* Match background-alt */
+    --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+    
+    /* Additional colors for visual interest */
+    --highlight: #a78bfa;
+    --highlight-light: #c4b5fd;
+    --warm: #fb923c;
+    --warm-light: #fdba74;
+    --cool: #22d3ee;
+    --cool-light: #67e8f9;
+    
+    /* Legacy variables for compatibility */
+    --primary-foreground: #ffffff;
+    --secondary: #132f4c;
+    --secondary-foreground: #f1f5f9;
+    
+    /* RGB variables for dark mode */
+    --primary-rgb: 0, 225, 213; /* Brighter teal for dark mode */
+  }
+  
+  .card-hover-glow:hover {
+    box-shadow: 0 0 25px rgba(var(--primary-rgb), 0.25);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+}
+
+/* Add smooth transitions for dark/light mode changes */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
+}
+
+/* Card styling */
+.card {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* Button styling */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Add dark mode specific button styles */
+.dark .btn-secondary {
+  color: var(--foreground);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient backgrounds with logo colors */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, var(--accent-light) 0%, var(--primary-dark) 100%);
+  color: white;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+}
+
+/* Texture overlay for more depth */
+.texture-overlay {
+  position: relative;
+}
+
+.texture-overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Card variations */
+.card-highlight {
+  border-top: 4px solid var(--accent); /* Yellow from logo */
+}
+
+.card-primary {
+  border-top: 4px solid var(--primary); /* Teal from logo */
+}
+
+.card-accent {
+  border-top: 4px solid var(--primary-dark); /* Purple from logo */
+}
+
+/* Improved shadows for more depth */
+.shadow-depth {
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Card hover effects */
+.card-hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.card-hover-glow {
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-hover-glow:hover {
+  box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.4);
+  transform: translateY(-2px);
+}
+
+.card-hover-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.13) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
+.card-hover-glow:hover::after {
+  opacity: 1;
+  transform: rotate(30deg) translate(10%, 10%);
+}
+
+.card-hover-border {
+  transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.card-hover-border:hover {
+  border-color: var(--primary);
+  transform: scale(1.02);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
+}
+
+.card-hover-scale {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover-scale:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.card-hover-rotate {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover-rotate:hover {
+  transform: rotate(1deg) translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Subtle background patterns */
+.bg-pattern-dots {
+  background-image: radial-gradient(var(--primary) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0;
+}
+
+.bg-pattern-lines {
+  background: linear-gradient(135deg, var(--background) 25%, transparent 25%) -10px 0,
+    linear-gradient(225deg, var(--background) 25%, transparent 25%) -10px 0,
+    linear-gradient(315deg, var(--background) 25%, transparent 25%),
+    linear-gradient(45deg, var(--background) 25%, transparent 25%);
+  background-size: 20px 20px;
+  background-color: var(--background-alt);
+}
+
+/* Static background with texture */
+.animated-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 75%,
+    transparent 75%,
+    transparent 100%
+  );
+  background-size: 100px 100px;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+
+/* Subtle animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Smooth scrolling for the chat container */
+.overflow-y-auto {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling for better UX */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* For dark mode */
+@media (prefers-color-scheme: dark) {
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* User message bubble with teal-focused gradient and standardized effects */
+.user-message-bubble {
+  background: linear-gradient(135deg, #00c5bc 0%, #4fffee 100%);
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 197, 188, 0.2);
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.user-message-bubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 197, 188, 0.3);
+}
+
+/* Assistant message bubble with standardized effects */
+.assistant-message-bubble {
+  background: linear-gradient(135deg, var(--background-alt) 0%, var(--card-bg) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.assistant-message-bubble:hover {
+  transform: translateY(-2px) rotate(1deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Add shine effect to both message types */
+.user-message-bubble::after, .assistant-message-bubble::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.5s ease;
+}
+
+.user-message-bubble:hover::after, .assistant-message-bubble:hover::after {
+  transform: rotate(30deg) translate(10%, 10%);
+}
+
+/* Text color adjustments for better readability */
+.text-bubble {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .assistant-message-bubble {
+    background: linear-gradient(135deg, var(--background-alt) 0%, rgba(40, 50, 80, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .assistant-message-bubble:hover {
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+  }
+  
+  .user-message-bubble {
+    background: linear-gradient(135deg, #00c5bc 0%, #4fffee 100%);
+    box-shadow: 0 2px 10px rgba(0, 197, 188, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  
+  .user-message-bubble:hover {
+    box-shadow: 0 4px 12px rgba(0, 197, 188, 0.4);
+  }
+}
+
+@keyframes messageAppear {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+.user-message-bubble, .assistant-message-bubble {
+  animation: messageAppear 0.3s ease-out forwards;
+}
+
+/* Enhanced prose styling for blog articles */
+.prose h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+}
+
+.prose h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+}
+
+.prose ul {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose blockquote {
+  font-style: italic;
+  border-left: 4px solid var(--primary);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+}
+
+.prose .lead {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--foreground);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.prose th {
+  background-color: var(--background-alt);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+}
+
+.prose td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.prose tr:nth-child(even) {
+  background-color: var(--background-alt);
+}
+
+/* Blog content specific styling */
+.blog-content svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.blog-content .my-8 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.blog-content .my-6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.blog-content .rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.blog-content .card {
+  background-color: var(--card-bg);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Citation styling */
+sup {
+  font-size: 0.65em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+sup a {
+  color: var(--primary);
+  text-decoration: none;
+  padding: 0 1px;
+}
+
+sup a:hover {
+  text-decoration: underline;
+}
+
+.blog-content a[href^="#ref-"] {
+  color: var(--primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.blog-content a[href^="#ref-"]:hover {
+  text-decoration: underline;
+}
+
+/* References section styling */
+.blog-content ol li:target {
+  background-color: var(--primary)/10;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Dark mode adjustments for blog content */
+@media (prefers-color-scheme: dark) {
+  .blog-content .bg-red-100 {
+    background-color: rgba(254, 202, 202, 0.2);
+  }
+  
+  .blog-content .bg-orange-100 {
+    background-color: rgba(254, 215, 170, 0.2);
+  }
+  
+  .blog-content .bg-yellow-100 {
+    background-color: rgba(254, 240, 138, 0.2);
+  }
+  
+  .blog-content .bg-blue-100 {
+    background-color: rgba(191, 219, 254, 0.2);
+  }
+  
+  .blog-content .text-red-600,
+  .blog-content .text-orange-600,
+  .blog-content .text-yellow-600,
+  .blog-content .text-blue-600 {
+    color: white;
+  }
+}
