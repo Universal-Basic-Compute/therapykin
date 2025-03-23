@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Link from 'next/link';
@@ -16,7 +16,8 @@ interface ChatMessage {
   audio?: string; // Add this to store audio URL
 }
 
-export default function ChatSession() {
+// Component that uses useSearchParams
+function ChatSessionWithSearchParams() {
   const { user, loading } = useAuth();
   const searchParams = useSearchParams();
   const [message, setMessage] = useState('');
@@ -1745,5 +1746,24 @@ export default function ChatSession() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ChatPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p>Loading your session...</p>
+          </div>
+        </main>
+      </div>
+    }>
+      <ChatSessionWithSearchParams />
+    </Suspense>
   );
 }
