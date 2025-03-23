@@ -1523,11 +1523,11 @@ export default function ChatSession() {
             )}
             
             {/* Settings Panel - Shown/hidden based on settingsCollapsed state */}
-            <div className={`card p-4 h-full overflow-y-auto bg-[var(--background-alt)]/50 border-l border-[var(--primary)]/10 ${
+            <div className={`card h-full overflow-hidden bg-[var(--background-alt)]/50 border-l border-[var(--primary)]/10 ${
               settingsCollapsed ? 'hidden' : 'block'
             }`} style={{ maxHeight: 'calc(100vh - 350px)' }}>
-              {/* Add a header with close button */}
-              <div className="flex justify-between items-center mb-4">
+              {/* Add a header with close button - keep this outside the scrollable area */}
+              <div className="flex justify-between items-center p-4 border-b border-[var(--primary)]/10">
                 <h2 className="text-lg font-semibold text-[var(--primary)]">Session Settings</h2>
                 <button 
                   onClick={() => setSettingsCollapsed(true)}
@@ -1539,6 +1539,9 @@ export default function ChatSession() {
                   </svg>
                 </button>
               </div>
+              
+              {/* Make this div scrollable */}
+              <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 410px)' }}>
               
               {/* Specialist Selection - First setting now */}
               <div className="mb-6">
@@ -1645,6 +1648,7 @@ export default function ChatSession() {
                     <strong>Session Length:</strong> Your session will automatically end after the selected duration.
                   </p>
                 </div>
+              </div>
               </div>
             </div>
           </div>
