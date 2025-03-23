@@ -391,7 +391,9 @@ export default function ChatSession() {
           // Get messages from KinOS
           const messages = await fetchMessagesFromKinOS(
             user.firstName,
-            user.lastName
+            user.lastName,
+            undefined, // No since parameter
+            selectedSpecialist // Pass the selected specialist
           );
           
           if (messages.length > 0) {

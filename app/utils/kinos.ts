@@ -8,13 +8,14 @@ interface KinOSResponse {
 export async function fetchMessagesFromKinOS(
   firstName: string,
   lastName: string,
-  since?: string
+  since?: string,
+  specialist: string = 'generalist' // Add specialist parameter with default
 ): Promise<Array<{role: string, content: string, timestamp: string}>> {
   try {
-    console.log(`Fetching messages for ${firstName} ${lastName}${since ? ` since ${since}` : ''}`);
+    console.log(`Fetching messages for ${firstName} ${lastName}${since ? ` since ${since}` : ''} (specialist: ${specialist})`);
     
     // Build the URL with query parameters
-    let url = `/api/kinos/messages?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}`;
+    let url = `/api/kinos/messages?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&specialist=${encodeURIComponent(specialist)}`;
     if (since) {
       url += `&since=${encodeURIComponent(since)}`;
     }

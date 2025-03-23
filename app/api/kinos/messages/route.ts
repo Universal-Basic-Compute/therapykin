@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
     const firstName = searchParams.get('firstName');
     const lastName = searchParams.get('lastName');
     const since = searchParams.get('since'); // Optional timestamp
+    const specialist = searchParams.get('specialist') || 'generalist'; // Get specialist parameter with default
     
     if (!firstName || !lastName) {
       return NextResponse.json(
@@ -17,12 +18,27 @@ export async function GET(request: NextRequest) {
     // Create the project ID by combining firstName and lastName
     const projectId = `${firstName}${lastName}`;
     
-    // Determine the base URL based on environment
-    let baseUrl = process.env.KINOS_API_URL 
-      ? `${process.env.KINOS_API_URL}/projects/therapykin/${projectId}/messages`
-      : process.env.NODE_ENV === 'development'
-        ? `http://localhost:5000/projects/therapykin/${projectId}/messages`
-        : `https://api.kinos-engine.ai/projects/therapykin/${projectId}/messages`;
+    // Determine the base URL based on environment and specialist
+    let baseUrl;
+    
+    // Use different project path based on specialist type
+    if (specialist === 'crypto') {
+      // For crypto specialist
+      baseUrl = process.env.KINOS_API_URL 
+        ? `${process.env.KINOS_API_URL}/projects/therapykincrypto/${projectId}/messages`
+        : process.env.NODE_ENV === 'development'
+          ? `http://localhost:5000/projects/therapykincrypto/${projectId}/messages`
+          : `https://api.kinos-engine.ai/projects/therapykincrypto/${projectId}/messages`;
+    } else {
+      // For generalist (default)
+      baseUrl = process.env.KINOS_API_URL 
+        ? `${process.env.KINOS_API_URL}/projects/therapykin/${projectId}/messages`
+        : process.env.NODE_ENV === 'development'
+          ? `http://localhost:5000/projects/therapykin/${projectId}/messages`
+          : `https://api.kinos-engine.ai/projects/therapykin/${projectId}/messages`;
+    }
+    
+    console.log(`Using API endpoint for messages: ${baseUrl}`);
     
     // Add since parameter if provided
     if (since) {
