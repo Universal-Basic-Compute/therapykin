@@ -1526,7 +1526,19 @@ export default function ChatSession() {
             <div className={`card p-4 h-full overflow-y-auto bg-[var(--background-alt)]/50 border-l border-[var(--primary)]/10 ${
               settingsCollapsed ? 'hidden' : 'block'
             }`} style={{ maxHeight: 'calc(100vh - 350px)' }}>
-              <h2 className="text-lg font-semibold mb-4 text-[var(--primary)]">Session Settings</h2>
+              {/* Add a header with close button */}
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-[var(--primary)]">Session Settings</h2>
+                <button 
+                  onClick={() => setSettingsCollapsed(true)}
+                  className="p-1 rounded-full hover:bg-[var(--background-alt)] transition-colors"
+                  aria-label="Close settings"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-foreground/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
               
               {/* Specialist Selection - First setting now */}
               <div className="mb-6">
