@@ -110,9 +110,17 @@ function ChatSessionWithSearchParams() {
         const statsData = await statsResponse.json();
         console.log('Session stats received:', statsData);
         
-        // Get the total sessions used from the stats
-        const totalSessionsUsed = statsData.stats?.totalSessions || 0;
-        console.log('Total sessions used according to stats:', totalSessionsUsed);
+        // Get the total sessions used from the stats, but exclude ongoing sessions
+        let totalSessionsUsed = statsData.stats?.totalSessions || 0;
+        
+        // Check if there are any ongoing sessions in the stats
+        if (statsData.stats?.ongoingSessions && statsData.stats.ongoingSessions > 0) {
+          // Subtract ongoing sessions from the total count
+          totalSessionsUsed -= statsData.stats.ongoingSessions;
+          console.log(`Excluding ${statsData.stats.ongoingSessions} ongoing sessions from the count`);
+        }
+        
+        console.log('Total completed sessions used according to stats:', totalSessionsUsed);
         
         // Then fetch the subscription data
         const response = await fetch('/api/users/subscription');
