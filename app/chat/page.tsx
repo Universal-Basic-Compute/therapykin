@@ -38,6 +38,7 @@ export default function ChatSession() {
   const [sessionEnded, setSessionEnded] = useState(false);
   const [sessionLength, setSessionLength] = useState<number>(30); // Default to 30 minutes
   const [showSettings, setShowSettings] = useState<boolean>(false); // For settings modal
+  const [settingsCollapsed, setSettingsCollapsed] = useState(false); // For collapsible sidebar
   const [hasSessionsRemaining, setHasSessionsRemaining] = useState<boolean | null>(null);
   const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
   const [isUpdatingPreference, setIsUpdatingPreference] = useState(false);
@@ -1364,11 +1365,26 @@ export default function ChatSession() {
       
       <main className="flex-grow pt-24 pb-24 px-4 relative">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
-          {/* Main Chat Area - Takes 2/3 of the space on larger screens */}
-          <div className="flex-grow md:w-2/3 flex flex-col">
+          {/* Main Chat Area - Takes full width when settings are collapsed */}
+          <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'md:w-full' : 'md:w-2/3'}`}>
           
           {/* Chat history */}
             <div className="flex-grow card overflow-hidden">
+              {/* Add settings toggle button */}
+              <button 
+                onClick={() => setSettingsCollapsed(!settingsCollapsed)}
+                className="absolute top-4 right-4 md:right-8 z-20 p-2 rounded-full bg-[var(--background-alt)] hover:bg-[var(--primary)]/10 transition-colors"
+                aria-label={settingsCollapsed ? "Show settings" : "Hide settings"}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={
+                    settingsCollapsed 
+                      ? "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                      : "M6 18L18 6M6 6l12 12"
+                  } />
+                </svg>
+              </button>
+              
               <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
                 <div className="space-y-4">
                 {chatHistory
@@ -1436,8 +1452,10 @@ export default function ChatSession() {
             </div>
           </div>
           
-          {/* Settings Sidebar - Takes 1/3 of the space on larger screens */}
-          <div className="md:w-1/3 md:max-w-xs">
+          {/* Settings Sidebar - Hidden when collapsed */}
+          <div className={`md:w-1/3 md:max-w-xs transition-all duration-300 ${
+            settingsCollapsed ? 'md:hidden' : 'md:block'
+          }`}>
             <div className="card p-4 h-full">
               <h2 className="text-lg font-semibold mb-4">Session Settings</h2>
               
@@ -1541,7 +1559,10 @@ export default function ChatSession() {
         
         {/* Message input - fixed to bottom */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--background)] border-t border-black/10 dark:border-white/10 z-10">
-          <form onSubmit={handleSubmit} className="max-w-7xl mx-auto flex shadow-sm rounded-lg overflow-hidden border border-black/10 dark:border-white/10 hover:shadow-md transition-shadow duration-200">
+          <div className="max-w-7xl mx-auto flex">
+            {/* This div creates the same layout as the chat area above */}
+            <div className={`flex-grow ${settingsCollapsed ? 'md:w-full' : 'md:w-2/3 pr-4'}`}>
+              <form onSubmit={handleSubmit} className="w-full flex shadow-sm rounded-lg overflow-hidden border border-black/10 dark:border-white/10 hover:shadow-md transition-shadow duration-200">
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -1606,7 +1627,12 @@ export default function ChatSession() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
               </svg>
             </button>
-          </form>
+              </form>
+            </div>
+            
+            {/* Empty div to maintain the same layout as above - hidden when settings are collapsed */}
+            <div className={`hidden ${settingsCollapsed ? 'md:hidden' : 'md:block md:w-1/3 md:max-w-xs'}`}></div>
+          </div>
         </div>
       </main>
     </div>
