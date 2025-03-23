@@ -1366,7 +1366,7 @@ export default function ChatSession() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
           {/* Main Chat Area - Takes 2/3 of the space on larger screens */}
           <div className="flex-grow md:w-2/3 flex flex-col">
-          <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-bold">Therapy Session</h1>
             <div className="flex items-center gap-2">
               {sessionStartTime && (
@@ -1378,9 +1378,9 @@ export default function ChatSession() {
           </div>
           
           {/* Chat history */}
-          <div className="flex-grow card overflow-hidden">
-            <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
-              <div className="space-y-4">
+            <div className="flex-grow card overflow-hidden">
+              <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
+                <div className="space-y-4">
                 {chatHistory
                   .filter(msg => !msg.content.includes('<system>')) // Filter out system messages
                   .map((msg) => (
@@ -1439,8 +1439,9 @@ export default function ChatSession() {
                       </div>
                     </div>
                 ))}
-                {/* Add an invisible element at the bottom to scroll to */}
-                <div ref={chatContainerRef} />
+                  {/* Add an invisible element at the bottom to scroll to */}
+                  <div ref={chatContainerRef} />
+                </div>
               </div>
             </div>
           </div>
