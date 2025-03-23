@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { sendMessageToKinOS, fetchMessagesFromKinOS } from '../utils/kinos';
 import { createSession, getOngoingSession } from '../utils/airtable';
 
@@ -17,6 +18,7 @@ interface ChatMessage {
 
 export default function ChatSession() {
   const { user, loading } = useAuth();
+  const searchParams = useSearchParams();
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [voiceMode, setVoiceMode] = useState(true);
@@ -203,8 +205,15 @@ export default function ChatSession() {
               console.log(`Loaded user's preferred voice: ${data.preferences.preferredVoice}`);
             }
             
-            // Set the specialist to the user's preference
-            if (data.preferences.preferredSpecialist) {
+            // Check URL parameter first, then fall back to user preference
+            const specialistParam = searchParams.get('specialist');
+            if (specialistParam && (specialistParam === 'generalist' || specialistParam === 'crypto')) {
+              setSelectedSpecialist(specialistParam);
+              console.log(`Using specialist from URL parameter: ${specialistParam}`);
+              
+              // Optionally update the user's preference to match the URL parameter
+              updateSelectedSpecialist(specialistParam);
+            } else if (data.preferences.preferredSpecialist) {
               setSelectedSpecialist(data.preferences.preferredSpecialist);
               console.log(`Loaded user's preferred specialist: ${data.preferences.preferredSpecialist}`);
             }
@@ -222,7 +231,7 @@ export default function ChatSession() {
     }
     
     fetchUserPreferences();
-  }, [user]);
+  }, [user, searchParams]); // Add searchParams as a dependency
 
   // Create a session when the component mounts
   useEffect(() => {
