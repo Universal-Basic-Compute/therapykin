@@ -1404,29 +1404,8 @@ export default function ChatSession() {
       
       <main className="flex-grow pt-24 pb-24 px-4 relative">
         <div className="max-w-7xl mx-auto flex flex-col gap-4">
-          {/* Session Phase Box - Add this new section */}
-          {sessionStartTime && (
-            <div className="card p-3 mb-2">
-              <div className="flex flex-col sm:flex-row justify-between items-center">
-                <div className={`px-4 py-2 rounded-lg text-center font-medium mb-2 sm:mb-0 ${getSessionPhase(sessionStartTime).color}`}>
-                  {getSessionPhase(sessionStartTime).phase}
-                </div>
-                <div className="w-full sm:w-1/2 flex items-center">
-                  <div className="w-full bg-[var(--background)] rounded-full h-2 mr-3">
-                    <div 
-                      className="bg-[var(--primary)] h-2 rounded-full" 
-                      style={{ width: `${Math.min(100, (minutesActive / sessionLength) * 100)}%` }}
-                    ></div>
-                  </div>
-                  <div className="text-xs text-foreground/70 whitespace-nowrap">
-                    {minutesActive}/{sessionLength} min
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
           
-          <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-240px)]">
+          <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
             {/* Main Chat Area - Takes full width when settings are collapsed */}
             <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'md:w-full' : 'md:w-2/3'}`}>
             
@@ -1518,10 +1497,30 @@ export default function ChatSession() {
           <div className={`md:w-1/3 md:max-w-xs transition-all duration-300 ${
             settingsCollapsed ? 'md:hidden' : 'md:block'
           }`}>
-            <div className="card p-4 h-full overflow-y-auto" style={{ maxHeight: 'calc(100vh - 240px)' }}>
+            <div className="card p-4 h-full overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
               <h2 className="text-lg font-semibold mb-4">Session Settings</h2>
               
-              {/* Specialist Selection - First setting now */}
+              {/* Session Phase Box - Add it here at the top of the settings */}
+              {sessionStartTime && (
+                <div className="mb-6">
+                  <h3 className="text-sm font-medium mb-2">Session Phase</h3>
+                  <div className={`w-full p-3 rounded-lg text-center font-medium ${getSessionPhase(sessionStartTime).color}`}>
+                    {getSessionPhase(sessionStartTime).phase}
+                  </div>
+                  <div className="w-full bg-[var(--background)] rounded-full h-2 mt-2">
+                    <div 
+                      className="bg-[var(--primary)] h-2 rounded-full" 
+                      style={{ width: `${Math.min(100, (minutesActive / sessionLength) * 100)}%` }}
+                    ></div>
+                  </div>
+                  <div className="flex justify-between text-xs mt-1 text-foreground/70">
+                    <span>{minutesActive} min</span>
+                    <span>{sessionLength} min</span>
+                  </div>
+                </div>
+              )}
+              
+              {/* Specialist Selection - Second setting now */}
               <div className="mb-6">
                 <h3 className="text-sm font-medium mb-2">Specialist Type</h3>
                 <div className="grid grid-cols-2 gap-2">
