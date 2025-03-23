@@ -1411,20 +1411,7 @@ export default function ChatSession() {
             
             {/* Chat history */}
             <div className="flex-grow card overflow-hidden">
-              {/* Add settings toggle button */}
-              <button 
-                onClick={() => setSettingsCollapsed(!settingsCollapsed)}
-                className="absolute top-4 right-4 md:right-8 z-20 p-3 rounded-full bg-[var(--primary)]/20 hover:bg-[var(--primary)]/30 transition-colors shadow-md"
-                aria-label={settingsCollapsed ? "Show settings" : "Hide settings"}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={
-                    settingsCollapsed 
-                      ? "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                      : "M6 18L18 6M6 6l12 12"
-                  } />
-                </svg>
-              </button>
+              {/* Settings toggle button removed from here - now added to session phase indicator */}
               
               <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
                 <div className="space-y-4">
@@ -1493,7 +1480,7 @@ export default function ChatSession() {
             </div>
           </div>
           
-          {/* Always visible session phase indicator */}
+          {/* Always visible session phase indicator with settings toggle */}
           {sessionStartTime && (
             <div className="fixed top-24 right-4 md:right-8 z-20 bg-white dark:bg-[var(--background-alt)]/90 p-3 rounded-lg shadow-md border border-[var(--primary)]/10 backdrop-blur-sm">
               <div className={`px-3 py-1 rounded-full text-center font-medium text-sm ${getSessionPhase(sessionStartTime).color}`}>
@@ -1509,6 +1496,28 @@ export default function ChatSession() {
                 <span>{minutesActive} min</span>
                 <span>{sessionLength} min</span>
               </div>
+              
+              {/* Add settings toggle button below the session phase */}
+              <button 
+                onClick={() => setSettingsCollapsed(!settingsCollapsed)}
+                className="w-full mt-3 p-2 rounded-lg bg-[var(--primary)]/20 hover:bg-[var(--primary)]/30 transition-colors flex items-center justify-center text-sm font-medium text-[var(--primary)]"
+              >
+                {settingsCollapsed ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    </svg>
+                    Show Settings
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Hide Settings
+                  </>
+                )}
+              </button>
             </div>
           )}
           
