@@ -1498,7 +1498,7 @@ export default function ChatSession() {
             <div className="card p-4 h-full overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
               <h2 className="text-lg font-semibold mb-4">Session Settings</h2>
               
-              {/* Session Phase Marker - Moved to the top */}
+              {/* Session Phase Marker - First setting */}
               {sessionStartTime && (
                 <div className="mb-6">
                   <h3 className="text-sm font-medium mb-2">Session Phase</h3>
@@ -1518,66 +1518,7 @@ export default function ChatSession() {
                 </div>
               )}
               
-              {/* Voice Mode Toggle */}
-              <div className="mb-6">
-                <h3 className="text-sm font-medium mb-2">Voice Mode</h3>
-                <button 
-                  className={`w-full btn-secondary text-sm flex items-center justify-center ${voiceMode ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30' : ''}`}
-                  onClick={toggleVoiceMode}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                  </svg>
-                  {voiceMode ? 'Voice Mode: On' : 'Voice Mode: Off'}
-                </button>
-              </div>
-              
-              {/* Voice Selection - Only show if voice mode is on */}
-              {voiceMode && (
-                <div className="mb-6">
-                  <h3 className="text-sm font-medium mb-2">Voice Selection</h3>
-                  <select
-                    className="w-full p-2 text-sm border border-black/10 dark:border-white/10 rounded-lg bg-[var(--background)]"
-                    value={selectedVoice}
-                    onChange={(e) => updatePreferredVoice(e.target.value)}
-                  >
-                    {voiceOptions.map(voice => (
-                      <option key={voice.id} value={voice.id}>
-                        {voice.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              
-              {/* Session Length Selection */}
-              <div className="mb-6">
-                <h3 className="text-sm font-medium mb-2">Session Length</h3>
-                <div className="grid grid-cols-3 gap-2">
-                  {[15, 30, 45].map((length) => (
-                    <button
-                      key={length}
-                      onClick={() => updateSessionLength(length)}
-                      disabled={isUpdatingPreference}
-                      className={`p-2 rounded-lg border text-sm ${
-                        sessionLength === length 
-                          ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
-                          : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                      } ${isUpdatingPreference ? 'opacity-50 cursor-wait' : ''}`}
-                    >
-                      {length} min
-                    </button>
-                  ))}
-                </div>
-                {isUpdatingPreference && (
-                  <div className="text-xs text-foreground/60 mt-2 flex items-center">
-                    <div className="w-3 h-3 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin mr-2"></div>
-                    Saving...
-                  </div>
-                )}
-              </div>
-              
-              {/* Specialist Selection */}
+              {/* Specialist Selection - Second setting */}
               <div className="mb-6">
                 <h3 className="text-sm font-medium mb-2">Specialist Type</h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -1609,8 +1550,66 @@ export default function ChatSession() {
                 </p>
               </div>
               
+              {/* Session Length Selection - Third setting */}
+              <div className="mb-6">
+                <h3 className="text-sm font-medium mb-2">Session Length</h3>
+                <div className="grid grid-cols-3 gap-2">
+                  {[15, 30, 45].map((length) => (
+                    <button
+                      key={length}
+                      onClick={() => updateSessionLength(length)}
+                      disabled={isUpdatingPreference}
+                      className={`p-2 rounded-lg border text-sm ${
+                        sessionLength === length 
+                          ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
+                          : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                      } ${isUpdatingPreference ? 'opacity-50 cursor-wait' : ''}`}
+                    >
+                      {length} min
+                    </button>
+                  ))}
+                </div>
+                {isUpdatingPreference && (
+                  <div className="text-xs text-foreground/60 mt-2 flex items-center">
+                    <div className="w-3 h-3 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Saving...
+                  </div>
+                )}
+              </div>
               
-              {/* Help Section */}
+              {/* Voice Mode Toggle - Fourth setting */}
+              <div className="mb-6">
+                <h3 className="text-sm font-medium mb-2">Voice Mode</h3>
+                <button 
+                  className={`w-full btn-secondary text-sm flex items-center justify-center ${voiceMode ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30' : ''}`}
+                  onClick={toggleVoiceMode}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  </svg>
+                  {voiceMode ? 'Voice Mode: On' : 'Voice Mode: Off'}
+                </button>
+              </div>
+              
+              {/* Voice Selection - Only show if voice mode is on */}
+              {voiceMode && (
+                <div className="mb-6">
+                  <h3 className="text-sm font-medium mb-2">Voice Selection</h3>
+                  <select
+                    className="w-full p-2 text-sm border border-black/10 dark:border-white/10 rounded-lg bg-[var(--background)]"
+                    value={selectedVoice}
+                    onChange={(e) => updatePreferredVoice(e.target.value)}
+                  >
+                    {voiceOptions.map(voice => (
+                      <option key={voice.id} value={voice.id}>
+                        {voice.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              
+              {/* Help Section - Last section */}
               <div>
                 <h3 className="text-sm font-medium mb-2">Help</h3>
                 <div className="text-xs text-foreground/70 space-y-2">
