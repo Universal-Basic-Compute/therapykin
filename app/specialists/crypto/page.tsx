@@ -2,6 +2,7 @@
 
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import Testimonial from "../../components/Testimonial";
 import Link from "next/link";
 
 export default function CryptoSpecialist() {
@@ -394,33 +395,17 @@ export default function CryptoSpecialist() {
             <h2 className="text-2xl font-semibold mb-6 text-center">What Crypto Traders Say</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg border border-foreground/5">
-                <div className="flex items-start mb-4">
-                  <svg className="w-10 h-10 text-[var(--primary)]/30 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
-                  <div>
-                    <p className="text-foreground/80 italic mb-4">
-                      "After a significant loss during the last market crash, I was experiencing paralyzing anxiety every time I tried to trade. My TherapyKin Crypto specialist helped me develop emotional circuit breakers that have completely transformed my approach."
-                    </p>
-                    <p className="font-medium">Alex K., Day Trader</p>
-                  </div>
-                </div>
-              </div>
+              <Testimonial 
+                quote="After a significant loss during the last market crash, I was experiencing paralyzing anxiety every time I tried to trade. My TherapyKin Crypto specialist helped me develop emotional circuit breakers that have completely transformed my approach."
+                author="Alex K."
+                title="Day Trader"
+              />
               
-              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg border border-foreground/5">
-                <div className="flex items-start mb-4">
-                  <svg className="w-10 h-10 text-[var(--primary)]/30 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
-                  <div>
-                    <p className="text-foreground/80 italic mb-4">
-                      "The emotional dashboard technique my specialist taught me has been a game-changer. I can now see patterns in my trading behavior that I was completely blind to before. My win rate has improved by 22% since implementing these tools."
-                    </p>
-                    <p className="font-medium">Maya R., Position Trader</p>
-                  </div>
-                </div>
-              </div>
+              <Testimonial 
+                quote="The emotional dashboard technique my specialist taught me has been a game-changer. I can now see patterns in my trading behavior that I was completely blind to before. My win rate has improved by 22% since implementing these tools."
+                author="Maya R."
+                title="Position Trader"
+              />
             </div>
           </div>
           
