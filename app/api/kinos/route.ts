@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { content, firstName, lastName, attachments = [], images = [], mode = null } = await request.json();
+    const { content, firstName, lastName, attachments = [], images = [], mode = null, specialist = null } = await request.json();
     
-    console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}`);
+    console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}`);
     
     // Create the project ID by combining firstName and lastName
     const projectId = `${firstName}${lastName}`;
@@ -28,6 +28,11 @@ export async function POST(request: NextRequest) {
     // Add mode if it exists
     if (mode) {
       requestBody.mode = mode;
+    }
+    
+    // Add specialist if it exists
+    if (specialist) {
+      requestBody.specialist = specialist;
     }
     
     // Forward the request to the appropriate API with the additional parameters

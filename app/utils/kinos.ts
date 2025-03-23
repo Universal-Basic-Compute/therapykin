@@ -44,10 +44,11 @@ export async function sendMessageToKinOS(
   lastName: string,
   attachments: any[] = [],
   images: string[] = [],
-  mode: string | null = null // Add this parameter
+  mode: string | null = null,
+  specialist: string | null = null // Add this parameter
 ): Promise<string> {
   try {
-    console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}`);
+    console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}`);
     
     // Create the request body with the mode parameter if provided
     const requestBody: any = {
@@ -61,6 +62,11 @@ export async function sendMessageToKinOS(
     // Add mode if it exists
     if (mode) {
       requestBody.mode = mode;
+    }
+    
+    // Add specialist if it exists
+    if (specialist) {
+      requestBody.specialist = specialist;
     }
     
     // Always use our API route - environment handling happens server-side

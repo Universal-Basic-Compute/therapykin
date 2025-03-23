@@ -48,6 +48,7 @@ export default function ChatSession() {
   const [lastUserMessageTime, setLastUserMessageTime] = useState<Date | null>(null);
   const [silenceMessageSent, setSilenceMessageSent] = useState(false);
   const [isTabActive, setIsTabActive] = useState(true);
+  const [selectedSpecialist, setSelectedSpecialist] = useState<string>("generalist");
   
   // Voice options
   const voiceOptions = [
@@ -201,6 +202,12 @@ export default function ChatSession() {
               setSelectedVoice(data.preferences.preferredVoice);
               console.log(`Loaded user's preferred voice: ${data.preferences.preferredVoice}`);
             }
+            
+            // Set the specialist to the user's preference
+            if (data.preferences.preferredSpecialist) {
+              setSelectedSpecialist(data.preferences.preferredSpecialist);
+              console.log(`Loaded user's preferred specialist: ${data.preferences.preferredSpecialist}`);
+            }
           }
         } else {
           console.error('Failed to fetch user preferences:', response.status);
@@ -331,7 +338,8 @@ export default function ChatSession() {
         user.lastName,
         [], // attachments
         [], // images
-        'session_opening' // Use session_opening mode
+        'session_opening', // Use session_opening mode
+        selectedSpecialist // Add selected specialist
       );
       
       // Update chat history with the response
@@ -434,7 +442,8 @@ export default function ChatSession() {
           user.lastName,
           [], // attachments
           [], // images
-          "journey" // Use journey mode
+          "journey", // Use journey mode
+          selectedSpecialist // Add selected specialist
         ).then(async (response) => {
           console.log("Halfway message sent successfully");
           setHalfwayMessageSent(true);
@@ -478,7 +487,8 @@ export default function ChatSession() {
           user.lastName,
           [], // attachments
           [], // images
-          "journey" // Use journey mode
+          "journey", // Use journey mode
+          selectedSpecialist // Add selected specialist
         ).then(async (response) => {
           console.log("Closing message sent successfully");
           setClosingMessageSent(true);
@@ -600,7 +610,8 @@ export default function ChatSession() {
           user.lastName,
           [], // attachments
           [], // images
-          "journey" // Use journey mode
+          "journey", // Use journey mode
+          selectedSpecialist // Add selected specialist
         ).then(async (response) => {
           console.log("Silence notification sent successfully");
           setSilenceMessageSent(true);
@@ -1010,7 +1021,8 @@ export default function ChatSession() {
             user?.lastName || 'User',
             [], // attachments
             [], // images
-            sessionMode // Add session mode
+            sessionMode, // Add session mode
+            selectedSpecialist // Add selected specialist
           );
           
           // If voice mode is enabled, convert response to speech
@@ -1156,6 +1168,32 @@ export default function ChatSession() {
       console.error('Error updating voice preference:', error);
     }
   };
+  
+  // Update selected specialist
+  const updateSelectedSpecialist = async (specialist: string) => {
+    try {
+      setSelectedSpecialist(specialist);
+      
+      // Update the user's preference
+      const response = await fetch('/api/users/preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          preferredSpecialist: specialist,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update specialist preference: ${response.status}`);
+      }
+      
+      console.log(`Specialist preference updated to: ${specialist}`);
+    } catch (error) {
+      console.error('Error updating specialist preference:', error);
+    }
+  };
 
   // Add cleanup for recording resources
   useEffect(() => {
@@ -1290,7 +1328,8 @@ export default function ChatSession() {
         user?.lastName || 'User',
         [], // attachments
         [], // images
-        sessionMode // Add session mode
+        sessionMode, // Add session mode
+        selectedSpecialist // Add selected specialist
       );
       
       // If voice mode is enabled, convert response to speech
@@ -1516,6 +1555,38 @@ export default function ChatSession() {
                     Saving...
                   </div>
                 )}
+              </div>
+              
+              {/* Specialist Selection */}
+              <div className="mb-6">
+                <h3 className="text-sm font-medium mb-2">Specialist Type</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => updateSelectedSpecialist("generalist")}
+                    className={`p-2 rounded-lg border text-sm ${
+                      selectedSpecialist === "generalist" 
+                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
+                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                    }`}
+                  >
+                    Generalist
+                  </button>
+                  <button
+                    onClick={() => updateSelectedSpecialist("crypto")}
+                    className={`p-2 rounded-lg border text-sm ${
+                      selectedSpecialist === "crypto" 
+                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
+                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                    }`}
+                  >
+                    Crypto
+                  </button>
+                </div>
+                <p className="text-xs text-foreground/60 mt-2">
+                  {selectedSpecialist === "generalist" 
+                    ? "General therapeutic support for various concerns" 
+                    : "Specialized support for crypto traders and investors"}
+                </p>
               </div>
               
               {/* Session Phase Marker */}
