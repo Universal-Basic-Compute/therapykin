@@ -1406,13 +1406,11 @@ export default function ChatSession() {
         <div className="max-w-7xl mx-auto flex flex-col gap-4">
           
           <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
-            {/* Main Chat Area - Takes full width when settings are collapsed */}
-            <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'w-full md:w-full' : 'md:w-2/3'}`}>
+            {/* Main Chat Area - Takes most of the width */}
+            <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'md:w-3/4' : 'md:w-2/3'}`}>
             
             {/* Chat history */}
             <div className="flex-grow card overflow-hidden">
-              {/* Settings toggle button removed from here - now added to session phase indicator */}
-              
               <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
                 <div className="space-y-4">
                 {chatHistory
@@ -1480,52 +1478,54 @@ export default function ChatSession() {
             </div>
           </div>
           
-          {/* Always visible session phase indicator with settings toggle */}
-          {sessionStartTime && (
-            <div className="fixed top-24 right-4 md:right-8 z-20 bg-white dark:bg-[var(--background-alt)]/90 p-3 rounded-lg shadow-md border border-[var(--primary)]/10 backdrop-blur-sm">
-              <div className={`px-3 py-1 rounded-full text-center font-medium text-sm ${getSessionPhase(sessionStartTime).color}`}>
-                {getSessionPhase(sessionStartTime).phase}
+          {/* Right Column - Always visible, contains session phase and settings toggle */}
+          <div className="md:w-1/4 md:max-w-xs flex flex-col gap-4">
+            {/* Session Phase Indicator - Always visible */}
+            {sessionStartTime && (
+              <div className="card p-4 bg-white dark:bg-[var(--background-alt)]/90 border border-[var(--primary)]/10">
+                <h3 className="text-sm font-medium mb-2">Session Phase</h3>
+                <div className={`w-full p-3 rounded-lg text-center font-medium ${getSessionPhase(sessionStartTime).color}`}>
+                  {getSessionPhase(sessionStartTime).phase}
+                </div>
+                <div className="w-full bg-[var(--background)] rounded-full h-2 mt-2">
+                  <div 
+                    className="bg-[var(--primary)] h-2 rounded-full" 
+                    style={{ width: `${Math.min(100, (minutesActive / sessionLength) * 100)}%` }}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-xs mt-1 text-foreground/70">
+                  <span>{minutesActive} min</span>
+                  <span>{sessionLength} min</span>
+                </div>
+                
+                {/* Settings toggle button */}
+                <button 
+                  onClick={() => setSettingsCollapsed(!settingsCollapsed)}
+                  className="w-full mt-3 p-2 rounded-lg bg-[var(--primary)]/20 hover:bg-[var(--primary)]/30 transition-colors flex items-center justify-center text-sm font-medium text-[var(--primary)]"
+                >
+                  {settingsCollapsed ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      </svg>
+                      Show Settings
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      Hide Settings
+                    </>
+                  )}
+                </button>
               </div>
-              <div className="w-full bg-[var(--background)] rounded-full h-2 mt-2">
-                <div 
-                  className="bg-[var(--primary)] h-2 rounded-full" 
-                  style={{ width: `${Math.min(100, (minutesActive / sessionLength) * 100)}%` }}
-                ></div>
-              </div>
-              <div className="flex justify-between text-xs mt-1 text-foreground/70">
-                <span>{minutesActive} min</span>
-                <span>{sessionLength} min</span>
-              </div>
-              
-              {/* Add settings toggle button below the session phase */}
-              <button 
-                onClick={() => setSettingsCollapsed(!settingsCollapsed)}
-                className="w-full mt-3 p-2 rounded-lg bg-[var(--primary)]/20 hover:bg-[var(--primary)]/30 transition-colors flex items-center justify-center text-sm font-medium text-[var(--primary)]"
-              >
-                {settingsCollapsed ? (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    </svg>
-                    Show Settings
-                  </>
-                ) : (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Hide Settings
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-          
-          {/* Settings Sidebar - Hidden when collapsed */}
-          <div className={`md:w-1/3 md:max-w-xs transition-all duration-300 ${
-            settingsCollapsed ? 'hidden' : 'block'
-          }`}>
-            <div className="card p-4 h-full overflow-y-auto bg-[var(--background-alt)]/50 border-l border-[var(--primary)]/10" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+            )}
+            
+            {/* Settings Panel - Shown/hidden based on settingsCollapsed state */}
+            <div className={`card p-4 h-full overflow-y-auto bg-[var(--background-alt)]/50 border-l border-[var(--primary)]/10 ${
+              settingsCollapsed ? 'hidden' : 'block'
+            }`} style={{ maxHeight: 'calc(100vh - 350px)' }}>
               <h2 className="text-lg font-semibold mb-4 text-[var(--primary)]">Session Settings</h2>
               
               {/* Specialist Selection - First setting now */}
@@ -1643,7 +1643,7 @@ export default function ChatSession() {
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--background)] border-t border-black/10 dark:border-white/10 z-10">
           <div className="max-w-7xl mx-auto flex">
             {/* This div creates the same layout as the chat area above */}
-            <div className={`flex-grow ${settingsCollapsed ? 'w-full' : 'md:w-2/3 pr-4'}`}>
+            <div className={`flex-grow ${settingsCollapsed ? 'md:w-3/4' : 'md:w-2/3'}`}>
               <form onSubmit={handleSubmit} className="w-full flex shadow-sm rounded-lg overflow-hidden border border-black/10 dark:border-white/10 hover:shadow-md transition-shadow duration-200">
             <textarea
               value={message}
@@ -1712,8 +1712,8 @@ export default function ChatSession() {
               </form>
             </div>
             
-            {/* Empty div to maintain the same layout as above - hidden when settings are collapsed */}
-            <div className={`hidden ${settingsCollapsed ? 'md:hidden' : 'md:block md:w-1/3 md:max-w-xs'}`}></div>
+            {/* Empty div to maintain the same layout as above */}
+            <div className="hidden md:block md:w-1/4 md:max-w-xs"></div>
           </div>
         </div>
       </main>
