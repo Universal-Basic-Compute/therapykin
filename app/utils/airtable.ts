@@ -21,7 +21,12 @@ const usersTable = base('USERS');
 export const sessionsTable = base('SESSIONS');
 
 // Check for an ongoing session
-export async function getOngoingSession(email: string): Promise<{ id: string, createdAt: string, sessionLength?: number } | null> {
+export async function getOngoingSession(email: string): Promise<{ 
+  id: string, 
+  createdAt: string, 
+  sessionLength?: number,
+  specialist?: string  // Add this field
+} | null> {
   try {
     // Get the most recent session for this user
     const records = await sessionsTable.select({
@@ -41,11 +46,12 @@ export async function getOngoingSession(email: string): Promise<{ id: string, cr
       return null;
     }
     
-    // Return the session with its details
+    // Return the session with its details including specialist
     return {
       id: record.id,
       createdAt: createdAt,
-      sessionLength: record.fields.SessionLength as number || 30 // Default to 30 if not set
+      sessionLength: record.fields.SessionLength as number || 30, // Default to 30 if not set
+      specialist: record.fields.Specialist as string || 'generalist', // Default to generalist if not set
     };
   } catch (error) {
     console.error('Error checking for ongoing session:', error);
@@ -54,7 +60,11 @@ export async function getOngoingSession(email: string): Promise<{ id: string, cr
 }
 
 // Create a new session
-export async function createSession(email: string, sessionLength: number = 30): Promise<{ id: string, createdAt: string, sessionLength: number }> {
+export async function createSession(
+  email: string, 
+  sessionLength: number = 30,
+  specialist: string = 'generalist'  // Add specialist parameter with default value
+): Promise<{ id: string, createdAt: string, sessionLength: number, specialist: string }> {
   try {
     const createdAt = new Date().toISOString();
     
@@ -64,6 +74,7 @@ export async function createSession(email: string, sessionLength: number = 30): 
           Email: email,
           CreatedAt: createdAt,
           SessionLength: sessionLength,
+          Specialist: specialist,  // Add this field to store the specialist
         },
       },
     ]);
@@ -73,6 +84,7 @@ export async function createSession(email: string, sessionLength: number = 30): 
       id: newSession.id,
       createdAt: newSession.fields.CreatedAt as string,
       sessionLength: newSession.fields.SessionLength as number || sessionLength,
+      specialist: newSession.fields.Specialist as string || specialist,
     };
   } catch (error) {
     console.error('Error creating session:', error);

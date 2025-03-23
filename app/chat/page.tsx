@@ -279,6 +279,12 @@ function ChatSessionWithSearchParams() {
                 setSessionLength(ongoingSession.sessionLength);
               }
               
+              // Set the specialist from the ongoing session
+              if (ongoingSession.specialist) {
+                setSelectedSpecialist(ongoingSession.specialist);
+                console.log(`Using specialist from ongoing session: ${ongoingSession.specialist}`);
+              }
+              
               // Calculate how many minutes have already passed
               setMinutesActive(elapsedMinutes);
               console.log(`Session already active for ${elapsedMinutes} minutes of ${sessionLengthValue} minutes total`);
@@ -321,7 +327,8 @@ function ChatSessionWithSearchParams() {
         return;
       }
       
-      const session = await createSession(user.email, sessionLength);
+      // Pass the selectedSpecialist to the createSession function
+      const session = await createSession(user.email, sessionLength, selectedSpecialist);
       setSessionId(session.id);
       const startTime = new Date(session.createdAt);
       setSessionStartTime(startTime);
