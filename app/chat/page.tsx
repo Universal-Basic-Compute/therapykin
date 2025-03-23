@@ -1366,16 +1366,6 @@ export default function ChatSession() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
           {/* Main Chat Area - Takes 2/3 of the space on larger screens */}
           <div className="flex-grow md:w-2/3 flex flex-col">
-            <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold">Therapy Session</h1>
-            <div className="flex items-center gap-2">
-              {sessionStartTime && (
-                <div className={`text-sm font-medium px-3 py-1 rounded-full ${getSessionPhase(sessionStartTime).color}`}>
-                  {getSessionPhase(sessionStartTime).phase}
-                </div>
-              )}
-            </div>
-          </div>
           
           {/* Chat history */}
             <div className="flex-grow card overflow-hidden">
