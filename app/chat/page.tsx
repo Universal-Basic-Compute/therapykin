@@ -1510,17 +1510,12 @@ export default function ChatSession() {
                 )}
               </div>
               
-              {/* Session Information */}
-              <div className="mb-6">
-                <h3 className="text-sm font-medium mb-2">Session Info</h3>
-                <div className="bg-[var(--background-alt)] p-3 rounded-lg text-sm">
-                  <div className="flex justify-between mb-2">
-                    <span>Elapsed:</span>
-                    <span className="font-medium">{minutesActive} min</span>
-                  </div>
-                  <div className="flex justify-between mb-2">
-                    <span>Remaining:</span>
-                    <span className="font-medium">{Math.max(0, sessionLength - minutesActive)} min</span>
+              {/* Session Phase Marker */}
+              {sessionStartTime && (
+                <div className="mb-6">
+                  <h3 className="text-sm font-medium mb-2">Session Phase</h3>
+                  <div className={`w-full p-3 rounded-lg text-center font-medium ${getSessionPhase(sessionStartTime).color}`}>
+                    {getSessionPhase(sessionStartTime).phase}
                   </div>
                   <div className="w-full bg-[var(--background)] rounded-full h-2 mt-2">
                     <div 
@@ -1528,8 +1523,12 @@ export default function ChatSession() {
                       style={{ width: `${Math.min(100, (minutesActive / sessionLength) * 100)}%` }}
                     ></div>
                   </div>
+                  <div className="flex justify-between text-xs mt-1 text-foreground/70">
+                    <span>{minutesActive} min</span>
+                    <span>{sessionLength} min</span>
+                  </div>
                 </div>
-              </div>
+              )}
               
               {/* Help Section */}
               <div>
