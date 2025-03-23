@@ -1493,6 +1493,25 @@ export default function ChatSession() {
             </div>
           </div>
           
+          {/* Always visible session phase indicator */}
+          {sessionStartTime && (
+            <div className="fixed top-24 right-4 md:right-8 z-20 bg-white dark:bg-[var(--background-alt)]/90 p-3 rounded-lg shadow-md border border-[var(--primary)]/10 backdrop-blur-sm">
+              <div className={`px-3 py-1 rounded-full text-center font-medium text-sm ${getSessionPhase(sessionStartTime).color}`}>
+                {getSessionPhase(sessionStartTime).phase}
+              </div>
+              <div className="w-full bg-[var(--background)] rounded-full h-2 mt-2">
+                <div 
+                  className="bg-[var(--primary)] h-2 rounded-full" 
+                  style={{ width: `${Math.min(100, (minutesActive / sessionLength) * 100)}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between text-xs mt-1 text-foreground/70">
+                <span>{minutesActive} min</span>
+                <span>{sessionLength} min</span>
+              </div>
+            </div>
+          )}
+          
           {/* Settings Sidebar - Hidden when collapsed */}
           <div className={`md:w-1/3 md:max-w-xs transition-all duration-300 ${
             settingsCollapsed ? 'md:hidden' : 'md:block'
