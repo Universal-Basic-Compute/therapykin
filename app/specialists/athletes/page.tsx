@@ -434,7 +434,9 @@ export default function AthleteSpecialist() {
           
           <div className="mt-16 mb-16">
             <h2 className="text-2xl font-semibold mb-6 text-center">Specialized Modes for Every Aspect of Athletic Life</h2>
-            
+            <p className="text-center text-foreground/70 mb-8 max-w-3xl mx-auto">
+              Our platform adapts to your specific needs with specialized support modes designed for different phases of your athletic journey
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Performance Preparation Mode */}
               <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">

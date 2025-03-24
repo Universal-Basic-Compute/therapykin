@@ -387,6 +387,65 @@ export const post = {
           </tbody>
         </table>
       </div>
+      
+      {/* Mobile-friendly alternative display */}
+      <div class="md:hidden mt-6 space-y-6">
+        <div class="border border-foreground/10 rounded-lg overflow-hidden">
+          <div class="bg-[var(--primary)]/10 px-4 py-2 font-medium">Between Sessions</div>
+          <div class="p-4 space-y-3">
+            <div>
+              <div class="text-xs font-medium text-foreground/60">AI Therapy Role:</div>
+              <div>Provides daily support and practice of techniques</div>
+            </div>
+            <div>
+              <div class="text-xs font-medium text-foreground/60">Human Therapy Role:</div>
+              <div>Offers deeper exploration and personalized treatment planning</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="border border-foreground/10 rounded-lg overflow-hidden">
+          <div class="bg-[var(--primary)]/10 px-4 py-2 font-medium">During Travel</div>
+          <div class="p-4 space-y-3">
+            <div>
+              <div class="text-xs font-medium text-foreground/60">AI Therapy Role:</div>
+              <div>Maintains continuity of care when in-person sessions aren't possible</div>
+            </div>
+            <div>
+              <div class="text-xs font-medium text-foreground/60">Human Therapy Role:</div>
+              <div>Resumes in-depth work upon return</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="border border-foreground/10 rounded-lg overflow-hidden">
+          <div class="bg-[var(--primary)]/10 px-4 py-2 font-medium">Crisis Moments</div>
+          <div class="p-4 space-y-3">
+            <div>
+              <div class="text-xs font-medium text-foreground/60">AI Therapy Role:</div>
+              <div>Offers immediate support using established techniques</div>
+            </div>
+            <div>
+              <div class="text-xs font-medium text-foreground/60">Human Therapy Role:</div>
+              <div>Provides follow-up and adjusts treatment plan based on crisis</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="border border-foreground/10 rounded-lg overflow-hidden">
+          <div class="bg-[var(--primary)]/10 px-4 py-2 font-medium">Skill Building</div>
+          <div class="p-4 space-y-3">
+            <div>
+              <div class="text-xs font-medium text-foreground/60">AI Therapy Role:</div>
+              <div>Facilitates frequent practice and reinforcement</div>
+            </div>
+            <div>
+              <div class="text-xs font-medium text-foreground/60">Human Therapy Role:</div>
+              <div>Introduces new skills and provides expert guidance</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     
     <p>Many leaders find that this hybrid approach offers the best of both worlds: the depth and human connection of traditional therapy combined with the consistency, availability, and adaptability of AI support.</p>
