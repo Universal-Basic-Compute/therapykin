@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <Script id="microsoft-clarity" strategy="beforeInteractive">
+      <Script id="microsoft-clarity" strategy="afterInteractive">
         {`
           (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
