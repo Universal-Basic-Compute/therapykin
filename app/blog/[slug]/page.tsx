@@ -6,7 +6,12 @@ import { useParams, useRouter } from "next/navigation";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import ShareButtons from "../../components/ShareButtons";
+import TableOfContents from "../../components/TableOfContents";
+import ReadingTime from "../../components/ReadingTime";
+import CommentSection from "../../components/CommentSection";
+import ArticleSchema from "../../components/ArticleSchema";
 import { getPostBySlug, blogPosts } from "../../data/blog-posts";
+import Head from "next/head";
 
 export default function BlogPost() {
   const params = useParams();
@@ -43,6 +48,34 @@ export default function BlogPost() {
   
   return (
     <div className="flex flex-col min-h-screen">
+      <Head>
+        <title>{post.title} | TherapyKin Blog</title>
+        <meta name="description" content={post.excerpt} />
+        <meta name="keywords" content={`${post.category}, mental health, therapy, ${post.persona}, TherapyKin`} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={currentUrl} />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:image" content={post.imageUrl || "https://therapykin.ai/logo.png"} />
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={currentUrl} />
+        <meta property="twitter:title" content={post.title} />
+        <meta property="twitter:description" content={post.excerpt} />
+        <meta property="twitter:image" content={post.imageUrl || "https://therapykin.ai/logo.png"} />
+      </Head>
+      
+      <ArticleSchema
+        title={post.title}
+        description={post.excerpt}
+        datePublished={post.date}
+        author={post.author}
+        imageUrl={post.imageUrl || ""}
+        url={currentUrl}
+      />
       <Header />
       
       <main className="flex-grow pt-24 pb-16 px-4">
@@ -86,27 +119,50 @@ export default function BlogPost() {
               {post.category}
             </span>
             <h1 className="text-3xl md:text-4xl font-bold mt-4 mb-4">{post.title}</h1>
-            <div className="flex items-center text-foreground/60">
+            <div className="flex flex-wrap items-center gap-2 text-foreground/60">
               <span>{formattedDate}</span>
               <span className="mx-2">•</span>
               <span>{post.author}</span>
+              <span className="mx-2">•</span>
+              <ReadingTime content={post.content} />
             </div>
           </div>
           
           {/* Featured Image */}
           <div className="mb-8 rounded-xl overflow-hidden">
             <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10">
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
-                <span className="text-[var(--primary)] font-medium">Featured Article Image</span>
-              </div>
+              {post.imageUrl ? (
+                <img 
+                  src={post.imageUrl} 
+                  alt={`Featured image for article: ${post.title} - TherapyKin Blog`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
+                  <span className="text-[var(--primary)] font-medium">Featured Article Image</span>
+                </div>
+              )}
             </div>
           </div>
           
-          {/* Article Content */}
-          <div 
-            className="prose prose-lg max-w-none mb-12 blog-content" 
-            dangerouslySetInnerHTML={{ __html: post.content }} 
-          />
+          {/* Content Layout with Table of Contents for longer posts */}
+          <div className="flex flex-col md:flex-row gap-8">
+            {/* Table of Contents for longer posts */}
+            {post.content.length > 5000 && (
+              <div className="md:w-1/4">
+                <TableOfContents content={post.content} />
+              </div>
+            )}
+            
+            {/* Main Content */}
+            <div className={post.content.length > 5000 ? "md:w-3/4" : "w-full"}>
+              {/* Article Content */}
+              <div 
+                className="prose prose-lg max-w-none mb-12 blog-content" 
+                dangerouslySetInnerHTML={{ __html: post.content }} 
+              />
+            </div>
+          </div>
           
           {/* Author Bio */}
           <div className="card p-6 mb-12">
@@ -133,6 +189,9 @@ export default function BlogPost() {
             />
           </div>
           
+          {/* Comment Section */}
+          <CommentSection postSlug={post.slug} />
+          
           {/* Related Articles */}
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
@@ -145,9 +204,17 @@ export default function BlogPost() {
                 .map(relatedPost => (
                   <div key={relatedPost.id} className="card overflow-hidden hover:shadow-depth transition-all">
                     <div className="aspect-w-16 aspect-h-9 bg-[var(--primary)]/10">
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10">
-                        <span className="text-[var(--primary)] font-medium">Article Image</span>
-                      </div>
+                      {relatedPost.imageUrl ? (
+                        <img 
+                          src={relatedPost.imageUrl} 
+                          alt={`Image for ${relatedPost.title}`}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10">
+                          <span className="text-[var(--primary)] font-medium">Article Image</span>
+                        </div>
+                      )}
                     </div>
                     <div className="p-6">
                       <h3 className="text-xl font-semibold mb-2">{relatedPost.title}</h3>

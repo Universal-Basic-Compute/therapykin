@@ -104,6 +104,21 @@ export const post = {
       </div>
     </div>
     
+    <div class="my-8 p-6 bg-[var(--primary)]/5 rounded-xl">
+      <div class="flex flex-col md:flex-row items-center gap-6">
+        <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-full bg-[var(--primary)]/10 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-2">Struggling with Traditional Therapy Scheduling?</h4>
+          <p class="text-foreground/80">TherapyKin offers flexible, brief therapy sessions that fit your busy schedule. No more rearranging your entire day for mental health support.</p>
+          <a href="/signup?plan=free" class="inline-block mt-4 px-4 py-2 bg-[var(--primary)] text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all">Try Free Brief Sessions</a>
+        </div>
+      </div>
+    </div>
+    
     <h2>Research on Brief Interventions</h2>
     <p>Recent studies have shown that brief, consistent therapeutic interventions can be highly effective, especially for busy individuals. A 2022 study published in the Journal of Occupational Health Psychology found that professionals who engaged in 3-4 brief therapeutic check-ins per week showed greater improvement in stress management than those who attended a single weekly session.<sup><a href="#ref-1">1</a></sup></p>
     
@@ -184,6 +199,12 @@ export const post = {
         <h3 class="text-xl font-semibold mb-2">4. Continuous Progress</h3>
         <p class="text-foreground/70">Regular check-ins create momentum, allowing for continuous progress rather than the start-stop pattern that can happen with weekly sessions.</p>
       </div>
+    </div>
+    
+    <div class="my-8 p-6 bg-[var(--background-alt)] rounded-xl">
+      <h4 class="text-lg font-semibold mb-4">Ready to experience the benefits of brief therapy sessions?</h4>
+      <p class="mb-4">TherapyKin's approach is designed specifically for busy professionals who need flexible, effective mental health support.</p>
+      <a href="/signup?plan=free" class="inline-block px-4 py-2 bg-[var(--primary)] text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all">Get Started with 3 Free Sessions</a>
     </div>
     
     <h2>Case Study: Executive Leadership Team</h2>
