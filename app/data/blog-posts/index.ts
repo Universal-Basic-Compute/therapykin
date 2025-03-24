@@ -11,10 +11,12 @@ import { post as leadershipResilienceGapPost } from './leadership-resilience-gap
 import { post as mentalGameBetweenGamesPost } from './mental-game-between-games';
 import { post as mentalPerformancePitfallsPost } from './mental-performance-pitfalls';
 import { post as therapyWaitlistsPost } from './navigating-therapy-waitlists';
+import { post as alternativeMentalHealthResourcesPost } from './alternative-mental-health-resources';
 
 // Export all posts in an array
 export const blogPosts = [
-  therapyWaitlistsPost, // Add the new post at the top to feature it
+  alternativeMentalHealthResourcesPost, // Add the new post at the top to feature it
+  therapyWaitlistsPost,
   mentalPerformancePitfallsPost,
   mentalGameBetweenGamesPost,
   briefSessionsPost,
@@ -44,7 +46,8 @@ export {
   leadershipResilienceGapPost,
   mentalGameBetweenGamesPost,
   mentalPerformancePitfallsPost,
-  therapyWaitlistsPost, // Add the export for the new post
+  therapyWaitlistsPost,
+  alternativeMentalHealthResourcesPost, // Add the export for the new post
 };
 
 // Helper function to get a post by slug
