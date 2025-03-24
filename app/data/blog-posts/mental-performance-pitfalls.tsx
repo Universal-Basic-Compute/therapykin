@@ -2,7 +2,7 @@ export const post = {
   id: 9,
   title: "Avoiding the Top 10 Mental Performance Pitfalls: A Guide for Elite Athletes",
   excerpt: "Learn how to identify and overcome the most common psychological traps that prevent athletes from reaching their full potential.",
-  date: "2023-12-05",
+  date: "2025-03-20",
   author: "TherapyKin Athletes Team",
   category: "Sports Psychology",
   imageUrl: "/blog/mental-performance-pitfalls.jpg",
