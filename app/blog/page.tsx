@@ -152,34 +152,6 @@ export default function Blog() {
             ))}
           </div>
           
-          {/* Newsletter Signup */}
-          <div className="card p-8 bg-[var(--background-alt)] shadow-depth mb-16">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold mb-2">Subscribe to Our Newsletter</h2>
-              <p className="text-foreground/70">
-                Get the latest articles, resources, and mental health insights delivered to your inbox.
-              </p>
-            </div>
-            <form className="max-w-md mx-auto">
-              <div className="flex gap-2">
-                <input 
-                  type="email" 
-                  placeholder="Your email address" 
-                  className="flex-grow px-4 py-2 rounded-lg border border-foreground/10 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                  required
-                />
-                <button 
-                  type="submit" 
-                  className="btn-primary whitespace-nowrap"
-                >
-                  Subscribe
-                </button>
-              </div>
-              <p className="text-xs text-foreground/60 mt-2 text-center">
-                We respect your privacy. Unsubscribe at any time.
-              </p>
-            </form>
-          </div>
           
           {/* Additional Resources */}
           <div className="mb-16">
