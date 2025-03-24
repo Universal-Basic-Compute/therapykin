@@ -1,11 +1,36 @@
 'use client';
 
+import React, { useState } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Testimonial from "../../components/Testimonial";
 import Link from "next/link";
 
 export default function AthleteSpecialist() {
+  // State for the assessment
+  const [assessmentScores, setAssessmentScores] = useState({
+    mentalGoals: 0,
+    refocus: 0,
+    anxietyManagement: 0,
+    offSeasonTraining: 0,
+    identityBalance: 0
+  });
+  
+  const [totalScore, setTotalScore] = useState(0);
+  const [scoreCalculated, setScoreCalculated] = useState(false);
+  
+  // Handle score selection
+  const handleScoreSelection = (question, score) => {
+    const newScores = { ...assessmentScores, [question]: score };
+    setAssessmentScores(newScores);
+  };
+  
+  // Calculate the total score
+  const calculateTotalScore = () => {
+    const sum = Object.values(assessmentScores).reduce((total, score) => total + score, 0);
+    setTotalScore(sum);
+    setScoreCalculated(true);
+  };
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -948,13 +973,21 @@ export default function AthleteSpecialist() {
                 <div>
                   <div className="flex justify-between mb-1">
                     <label className="font-medium">I have clear mental performance goals separate from my physical goals</label>
-                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                    <span className="text-sm text-foreground/60">Score: {assessmentScores.mentalGoals}/5</span>
                   </div>
                   <div className="flex justify-between gap-2">
                     <span className="text-xs">Strongly Disagree</span>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map((num) => (
-                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                        <div 
+                          key={num} 
+                          className={`w-8 h-8 rounded-full border flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10 ${
+                            assessmentScores.mentalGoals === num 
+                              ? "bg-[var(--primary)] text-white border-[var(--primary)]" 
+                              : "border-foreground/20"
+                          }`}
+                          onClick={() => handleScoreSelection("mentalGoals", num)}
+                        >
                           {num}
                         </div>
                       ))}
@@ -966,13 +999,21 @@ export default function AthleteSpecialist() {
                 <div>
                   <div className="flex justify-between mb-1">
                     <label className="font-medium">I can quickly refocus after distractions during training or competition</label>
-                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                    <span className="text-sm text-foreground/60">Score: {assessmentScores.refocus}/5</span>
                   </div>
                   <div className="flex justify-between gap-2">
                     <span className="text-xs">Strongly Disagree</span>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map((num) => (
-                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                        <div 
+                          key={num} 
+                          className={`w-8 h-8 rounded-full border flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10 ${
+                            assessmentScores.refocus === num 
+                              ? "bg-[var(--primary)] text-white border-[var(--primary)]" 
+                              : "border-foreground/20"
+                          }`}
+                          onClick={() => handleScoreSelection("refocus", num)}
+                        >
                           {num}
                         </div>
                       ))}
@@ -984,13 +1025,21 @@ export default function AthleteSpecialist() {
                 <div>
                   <div className="flex justify-between mb-1">
                     <label className="font-medium">I have effective strategies for managing pre-competition anxiety</label>
-                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                    <span className="text-sm text-foreground/60">Score: {assessmentScores.anxietyManagement}/5</span>
                   </div>
                   <div className="flex justify-between gap-2">
                     <span className="text-xs">Strongly Disagree</span>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map((num) => (
-                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                        <div 
+                          key={num} 
+                          className={`w-8 h-8 rounded-full border flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10 ${
+                            assessmentScores.anxietyManagement === num 
+                              ? "bg-[var(--primary)] text-white border-[var(--primary)]" 
+                              : "border-foreground/20"
+                          }`}
+                          onClick={() => handleScoreSelection("anxietyManagement", num)}
+                        >
                           {num}
                         </div>
                       ))}
@@ -1002,13 +1051,21 @@ export default function AthleteSpecialist() {
                 <div>
                   <div className="flex justify-between mb-1">
                     <label className="font-medium">I maintain mental training during off-season periods</label>
-                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                    <span className="text-sm text-foreground/60">Score: {assessmentScores.offSeasonTraining}/5</span>
                   </div>
                   <div className="flex justify-between gap-2">
                     <span className="text-xs">Strongly Disagree</span>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map((num) => (
-                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                        <div 
+                          key={num} 
+                          className={`w-8 h-8 rounded-full border flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10 ${
+                            assessmentScores.offSeasonTraining === num 
+                              ? "bg-[var(--primary)] text-white border-[var(--primary)]" 
+                              : "border-foreground/20"
+                          }`}
+                          onClick={() => handleScoreSelection("offSeasonTraining", num)}
+                        >
                           {num}
                         </div>
                       ))}
@@ -1020,13 +1077,21 @@ export default function AthleteSpecialist() {
                 <div>
                   <div className="flex justify-between mb-1">
                     <label className="font-medium">I can effectively balance athletic identity with other aspects of my life</label>
-                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                    <span className="text-sm text-foreground/60">Score: {assessmentScores.identityBalance}/5</span>
                   </div>
                   <div className="flex justify-between gap-2">
                     <span className="text-xs">Strongly Disagree</span>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map((num) => (
-                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                        <div 
+                          key={num} 
+                          className={`w-8 h-8 rounded-full border flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10 ${
+                            assessmentScores.identityBalance === num 
+                              ? "bg-[var(--primary)] text-white border-[var(--primary)]" 
+                              : "border-foreground/20"
+                          }`}
+                          onClick={() => handleScoreSelection("identityBalance", num)}
+                        >
                           {num}
                         </div>
                       ))}
@@ -1038,9 +1103,30 @@ export default function AthleteSpecialist() {
               
               <div className="mt-6 pt-4 border-t border-foreground/10">
                 <div className="flex justify-between items-center">
-                  <span className="font-medium">Total Score: ___/25</span>
-                  <button className="px-4 py-2 bg-[var(--primary)] text-white rounded-md text-sm">Calculate My Score</button>
+                  <span className="font-medium">Total Score: {scoreCalculated ? totalScore : "___"}/25</span>
+                  <button 
+                    onClick={calculateTotalScore}
+                    className="px-4 py-2 bg-[var(--primary)] text-white rounded-md text-sm"
+                  >
+                    Calculate My Score
+                  </button>
                 </div>
+                
+                {scoreCalculated && (
+                  <div className="mt-4 p-4 rounded-lg bg-[var(--background-alt)]/50">
+                    <h4 className="font-semibold mb-2">Your Assessment Result:</h4>
+                    {totalScore >= 20 ? (
+                      <p className="text-green-600 font-medium">Excellent mental readiness (20-25): You have a strong foundation in mental performance skills!</p>
+                    ) : totalScore >= 15 ? (
+                      <p className="text-blue-600 font-medium">Good foundation (15-19): You have solid mental skills with some areas for improvement.</p>
+                    ) : totalScore >= 10 ? (
+                      <p className="text-amber-600 font-medium">Developing (10-14): Several areas need significant development to reach your potential.</p>
+                    ) : (
+                      <p className="text-red-600 font-medium">Beginning stage (Below 10): Consider prioritizing mental performance training as a key focus area.</p>
+                    )}
+                  </div>
+                )}
+                
                 <p className="text-sm mt-4 text-foreground/70">
                   <strong>Scoring Guide:</strong><br/>
                   20-25: Excellent mental readiness<br/>
