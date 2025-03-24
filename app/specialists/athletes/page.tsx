@@ -1136,13 +1136,45 @@ export default function AthleteSpecialist() {
                   <div className="mt-4 p-4 rounded-lg bg-[var(--background-alt)]/50">
                     <h4 className="font-semibold mb-2">Your Assessment Result:</h4>
                     {totalScore >= 20 ? (
-                      <p className="text-green-600 font-medium">Excellent mental readiness (20-25): You have a strong foundation in mental performance skills!</p>
+                      <div>
+                        <p className="text-green-600 font-medium mb-2">Excellent mental readiness (20-25)</p>
+                        <p className="text-foreground/80 mb-2">
+                          You demonstrate an exceptional foundation in mental performance skills! Your approach to mental training appears to be as structured and consistent as your physical training.
+                        </p>
+                        <p className="text-foreground/80">
+                          <strong>Next steps:</strong> Consider refining your mental skills even further by exploring advanced visualization techniques, developing situation-specific mental strategies, and mentoring others. Your TherapyKin Athletes specialist can help you reach even higher levels of mental mastery.
+                        </p>
+                      </div>
                     ) : totalScore >= 15 ? (
-                      <p className="text-blue-600 font-medium">Good foundation (15-19): You have solid mental skills with some areas for improvement.</p>
+                      <div>
+                        <p className="text-blue-600 font-medium mb-2">Good foundation (15-19)</p>
+                        <p className="text-foreground/80 mb-2">
+                          You have solid mental skills with clear strengths in some areas. You likely notice the positive impact of mental training on your performance, but there are still opportunities to develop a more comprehensive approach.
+                        </p>
+                        <p className="text-foreground/80">
+                          <strong>Next steps:</strong> Identify the specific areas where you scored lower and create a targeted plan to strengthen these skills. A TherapyKin Athletes specialist can help you develop consistency across all aspects of mental performance.
+                        </p>
+                      </div>
                     ) : totalScore >= 10 ? (
-                      <p className="text-amber-600 font-medium">Developing (10-14): Several areas need significant development to reach your potential.</p>
+                      <div>
+                        <p className="text-amber-600 font-medium mb-2">Developing (10-14)</p>
+                        <p className="text-foreground/80 mb-2">
+                          You're aware of the importance of mental skills and have begun implementing some techniques, but several areas need significant development to reach your full potential. You may experience inconsistent mental performance during training and competition.
+                        </p>
+                        <p className="text-foreground/80">
+                          <strong>Next steps:</strong> Establish a structured mental training routine that addresses your specific challenges. Working with a TherapyKin Athletes specialist can help you build a comprehensive mental skills foundation that complements your physical training.
+                        </p>
+                      </div>
                     ) : (
-                      <p className="text-red-600 font-medium">Beginning stage (Below 10): Consider prioritizing mental performance training as a key focus area.</p>
+                      <div>
+                        <p className="text-red-600 font-medium mb-2">Beginning stage (Below 10)</p>
+                        <p className="text-foreground/80 mb-2">
+                          Your assessment suggests that mental performance training represents a significant opportunity for improvement. Like many athletes, you may have focused primarily on physical development while mental skills have remained underdeveloped.
+                        </p>
+                        <p className="text-foreground/80">
+                          <strong>Next steps:</strong> Consider prioritizing mental performance training as a key focus area. Starting with fundamentals like goal-setting, focus training, and pre-performance routines can yield rapid improvements. A TherapyKin Athletes specialist can guide you through this process and help you build these essential skills from the ground up.
+                        </p>
+                      </div>
                     )}
                   </div>
                 )}
