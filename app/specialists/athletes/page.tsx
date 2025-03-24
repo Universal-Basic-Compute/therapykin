@@ -163,6 +163,26 @@ export default function AthleteSpecialist() {
           </div>
           </div>
           
+          {/* Top CTA Section */}
+          <div className="mb-12 bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10 p-6 rounded-lg border border-[var(--primary)]/20">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div>
+                <h2 className="text-xl font-semibold mb-2">Ready to Elevate Your Mental Game?</h2>
+                <p className="text-foreground/80">
+                  Start your journey with TherapyKin Athletes today and discover how specialized mental performance support can transform your athletic experience.
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <Link 
+                  href="/chat?specialist=athletes" 
+                  className="btn-primary text-white px-6 py-3 rounded-md font-medium inline-block whitespace-nowrap"
+                >
+                  Start Your First Session
+                </Link>
+              </div>
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
               <h2 className="text-2xl font-semibold mb-4">Core Capabilities</h2>
