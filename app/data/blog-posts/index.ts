@@ -7,6 +7,7 @@ import { post as ruralSpecializedSupportPost } from './rural-stress-specialized-
 import { post as betweenSessionSupportPost } from './between-session-therapy-support';
 import { post as crisisManagementPost } from './crisis-management-between-therapy';
 import { post as therapeuticTechniquePost } from './therapeutic-technique-practice';
+import { post as leadershipResilienceGapPost } from './leadership-resilience-gap';
 
 // Export all posts in an array
 export const blogPosts = [
@@ -19,6 +20,7 @@ export const blogPosts = [
   betweenSessionSupportPost,
   crisisManagementPost,
   therapeuticTechniquePost,
+  leadershipResilienceGapPost,
   // Add more posts here as they are created
 ];
 
@@ -33,6 +35,7 @@ export {
   betweenSessionSupportPost,
   crisisManagementPost,
   therapeuticTechniquePost,
+  leadershipResilienceGapPost,
 };
 
 // Helper function to get a post by slug
