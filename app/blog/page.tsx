@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { blogPosts } from "../data/blog-posts";
+import { blogPosts } from "../data/blog-posts"; // This imports all blog posts including the new mental-performance-pitfalls post
 
 export default function Blog() {
   const [activeFilter, setActiveFilter] = useState("all");
