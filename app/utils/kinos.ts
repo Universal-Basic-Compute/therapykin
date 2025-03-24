@@ -100,7 +100,7 @@ export async function sendMessageToKinOS(
       return data;
     } else if (data.message_id) {
       // If we only have a message_id, try to fetch the response
-      return await pollForResponse(data.message_id, firstName, lastName);
+      return await pollForResponse(data.message_id, firstName, lastName, 10, 1000, specialist || 'generalist');
     } else {
       // For development/testing, provide a mock response when the API doesn't return expected format
       console.log('KinOS API returned unexpected data format:', data);
@@ -130,7 +130,8 @@ async function pollForResponse(
   firstName: string,
   lastName: string,
   maxAttempts = 10,
-  delayMs = 1000
+  delayMs = 1000,
+  specialist = 'generalist' // Add specialist parameter with default
 ): Promise<string> {
   console.log(`Polling for response to message ID: ${messageId}`);
   
@@ -143,7 +144,7 @@ async function pollForResponse(
       await new Promise(resolve => setTimeout(resolve, delayMs));
       
       // Try to fetch the response using our API route
-      const response = await fetch(`${statusEndpoint}?messageId=${messageId}&firstName=${firstName}&lastName=${lastName}`);
+      const response = await fetch(`${statusEndpoint}?messageId=${messageId}&firstName=${firstName}&lastName=${lastName}&specialist=${specialist}`);
       
       if (!response.ok) {
         console.log(`Polling attempt ${attempt} failed with status ${response.status}`);

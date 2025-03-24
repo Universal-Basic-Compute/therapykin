@@ -20,6 +20,20 @@ export async function POST(request: NextRequest) {
         : process.env.NODE_ENV === 'development'
           ? `http://localhost:5000/projects/therapykincrypto/${projectId}/messages`
           : `https://api.kinos-engine.ai/projects/therapykincrypto/${projectId}/messages`;
+    } else if (specialist === 'athletes') {
+      // For athletes specialist
+      baseUrl = process.env.KINOS_API_URL 
+        ? `${process.env.KINOS_API_URL}/projects/therapykinathletes/${projectId}/messages`
+        : process.env.NODE_ENV === 'development'
+          ? `http://localhost:5000/projects/therapykinathletes/${projectId}/messages`
+          : `https://api.kinos-engine.ai/projects/therapykinathletes/${projectId}/messages`;
+    } else if (specialist === 'executives') {
+      // For executives specialist
+      baseUrl = process.env.KINOS_API_URL 
+        ? `${process.env.KINOS_API_URL}/projects/therapykinexecutives/${projectId}/messages`
+        : process.env.NODE_ENV === 'development'
+          ? `http://localhost:5000/projects/therapykinexecutives/${projectId}/messages`
+          : `https://api.kinos-engine.ai/projects/therapykinexecutives/${projectId}/messages`;
     } else {
       // For generalist (default)
       baseUrl = process.env.KINOS_API_URL 
