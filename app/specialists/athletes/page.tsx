@@ -1413,7 +1413,7 @@ export default function AthleteSpecialist() {
             
             <div className="mt-8 text-center">
               <Link 
-                href="/resources/mental-performance-pitfalls" 
+                href="/blog/mental-performance-pitfalls" 
                 className="text-[var(--primary)] font-medium hover:underline"
               >
                 Read our complete guide to avoiding the top 10 mental performance pitfalls →
