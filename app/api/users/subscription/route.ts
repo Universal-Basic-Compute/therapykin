@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       plan: userRecord.fields.SubscriptionPlan || 'free',
       status: userRecord.fields.SubscriptionStatus || 'active',
       isAnnual: userRecord.fields.IsAnnual === true,
-      currentPeriodEnd: userRecord.fields.CurrentPeriodEnd || null,
+      currentPeriodEnd: userRecord.fields.SubscriptionCurrentPeriodEnd || null,
       sessionsRemaining: sessionsRemaining,
       totalSessions: userRecord.fields.TotalSessions || 0,
       daysActive: userRecord.fields.DaysActive || 1
