@@ -70,6 +70,17 @@ export default function ExecutiveSpecialist() {
             <p className="text-xl text-foreground/70 mb-4">
               TherapyKin Executives bridges the gap between leadership excellence and personal wellbeing, providing confidential support tailored to the specific demands of high-stakes leadership roles.
             </p>
+  
+            {/* Add the CTA button here */}
+            <div className="mt-6 mb-8">
+              <Link 
+                href="/chat?specialist=executives" 
+                className="btn-primary text-white px-6 py-3 rounded-md font-medium inline-block text-lg"
+              >
+                Start Executive Session Now
+              </Link>
+              <span className="ml-4 text-sm text-foreground/60">No commitment required</span>
+            </div>
           </div>
           
           <div className="flex flex-col md:flex-row gap-6 mt-8 mb-16">
