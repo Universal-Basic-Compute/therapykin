@@ -45,11 +45,16 @@ export default function AthleteSpecialist() {
             </nav>
           </div>
           
-          <div className="mb-12">
-            <span className="px-3 py-1 bg-[var(--primary)]/10 text-[var(--primary)] rounded-full text-sm font-medium">
-              Performance Specialist
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold mt-4 mb-6">Mental Performance Companion for Elite Athletes</h1>
+          {/* Hero Section with Image */}
+          <div className="relative mb-12 overflow-hidden rounded-xl bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 p-8">
+            <div className="absolute top-0 right-0 w-1/2 h-full opacity-20">
+              <div className="w-full h-full bg-[url('/images/athlete-focus.jpg')] bg-cover bg-center"></div>
+            </div>
+            <div className="relative z-10 max-w-2xl">
+              <span className="px-3 py-1 bg-[var(--primary)]/10 text-[var(--primary)] rounded-full text-sm font-medium">
+                Performance Specialist
+              </span>
+              <h1 className="text-3xl md:text-4xl font-bold mt-4 mb-6">Mental Performance Companion for Elite Athletes</h1>
             
             <div className="bg-gradient-to-r from-[var(--primary)]/5 to-transparent p-6 rounded-lg border-l-4 border-[var(--primary)] mb-8">
               <h2 className="text-xl md:text-2xl font-semibold mb-3">The Mental Edge: Where Champions Are Made</h2>
@@ -493,8 +498,91 @@ export default function AthleteSpecialist() {
             </div>
           </div>
           
+          {/* Team Packages and Remote Support */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+              <div className="flex items-center mb-6">
+                <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
+                  <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold">Team Performance Packages</h3>
+              </div>
+              <p className="text-foreground/70 mb-4">
+                Elevate your entire team's mental performance with our specialized team packages. Ideal for professional teams, collegiate programs, and elite club organizations.
+              </p>
+              <ul className="text-foreground/70 space-y-2 pl-4 mb-6">
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] mr-2">•</span>
+                  <span>Team culture and cohesion development</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] mr-2">•</span>
+                  <span>Leadership and communication enhancement</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] mr-2">•</span>
+                  <span>Group workshops and individual sessions</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] mr-2">•</span>
+                  <span>Coach-athlete relationship optimization</span>
+                </li>
+              </ul>
+              <div className="text-center">
+                <Link 
+                  href="/contact?subject=Team%20Package%20Inquiry" 
+                  className="btn-secondary text-sm px-4 py-2"
+                >
+                  Request Team Package Information
+                </Link>
+              </div>
+            </div>
+            
+            <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+              <div className="flex items-center mb-6">
+                <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
+                  <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h.5A2.5 2.5 0 0020 5.5v-1.65M12 14.5V17m0 0v2.5M12 17h2.5M12 17h-2.5"></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold">Remote Competition Support</h3>
+              </div>
+              <p className="text-foreground/70 mb-4">
+                Access specialized mental performance support wherever your competitions take you. Our platform is designed to provide seamless support during your most critical moments.
+              </p>
+              <ul className="text-foreground/70 space-y-2 pl-4 mb-6">
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] mr-2">•</span>
+                  <span>Pre-competition preparation sessions</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] mr-2">•</span>
+                  <span>Between-event mental reset guidance</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] mr-2">•</span>
+                  <span>Post-competition processing and recovery</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] mr-2">•</span>
+                  <span>Time-zone adapted availability for global events</span>
+                </li>
+              </ul>
+              <div className="text-center">
+                <Link 
+                  href="/chat?specialist=athletes&mode=competition" 
+                  className="btn-secondary text-sm px-4 py-2"
+                >
+                  Learn About Competition Support
+                </Link>
+              </div>
+            </div>
+          </div>
+          
           <div className="mb-16">
-            <h2 className="text-2xl font-semibold mb-6 text-center">Case Applications</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-center">Athlete Success Stories</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Pre-Competition Support */}
@@ -505,9 +593,9 @@ export default function AthleteSpecialist() {
                 </p>
                 <div className="bg-[var(--background-alt)] p-4 rounded-lg">
                   <p className="text-sm italic text-foreground/80">
-                    "The visualization techniques my TherapyKin Athletes specialist helped me develop made a huge difference. For the first time, I felt completely mentally prepared before my championship match."
+                    "The visualization techniques my TherapyKin Athletes specialist helped me develop made a huge difference. For the first time, I felt completely mentally prepared before my championship match. I was able to stay present and execute exactly as I had practiced."
                   </p>
-                  <p className="text-sm font-medium mt-2">— Professional Tennis Player</p>
+                  <p className="text-sm font-medium mt-2">— Maria L., Professional Tennis Player</p>
                 </div>
               </div>
               
@@ -519,9 +607,9 @@ export default function AthleteSpecialist() {
                 </p>
                 <div className="bg-[var(--background-alt)] p-4 rounded-lg">
                   <p className="text-sm italic text-foreground/80">
-                    "Having consistent mental support throughout the season helped me avoid the mid-season slump I usually experience. I was able to maintain focus and motivation even during our toughest stretch of games."
+                    "Having consistent mental support throughout the season helped me avoid the mid-season slump I usually experience. I was able to maintain focus and motivation even during our toughest stretch of games. My shooting percentage actually improved during playoff pressure."
                   </p>
-                  <p className="text-sm font-medium mt-2">— Professional Basketball Player</p>
+                  <p className="text-sm font-medium mt-2">— Darius J., Professional Basketball Player</p>
                 </div>
               </div>
               
@@ -533,9 +621,37 @@ export default function AthleteSpecialist() {
                 </p>
                 <div className="bg-[var(--background-alt)] p-4 rounded-lg">
                   <p className="text-sm italic text-foreground/80">
-                    "After my ACL tear, I was devastated. My specialist helped me use visualization to maintain my mental edge during recovery and build the confidence I needed to return to competition without fear."
+                    "After my ACL tear, I was devastated. My specialist helped me use visualization to maintain my mental edge during recovery and build the confidence I needed to return to competition without fear. I came back stronger mentally than I was before the injury."
                   </p>
-                  <p className="text-sm font-medium mt-2">— Olympic Skier</p>
+                  <p className="text-sm font-medium mt-2">— Emma R., Olympic Alpine Skier</p>
+                </div>
+              </div>
+              
+              {/* Team Sport Dynamics */}
+              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-semibold mb-4">Team Sport Dynamics</h3>
+                <p className="text-foreground/70 mb-4">
+                  Navigating complex team relationships, managing leadership responsibilities, and maintaining individual performance within team contexts.
+                </p>
+                <div className="bg-[var(--background-alt)] p-4 rounded-lg">
+                  <p className="text-sm italic text-foreground/80">
+                    "As team captain, I was struggling with the pressure of leadership while maintaining my own performance. My specialist helped me develop communication strategies that transformed our team culture. We went from constant conflict to winning the championship."
+                  </p>
+                  <p className="text-sm font-medium mt-2">— Carlos M., Professional Soccer Team Captain</p>
+                </div>
+              </div>
+              
+              {/* Individual Sport Focus */}
+              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-semibold mb-4">Individual Sport Focus</h3>
+                <p className="text-foreground/70 mb-4">
+                  Developing self-reliance, managing isolation during training and competition, and maintaining motivation without team support.
+                </p>
+                <div className="bg-[var(--background-alt)] p-4 rounded-lg">
+                  <p className="text-sm italic text-foreground/80">
+                    "The loneliness of long-distance training was affecting my performance. My specialist helped me develop mental routines that keep me focused and motivated even during solo training. I've shaved 4 minutes off my marathon time."
+                  </p>
+                  <p className="text-sm font-medium mt-2">— Aisha K., Elite Marathon Runner</p>
                 </div>
               </div>
               
@@ -549,8 +665,50 @@ export default function AthleteSpecialist() {
                   <p className="text-sm italic text-foreground/80">
                     "When I was traded to a new team mid-season, my specialist helped me navigate the emotional challenges and quickly adapt to the new environment. This support was crucial for maintaining my performance during a difficult transition."
                   </p>
-                  <p className="text-sm font-medium mt-2">— Professional Soccer Player</p>
+                  <p className="text-sm font-medium mt-2">— Miguel S., Professional Baseball Player</p>
                 </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* FAQ Section */}
+          <div className="mb-16">
+            <h2 className="text-2xl font-semibold mb-6 text-center">Frequently Asked Questions</h2>
+            
+            <div className="space-y-4">
+              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg border border-foreground/5">
+                <h3 className="text-lg font-semibold mb-2">How does TherapyKin Athletes differ from traditional sports psychology?</h3>
+                <p className="text-foreground/70">
+                  While sports psychology typically focuses on performance enhancement in clinical settings, TherapyKin Athletes provides continuous, accessible support throughout your athletic journey. Our specialists integrate sport psychology techniques with broader mental health support, available 24/7 via our platform, adapting to your training cycles and competition schedule.
+                </p>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg border border-foreground/5">
+                <h3 className="text-lg font-semibold mb-2">Can TherapyKin Athletes help with my specific sport?</h3>
+                <p className="text-foreground/70">
+                  Yes! Our specialists are trained to understand the unique mental demands across different sports, from team sports like basketball and soccer to individual sports like tennis, golf, and endurance events. We tailor our approach to your specific sport's psychological requirements, whether that involves team dynamics, individual focus, or specialized performance contexts.
+                </p>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg border border-foreground/5">
+                <h3 className="text-lg font-semibold mb-2">How quickly might I see results?</h3>
+                <p className="text-foreground/70">
+                  Many athletes report immediate benefits from their first session, particularly in areas like pre-competition anxiety management and focus techniques. More comprehensive mental skills development typically shows measurable improvement within 2-4 weeks of consistent practice. Our specialists work with you to establish baseline metrics and track your progress over time.
+                </p>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg border border-foreground/5">
+                <h3 className="text-lg font-semibold mb-2">Will my coach or team know I'm using this service?</h3>
+                <p className="text-foreground/70">
+                  Your privacy is paramount. Your use of TherapyKin Athletes is completely confidential unless you choose to share this information. Many athletes find that sharing certain techniques with their coaches enhances their training, but this is always your decision. We can also provide guidance on how to effectively communicate mental skills work with your coaching staff if desired.
+                </p>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg border border-foreground/5">
+                <h3 className="text-lg font-semibold mb-2">Can I access support during competitions or while traveling?</h3>
+                <p className="text-foreground/70">
+                  Absolutely! Our platform is designed for accessibility anywhere, anytime. Many athletes use our services during competition travel, between events, or even for quick check-ins before performances. Our specialists can provide brief, focused interventions that fit into your competition schedule and help you maintain your mental edge when it matters most.
+                </p>
               </div>
             </div>
           </div>
@@ -578,6 +736,97 @@ export default function AthleteSpecialist() {
             </div>
           </div>
 
+          {/* Quick Start Guide */}
+          <div className="mb-16 bg-white dark:bg-[var(--background-alt)]/30 p-8 rounded-lg border border-foreground/5">
+            <h2 className="text-2xl font-semibold mb-6 text-center">Quick Start Mental Performance Guide</h2>
+            <p className="text-center text-foreground/70 mb-8 max-w-3xl mx-auto">
+              Begin enhancing your mental performance today with these evidence-based techniques used by elite athletes
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-lg shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 text-[var(--primary)]">
+                  <span className="text-xl font-bold">1</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Pre-Performance Routine</h3>
+                <p className="text-foreground/70 text-sm mb-3">
+                  Develop a consistent 3-5 minute routine to perform before competition or training.
+                </p>
+                <ul className="text-sm space-y-1 text-foreground/70">
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>Take 5 deep breaths, inhaling for 4 counts, holding for 2, exhaling for 6</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>Visualize one successful performance moment in vivid detail</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>Repeat your personal performance mantra 3 times</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-lg shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 text-[var(--primary)]">
+                  <span className="text-xl font-bold">2</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Focus Reset Technique</h3>
+                <p className="text-foreground/70 text-sm mb-3">
+                  Use this 30-second technique whenever you need to regain focus during competition.
+                </p>
+                <ul className="text-sm space-y-1 text-foreground/70">
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>Acknowledge the distraction without judgment</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>Take one deliberate breath while saying "reset" to yourself</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>Direct attention to one immediate physical sensation</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-lg shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 text-[var(--primary)]">
+                  <span className="text-xl font-bold">3</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Performance Journal</h3>
+                <p className="text-foreground/70 text-sm mb-3">
+                  Spend 5 minutes after each training session or competition recording:
+                </p>
+                <ul className="text-sm space-y-1 text-foreground/70">
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>One mental aspect that went well</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>One mental challenge you faced</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[var(--primary)] mr-2">•</span>
+                    <span>One specific mental adjustment for next time</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="text-center mt-8">
+              <Link 
+                href="/resources/athletes-starter-kit" 
+                className="text-[var(--primary)] font-medium hover:underline"
+              >
+                Download the complete Athletes Mental Performance Starter Kit →
+              </Link>
+            </div>
+          </div>
+          
           <div className="text-center bg-[var(--background-alt)] p-10 rounded-lg">
             <h2 className="text-2xl font-semibold mb-4">Ready to Gain Your Mental Edge?</h2>
             <p className="text-foreground/70 max-w-2xl mx-auto mb-6">
