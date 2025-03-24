@@ -72,6 +72,16 @@ export default function Blog() {
             >
               Supplemental Support
             </button>
+            <button 
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                activeFilter === "athletes" 
+                  ? "bg-[var(--primary)] text-white" 
+                  : "bg-[var(--background-alt)] hover:bg-[var(--primary)]/10"
+              }`}
+              onClick={() => setActiveFilter("athletes")}
+            >
+              For Athletes
+            </button>
           </div>
           
           {featuredPost && (
