@@ -5,7 +5,7 @@ export const post = {
   date: "2023-11-15",
   author: "TherapyKin Athletes Team",
   category: "Sports Psychology",
-  imageUrl: "/blog/athlete-offseason-mental-game.jpg",
+  imageUrl: "/blog/mental-game-between-games.jpg",
   slug: "mental-game-between-games",
   persona: "athletes",
   sources: [
