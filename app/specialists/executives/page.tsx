@@ -6,27 +6,17 @@ import Testimonial from "../../components/Testimonial";
 import Link from "next/link";
 import Head from "next/head";
 
-export const metadata = {
-  title: "Executive Mental Health Specialist | TherapyKin",
-  description: "Specialized mental health support for executives and leaders. Time-optimized therapy that integrates with your demanding schedule and addresses leadership-specific challenges.",
-  keywords: "executive therapy, leadership mental health, executive wellbeing, leadership resilience, executive coaching, leadership psychology",
-  openGraph: {
-    title: "Executive Mental Health Specialist | TherapyKin",
-    description: "Specialized mental health support for executives and leaders. Time-optimized therapy that integrates with your demanding schedule.",
-    images: [
-      {
-        url: "/specialists/executive-specialist.jpg",
-        width: 1200,
-        height: 630,
-        alt: "TherapyKin Executive Specialist"
-      }
-    ]
-  }
-};
-
 export default function ExecutiveSpecialist() {
   return (
     <div className="flex flex-col min-h-screen">
+      <Head>
+        <title>Executive Mental Health Specialist | TherapyKin</title>
+        <meta name="description" content="Specialized mental health support for executives and leaders. Time-optimized therapy that integrates with your demanding schedule and addresses leadership-specific challenges." />
+        <meta name="keywords" content="executive therapy, leadership mental health, executive wellbeing, leadership resilience, executive coaching, leadership psychology" />
+        <meta property="og:title" content="Executive Mental Health Specialist | TherapyKin" />
+        <meta property="og:description" content="Specialized mental health support for executives and leaders. Time-optimized therapy that integrates with your demanding schedule." />
+        <meta property="og:image" content="/specialists/executive-specialist.jpg" />
+      </Head>
       <Header />
       
       <main className="flex-grow pt-24 pb-16 px-4">
