@@ -2,7 +2,7 @@ export const post = {
   id: 10,
   title: "The Mental Game Between Games: How Elite Athletes Manage the Psychological Off-Season",
   excerpt: "While physical training periodization is well-understood, the psychological aspects of the off-season present unique challenges and opportunities that are rarely discussed.",
-  date: "2023-11-15",
+  date: "2025-03-17",
   author: "TherapyKin Athletes Team",
   category: "Sports Psychology",
   imageUrl: "/blog/mental-game-between-games.jpg",

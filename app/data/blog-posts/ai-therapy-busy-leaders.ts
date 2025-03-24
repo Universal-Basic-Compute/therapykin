@@ -2,7 +2,7 @@ export const post = {
   id: 3,
   title: "Between Meetings and Deadlines: How AI-Powered Therapy is Filling the Mental Health Gap for Leaders",
   excerpt: "For those with unpredictable schedules, AI-powered therapy offers a flexible solution that adapts to your availability.",
-  date: "2023-10-25",
+  date: "2025-03-22",
   author: "TherapyKin Team",
   category: "Technology",
   imageUrl: "/blog/ai-therapy-busy-leaders.jpg",

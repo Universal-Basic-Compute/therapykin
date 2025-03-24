@@ -2,7 +2,7 @@ export const post = {
   id: 1,
   title: "The 30-Minute Mental Health Solution: How Brief Therapeutic Check-ins Outperform Weekly Sessions",
   excerpt: "Research shows that brief, consistent interventions can be more effective than traditional weekly therapy sessions for busy professionals.",
-  date: "2023-11-15",
+  date: "2025-03-20",
   author: "TherapyKin Team",
   category: "Busy Professionals",
   imageUrl: "/blog/30-minute-mental-health-solution.jpg",

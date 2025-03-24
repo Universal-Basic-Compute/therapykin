@@ -2,7 +2,7 @@ export const post = {
   id: 2,
   title: "Mental Agility: Why Top Performers Are Switching from Traditional Therapy to Adaptive Support",
   excerpt: "Discover the connection between mental flexibility and workplace performance, and why adaptive support creates better outcomes.",
-  date: "2023-11-08",
+  date: "2025-03-24",
   author: "TherapyKin Team",
   category: "Workplace Performance",
   imageUrl: "/blog/mental-agility-top-performers.jpg",

@@ -2,7 +2,7 @@ export const post = {
   id: 7,
   title: "Bridging the Gap: Why Between-Session Support Is Critical for Therapeutic Success",
   excerpt: "Discover how continuous support between therapy sessions can significantly improve outcomes and prevent relapse.",
-  date: "2023-11-15",
+  date: "2025-03-23",
   author: "TherapyKin Team",
   category: "Therapeutic Approaches",
   imageUrl: "/blog/between-session-therapy-support.jpg",

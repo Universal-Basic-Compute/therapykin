@@ -2,7 +2,7 @@ export const post = {
   id: 4,
   title: "Beyond Geography: How Rural Americans Are Finding Quality Mental Health Support Without the Drive",
   excerpt: "Rural residents are discovering effective alternatives to distant in-person therapy, saving time and money while getting quality care.",
-  date: "2023-10-18",
+  date: "2025-03-18",
   author: "TherapyKin Team",
   category: "Rural Access",
   imageUrl: "/blog/rural-mental-health-access.jpg",

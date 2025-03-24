@@ -2,7 +2,7 @@ export const post = {
   id: 4,
   title: "The Leadership Resilience Gap: Why Traditional Executive Support Falls Short",
   excerpt: "As leadership demands intensify, conventional support systems often fail to address the deeper psychological needs of executives under pressure.",
-  date: "2023-11-15",
+  date: "2025-03-19",
   author: "Dr. Emma Richardson",
   category: "Leadership",
   imageUrl: "/blog/leadership-resilience-gap.jpg",

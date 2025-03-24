@@ -2,7 +2,7 @@ export const post = {
   id: 5,
   title: "Beyond Generic Solutions: Why Rural Mental Health Needs Specialized Support",
   excerpt: "Rural residents face unique mental health challenges that require tailored approaches. Learn why specialized support matters and how to find it.",
-  date: "2023-11-05",
+  date: "2025-03-16",
   author: "TherapyKin Team",
   category: "Rural Wellness",
   imageUrl: "/blog/rural-stress-specialized-support.jpg",

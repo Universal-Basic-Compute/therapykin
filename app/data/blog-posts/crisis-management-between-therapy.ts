@@ -2,7 +2,7 @@ export const post = {
   id: 8,
   title: "Managing Emotional Crises Between Therapy Sessions: Building Your Safety Net",
   excerpt: "Learn effective strategies to handle emotional crises and urgent mental health needs during the gaps between scheduled therapy appointments.",
-  date: "2023-11-15",
+  date: "2025-03-21",
   author: "TherapyKin Team",
   category: "Self-Care",
   imageUrl: "/blog/crisis-management-between-therapy.jpg",
