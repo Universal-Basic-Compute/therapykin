@@ -66,7 +66,38 @@ export default function AthleteSpecialist() {
             <p className="text-xl text-foreground/70 mb-4">
               While physical training is meticulously planned, mental skills are often undertrained. TherapyKin Athletes delivers consistent, accessible mental performance support whenever and wherever you need it.
             </p>
-            
+              
+            {/* Quick Takeaways Section */}
+            <div className="bg-white dark:bg-[var(--background-alt)]/70 p-5 rounded-lg border-l-4 border-[var(--primary)] mb-6">
+              <h3 className="font-semibold text-lg mb-2">Quick Takeaways</h3>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>Mental performance training is as crucial as physical training for elite athletes</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>Support adapts to your training cycle, competition schedule, and career stage</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>Available 24/7, fitting into your schedule rather than disrupting it</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>87% of athletes report reduced performance anxiety within 4 sessions</span>
+                </li>
+              </ul>
+            </div>
+              
             <div className="flex flex-col md:flex-row gap-6 mt-8 mb-10">
               <div className="flex-1 bg-white dark:bg-[var(--background-alt)]/50 p-5 rounded-lg border border-foreground/5">
                 <div className="flex items-center mb-3">
@@ -147,6 +178,22 @@ export default function AthleteSpecialist() {
                   <span>Identity development beyond sport</span>
                 </li>
               </ul>
+              
+              <div className="mt-6 pt-4 border-t border-foreground/10">
+                <h4 className="text-sm font-medium text-[var(--primary)]">Related Resources:</h4>
+                <ul className="mt-2 space-y-1">
+                  <li>
+                    <Link href="/resources/mental-skills-development" className="text-sm hover:underline text-foreground/70">
+                      → Complete Mental Skills Development Guide
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/blog/visualization-techniques-for-athletes" className="text-sm hover:underline text-foreground/70">
+                      → Advanced Visualization Techniques for Elite Performance
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
             
             <div>
@@ -687,6 +734,12 @@ export default function AthleteSpecialist() {
                   </p>
                   <p className="text-sm font-medium mt-2">— Maria L., Professional Tennis Player</p>
                 </div>
+                <div className="mt-4 bg-[var(--background-alt)] p-4 rounded-lg">
+                  <p className="text-sm italic text-foreground/80">
+                    "As a team sport athlete, I struggled with balancing my individual goals with team objectives. My specialist helped me reframe this as complementary rather than competing priorities, which transformed my approach to training."
+                  </p>
+                  <p className="text-sm font-medium mt-2">— Jason T., Professional Basketball Forward</p>
+                </div>
               </div>
               
               {/* In-Season Maintenance */}
@@ -709,11 +762,65 @@ export default function AthleteSpecialist() {
                 <p className="text-foreground/70 mb-4">
                   Psychological support during recovery, maintaining mental skills during physical limitations, return-to-play confidence building, and finding meaning in the rehabilitation process.
                 </p>
-                <div className="bg-[var(--background-alt)] p-4 rounded-lg">
-                  <p className="text-sm italic text-foreground/80">
-                    "After my ACL tear, I was devastated. My specialist helped me use visualization to maintain my mental edge during recovery and build the confidence I needed to return to competition without fear. I came back stronger mentally than I was before the injury."
-                  </p>
-                  <p className="text-sm font-medium mt-2">— Emma R., Olympic Alpine Skier</p>
+                <div className="space-y-4">
+                  <div className="bg-[var(--background-alt)] p-4 rounded-lg">
+                    <p className="text-sm italic text-foreground/80">
+                      "After my ACL tear, I was devastated. My specialist helped me use visualization to maintain my mental edge during recovery and build the confidence I needed to return to competition without fear. I came back stronger mentally than I was before the injury."
+                    </p>
+                    <p className="text-sm font-medium mt-2">— Emma R., Olympic Alpine Skier</p>
+                  </div>
+                
+                  {/* Olympic Athlete Recovery Timeline */}
+                  <div className="bg-white dark:bg-[var(--background-alt)]/70 p-4 rounded-lg border border-foreground/10">
+                    <h4 className="font-medium text-sm mb-3">Emma's Mental Recovery Timeline</h4>
+                    <div className="relative">
+                      {/* Timeline line */}
+                      <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-[var(--primary)]/30"></div>
+                    
+                      {/* Timeline events */}
+                      <div className="ml-10 space-y-6 relative pb-2">
+                        <div className="relative">
+                          <div className="absolute -left-10 mt-1.5 w-4 h-4 rounded-full bg-[var(--primary)]"></div>
+                          <div>
+                            <span className="text-xs font-medium text-[var(--primary)]">Week 1-2</span>
+                            <p className="text-sm">Initial trauma processing and emotional regulation</p>
+                          </div>
+                        </div>
+                      
+                        <div className="relative">
+                          <div className="absolute -left-10 mt-1.5 w-4 h-4 rounded-full bg-[var(--primary)]"></div>
+                          <div>
+                            <span className="text-xs font-medium text-[var(--primary)]">Month 1-2</span>
+                            <p className="text-sm">Daily visualization of successful rehabilitation and healing</p>
+                          </div>
+                        </div>
+                      
+                        <div className="relative">
+                          <div className="absolute -left-10 mt-1.5 w-4 h-4 rounded-full bg-[var(--primary)]"></div>
+                          <div>
+                            <span className="text-xs font-medium text-[var(--primary)]">Month 3-5</span>
+                            <p className="text-sm">Identity work and skill maintenance during physical limitations</p>
+                          </div>
+                        </div>
+                      
+                        <div className="relative">
+                          <div className="absolute -left-10 mt-1.5 w-4 h-4 rounded-full bg-[var(--primary)]"></div>
+                          <div>
+                            <span className="text-xs font-medium text-[var(--primary)]">Month 6-8</span>
+                            <p className="text-sm">Return-to-snow confidence building and fear processing</p>
+                          </div>
+                        </div>
+                      
+                        <div className="relative">
+                          <div className="absolute -left-10 mt-1.5 w-4 h-4 rounded-full bg-[var(--primary)]"></div>
+                          <div>
+                            <span className="text-xs font-medium text-[var(--primary)]">Month 9-12</span>
+                            <p className="text-sm">Competition readiness and performance enhancement</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               
@@ -826,6 +933,131 @@ export default function AthleteSpecialist() {
             </div>
           </div>
 
+          {/* Self-Assessment Tool */}
+          <div className="mb-16 bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10 p-8 rounded-lg border border-foreground/5">
+            <h2 className="text-2xl font-semibold mb-4 text-center">Off-Season Mental Readiness Assessment</h2>
+            <p className="text-center text-foreground/70 mb-6 max-w-3xl mx-auto">
+              Rate yourself on each statement from 1-5 (1 = Strongly Disagree, 5 = Strongly Agree) to assess your current mental approach to training and competition
+            </p>
+            
+            <div className="bg-white dark:bg-[var(--background-alt)]/70 p-6 rounded-lg mb-6">
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <label className="font-medium">I have clear mental performance goals separate from my physical goals</label>
+                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-xs">Strongly Disagree</span>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                          {num}
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-xs">Strongly Agree</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <label className="font-medium">I can quickly refocus after distractions during training or competition</label>
+                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-xs">Strongly Disagree</span>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                          {num}
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-xs">Strongly Agree</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <label className="font-medium">I have effective strategies for managing pre-competition anxiety</label>
+                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-xs">Strongly Disagree</span>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                          {num}
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-xs">Strongly Agree</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <label className="font-medium">I maintain mental training during off-season periods</label>
+                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-xs">Strongly Disagree</span>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                          {num}
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-xs">Strongly Agree</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <label className="font-medium">I can effectively balance athletic identity with other aspects of my life</label>
+                    <span className="text-sm text-foreground/60">Score: __/5</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-xs">Strongly Disagree</span>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <div key={num} className="w-8 h-8 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer hover:bg-[var(--primary)]/10">
+                          {num}
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-xs">Strongly Agree</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-6 pt-4 border-t border-foreground/10">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">Total Score: ___/25</span>
+                  <button className="px-4 py-2 bg-[var(--primary)] text-white rounded-md text-sm">Calculate My Score</button>
+                </div>
+                <p className="text-sm mt-4 text-foreground/70">
+                  <strong>Scoring Guide:</strong><br/>
+                  20-25: Excellent mental readiness<br/>
+                  15-19: Good foundation with room for improvement<br/>
+                  10-14: Several areas need significant development<br/>
+                  Below 10: Consider prioritizing mental performance training
+                </p>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <Link 
+                href="/resources/comprehensive-athlete-assessment" 
+                className="text-[var(--primary)] font-medium hover:underline"
+              >
+                Take our comprehensive 50-point assessment for deeper insights →
+              </Link>
+            </div>
+          </div>
+          
           {/* Quick Start Guide */}
           <div className="mb-16 bg-white dark:bg-[var(--background-alt)]/30 p-8 rounded-lg border border-foreground/5">
             <h2 className="text-2xl font-semibold mb-6 text-center">Quick Start Mental Performance Guide</h2>
@@ -835,8 +1067,13 @@ export default function AthleteSpecialist() {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-lg shadow-sm">
-                <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 text-[var(--primary)]">
-                  <span className="text-xl font-bold">1</span>
+                <div className="flex justify-between items-start mb-2">
+                  <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)]">
+                    <span className="text-xl font-bold">1</span>
+                  </div>
+                  <span className="px-2 py-1 bg-[var(--primary)]/10 text-[var(--primary)] rounded-full text-xs font-medium">
+                    First Week Implementation
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Pre-Performance Routine</h3>
                 <p className="text-foreground/70 text-sm mb-3">
@@ -859,8 +1096,13 @@ export default function AthleteSpecialist() {
               </div>
               
               <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-lg shadow-sm">
-                <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 text-[var(--primary)]">
-                  <span className="text-xl font-bold">2</span>
+                <div className="flex justify-between items-start mb-2">
+                  <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)]">
+                    <span className="text-xl font-bold">2</span>
+                  </div>
+                  <span className="px-2 py-1 bg-[var(--primary)]/10 text-[var(--primary)] rounded-full text-xs font-medium">
+                    Week 2-3 Implementation
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Focus Reset Technique</h3>
                 <p className="text-foreground/70 text-sm mb-3">
@@ -883,8 +1125,13 @@ export default function AthleteSpecialist() {
               </div>
               
               <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-lg shadow-sm">
-                <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 text-[var(--primary)]">
-                  <span className="text-xl font-bold">3</span>
+                <div className="flex justify-between items-start mb-2">
+                  <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)]">
+                    <span className="text-xl font-bold">3</span>
+                  </div>
+                  <span className="px-2 py-1 bg-[var(--primary)]/10 text-[var(--primary)] rounded-full text-xs font-medium">
+                    Ongoing Daily Practice
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Performance Journal</h3>
                 <p className="text-foreground/70 text-sm mb-3">
@@ -907,12 +1154,125 @@ export default function AthleteSpecialist() {
               </div>
             </div>
             
-            <div className="text-center mt-8">
+            <div className="text-center mt-8 space-y-3">
               <Link 
                 href="/resources/athletes-starter-kit" 
-                className="text-[var(--primary)] font-medium hover:underline"
+                className="text-[var(--primary)] font-medium hover:underline block"
               >
                 Download the complete Athletes Mental Performance Starter Kit →
+              </Link>
+              <Link 
+                href="/downloads/one-page-mental-performance-summary.pdf" 
+                className="inline-flex items-center text-sm px-4 py-2 border border-[var(--primary)] text-[var(--primary)] rounded-full hover:bg-[var(--primary)]/5"
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Download One-Page Summary (PDF)
+              </Link>
+            </div>
+          </div>
+          
+          {/* Common Mistakes to Avoid Section */}
+          <div className="mb-16 bg-white dark:bg-[var(--background-alt)]/30 p-8 rounded-lg border border-foreground/5">
+            <h2 className="text-2xl font-semibold mb-6 text-center">Common Mental Performance Mistakes to Avoid</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white dark:bg-[var(--background-alt)]/70 p-6 rounded-lg border border-red-200">
+                <div className="flex items-start mb-4">
+                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1">Neglecting Mental Training During Off-Season</h3>
+                    <p className="text-foreground/70 text-sm">
+                      Many athletes focus exclusively on physical recovery and training during the off-season, allowing mental skills to deteriorate.
+                    </p>
+                  </div>
+                </div>
+                <div className="ml-13 pl-13">
+                  <h4 className="text-sm font-medium text-[var(--primary)] mb-2">Better Approach:</h4>
+                  <p className="text-sm text-foreground/70">
+                    Maintain a consistent mental training schedule year-round, using the off-season to develop new mental skills without the pressure of immediate competition.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)]/70 p-6 rounded-lg border border-red-200">
+                <div className="flex items-start mb-4">
+                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1">Inconsistent Pre-Performance Routines</h3>
+                    <p className="text-foreground/70 text-sm">
+                      Changing mental preparation approaches before different competitions creates inconsistency in mental readiness.
+                    </p>
+                  </div>
+                </div>
+                <div className="ml-13 pl-13">
+                  <h4 className="text-sm font-medium text-[var(--primary)] mb-2">Better Approach:</h4>
+                  <p className="text-sm text-foreground/70">
+                    Develop a standardized pre-performance routine that can be scaled up or down based on competition importance, but maintains the same core elements.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)]/70 p-6 rounded-lg border border-red-200">
+                <div className="flex items-start mb-4">
+                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1">Reactive Instead of Proactive Support</h3>
+                    <p className="text-foreground/70 text-sm">
+                      Only seeking mental performance support when already experiencing problems or performance declines.
+                    </p>
+                  </div>
+                </div>
+                <div className="ml-13 pl-13">
+                  <h4 className="text-sm font-medium text-[var(--primary)] mb-2">Better Approach:</h4>
+                  <p className="text-sm text-foreground/70">
+                    Establish ongoing mental performance support that builds skills proactively, preventing issues before they impact performance.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="bg-white dark:bg-[var(--background-alt)]/70 p-6 rounded-lg border border-red-200">
+                <div className="flex items-start mb-4">
+                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1">Isolating Mental and Physical Training</h3>
+                    <p className="text-foreground/70 text-sm">
+                      Treating mental and physical training as completely separate domains rather than integrated aspects of performance.
+                    </p>
+                  </div>
+                </div>
+                <div className="ml-13 pl-13">
+                  <h4 className="text-sm font-medium text-[var(--primary)] mb-2">Better Approach:</h4>
+                  <p className="text-sm text-foreground/70">
+                    Integrate mental skills practice directly into physical training sessions, reinforcing the mind-body connection that drives peak performance.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <Link 
+                href="/resources/mental-performance-pitfalls" 
+                className="text-[var(--primary)] font-medium hover:underline"
+              >
+                Read our complete guide to avoiding the top 10 mental performance pitfalls →
               </Link>
             </div>
           </div>
