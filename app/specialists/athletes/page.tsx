@@ -295,6 +295,96 @@ export default function AthleteSpecialist() {
             </div>
           </div>
           
+          {/* Integration with Physical Training */}
+          <div className="mb-16 bg-gradient-to-r from-[var(--primary)]/10 to-transparent p-8 rounded-lg">
+            <h2 className="text-2xl font-semibold mb-6">Seamless Integration with Physical Training</h2>
+            
+            <div className="flex flex-col md:flex-row gap-8 items-center">
+              <div className="md:w-1/2">
+                <p className="text-foreground/80 mb-4">
+                  TherapyKin Athletes is designed to complement your existing physical training regimen, not compete with it. Our specialists work in harmony with your technical coaches and physical trainers.
+                </p>
+                <ul className="space-y-3 text-foreground/80">
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Mental skills that enhance physical technique acquisition</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Psychological strategies that optimize physical recovery</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Mental approaches that maximize physical training adaptations</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Coordination with strength coaches and technical trainers</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="md:w-1/2 bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4">The Mind-Body Performance Loop</h3>
+                <div className="relative h-64 rounded-lg overflow-hidden bg-gradient-to-r from-[var(--primary)]/5 to-[var(--accent)]/5 flex items-center justify-center">
+                  <div className="text-center p-4">
+                    <div className="w-40 h-40 mx-auto rounded-full border-4 border-[var(--primary)]/30 flex items-center justify-center relative">
+                      <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[var(--primary)] animate-spin" style={{animationDuration: '8s'}}></div>
+                      <div className="text-center">
+                        <p className="font-bold text-lg">Mental</p>
+                        <svg className="w-6 h-6 mx-auto my-2 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                        </svg>
+                        <p className="font-bold text-lg">Physical</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-foreground/70 mt-4 text-center">
+                  Mental and physical training work in a continuous feedback loop, each enhancing the other for optimal performance.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Social Proof Metrics */}
+          <div className="mb-16 bg-white dark:bg-[var(--background-alt)]/30 p-8 rounded-lg border border-foreground/5">
+            <h2 className="text-2xl font-semibold mb-6 text-center">The TherapyKin Athletes Impact</h2>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-[var(--primary)] mb-2">87%</div>
+                <p className="text-sm text-foreground/70">of athletes report reduced performance anxiety within 4 sessions</p>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-[var(--primary)] mb-2">92%</div>
+                <p className="text-sm text-foreground/70">satisfaction rate among professional athletes using our service</p>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-[var(--primary)] mb-2">76%</div>
+                <p className="text-sm text-foreground/70">of users report measurable performance improvements</p>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-[var(--primary)] mb-2">3.2x</div>
+                <p className="text-sm text-foreground/70">faster recovery from setbacks compared to traditional support</p>
+              </div>
+            </div>
+            
+            <div className="text-center text-foreground/70">
+              <p className="italic">
+                "TherapyKin Athletes has become an essential component of our high-performance program. The specialized mental support has transformed how our athletes approach competition and recovery."
+              </p>
+              <p className="font-medium mt-2">— Director of Performance, Professional Sports Organization</p>
+            </div>
+          </div>
+          
           <div className="mt-16 mb-16">
             <h2 className="text-2xl font-semibold mb-6 text-center">Specialized Modes for Every Aspect of Athletic Life</h2>
             
