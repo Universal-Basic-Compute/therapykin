@@ -47,3 +47,8 @@ export function getPostBySlug(slug: string) {
 export function getPostsByPersona(persona: string) {
   return blogPosts.filter(post => post.persona === persona);
 }
+
+// Helper function to get featured posts
+export function getFeaturedPosts(count: number = 3) {
+  return blogPosts.slice(0, count);
+}
