@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../../components/Header";
@@ -16,10 +16,17 @@ export default function BlogPost() {
   // Find the blog post with the matching slug
   const post = getPostBySlug(slug as string);
   
-  // If post not found, redirect to blog index
+  // Move the redirect to useEffect
+  useEffect(() => {
+    // If post not found, redirect to blog index
+    if (!post) {
+      router.push('/blog');
+    }
+  }, [post, router]);
+  
+  // Return early if post is not found
   if (!post) {
-    router.push('/blog');
-    return null;
+    return null; // or a loading state
   }
   
   // Format date
