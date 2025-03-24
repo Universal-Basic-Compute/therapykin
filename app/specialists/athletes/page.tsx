@@ -1191,15 +1191,6 @@ export default function AthleteSpecialist() {
                 </p>
               </div>
             </div>
-            
-            <div className="text-center">
-              <Link 
-                href="/resources/comprehensive-athlete-assessment" 
-                className="text-[var(--primary)] font-medium hover:underline"
-              >
-                Take our comprehensive 50-point assessment for deeper insights →
-              </Link>
-            </div>
           </div>
           
           {/* Quick Start Guide */}
