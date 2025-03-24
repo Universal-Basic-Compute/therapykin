@@ -1216,6 +1216,26 @@ function ChatSessionWithSearchParams() {
         throw new Error(`Failed to update specialist preference: ${response.status}`);
       }
       
+      // If we have an active session, update the session in Airtable
+      if (sessionId) {
+        const sessionResponse = await fetch('/api/sessions/update-specialist', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId,
+            specialist,
+          }),
+        });
+        
+        if (!sessionResponse.ok) {
+          throw new Error(`Failed to update session specialist: ${sessionResponse.status}`);
+        }
+        
+        console.log(`Session specialist updated to: ${specialist}`);
+      }
+      
       console.log(`Specialist preference updated to: ${specialist}`);
     } catch (error) {
       console.error('Error updating specialist preference:', error);
