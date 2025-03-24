@@ -9,9 +9,11 @@ import { post as crisisManagementPost } from './crisis-management-between-therap
 import { post as therapeuticTechniquePost } from './therapeutic-technique-practice';
 import { post as leadershipResilienceGapPost } from './leadership-resilience-gap';
 import { post as mentalGameBetweenGamesPost } from './mental-game-between-games';
+import { post as mentalPerformancePitfallsPost } from './mental-performance-pitfalls';
 
 // Export all posts in an array
 export const blogPosts = [
+  mentalPerformancePitfallsPost,
   mentalGameBetweenGamesPost,
   briefSessionsPost,
   mentalAgilityPost,
@@ -39,6 +41,7 @@ export {
   therapeuticTechniquePost,
   leadershipResilienceGapPost,
   mentalGameBetweenGamesPost,
+  mentalPerformancePitfallsPost,
 };
 
 // Helper function to get a post by slug
