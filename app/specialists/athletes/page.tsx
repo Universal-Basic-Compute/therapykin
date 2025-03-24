@@ -19,8 +19,11 @@ export default function AthleteSpecialist() {
   const [totalScore, setTotalScore] = useState(0);
   const [scoreCalculated, setScoreCalculated] = useState(false);
   
+  // Define type for assessment score keys
+  type AssessmentScoreKey = 'mentalGoals' | 'refocus' | 'anxietyManagement' | 'offSeasonTraining' | 'identityBalance';
+  
   // Handle score selection
-  const handleScoreSelection = (question, score) => {
+  const handleScoreSelection = (question: AssessmentScoreKey, score: number) => {
     const newScores = { ...assessmentScores, [question]: score };
     setAssessmentScores(newScores);
   };
