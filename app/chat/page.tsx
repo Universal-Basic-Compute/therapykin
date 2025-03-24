@@ -216,10 +216,10 @@ function ChatSessionWithSearchParams() {
             
             // Check URL parameter first, then fall back to user preference
             const specialistParam = searchParams.get('specialist');
-            if (specialistParam && (specialistParam === 'generalist' || specialistParam === 'crypto')) {
+            if (specialistParam && (specialistParam === 'generalist' || specialistParam === 'crypto' || specialistParam === 'athletes' || specialistParam === 'executives')) {
               setSelectedSpecialist(specialistParam);
               console.log(`Using specialist from URL parameter: ${specialistParam}`);
-              
+    
               // Optionally update the user's preference to match the URL parameter
               updateSelectedSpecialist(specialistParam);
             } else if (data.preferences.preferredSpecialist) {
@@ -1594,11 +1594,35 @@ function ChatSessionWithSearchParams() {
                   >
                     Crypto
                   </button>
+                  <button
+                    onClick={() => updateSelectedSpecialist("athletes")}
+                    className={`p-2 rounded-lg border text-sm ${
+                      selectedSpecialist === "athletes" 
+                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
+                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                    }`}
+                  >
+                    Athletes
+                  </button>
+                  <button
+                    onClick={() => updateSelectedSpecialist("executives")}
+                    className={`p-2 rounded-lg border text-sm ${
+                      selectedSpecialist === "executives" 
+                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
+                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                    }`}
+                  >
+                    Executives
+                  </button>
                 </div>
                 <p className="text-xs text-foreground/60 mt-2">
                   {selectedSpecialist === "generalist" 
                     ? "General therapeutic support for various concerns" 
-                    : "Specialized support for crypto traders and investors"}
+                    : selectedSpecialist === "crypto"
+                    ? "Specialized support for crypto traders and investors"
+                    : selectedSpecialist === "athletes"
+                    ? "Mental performance support for athletes and competitors"
+                    : "Leadership and executive performance support"}
                 </p>
               </div>
               
