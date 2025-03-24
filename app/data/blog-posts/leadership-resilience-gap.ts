@@ -128,17 +128,17 @@ export const post = {
     <h2>Why Traditional Executive Coaching Misses the Psychological Dimension</h2>
     <p>Executive coaching has become a standard offering for senior leaders, but most coaching models focus almost exclusively on performance optimization rather than psychological wellbeing. This creates a critical blind spot in executive support.</p>
     
-    <div class="my-8 overflow-x-auto">
+    <div class="my-8 overflow-x-auto sm:rounded-lg shadow-sm">
       <table class="w-full text-sm">
         <thead class="bg-[var(--background-alt)]">
           <tr>
-            <th class="px-4 py-3 text-left">Support Type</th>
-            <th class="px-4 py-3 text-left">Primary Focus</th>
-            <th class="px-4 py-3 text-left">Psychological Support</th>
-            <th class="px-4 py-3 text-left">Key Limitation</th>
+            <th class="px-4 py-3 text-left font-semibold">Support Type</th>
+            <th class="px-4 py-3 text-left font-semibold">Primary Focus</th>
+            <th class="px-4 py-3 text-left font-semibold">Psychological Support</th>
+            <th class="px-4 py-3 text-left font-semibold">Key Limitation</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-foreground/10">
           <tr class="border-t border-foreground/10">
             <td class="px-4 py-3 font-medium">Executive Coaching</td>
             <td class="px-4 py-3">Performance & leadership skills</td>
@@ -390,16 +390,16 @@ export const post = {
       <h3 class="text-xl font-semibold mb-4">Case Study: Transformation at Global Financial Services Firm</h3>
       <p class="mb-4">A global financial services firm implemented an integrated psychological support program for their executive team during a major digital transformation initiative. The results after 18 months were significant:</p>
       
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <div class="bg-white dark:bg-[var(--background-alt)] p-4 rounded-lg text-center">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+        <div class="bg-white dark:bg-[var(--background-alt)] p-4 rounded-lg text-center shadow-sm">
           <span class="text-[var(--primary)] text-3xl font-bold">42%</span>
           <p class="text-sm text-foreground/70 mt-1">Reduction in executive turnover</p>
         </div>
-        <div class="bg-white dark:bg-[var(--background-alt)] p-4 rounded-lg text-center">
+        <div class="bg-white dark:bg-[var(--background-alt)] p-4 rounded-lg text-center shadow-sm">
           <span class="text-[var(--primary)] text-3xl font-bold">67%</span>
           <p class="text-sm text-foreground/70 mt-1">Improvement in decision consistency</p>
         </div>
-        <div class="bg-white dark:bg-[var(--background-alt)] p-4 rounded-lg text-center">
+        <div class="bg-white dark:bg-[var(--background-alt)] p-4 rounded-lg text-center shadow-sm sm:col-span-2 md:col-span-1">
           <span class="text-[var(--primary)] text-3xl font-bold">28%</span>
           <p class="text-sm text-foreground/70 mt-1">Faster strategic implementation</p>
         </div>
@@ -605,7 +605,7 @@ export const post = {
     
     <p>Forward-thinking organizations are increasingly recognizing that executive psychological support isn't a luxury or a remedial intervention—it's a strategic investment in sustainable leadership capacity. The most sophisticated approaches treat psychological wellbeing as an integral part of leadership development rather than a separate wellness initiative.</p>
     
-    <div class="my-8 p-6 bg-[var(--primary)]/5 rounded-xl">
+    <div class="my-8 p-6 bg-[var(--primary)]/5 rounded-xl shadow-md">
       <div class="flex flex-col md:flex-row items-center gap-6">
         <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-full bg-[var(--primary)]/10 flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -615,7 +615,10 @@ export const post = {
         <div>
           <h4 class="text-lg font-semibold mb-2">Experience TherapyKin Executives</h4>
           <p class="text-foreground/80">TherapyKin Executives offers specialized psychological support designed specifically for the unique challenges of leadership roles. Our approach integrates seamlessly with your schedule while providing the depth of support needed to sustain peak performance under pressure.</p>
-          <a href="/specialists/executives" class="inline-block mt-4 px-4 py-2 bg-[var(--primary)] text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all">Learn More About Our Executive Support</a>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="/specialists/executives" class="inline-block px-4 py-2 bg-[var(--primary)] text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all">Learn More About Executive Support</a>
+            <a href="/chat?specialist=executives" class="inline-block px-4 py-2 bg-white dark:bg-[var(--background-alt)] border border-[var(--primary)] text-[var(--primary)] rounded-full text-sm font-medium hover:bg-[var(--primary)]/5 transition-all">Start a Session Now</a>
+          </div>
         </div>
       </div>
     </div>
@@ -626,6 +629,44 @@ export const post = {
     <p>Forward-thinking leaders and organizations are recognizing that bridging this gap requires a fundamentally different approach—one that integrates deep psychological expertise with leadership context, provides support that adapts to executive constraints, and treats wellbeing not as separate from performance but as its foundation.</p>
     
     <p>The future of executive effectiveness lies not in pushing harder within traditional paradigms, but in pioneering integrated approaches that sustain the psychological foundations of leadership. In doing so, we create not just more effective leaders, but more sustainable organizations capable of navigating our increasingly complex world.</p>
+    
+    <div class="my-12 p-6 bg-[var(--background-alt)] rounded-xl">
+      <h3 class="text-xl font-semibold mb-4">Related Articles</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="flex items-start">
+          <div class="w-20 h-20 rounded-md bg-[var(--primary)]/10 flex-shrink-0 overflow-hidden mr-4">
+            <img 
+              src="/blog/ai-therapy-busy-leaders.jpg" 
+              alt="AI Therapy for Busy Leaders" 
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <h4 class="font-medium mb-1">Between Meetings and Deadlines</h4>
+            <p class="text-sm text-foreground/70 mb-2">How AI-powered therapy is filling the mental health gap for leaders with unpredictable schedules.</p>
+            <a href="/blog/ai-therapy-busy-leaders" class="text-[var(--primary)] text-sm font-medium hover:underline">
+              Read Article →
+            </a>
+          </div>
+        </div>
+        <div class="flex items-start">
+          <div class="w-20 h-20 rounded-md bg-[var(--primary)]/10 flex-shrink-0 overflow-hidden mr-4">
+            <img 
+              src="/blog/mental-agility-top-performers.jpg" 
+              alt="Mental Agility for Top Performers" 
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <h4 class="font-medium mb-1">Mental Agility for Top Performers</h4>
+            <p class="text-sm text-foreground/70 mb-2">Strategies for developing mental flexibility and resilience in high-pressure environments.</p>
+            <a href="/blog/mental-agility-top-performers" class="text-[var(--primary)] text-sm font-medium hover:underline">
+              Read Article →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
     
     <hr class="my-12 border-t border-foreground/10" />
     

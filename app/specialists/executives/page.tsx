@@ -4,6 +4,25 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Testimonial from "../../components/Testimonial";
 import Link from "next/link";
+import Head from "next/head";
+
+export const metadata = {
+  title: "Executive Mental Health Specialist | TherapyKin",
+  description: "Specialized mental health support for executives and leaders. Time-optimized therapy that integrates with your demanding schedule and addresses leadership-specific challenges.",
+  keywords: "executive therapy, leadership mental health, executive wellbeing, leadership resilience, executive coaching, leadership psychology",
+  openGraph: {
+    title: "Executive Mental Health Specialist | TherapyKin",
+    description: "Specialized mental health support for executives and leaders. Time-optimized therapy that integrates with your demanding schedule.",
+    images: [
+      {
+        url: "/specialists/executive-specialist.jpg",
+        width: 1200,
+        height: 630,
+        alt: "TherapyKin Executive Specialist"
+      }
+    ]
+  }
+};
 
 export default function ExecutiveSpecialist() {
   return (
@@ -409,6 +428,47 @@ export default function ExecutiveSpecialist() {
                     <p className="text-[var(--primary)] font-bold text-xl">Executive</p>
                     <p className="text-3xl font-bold">Support</p>
                     <p className="text-sm text-foreground/60 mt-1">Leadership-focused</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-16">
+            <h2 className="text-2xl font-semibold mb-6 text-center">Related Resources</h2>
+            <div className="bg-white dark:bg-[var(--background-alt)]/50 p-6 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+              <h3 className="text-xl font-semibold mb-3">Leadership Articles</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-start">
+                  <div className="w-20 h-20 rounded-md bg-[var(--primary)]/10 flex-shrink-0 overflow-hidden mr-4">
+                    <img 
+                      src="/blog/leadership-resilience-gap.jpg" 
+                      alt="Leadership Resilience Gap" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-1">The Leadership Resilience Gap</h4>
+                    <p className="text-sm text-foreground/70 mb-2">Why traditional executive support falls short in addressing the psychological needs of leaders.</p>
+                    <Link href="/blog/leadership-resilience-gap" className="text-[var(--primary)] text-sm font-medium hover:underline">
+                      Read Article →
+                    </Link>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="w-20 h-20 rounded-md bg-[var(--primary)]/10 flex-shrink-0 overflow-hidden mr-4">
+                    <img 
+                      src="/blog/ai-therapy-busy-leaders.jpg" 
+                      alt="AI Therapy for Busy Leaders" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-1">Between Meetings and Deadlines</h4>
+                    <p className="text-sm text-foreground/70 mb-2">How AI-powered therapy is filling the mental health gap for leaders with unpredictable schedules.</p>
+                    <Link href="/blog/ai-therapy-busy-leaders" className="text-[var(--primary)] text-sm font-medium hover:underline">
+                      Read Article →
+                    </Link>
                   </div>
                 </div>
               </div>
