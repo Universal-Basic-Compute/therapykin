@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
     
     // Extract subscription details with fallbacks for missing fields
     const subscriptionData = {
-      plan: userRecord.fields.Plan || 'free',
+      plan: userRecord.fields.SubscriptionPlan || 'free',
       status: userRecord.fields.SubscriptionStatus || 'active',
       isAnnual: userRecord.fields.IsAnnual === true,
       currentPeriodEnd: userRecord.fields.CurrentPeriodEnd || null,
