@@ -76,6 +76,14 @@ export default function BlogPost() {
         imageUrl={post.imageUrl || ""}
         url={currentUrl}
       />
+      <ArticleSchema
+        title={post.title}
+        description={post.excerpt}
+        datePublished={post.date}
+        author={post.author}
+        imageUrl={post.imageUrl || ""}
+        url={currentUrl}
+      />
       <Header />
       
       <main className="flex-grow pt-24 pb-16 px-4">
