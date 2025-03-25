@@ -278,6 +278,110 @@ export default function Team() {
             </div>
           </div>
           
+          {/* Advisors */}
+          <div className="mb-20">
+            <h2 className="text-2xl font-bold mb-8 text-center">Our Advisors</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {/* Bassel Tabet */}
+              <div className="card p-8 shadow-depth">
+                <div className="flex flex-col items-center mb-6">
+                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[var(--primary)]/30 to-[var(--accent)]/30 flex items-center justify-center mb-4 overflow-hidden">
+                    <span className="text-3xl font-bold text-[var(--primary)]">BT</span>
+                  </div>
+                  <h2 className="text-2xl font-bold mb-1">Bassel Tabet</h2>
+                  <div className="flex items-center mb-2">
+                    <p className="text-foreground/70">Financial & Strategic Advisor</p>
+                  </div>
+                  <div className="flex space-x-3 mb-4">
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-foreground/60 hover:text-[var(--primary)]">
+                      <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                      </svg>
+                    </a>
+                  </div>
+                  <div className="flex flex-wrap gap-2 justify-center mb-4">
+                    <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Private Banking</span>
+                    <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Wealth Management</span>
+                    <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Entrepreneurship</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <p className="text-foreground/80">
+                    Senior manager with experience in private banking, real estate, art dealing and entrepreneurship. Bassel brings financial expertise and strategic guidance to TherapyKin, helping us navigate growth and investment opportunities.
+                  </p>
+                  
+                  <div className="bg-[var(--background-alt)] p-4 rounded-lg">
+                    <h3 className="font-semibold mb-2">Experience Highlights</h3>
+                    <ul className="space-y-2">
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                        <div>
+                          <p className="font-medium">Team Leader Suisse Romande at Syz Group</p>
+                          <p className="text-sm text-foreground/60">Jul 2024 - Present</p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                        <div>
+                          <p className="font-medium">Partner & Advisor at DigitalKin</p>
+                          <p className="text-sm text-foreground/60">Oct 2023 - Present</p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                        <div>
+                          <p className="font-medium">Executive Director at Credit Suisse</p>
+                          <p className="text-sm text-foreground/60">Oct 2022 - Jun 2024</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold mb-2">Education</h3>
+                    <ul className="space-y-2">
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                        </svg>
+                        <div>
+                          <p className="font-medium">HEC Lausanne</p>
+                          <p className="text-sm text-foreground/60">Master of Science in Economics - Management (2001-2006)</p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998a12.078 12.078 0 01.665-6.479L12 14z" />
+                        </svg>
+                        <div>
+                          <p className="font-medium">University of Miami</p>
+                          <p className="text-sm text-foreground/60">Master, Management & Music Industry (2006)</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold mb-2">Advisory Role</h3>
+                    <p className="text-foreground/80">
+                      As an advisor to TherapyKin, Bassel provides strategic guidance on financial planning, business development, and investment strategies. His experience in both traditional finance and innovative startups helps us build a sustainable business model while maintaining our focus on mental health innovation.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           {/* Join Our Team */}
           <div className="card p-8 shadow-depth text-center">
             <h2 className="text-2xl font-bold mb-4">Join Our Team</h2>
