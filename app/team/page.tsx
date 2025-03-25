@@ -123,7 +123,7 @@ export default function Team() {
                 </div>
                 <h2 className="text-2xl font-bold mb-1">Paul C Clarke</h2>
                 <div className="flex items-center mb-2">
-                  <p className="text-foreground/70">Co-founder & Business Development</p>
+                  <p className="text-foreground/70">Co-founder & Start-up Support Specialist</p>
                   <svg className="h-5 w-5 text-[var(--primary)] ml-2" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
                   </svg>
@@ -141,15 +141,15 @@ export default function Team() {
                   </a>
                 </div>
                 <div className="flex flex-wrap gap-2 justify-center mb-4">
-                  <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Business Strategy</span>
-                  <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Partnerships</span>
-                  <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Growth</span>
+                  <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Start-up Leadership</span>
+                  <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Product Management</span>
+                  <span className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">Software Development</span>
                 </div>
               </div>
               
               <div className="space-y-4">
                 <p className="text-foreground/80">
-                  Paul drives TherapyKin's business strategy and partnerships, working to make our therapeutic companion accessible to those who need it most. His focus on sustainable growth ensures we can fulfill our mission while building a viable business.
+                  Paul specializes in transforming early-stage ventures into market-ready businesses. At TherapyKin, he bridges the gap between therapeutic expertise and technical implementation, ensuring our solutions are both effective and accessible to those who need them most.
                 </p>
                 
                 <div className="bg-[var(--background-alt)] p-4 rounded-lg">
@@ -160,8 +160,8 @@ export default function Team() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                       </svg>
                       <div>
-                        <p className="font-medium">Business Development Lead at DigitalKin</p>
-                        <p className="text-sm text-foreground/60">Jan 2023 - Dec 2024</p>
+                        <p className="font-medium">Co-Founder at C. Clarke Bros. Software Development</p>
+                        <p className="text-sm text-foreground/60">Mar 2024 - Present</p>
                       </div>
                     </li>
                     <li className="flex items-start">
@@ -169,8 +169,8 @@ export default function Team() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                       </svg>
                       <div>
-                        <p className="font-medium">Strategic Partnerships Manager</p>
-                        <p className="text-sm text-foreground/60">2018 - 2022</p>
+                        <p className="font-medium">Product Manager at $UBC - Universal Basic Compute</p>
+                        <p className="text-sm text-foreground/60">Sept 2024 - Present</p>
                       </div>
                     </li>
                     <li className="flex items-start">
@@ -178,8 +178,34 @@ export default function Team() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                       </svg>
                       <div>
-                        <p className="font-medium">Business Development Consultant</p>
-                        <p className="text-sm text-foreground/60">2015 - 2018</p>
+                        <p className="font-medium">Product Development Specialist at SNEAKAR Shoe Co</p>
+                        <p className="text-sm text-foreground/60">Mar 2024 - Present</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold mb-2">Education</h3>
+                  <ul className="space-y-2">
+                    <li className="flex items-start">
+                      <svg className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                      </svg>
+                      <div>
+                        <p className="font-medium">The University of Sheffield</p>
+                        <p className="text-sm text-foreground/60">Bachelor's degree, Journalism (2016-2019)</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start">
+                      <svg className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                      </svg>
+                      <div>
+                        <p className="font-medium">London Metropolitan University</p>
+                        <p className="text-sm text-foreground/60">Bachelor of Laws - LLB (2019-2020)</p>
                       </div>
                     </li>
                   </ul>
@@ -188,14 +214,14 @@ export default function Team() {
                 <div>
                   <h3 className="font-semibold mb-2">Current Focus</h3>
                   <p className="text-foreground/80">
-                    At TherapyKin, Paul focuses on building strategic partnerships with mental health organizations, healthcare providers, and technology companies to expand our reach and impact. He's passionate about making quality mental health support accessible to everyone.
+                    At TherapyKin, Paul focuses on transforming therapeutic concepts into viable digital solutions. He excels at distilling complex projects into manageable components without sacrificing quality or vision, while ensuring our technology remains accessible to those who need it most.
                   </p>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold mb-2">Vision</h3>
                   <p className="text-foreground/80">
-                    "I believe that technology, when thoughtfully designed and ethically implemented, can help bridge the gaps in our mental healthcare system. TherapyKin represents our vision of how AI can complement human care, making support available whenever and wherever it's needed."
+                    "We are creating hubs for innovation, collaboration and celebrations. The world is filled with talented people with great ideas that if realized could materially improve everybody's lives. At TherapyKin, we're advancing mental health support through technology inspired by traditional therapeutic concepts."
                   </p>
                 </div>
               </div>
