@@ -284,6 +284,7 @@ export default function Team() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Bassel Tabet */}
+              {/* 
               <div className="card p-8 shadow-depth">
                 <div className="flex flex-col items-center mb-6">
                   <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[var(--primary)]/30 to-[var(--accent)]/30 flex items-center justify-center mb-4 overflow-hidden">
@@ -351,7 +352,7 @@ export default function Team() {
                       <li className="flex items-start">
                         <svg className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998a12.078 12.078 0 01.665-6.479L12 14z" />
                         </svg>
                         <div>
                           <p className="font-medium">HEC Lausanne</p>
@@ -379,6 +380,7 @@ export default function Team() {
                   </div>
                 </div>
               </div>
+              */}
             </div>
           </div>
           
