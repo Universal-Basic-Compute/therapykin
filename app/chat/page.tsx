@@ -218,11 +218,28 @@ function ChatSessionWithSearchParams() {
             const specialistParam = searchParams.get('specialist');
             if (specialistParam && (specialistParam === 'generalist' || specialistParam === 'crypto' || 
                 specialistParam === 'athletes' || specialistParam === 'executives' || specialistParam === 'herosjourney')) {
+              // Just set the selected specialist without calling updateSelectedSpecialist
               setSelectedSpecialist(specialistParam);
               console.log(`Using specialist from URL parameter: ${specialistParam}`);
-    
-              // Optionally update the user's preference to match the URL parameter
-              updateSelectedSpecialist(specialistParam);
+              
+              // Update the user's preference in the background without resetting the conversation
+              fetch('/api/users/preferences', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  preferredSpecialist: specialistParam,
+                }),
+              }).then(response => {
+                if (!response.ok) {
+                  console.error(`Failed to update specialist preference: ${response.status}`);
+                } else {
+                  console.log(`Updated specialist preference to: ${specialistParam}`);
+                }
+              }).catch(error => {
+                console.error('Error updating specialist preference:', error);
+              });
             } else if (data.preferences.preferredSpecialist) {
               setSelectedSpecialist(data.preferences.preferredSpecialist);
               console.log(`Loaded user's preferred specialist: ${data.preferences.preferredSpecialist}`);
