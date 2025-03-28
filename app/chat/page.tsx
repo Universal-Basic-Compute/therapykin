@@ -216,7 +216,8 @@ function ChatSessionWithSearchParams() {
             
             // Check URL parameter first, then fall back to user preference
             const specialistParam = searchParams.get('specialist');
-            if (specialistParam && (specialistParam === 'generalist' || specialistParam === 'crypto' || specialistParam === 'athletes' || specialistParam === 'executives')) {
+            if (specialistParam && (specialistParam === 'generalist' || specialistParam === 'crypto' || 
+                specialistParam === 'athletes' || specialistParam === 'executives' || specialistParam === 'herosjourney')) {
               setSelectedSpecialist(specialistParam);
               console.log(`Using specialist from URL parameter: ${specialistParam}`);
     
