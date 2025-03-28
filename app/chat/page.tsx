@@ -1634,6 +1634,16 @@ function ChatSessionWithSearchParams() {
                   >
                     Executives
                   </button>
+                  <button
+                    onClick={() => updateSelectedSpecialist("herosjourney")}
+                    className={`p-2 rounded-lg border text-sm ${
+                      selectedSpecialist === "herosjourney" 
+                        ? 'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]' 
+                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                    }`}
+                  >
+                    Hero's Journey
+                  </button>
                 </div>
                 <p className="text-xs text-foreground/60 mt-2">
                   {selectedSpecialist === "generalist" 
@@ -1642,7 +1652,9 @@ function ChatSessionWithSearchParams() {
                     ? "Specialized support for crypto traders and investors"
                     : selectedSpecialist === "athletes"
                     ? "Mental performance support for athletes and competitors"
-                    : "Leadership and executive performance support"}
+                    : selectedSpecialist === "executives"
+                    ? "Leadership and executive performance support"
+                    : "Transform challenges into strengths with the Hero's Journey"}
                 </p>
               </div>
               
