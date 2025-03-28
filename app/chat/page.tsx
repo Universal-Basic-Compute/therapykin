@@ -1199,44 +1199,90 @@ function ChatSessionWithSearchParams() {
   // Update selected specialist
   const updateSelectedSpecialist = async (specialist: string) => {
     try {
-      setSelectedSpecialist(specialist);
-      
-      // Update the user's preference
-      const response = await fetch('/api/users/preferences', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          preferredSpecialist: specialist,
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Failed to update specialist preference: ${response.status}`);
-      }
-      
-      // If we have an active session, update the session in Airtable
-      if (sessionId) {
-        const sessionResponse = await fetch('/api/sessions/update-specialist', {
+      // Only proceed with conversation reset if the specialist is actually changing
+      if (selectedSpecialist !== specialist) {
+        setSelectedSpecialist(specialist);
+        
+        // Update the user's preference
+        const response = await fetch('/api/users/preferences', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            sessionId,
-            specialist,
+            preferredSpecialist: specialist,
           }),
         });
         
-        if (!sessionResponse.ok) {
-          throw new Error(`Failed to update session specialist: ${sessionResponse.status}`);
+        if (!response.ok) {
+          throw new Error(`Failed to update specialist preference: ${response.status}`);
         }
         
-        console.log(`Session specialist updated to: ${specialist}`);
+        // If we have an active session, update the session in Airtable
+        if (sessionId) {
+          const sessionResponse = await fetch('/api/sessions/update-specialist', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              sessionId,
+              specialist,
+            }),
+          });
+          
+          if (!sessionResponse.ok) {
+            throw new Error(`Failed to update session specialist: ${sessionResponse.status}`);
+          }
+          
+          console.log(`Session specialist updated to: ${specialist}`);
+          
+          // Clear the current chat history
+          setChatHistory([]);
+          
+          // Show loading indicator
+          setIsInitialMessageLoading(true);
+          setChatHistory([
+            { 
+              role: 'assistant', 
+              content: '...', 
+              id: 'specialist-change-loading',
+              loading: true
+            }
+          ]);
+          
+          // Send a system message to inform about the specialist change
+          const welcomeMessage = `<system>Specialist changed to ${specialist}</system>`;
+          const response = await sendMessageToKinOS(
+            welcomeMessage,
+            user?.firstName || 'Guest',
+            user?.lastName || 'User',
+            [], // attachments
+            [], // images
+            'session_opening', // Use session_opening mode
+            specialist // Add selected specialist
+          );
+          
+          // Update chat history with the response
+          setIsInitialMessageLoading(false);
+          const audioUrl = voiceMode ? await textToSpeech(response) : '';
+          setChatHistory([
+            { 
+              role: 'assistant', 
+              content: response,
+              id: 'specialist-change-' + Date.now(),
+              audio: audioUrl
+            }
+          ]);
+            
+          // Play audio if voice mode is enabled
+          if (voiceMode && audioUrl) {
+            playAudio(audioUrl, 'specialist-change-' + Date.now());
+          }
+        }
+        
+        console.log(`Specialist preference updated to: ${specialist}`);
       }
-      
-      console.log(`Specialist preference updated to: ${specialist}`);
     } catch (error) {
       console.error('Error updating specialist preference:', error);
     }
