@@ -1251,8 +1251,8 @@ function ChatSessionWithSearchParams() {
             }
           ]);
           
-          // Send a system message to inform about the specialist change
-          const welcomeMessage = `<system>Specialist changed to ${specialist}</system>`;
+          // Send the correct system message format
+          const welcomeMessage = `<system>New ${sessionLength} minute session starting with ${user?.firstName || 'Guest'}</system>`;
           const response = await sendMessageToKinOS(
             welcomeMessage,
             user?.firstName || 'Guest',
