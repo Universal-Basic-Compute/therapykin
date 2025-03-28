@@ -123,9 +123,9 @@ export default function Header() {
                       </Link>
                       <Link 
                         href="/specialists/herosjourney" 
-                        className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
+                        className="block px-4 py-2 text-sm font-medium text-[var(--accent)] hover:bg-[var(--accent)]/10 hover:text-[var(--accent)] border-l-2 border-[var(--accent)]"
                       >
-                        Hero's Journey Specialist
+                        Hero's Journey Specialist <span className="ml-1 text-xs bg-[var(--accent)]/20 px-1.5 py-0.5 rounded-full">Partner</span>
                       </Link>
                     </div>
                   </div>
@@ -345,10 +345,10 @@ export default function Header() {
               </Link>
               <Link 
                 href="/specialists/herosjourney" 
-                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
+                className="text-[var(--accent)] hover:text-[var(--accent)] block px-3 py-2 text-base font-medium border-l-2 border-[var(--accent)]"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Hero's Journey Specialist
+                Hero's Journey Specialist <span className="ml-1 text-xs bg-[var(--accent)]/20 px-1.5 py-0.5 rounded-full">Partner</span>
               </Link>
               
               <p className="px-3 py-1 text-xs uppercase text-foreground/40 font-semibold mt-2">Resources</p>
