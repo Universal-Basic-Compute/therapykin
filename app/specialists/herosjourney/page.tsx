@@ -71,6 +71,18 @@ export default function HerosJourneySpecialist() {
               Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
             </p>
             
+            {/* Partnership banner */}
+            <div className="bg-[var(--accent)]/10 border border-[var(--accent)] p-4 rounded-lg mb-8">
+              <div className="flex items-center">
+                <svg className="w-6 h-6 text-[var(--accent)] mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <p className="text-foreground/80 font-medium">
+                  <span className="font-bold">Exclusive Partnership:</span> This specialist is powered by our therapeutic partnership with the Hero's Journey Institute, bringing their proven methodology directly to TherapyKin users.
+                </p>
+              </div>
+            </div>
+            
             {/* Add the CTA button here */}
             <div className="mt-6 mb-8">
               <Link 
