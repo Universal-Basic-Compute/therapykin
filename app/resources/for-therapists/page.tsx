@@ -241,7 +241,7 @@ export default function ForTherapists() {
           
           <section className="mb-16">
             <h2 className="text-3xl font-semibold mb-6 text-center">The Partnership Process</h2>
-            <div className="mb-8 relative aspect-[4/1] w-full overflow-hidden rounded-xl shadow-lg">
+            <div className="mb-8 relative aspect-[3/2] w-full overflow-hidden rounded-xl shadow-lg">
               <Image 
                 src="/for-therapists/partnership-timeline.png" 
                 alt="Partnership Timeline" 
