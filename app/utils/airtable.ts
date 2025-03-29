@@ -10,9 +10,25 @@ if (!process.env.AIRTABLE_BASE_ID) {
 }
 
 // Initialize Airtable with explicit error handling
-const base = new Airtable({
-  apiKey: process.env.AIRTABLE_API_KEY,
-}).base(process.env.AIRTABLE_BASE_ID || '');
+let base;
+try {
+  base = new Airtable({
+    apiKey: process.env.AIRTABLE_API_KEY,
+  }).base(process.env.AIRTABLE_BASE_ID || '');
+  
+  console.log('Airtable initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize Airtable:', error);
+  // Provide a fallback to prevent crashes
+  base = {
+    table: () => ({
+      select: () => ({ firstPage: async () => [] }),
+      find: async () => ({ fields: {} }),
+      create: async () => { throw new Error('Airtable not properly initialized'); },
+      update: async () => { throw new Error('Airtable not properly initialized'); },
+    }),
+  };
+}
 
 // Get the users table
 const usersTable = base('USERS');
@@ -70,7 +86,13 @@ export async function createSession(
   specialist: string = 'generalist'  // Add specialist parameter with default value
 ): Promise<{ id: string, createdAt: string, sessionLength: number, specialist: string }> {
   try {
+    if (!email) {
+      throw new Error('Email is required for creating a session');
+    }
+    
     const createdAt = new Date().toISOString();
+    
+    console.log(`Creating new session for ${email} with length ${sessionLength} and specialist ${specialist}`);
     
     const records = await sessionsTable.create([
       {
@@ -84,7 +106,13 @@ export async function createSession(
       },
     ]);
     
+    if (!records || records.length === 0) {
+      throw new Error('No records returned from Airtable');
+    }
+    
     const newSession = records[0];
+    console.log(`Session created successfully with ID: ${newSession.id}`);
+    
     return {
       id: newSession.id,
       createdAt: newSession.fields.CreatedAt as string,
@@ -92,7 +120,20 @@ export async function createSession(
       specialist: newSession.fields.Specialist as string || specialist,
     };
   } catch (error) {
+    // Provide more detailed error information
     console.error('Error creating session:', error);
+    
+    // Check for specific Airtable errors
+    if (error instanceof Error) {
+      if (error.message.includes('AUTHENTICATION_REQUIRED')) {
+        console.error('Airtable authentication failed. Check your API key.');
+      } else if (error.message.includes('NOT_FOUND')) {
+        console.error('Airtable base or table not found. Check your base ID and table name.');
+      } else if (error.message.includes('PERMISSION_DENIED')) {
+        console.error('Permission denied. Check your Airtable permissions.');
+      }
+    }
+    
     throw error;
   }
 }

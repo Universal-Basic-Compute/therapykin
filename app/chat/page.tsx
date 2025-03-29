@@ -359,14 +359,30 @@ function ChatSessionWithSearchParams() {
         return;
       }
       
-      // Pass the selectedSpecialist to the createSession function
-      const session = await createSession(user.email, sessionLength, selectedSpecialist);
-      setSessionId(session.id);
-      const startTime = new Date(session.createdAt);
-      setSessionStartTime(startTime);
-      setMinutesActive(0);
-      setHalfwayMessageSent(false); // Reset the halfway message flag
-      setClosingMessageSent(false); // Reset the closing message flag
+      try {
+        console.log(`Creating new session for ${user.email} with length ${sessionLength} and specialist ${selectedSpecialist}`);
+        
+        // Pass the selectedSpecialist to the createSession function
+        const session = await createSession(user.email, sessionLength, selectedSpecialist);
+        
+        if (!session || !session.id) {
+          throw new Error('Invalid session data returned');
+        }
+        
+        console.log('Session created successfully:', session);
+        
+        setSessionId(session.id);
+        const startTime = new Date(session.createdAt);
+        setSessionStartTime(startTime);
+        setMinutesActive(0);
+        setHalfwayMessageSent(false); // Reset the halfway message flag
+        setClosingMessageSent(false); // Reset the closing message flag
+      } catch (error) {
+        console.error('Failed to create new session:', error);
+        
+        // Show an error message to the user
+        alert('There was a problem starting your session. Please try again or contact support if the issue persists.');
+      }
       
       // Show loading indicator
       setIsInitialMessageLoading(true);
