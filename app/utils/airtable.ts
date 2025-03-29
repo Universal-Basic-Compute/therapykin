@@ -10,7 +10,7 @@ if (!process.env.AIRTABLE_BASE_ID) {
 }
 
 // Initialize Airtable with explicit error handling
-let base;
+let base: Airtable.Base;
 try {
   base = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY,
@@ -19,7 +19,7 @@ try {
   console.log('Airtable initialized successfully');
 } catch (error) {
   console.error('Failed to initialize Airtable:', error);
-  // Provide a fallback to prevent crashes
+  // Provide a fallback to prevent crashes with type assertion
   base = {
     table: () => ({
       select: () => ({ firstPage: async () => [] }),
@@ -27,7 +27,7 @@ try {
       create: async () => { throw new Error('Airtable not properly initialized'); },
       update: async () => { throw new Error('Airtable not properly initialized'); },
     }),
-  };
+  } as unknown as Airtable.Base;
 }
 
 // Get the users table

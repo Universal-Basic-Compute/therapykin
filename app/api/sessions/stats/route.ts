@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     console.log(`Found ${records.length} sessions for user ${currentUser.email}`);
     
     // Filter sessions with MinutesActive > 5
-    const validSessions = records.filter(record => {
+    const validSessions = records.filter((record: any) => {
       const minutesActive = record.fields.MinutesActive as number || 0;
       return minutesActive > 5;
     });
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     
     // Calculate days active (unique days with sessions)
     const uniqueDays = new Set();
-    validSessions.forEach(session => {
+    validSessions.forEach((session: any) => {
       if (session.fields.CreatedAt) {
         const date = new Date(session.fields.CreatedAt as string).toISOString().split('T')[0];
         uniqueDays.add(date);
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     
     // Calculate ongoing sessions (where CreatedAt + SessionLength > now)
     const now = new Date();
-    const ongoingSessions = records.filter(session => {
+    const ongoingSessions = records.filter((session: any) => {
       if (!session.fields.CreatedAt || !session.fields.SessionLength) return false;
       
       const sessionStartTime = new Date(session.fields.CreatedAt as string);
