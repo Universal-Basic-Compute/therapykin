@@ -11,13 +11,13 @@ export default function ForTherapists() {
       <Header />
       
       <main className="flex-grow pt-24 pb-16 px-4">
-        {/* Hero section with gradient background */}
+        {/* Hero section with background image */}
         <div className="relative overflow-hidden rounded-3xl mb-16 max-w-6xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)] via-[var(--primary-light)] to-[var(--primary-dark)] opacity-90"></div>
-          <div className="absolute inset-0 bg-pattern-dots opacity-10"></div>
-          <div className="relative z-10 py-20 px-8 text-white">
+          <div className="absolute inset-0 bg-white"></div>
+          <div className="absolute inset-0 bg-[url('/for-therapists/title-background.png')] bg-cover bg-center opacity-50"></div>
+          <div className="relative z-10 py-20 px-8 text-[var(--foreground)]">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center">Extend Your Therapeutic Reach with TherapyKin</h1>
-            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-center text-white/90">
+            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-center text-[var(--foreground)]/80">
               Transform Your Practice, Preserve Your Essence
             </p>
           </div>
