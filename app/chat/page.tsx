@@ -1692,6 +1692,28 @@ Important style requirements:
         const imageUrl = data.result.data[0].url;
         setSessionImage(imageUrl);
         
+        // Save the image URL to Airtable
+        try {
+          const saveResponse = await fetch('/api/sessions/update-image', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              sessionId,
+              imageUrl
+            }),
+          });
+          
+          if (saveResponse.ok) {
+            console.log('Session image URL saved to Airtable successfully');
+          } else {
+            console.error('Failed to save session image URL to Airtable:', saveResponse.status);
+          }
+        } catch (saveError) {
+          console.error('Error saving session image URL to Airtable:', saveError);
+        }
+        
         // Add the image to the chat
         const messageId = `session-image-${Date.now()}`;
         const message = "Here's a visual representation of our session today. I hope it captures some of the themes we've explored together.";
