@@ -722,7 +722,7 @@ function ChatSessionWithSearchParams() {
     }
     
     // Check for silence every 30 seconds
-    const silenceCheckInterval = setInterval(() => {
+    const silenceCheckInterval = setInterval(async () => {
       // Don't send silence notification if:
       // - No last user message time
       // - Silence message already sent
@@ -739,6 +739,13 @@ function ChatSessionWithSearchParams() {
       if (silenceDuration >= 150) {
         console.log(`User has been silent for ${silenceDuration.toFixed(0)} seconds, sending silence notification`);
         
+        // Capture image from camera if enabled
+        let screenshot = null;
+        if (cameraEnabled) {
+          screenshot = await captureImage();
+          console.log(`Captured screenshot for silence notification: ${screenshot ? 'success' : 'failed'}`);
+        }
+        
         // Send the silence message
         sendMessageToKinOS(
           "<system>Info: The user stayed silent, maybe try to drive the conversation elsewhere? (make sure you don't repeat yourself)</system>",
@@ -747,7 +754,8 @@ function ChatSessionWithSearchParams() {
           [], // attachments
           [], // images
           "journey", // Use journey mode
-          selectedSpecialist // Add selected specialist
+          selectedSpecialist, // Add selected specialist
+          screenshot // Add screenshot if camera is enabled
         ).then(async (response) => {
           console.log("Silence notification sent successfully");
           setSilenceMessageSent(true);
@@ -787,7 +795,7 @@ function ChatSessionWithSearchParams() {
     }, 30000); // Check every 30 seconds
     
     return () => clearInterval(silenceCheckInterval);
-  }, [user, sessionStartTime, sessionEnded, lastUserMessageTime, silenceMessageSent, isTabActive, isPlaying]); // Add isPlaying as a dependency
+  }, [user, sessionStartTime, sessionEnded, lastUserMessageTime, silenceMessageSent, isTabActive, isPlaying, cameraEnabled]); // Add cameraEnabled as a dependency
 
   // Add a session-ended message to the chat when the session ends
   useEffect(() => {
