@@ -160,8 +160,19 @@ export default function Home() {
       <PricingTiers />
 
 
-      {/* Final CTA - with teal-focused gradient background */}
-      <section className="py-24 px-4 bg-gradient-to-br from-[#00c5bc] via-[#00e1d5] to-[#4fffee] texture-overlay animated-bg relative text-white">
+      {/* Final CTA - with background image */}
+      <section className="py-24 px-4 relative text-white">
+        {/* Background image */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/cta.png" 
+            alt="CTA Background" 
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/30"></div> {/* Overlay for better text readability */}
+        </div>
+        
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <h2 className="text-4xl font-bold mb-6 drop-shadow-md">Ready For A Different Kind Of Support?</h2>
           <p className="text-xl mb-10 font-medium drop-shadow-sm">Start Your Journey Today</p>
@@ -181,15 +192,6 @@ export default function Home() {
           </div>
           <p className="mt-10 font-medium">Questions? Contact us at <a href="mailto:support@therapykin.ai" className="underline hover:text-white/80">support@therapykin.ai</a></p>
           <p className="mt-4 text-xs max-w-2xl mx-auto font-medium">TherapyKin is not a replacement for professional mental health treatment. If you're experiencing a mental health emergency, please contact a crisis helpline or emergency services immediately.</p>
-        </div>
-        
-        {/* Add semi-transparent overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/20 z-0"></div>
-        
-        {/* Add decorative elements */}
-        <div className="absolute bottom-0 right-0 w-full h-full overflow-hidden z-[-1] opacity-10">
-          <div className="absolute bottom-[10%] right-[5%] w-64 h-64 rounded-full bg-white"></div>
-          <div className="absolute top-[20%] left-[10%] w-40 h-40 rounded-full bg-white"></div>
         </div>
       </section>
 
