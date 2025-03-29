@@ -244,6 +244,20 @@ function ChatSessionWithSearchParams() {
               setSelectedSpecialist(data.preferences.preferredSpecialist);
               console.log(`Loaded user's preferred specialist: ${data.preferences.preferredSpecialist}`);
             }
+            
+            // Set camera preference if available
+            if (data.preferences.cameraEnabled !== undefined) {
+              setCameraEnabled(data.preferences.cameraEnabled);
+              console.log(`Loaded user's camera preference: ${data.preferences.cameraEnabled}`);
+              
+              // If camera should be enabled, initialize it
+              if (data.preferences.cameraEnabled) {
+                // We'll initialize camera after component is fully mounted
+                setTimeout(() => {
+                  toggleCamera();
+                }, 1000);
+              }
+            }
           }
         } else {
           console.error('Failed to fetch user preferences:', response.status);
@@ -447,6 +461,12 @@ function ChatSessionWithSearchParams() {
   const [rememberingContext, setRememberingContext] = useState(3);
   const [feedbackComments, setFeedbackComments] = useState('');
   const [isSubmittingRating, setIsSubmittingRating] = useState(false);
+  
+  // Add camera state
+  const [cameraEnabled, setCameraEnabled] = useState(false);
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [cameraError, setCameraError] = useState<string | null>(null);
   
   // Fetch previous messages when entering an existing session
   useEffect(() => {
@@ -1281,6 +1301,70 @@ function ChatSessionWithSearchParams() {
     }
   };
   
+  // Toggle camera function
+  const toggleCamera = async () => {
+    try {
+      if (cameraEnabled) {
+        // Turn off camera
+        if (cameraStream) {
+          cameraStream.getTracks().forEach(track => track.stop());
+          setCameraStream(null);
+        }
+        setCameraEnabled(false);
+        setCameraError(null);
+      } else {
+        // Turn on camera
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+            facingMode: "user"
+          } 
+        });
+        
+        setCameraStream(stream);
+        setCameraEnabled(true);
+        setCameraError(null);
+        
+        // If we have a video element reference, set its source to the stream
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      }
+      
+      // Save the camera preference
+      updateCameraPreference(!cameraEnabled);
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      setCameraError('Could not access camera. Please check permissions and try again.');
+      setCameraEnabled(false);
+    }
+  };
+  
+  // Update camera preference
+  const updateCameraPreference = async (enabled: boolean) => {
+    try {
+      // Update the user's preference
+      const response = await fetch('/api/users/preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cameraEnabled: enabled,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update camera preference: ${response.status}`);
+      }
+      
+      console.log(`Camera preference updated to: ${enabled}`);
+    } catch (error) {
+      console.error('Error updating camera preference:', error);
+    }
+  };
+  
   // Update selected specialist
   const updateSelectedSpecialist = async (specialist: string) => {
     try {
@@ -1393,6 +1477,16 @@ function ChatSessionWithSearchParams() {
       }
     };
   }, [isRecording]);
+  
+  // Add cleanup for camera resources
+  useEffect(() => {
+    return () => {
+      // Stop camera stream if component unmounts while camera is on
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [cameraStream]);
 
   if (loading || isCheckingSubscription) {
     return (
@@ -1814,6 +1908,44 @@ function ChatSessionWithSearchParams() {
             
             {/* Chat history */}
             <div className="flex-grow card overflow-hidden">
+              {/* Camera display when enabled */}
+              {cameraEnabled && (
+                <div className="relative p-4 bg-black">
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full max-h-[240px] object-cover rounded-lg"
+                  />
+                  
+                  {/* Camera controls overlay */}
+                  <div className="absolute bottom-2 right-2 flex space-x-2">
+                    <button
+                      onClick={toggleCamera}
+                      className="p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {/* Show camera error if any */}
+              {cameraError && (
+                <div className="mx-4 mt-4 p-3 bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 rounded-lg">
+                  <p className="text-sm">{cameraError}</p>
+                  <button 
+                    onClick={() => setCameraError(null)} 
+                    className="text-xs underline mt-1"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              )}
+              
               <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
                 <div className="space-y-4">
                 {chatHistory
@@ -2068,6 +2200,20 @@ function ChatSessionWithSearchParams() {
                 </button>
               </div>
               
+              {/* Camera Mode Toggle */}
+              <div className="mb-6">
+                <h3 className="text-sm font-medium mb-2">Camera Mode</h3>
+                <button 
+                  className={`w-full btn-secondary text-sm flex items-center justify-center ${cameraEnabled ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30' : ''}`}
+                  onClick={toggleCamera}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  {cameraEnabled ? 'Camera Mode: On' : 'Camera Mode: Off'}
+                </button>
+              </div>
+              
               {/* Voice Selection - Only show if voice mode is on */}
               {voiceMode && (
                 <div className="mb-6">
@@ -2113,6 +2259,22 @@ function ChatSessionWithSearchParams() {
             {/* This div creates the same layout as the chat area above */}
             <div className={`flex-grow ${settingsCollapsed ? 'md:w-3/4' : 'md:w-2/3'}`}>
               <form onSubmit={handleSubmit} className="w-full flex shadow-sm rounded-lg overflow-hidden border border-black/10 dark:border-white/10 hover:shadow-md transition-shadow duration-200">
+            {/* Camera button */}
+            <button 
+              type="button"
+              onClick={toggleCamera}
+              className={`p-3 self-end transition-colors ${
+                cameraEnabled 
+                  ? 'bg-[var(--primary-dark)] text-white' 
+                  : 'bg-[var(--background-alt)] text-foreground/70 hover:bg-[var(--primary)]/10'
+              } ${sessionEnded ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={sessionEnded}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </button>
+            
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
