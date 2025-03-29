@@ -1109,18 +1109,16 @@ function ChatSessionWithSearchParams() {
       ]);
       
       console.log('Sending audio for transcription...');
-      
-      // Prepare images array
-      const images: string[] = [];
+    
+      // Store the captured image for sending
+      const screenshot = capturedImage;
       if (capturedImage) {
-        images.push(capturedImage);
         console.log(`Using existing captured image in voice message. Image data length: ${capturedImage.length}`);
       } else if (cameraEnabled) {
         // Capture a new image if camera is enabled but no image is captured yet
-        const imageData = captureImage();
-        if (imageData) {
-          images.push(imageData);
-          console.log(`Captured new image for voice message. Image data length: ${imageData.length}`);
+        const newScreenshot = captureImage();
+        if (newScreenshot) {
+          console.log(`Captured new image for voice message. Image data length: ${newScreenshot.length}`);
         } else {
           console.log('Failed to capture image for voice message');
         }
@@ -1143,19 +1141,13 @@ function ChatSessionWithSearchParams() {
         // Remove the loading message
         setChatHistory(prev => prev.filter(msg => !msg.id?.startsWith('transcribing-')));
         
-        // Prepare images array
-        const images: string[] = [];
-        if (capturedImage) {
-          images.push(capturedImage);
-        }
-        
         // Create a user message with the transcribed text and image if available
         const userMessageId = `user-${Date.now()}`;
         setChatHistory(prev => [
           ...prev,
           { 
             role: 'user', 
-            content: capturedImage ? `${data.text} [Image attached]` : data.text, 
+            content: screenshot ? `${data.text} [Image attached]` : data.text, 
             id: userMessageId 
           }
         ]);
@@ -1165,7 +1157,6 @@ function ChatSessionWithSearchParams() {
         setSilenceMessageSent(false);
         
         // Clear the captured image after sending
-        const imageToSend = capturedImage;
         setCapturedImage(null);
         
         // Set loading state for assistant response
@@ -1182,9 +1173,10 @@ function ChatSessionWithSearchParams() {
             user?.firstName || 'Guest',
             user?.lastName || 'User',
             [], // attachments
-            images, // Include any captured images
+            [], // empty images array
             sessionMode, // Add session mode
-            selectedSpecialist // Add selected specialist
+            selectedSpecialist, // Add selected specialist
+            screenshot // Add screenshot as a separate parameter
           );
           
           // If voice mode is enabled, convert response to speech
@@ -1212,7 +1204,7 @@ function ChatSessionWithSearchParams() {
             ...chatHistory,
             { 
               role: 'user', 
-              content: imageToSend ? `${data.text} [Image attached]` : data.text, 
+              content: screenshot ? `${data.text} [Image attached]` : data.text, 
               id: userMessageId 
             },
             { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
@@ -1687,13 +1679,6 @@ function ChatSessionWithSearchParams() {
     // Set sending flag to prevent message fetching during send
     setIsSendingMessage(true);
     
-    // Prepare images array
-    const images: string[] = [];
-    if (capturedImage) {
-      images.push(capturedImage);
-      console.log(`Including image in message. Image data length: ${capturedImage.length}`);
-    }
-    
     // Add user message to chat with image if available
     const userMessageId = `user-${Date.now()}`;
     setChatHistory([...chatHistory, { 
@@ -1710,8 +1695,8 @@ function ChatSessionWithSearchParams() {
     const userMessage = message;
     setMessage('');
     
-    // Clear the captured image after sending
-    const imageToSend = capturedImage;
+    // Store the captured image for sending
+    const screenshot = capturedImage;
     setCapturedImage(null);
     
     // Set loading state
@@ -1722,7 +1707,7 @@ function ChatSessionWithSearchParams() {
     ]);
     
     try {
-      console.log(`Sending message to KinOS with ${images.length} images`);
+      console.log(`Sending message to KinOS${screenshot ? ' with screenshot' : ''}`);
       
       // Send message to KinOS API
       const response = await sendMessageToKinOS(
@@ -1730,12 +1715,13 @@ function ChatSessionWithSearchParams() {
         user?.firstName || 'Guest',
         user?.lastName || 'User',
         [], // attachments
-        images, // Include any captured images
+        [], // empty images array
         sessionMode, // Add session mode
-        selectedSpecialist // Add selected specialist
+        selectedSpecialist, // Add selected specialist
+        screenshot // Add screenshot as a separate parameter
       );
       
-      console.log(`Received response from KinOS after sending message with ${images.length} images`);
+      console.log(`Received response from KinOS after sending message${screenshot ? ' with screenshot' : ''}`);
       
       // If voice mode is enabled, convert response to speech
       let audioUrl = '';
@@ -1760,7 +1746,7 @@ function ChatSessionWithSearchParams() {
       // Save the conversation to local storage or your backend if needed
       saveConversation([
         ...chatHistory.filter(msg => msg.id !== loadingId),
-        { role: 'user', content: userMessage || (imageToSend ? '[Image sent]' : ''), id: userMessageId },
+        { role: 'user', content: userMessage || (screenshot ? '[Image sent]' : ''), id: userMessageId },
         { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
       ]);
     } catch (error) {

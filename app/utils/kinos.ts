@@ -46,10 +46,11 @@ export async function sendMessageToKinOS(
   attachments: any[] = [],
   images: string[] = [],
   mode: string | null = null,
-  specialist: string | null = null // Add this parameter
+  specialist: string | null = null, // Add this parameter
+  screenshot: string | null = null // Add screenshot parameter
 ): Promise<string> {
   try {
-    console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}`);
+    console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
     // Log image information
     if (images && images.length > 0) {
@@ -61,6 +62,13 @@ export async function sendMessageToKinOS(
       console.log('No images being sent to KinOS');
     }
     
+    // Log screenshot information
+    if (screenshot) {
+      console.log(`Sending screenshot to KinOS: length ${screenshot.length}, starts with: ${screenshot.substring(0, 30)}...`);
+    } else {
+      console.log('No screenshot being sent to KinOS');
+    }
+    
     // Create the request body with the mode parameter if provided
     const requestBody: any = {
       content,
@@ -69,6 +77,11 @@ export async function sendMessageToKinOS(
       attachments,
       images,
     };
+    
+    // Add screenshot if it exists
+    if (screenshot) {
+      requestBody.screenshot = screenshot;
+    }
     
     // Add mode if it exists
     if (mode) {
@@ -83,7 +96,8 @@ export async function sendMessageToKinOS(
     // Always use our API route - environment handling happens server-side
     console.log('Sending request to KinOS API with body:', JSON.stringify({
       ...requestBody,
-      images: images ? `[${images.length} images]` : '[]' // Don't log the full image data
+      images: images ? `[${images.length} images]` : '[]', // Don't log the full image data
+      screenshot: screenshot ? '[screenshot data]' : null // Don't log the full screenshot data
     }));
     
     const response = await fetch('/api/kinos', {

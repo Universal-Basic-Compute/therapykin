@@ -2,9 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { content, firstName, lastName, attachments = [], images = [], mode = null, specialist = null } = await request.json();
+    const { 
+      content, 
+      firstName, 
+      lastName, 
+      attachments = [], 
+      images = [], 
+      mode = null, 
+      specialist = null,
+      screenshot = null // Add screenshot parameter
+    } = await request.json();
     
-    console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}`);
+    console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
     // Create the project ID by combining firstName and lastName
     const projectId = `${firstName}${lastName}`;
@@ -60,6 +69,11 @@ export async function POST(request: NextRequest) {
       model: "claude-3-7-sonnet-latest", // Add the specified model
       history_length: 50 // Add the specified history length
     };
+    
+    // Add screenshot if it exists
+    if (screenshot) {
+      requestBody.screenshot = screenshot;
+    }
     
     // Add mode if it exists
     if (mode) {
