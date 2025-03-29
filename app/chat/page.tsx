@@ -311,6 +311,12 @@ function ChatSessionWithSearchParams() {
                 console.log(`Using specialist from ongoing session: ${ongoingSession.specialist}`);
               }
               
+              // Check if rating has been submitted for this session
+              if (ongoingSession.ratingSubmitted) {
+                setRatingSubmitted(true);
+                console.log('Rating already submitted for this session');
+              }
+              
               // Calculate how many minutes have already passed
               setMinutesActive(elapsedMinutes);
               console.log(`Session already active for ${elapsedMinutes} minutes of ${sessionLengthValue} minutes total`);
@@ -414,6 +420,17 @@ function ChatSessionWithSearchParams() {
   
   // Add state to track if a message is being sent
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+  
+  // Add state for session rating
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [ratingSubmitted, setRatingSubmitted] = useState(false);
+  const [overallRating, setOverallRating] = useState(3);
+  const [understandingEmpathy, setUnderstandingEmpathy] = useState(3);
+  const [helpfulnessOfAdvice, setHelpfulnessOfAdvice] = useState(3);
+  const [sessionFlow, setSessionFlow] = useState(3);
+  const [rememberingContext, setRememberingContext] = useState(3);
+  const [feedbackComments, setFeedbackComments] = useState('');
+  const [isSubmittingRating, setIsSubmittingRating] = useState(false);
   
   // Fetch previous messages when entering an existing session
   useEffect(() => {
@@ -591,6 +608,11 @@ function ChatSessionWithSearchParams() {
         setSessionMode('session_ended');
         setSessionEnded(true);
         console.log(`Session has ended after ${sessionDuration.toFixed(1)} minutes (limit: ${SESSION_DURATION} minutes)`);
+        
+        // Show rating modal when session ends if rating hasn't been submitted yet
+        if (!ratingSubmitted) {
+          setShowRatingModal(true);
+        }
       }
       // Middle of the session
       else {
@@ -604,7 +626,7 @@ function ChatSessionWithSearchParams() {
     const intervalId = setInterval(updateSessionMode, 30000); // check every 30 seconds
     
     return () => clearInterval(intervalId);
-  }, [sessionStartTime, sessionLength, halfwayMessageSent, closingMessageSent, user, sessionEnded]); // Add closingMessageSent as a dependency
+  }, [sessionStartTime, sessionLength, halfwayMessageSent, closingMessageSent, user, sessionEnded, ratingSubmitted]); // Add ratingSubmitted as a dependency
   
   // Add effect to track tab visibility
   useEffect(() => {
@@ -736,6 +758,18 @@ function ChatSessionWithSearchParams() {
             }
           ]);
           
+          // Add a system message with rate button
+          if (!ratingSubmitted) {
+            setChatHistory(prev => [
+              ...prev,
+              { 
+                role: 'assistant', 
+                content: 'Would you like to rate your session experience?',
+                id: 'rate-session-prompt'
+              }
+            ]);
+          }
+          
           // Play audio if voice mode is enabled
           if (voiceMode && audioUrl) {
             playAudio(audioUrl, 'session-ended-message');
@@ -743,7 +777,7 @@ function ChatSessionWithSearchParams() {
         })();
       }
     }
-  }, [sessionEnded, chatHistory, sessionLength, voiceMode]); // Add voiceMode as a dependency
+  }, [sessionEnded, chatHistory, sessionLength, voiceMode, ratingSubmitted]); // Add ratingSubmitted as a dependency
 
   // Track and update minutes active
   useEffect(() => {
@@ -1505,6 +1539,44 @@ function ChatSessionWithSearchParams() {
   const saveConversation = (conversation: ChatMessage[]) => {
     // This is a placeholder - implement as needed
   };
+  
+  // Function to submit session rating
+  const submitRating = async () => {
+    if (!sessionId) return;
+    
+    setIsSubmittingRating(true);
+    
+    try {
+      const response = await fetch('/api/sessions/submit-rating', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          overallRating,
+          understandingEmpathy,
+          helpfulnessOfAdvice,
+          sessionFlow,
+          rememberingContext,
+          comments: feedbackComments
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to submit rating: ${response.status}`);
+      }
+      
+      console.log('Session rating submitted successfully');
+      setRatingSubmitted(true);
+      setShowRatingModal(false);
+    } catch (error) {
+      console.error('Error submitting session rating:', error);
+      alert('Failed to submit your feedback. Please try again.');
+    } finally {
+      setIsSubmittingRating(false);
+    }
+  };
 
   // Function to play audio for a specific message
   const playMessageAudio = async (msg: ChatMessage) => {
@@ -1530,6 +1602,187 @@ function ChatSessionWithSearchParams() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
+      
+      {/* Rating Modal */}
+      {showRatingModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-[var(--background)] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-[var(--primary)]">Rate Your Session</h2>
+                <button 
+                  onClick={() => setShowRatingModal(false)}
+                  className="text-foreground/60 hover:text-foreground"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <p className="mb-6 text-foreground/70">
+                Your feedback helps us improve your therapy experience. All ratings are confidential.
+              </p>
+              
+              <div className="space-y-6">
+                {/* Overall Rating */}
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Overall Experience</h3>
+                  <div className="flex gap-2 justify-center">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <button
+                        key={rating}
+                        onClick={() => setOverallRating(rating)}
+                        className={`w-12 h-12 rounded-full flex items-center justify-center text-xl transition-all ${
+                          rating <= overallRating
+                            ? 'bg-yellow-400 text-yellow-900'
+                            : 'bg-[var(--background-alt)] text-foreground/40'
+                        }`}
+                      >
+                        ★
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Understanding & Empathy */}
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h3 className="text-lg font-medium">Understanding & Empathy</h3>
+                    <span className="text-sm text-foreground/70">
+                      {understandingEmpathy === 1 ? 'Poor' : 
+                       understandingEmpathy === 2 ? 'Fair' :
+                       understandingEmpathy === 3 ? 'Good' :
+                       understandingEmpathy === 4 ? 'Very Good' : 'Excellent'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={understandingEmpathy}
+                    onChange={(e) => setUnderstandingEmpathy(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-foreground/60">
+                    <span>Poor</span>
+                    <span>Excellent</span>
+                  </div>
+                </div>
+                
+                {/* Helpfulness of Advice */}
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h3 className="text-lg font-medium">Helpfulness of Advice</h3>
+                    <span className="text-sm text-foreground/70">
+                      {helpfulnessOfAdvice === 1 ? 'Not Helpful' : 
+                       helpfulnessOfAdvice === 2 ? 'Slightly Helpful' :
+                       helpfulnessOfAdvice === 3 ? 'Moderately Helpful' :
+                       helpfulnessOfAdvice === 4 ? 'Very Helpful' : 'Extremely Helpful'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={helpfulnessOfAdvice}
+                    onChange={(e) => setHelpfulnessOfAdvice(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-foreground/60">
+                    <span>Not Helpful</span>
+                    <span>Very Helpful</span>
+                  </div>
+                </div>
+                
+                {/* Session Flow & Navigation */}
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h3 className="text-lg font-medium">Session Flow & Navigation</h3>
+                    <span className="text-sm text-foreground/70">
+                      {sessionFlow === 1 ? 'Confusing' : 
+                       sessionFlow === 2 ? 'Somewhat Clear' :
+                       sessionFlow === 3 ? 'Clear' :
+                       sessionFlow === 4 ? 'Very Clear' : 'Intuitive'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={sessionFlow}
+                    onChange={(e) => setSessionFlow(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-foreground/60">
+                    <span>Confusing</span>
+                    <span>Intuitive</span>
+                  </div>
+                </div>
+                
+                {/* Remembering Previous Context */}
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h3 className="text-lg font-medium">Remembering Previous Context</h3>
+                    <span className="text-sm text-foreground/70">
+                      {rememberingContext === 1 ? 'Poor Memory' : 
+                       rememberingContext === 2 ? 'Some Memory' :
+                       rememberingContext === 3 ? 'Good Memory' :
+                       rememberingContext === 4 ? 'Very Good Memory' : 'Excellent Memory'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={rememberingContext}
+                    onChange={(e) => setRememberingContext(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-foreground/60">
+                    <span>Poor Memory</span>
+                    <span>Excellent Memory</span>
+                  </div>
+                </div>
+                
+                {/* Additional Comments */}
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Additional Comments</h3>
+                  <textarea
+                    value={feedbackComments}
+                    onChange={(e) => setFeedbackComments(e.target.value)}
+                    placeholder="What went well? What could be improved?"
+                    className="w-full p-3 border border-black/10 dark:border-white/10 rounded-lg bg-[var(--background)] min-h-[100px]"
+                  />
+                </div>
+                
+                <div className="flex justify-end gap-4 mt-6">
+                  <button
+                    onClick={() => setShowRatingModal(false)}
+                    className="btn-secondary"
+                  >
+                    Skip for Now
+                  </button>
+                  <button
+                    onClick={submitRating}
+                    disabled={isSubmittingRating}
+                    className="btn-primary flex items-center"
+                  >
+                    {isSubmittingRating ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        Submitting...
+                      </>
+                    ) : (
+                      'Submit Feedback'
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       <main className="flex-grow pt-24 pb-24 px-4 relative">
         <div className="max-w-7xl mx-auto flex flex-col gap-4">
@@ -1562,7 +1815,20 @@ function ChatSessionWithSearchParams() {
                       ) : (
                         <div>
                           <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
-                          {msg.role === 'assistant' && (
+                        
+                          {/* Add Rate Session button for the rate-session-prompt message */}
+                          {msg.id === 'rate-session-prompt' && !ratingSubmitted && (
+                            <div className="mt-3">
+                              <button 
+                                onClick={() => setShowRatingModal(true)}
+                                className="px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary-dark)] transition-colors"
+                              >
+                                Rate Your Session
+                              </button>
+                            </div>
+                          )}
+                        
+                          {msg.role === 'assistant' && msg.id !== 'rate-session-prompt' && (
                             <div className="mt-2 flex justify-end">
                               {currentPlayingId === msg.id ? (
                                 <button 

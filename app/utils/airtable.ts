@@ -25,7 +25,9 @@ export async function getOngoingSession(email: string): Promise<{
   id: string, 
   createdAt: string, 
   sessionLength?: number,
-  specialist?: string  // Add this field
+  specialist?: string,
+  rating?: number,
+  ratingSubmitted?: boolean
 } | null> {
   try {
     // Get the most recent session for this user
@@ -46,12 +48,14 @@ export async function getOngoingSession(email: string): Promise<{
       return null;
     }
     
-    // Return the session with its details including specialist
+    // Return the session with its details including specialist and rating information
     return {
       id: record.id,
       createdAt: createdAt,
       sessionLength: record.fields.SessionLength as number || 30, // Default to 30 if not set
       specialist: record.fields.Specialist as string || 'generalist', // Default to generalist if not set
+      rating: record.fields.Rating as number || undefined,
+      ratingSubmitted: record.fields.RatingSubmitted as boolean || false,
     };
   } catch (error) {
     console.error('Error checking for ongoing session:', error);
@@ -75,6 +79,7 @@ export async function createSession(
           CreatedAt: createdAt,
           SessionLength: sessionLength,
           Specialist: specialist,  // Add this field to store the specialist
+          RatingSubmitted: false,  // Initialize rating as not submitted
         },
       },
     ]);
@@ -89,6 +94,42 @@ export async function createSession(
   } catch (error) {
     console.error('Error creating session:', error);
     throw error;
+  }
+}
+
+// Submit session rating
+export async function submitSessionRating(
+  sessionId: string,
+  rating: {
+    overallRating: number,
+    understandingEmpathy: number,
+    helpfulnessOfAdvice: number,
+    sessionFlow: number,
+    rememberingContext: number,
+    comments?: string
+  }
+): Promise<boolean> {
+  try {
+    await sessionsTable.update([
+      {
+        id: sessionId,
+        fields: {
+          Rating: rating.overallRating,
+          UnderstandingEmpathy: rating.understandingEmpathy,
+          HelpfulnessOfAdvice: rating.helpfulnessOfAdvice,
+          SessionFlow: rating.sessionFlow,
+          RememberingContext: rating.rememberingContext,
+          FeedbackComments: rating.comments || '',
+          RatingSubmitted: true,
+          RatingSubmittedAt: new Date().toISOString()
+        },
+      },
+    ]);
+    
+    return true;
+  } catch (error) {
+    console.error('Error submitting session rating:', error);
+    return false;
   }
 }
 
