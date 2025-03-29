@@ -1116,7 +1116,7 @@ function ChatSessionWithSearchParams() {
         console.log(`Using existing captured image in voice message. Image data length: ${capturedImage.length}`);
       } else if (cameraEnabled) {
         // Capture a new image if camera is enabled but no image is captured yet
-        const newScreenshot = captureImage();
+        const newScreenshot = await captureImage();
         if (newScreenshot) {
           console.log(`Captured new image for voice message. Image data length: ${newScreenshot.length}`);
         } else {
@@ -1391,11 +1391,65 @@ function ChatSessionWithSearchParams() {
     }
   };
   
+  // Function to resize image before sending
+  const resizeImageForUpload = (imageDataUrl: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      try {
+        const img = new Image();
+        img.onload = () => {
+          // Create a canvas for resizing
+          const canvas = document.createElement('canvas');
+          
+          // Calculate new dimensions while maintaining aspect ratio
+          let width = img.width;
+          let height = img.height;
+          const maxDimension = 512;
+          
+          if (width > height && width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+          
+          // Set canvas dimensions
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw resized image on canvas
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Could not get canvas context'));
+            return;
+          }
+          
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to JPEG with 80% quality
+          const resizedImageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          console.log(`Image resized from ${img.width}x${img.height} to ${width}x${height}, new size: ${resizedImageDataUrl.length} bytes`);
+          
+          resolve(resizedImageDataUrl);
+        };
+        
+        img.onerror = () => {
+          reject(new Error('Failed to load image for resizing'));
+        };
+        
+        img.src = imageDataUrl;
+      } catch (error) {
+        console.error('Error resizing image:', error);
+        reject(error);
+      }
+    });
+  };
+
   // Function to capture image from camera
-  const captureImage = () => {
+  const captureImage = async () => {
     if (!videoRef.current || !cameraStream) {
       console.error('Cannot capture image: video element or camera stream not available');
-      return;
+      return null;
     }
     
     try {
@@ -1422,11 +1476,15 @@ function ChatSessionWithSearchParams() {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       
       // Convert canvas to data URL (base64 encoded image)
-      const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
-      console.log(`Image captured successfully. Data URL length: ${imageDataUrl.length}, starts with: ${imageDataUrl.substring(0, 50)}...`);
-      setCapturedImage(imageDataUrl);
-    
-      return imageDataUrl;
+      const originalImageDataUrl = canvas.toDataURL('image/jpeg', 1.0);
+      console.log(`Image captured successfully. Original data URL length: ${originalImageDataUrl.length}`);
+      
+      // Resize the image to 512px max dimension with 80% JPEG quality
+      const resizedImageDataUrl = await resizeImageForUpload(originalImageDataUrl);
+      console.log(`Image resized. New data URL length: ${resizedImageDataUrl.length}`);
+      
+      setCapturedImage(resizedImageDataUrl);
+      return resizedImageDataUrl;
     } catch (error) {
       console.error('Error capturing image:', error);
       setCameraError('Failed to capture image. Please try again.');
@@ -1678,7 +1736,7 @@ function ChatSessionWithSearchParams() {
     // Capture image from camera if enabled and no image is already captured
     let screenshot = capturedImage;
     if (cameraEnabled && !capturedImage) {
-      const capturedImg = captureImage();
+      const capturedImg = await captureImage();
       screenshot = capturedImg || null; // Ensure it's either string or null, not undefined
       console.log(`Auto-captured image for message. Image data length: ${screenshot ? screenshot.length : 0}`);
     }
