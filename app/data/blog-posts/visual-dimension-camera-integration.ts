@@ -5,7 +5,7 @@ export const post = {
   date: "2025-05-15",
   author: "TherapyKin Team",
   category: "Technology",
-  imageUrl: "/blog/visual-dimension-camera.jpg",
+  imageUrl: "/blog/visual-dimension-camera-integration.jpg",
   slug: "visual-dimension-camera-integration",
   persona: "tech-forward",
   sources: [
