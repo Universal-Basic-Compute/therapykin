@@ -1326,10 +1326,26 @@ function ChatSessionWithSearchParams() {
         setCameraEnabled(true);
         setCameraError(null);
         
-        // If we have a video element reference, set its source to the stream
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
+        // Add a small delay to ensure the video element is in the DOM
+        setTimeout(() => {
+          // If we have a video element reference, set its source to the stream
+          if (videoRef.current) {
+            console.log('Setting video source to camera stream');
+            videoRef.current.srcObject = stream;
+            
+            // Add event listeners to debug video loading
+            videoRef.current.onloadedmetadata = () => {
+              console.log('Video metadata loaded');
+              videoRef.current?.play().catch(e => console.error('Error playing video:', e));
+            };
+            
+            videoRef.current.onerror = (e) => {
+              console.error('Video element error:', e);
+            };
+          } else {
+            console.error('Video element reference not found');
+          }
+        }, 100);
         
         // Auto-close settings panel when enabling camera
         setSettingsCollapsed(true);
@@ -2217,7 +2233,7 @@ function ChatSessionWithSearchParams() {
               </div>
             </div>
             
-            {/* Camera Display - Add this new section */}
+            {/* Camera Display - Updated section */}
             {cameraEnabled && (
               <div className="card overflow-hidden bg-black rounded-lg mt-4">
                 <div className="relative aspect-[4/3]">
@@ -2227,7 +2243,13 @@ function ChatSessionWithSearchParams() {
                     playsInline
                     muted
                     className="w-full h-full object-cover"
+                    style={{ display: 'block' }} // Ensure video is displayed as block
                   />
+                  
+                  {/* Fallback message if video isn't showing */}
+                  <div className="absolute inset-0 flex items-center justify-center text-white">
+                    <span className="text-sm">Camera initializing...</span>
+                  </div>
                   
                   {/* Camera controls overlay */}
                   <div className="absolute bottom-2 right-2 flex space-x-2">
