@@ -685,12 +685,17 @@ function ChatSessionWithSearchParams() {
     
     // Check for silence every 30 seconds
     const silenceCheckInterval = setInterval(() => {
-      if (!lastUserMessageTime || silenceMessageSent || !isTabActive) return;
+      // Don't send silence notification if:
+      // - No last user message time
+      // - Silence message already sent
+      // - Tab is inactive
+      // - Audio is currently playing (TTS)
+      if (!lastUserMessageTime || silenceMessageSent || !isTabActive || isPlaying) return;
       
       const now = new Date();
       const silenceDuration = (now.getTime() - lastUserMessageTime.getTime()) / 1000; // in seconds
       
-      console.log(`Checking silence: ${silenceDuration.toFixed(0)} seconds since last user message (tab ${isTabActive ? 'active' : 'inactive'})`);
+      console.log(`Checking silence: ${silenceDuration.toFixed(0)} seconds since last user message (tab ${isTabActive ? 'active' : 'inactive'}, audio ${isPlaying ? 'playing' : 'not playing'})`);
       
       // If user has been silent for 2:30 minutes (150 seconds)
       if (silenceDuration >= 150) {
@@ -744,7 +749,7 @@ function ChatSessionWithSearchParams() {
     }, 30000); // Check every 30 seconds
     
     return () => clearInterval(silenceCheckInterval);
-  }, [user, sessionStartTime, sessionEnded, lastUserMessageTime, silenceMessageSent, isTabActive]);
+  }, [user, sessionStartTime, sessionEnded, lastUserMessageTime, silenceMessageSent, isTabActive, isPlaying]); // Add isPlaying as a dependency
 
   // Add a session-ended message to the chat when the session ends
   useEffect(() => {
