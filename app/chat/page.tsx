@@ -424,7 +424,7 @@ function ChatSessionWithSearchParams() {
         playAudio(audioUrl, 'initial-' + Date.now());
       }
       
-      console.log('New session created:', session.id, 'at', startTime);
+      console.log('New session created successfully');
     }
 
     // Only run initializeSession when user, hasSessionsRemaining, and preferencesLoaded are all set
