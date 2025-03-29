@@ -1657,8 +1657,14 @@ function ChatSessionWithSearchParams() {
       console.log('Requesting session summary image...');
       setSessionImageRequested(true);
       
-      // Create a prompt for the image based on the session
-      const prompt = `<system>Please generate an image that captures the essence of this therapy session. Create a visual representation that reflects the themes, emotions, and progress we've discussed. The image should be abstract enough to maintain privacy while still being meaningful to the client.</system>`;
+      // Create a prompt for the image based on the session with specific style requirements
+      const prompt = `<system>Please generate an image that captures the essence of this therapy session. Create a visual representation that reflects the themes, emotions, and progress we've discussed. The image should be abstract enough to maintain privacy while still being meaningful to the client.
+
+Important style requirements:
+- Use a soothing pencil style illustration
+- Incorporate the site's color palette: white, teal, light green, purple, violet, yellow, and orange
+- Keep the style clean, modern, and therapeutic
+- Ensure the image feels calming and supportive</system>`;
       
       // Send the request to KinOS
       const response = await fetch('/api/kinos/image', {
