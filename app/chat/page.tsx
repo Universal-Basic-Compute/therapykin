@@ -412,6 +412,9 @@ function ChatSessionWithSearchParams() {
     }
   }, [user, sessionId, hasSessionsRemaining, preferencesLoaded]); // Add preferencesLoaded as a dependency
   
+  // Add state to track if a message is being sent
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+  
   // Fetch previous messages when entering an existing session
   useEffect(() => {
     async function fetchPreviousMessages() {
@@ -419,7 +422,8 @@ function ChatSessionWithSearchParams() {
       
       try {
         // Only fetch messages if this is an existing session (not a new one)
-        if (minutesActive > 0) {
+        // And not currently sending a message
+        if (minutesActive > 0 && !isSendingMessage) {
           console.log('Fetching previous messages for existing session...');
           
           // Get messages from KinOS
@@ -431,16 +435,22 @@ function ChatSessionWithSearchParams() {
           );
           
           if (messages.length > 0) {
-            // Convert KinOS messages to our chat format
-            const formattedMessages: ChatMessage[] = messages.map((msg, index) => ({
-              role: msg.role as 'user' | 'assistant',
-              content: msg.content,
-              id: `${msg.role}-${index}-${new Date(msg.timestamp).getTime()}`
-            }));
-            
-            // Update chat history with fetched messages
-            setChatHistory(formattedMessages);
-            console.log(`Loaded ${formattedMessages.length} messages from previous session`);
+            // Only update chat history if it's empty or if we have more messages than before
+            // This prevents overwriting recent messages
+            if (chatHistory.length === 0 || messages.length > chatHistory.length) {
+              // Convert KinOS messages to our chat format
+              const formattedMessages: ChatMessage[] = messages.map((msg, index) => ({
+                role: msg.role as 'user' | 'assistant',
+                content: msg.content,
+                id: `${msg.role}-${index}-${new Date(msg.timestamp).getTime()}`
+              }));
+              
+              // Update chat history with fetched messages
+              setChatHistory(formattedMessages);
+              console.log(`Loaded ${formattedMessages.length} messages from previous session`);
+            } else {
+              console.log(`Skipped loading ${messages.length} messages as we already have ${chatHistory.length} messages`);
+            }
           }
         }
       } catch (error) {
@@ -449,7 +459,7 @@ function ChatSessionWithSearchParams() {
     }
     
     fetchPreviousMessages();
-  }, [user, sessionId, sessionStartTime, minutesActive]);
+  }, [user, sessionId, sessionStartTime, minutesActive, isSendingMessage, chatHistory.length]);
 
   // Update the session mode based on timing
   useEffect(() => {
@@ -1000,6 +1010,9 @@ function ChatSessionWithSearchParams() {
   // Function to send audio to STT API
   const sendAudioForTranscription = async (audioBlob: Blob) => {
     try {
+      // Set sending flag to prevent message fetching during transcription and response
+      setIsSendingMessage(true);
+      
       // Create form data
       const formData = new FormData();
       formData.append('file', audioBlob, 'recording.webm');
@@ -1042,10 +1055,6 @@ function ChatSessionWithSearchParams() {
           ...prev,
           { role: 'user', content: data.text, id: userMessageId }
         ]);
-        
-        // Reset silence timer
-        setLastUserMessageTime(new Date());
-        setSilenceMessageSent(false);
         
         // Reset silence timer
         setLastUserMessageTime(new Date());
@@ -1125,6 +1134,9 @@ function ChatSessionWithSearchParams() {
           id: 'error-' + Date.now()
         }
       ]);
+    } finally {
+      // Reset sending flag when done
+      setIsSendingMessage(false);
     }
   };
 
@@ -1412,6 +1424,9 @@ function ChatSessionWithSearchParams() {
     
     if (!message.trim() || sessionEnded) return;
     
+    // Set sending flag to prevent message fetching during send
+    setIsSendingMessage(true);
+    
     // Add user message to chat
     const userMessageId = `user-${Date.now()}`;
     setChatHistory([...chatHistory, { role: 'user', content: message, id: userMessageId }]);
@@ -1480,6 +1495,9 @@ function ChatSessionWithSearchParams() {
             : msg
         )
       );
+    } finally {
+      // Reset sending flag when done
+      setIsSendingMessage(false);
     }
   };
 
