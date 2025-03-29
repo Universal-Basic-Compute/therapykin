@@ -17,8 +17,20 @@ export default function Home() {
       <Header />
       
       <div className="pt-16">
-      {/* Hero Section with improved gradient background */}
-      <header className="flex flex-col items-center justify-center text-center py-24 px-4 bg-gradient-to-br from-[#00c5bc] via-[#00e1d5] to-[#4fffee] texture-overlay animated-bg relative">
+      {/* Hero Section with background image */}
+      <header className="flex flex-col items-center justify-center text-center py-24 px-4 relative">
+        {/* Background image */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/background.png" 
+            alt="TherapyKin Background" 
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/30"></div> {/* Overlay for better text readability */}
+        </div>
+        
         <div className="animate-fade-in max-w-6xl mx-auto text-white z-10 relative">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white drop-shadow-md">TherapyKin</h1>
           <h2 className="text-xl md:text-2xl max-w-3xl mb-8 text-white font-medium drop-shadow-md">
@@ -41,15 +53,6 @@ export default function Home() {
               Learn More
             </Link>
           </div>
-        </div>
-        
-        {/* Add semi-transparent overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/20 z-0"></div>
-        
-        {/* Add decorative elements */}
-        <div className="absolute top-0 right-0 w-full h-full overflow-hidden z-[-1] opacity-10">
-          <div className="absolute top-[10%] right-[5%] w-64 h-64 rounded-full bg-white"></div>
-          <div className="absolute bottom-[20%] left-[10%] w-40 h-40 rounded-full bg-white"></div>
         </div>
       </header>
 
