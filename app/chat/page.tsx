@@ -14,6 +14,7 @@ interface ChatMessage {
   id?: string;
   loading?: boolean;
   audio?: string; // Add this to store audio URL
+  image?: string; // Add this to store image URL
 }
 
 // Component that uses useSearchParams
@@ -1124,16 +1125,30 @@ function ChatSessionWithSearchParams() {
         // Remove the loading message
         setChatHistory(prev => prev.filter(msg => !msg.id?.startsWith('transcribing-')));
         
-        // Create a user message with the transcribed text
+        // Prepare images array
+        const images: string[] = [];
+        if (capturedImage) {
+          images.push(capturedImage);
+        }
+        
+        // Create a user message with the transcribed text and image if available
         const userMessageId = `user-${Date.now()}`;
         setChatHistory(prev => [
           ...prev,
-          { role: 'user', content: data.text, id: userMessageId }
+          { 
+            role: 'user', 
+            content: capturedImage ? `${data.text} [Image attached]` : data.text, 
+            id: userMessageId 
+          }
         ]);
         
         // Reset silence timer
         setLastUserMessageTime(new Date());
         setSilenceMessageSent(false);
+        
+        // Clear the captured image after sending
+        const imageToSend = capturedImage;
+        setCapturedImage(null);
         
         // Set loading state for assistant response
         const loadingId = Date.now().toString();
@@ -1149,7 +1164,7 @@ function ChatSessionWithSearchParams() {
             user?.firstName || 'Guest',
             user?.lastName || 'User',
             [], // attachments
-            [], // images
+            images, // Include any captured images
             sessionMode, // Add session mode
             selectedSpecialist // Add selected specialist
           );
@@ -1177,7 +1192,11 @@ function ChatSessionWithSearchParams() {
           // Save the conversation to local storage or your backend if needed
           saveConversation([
             ...chatHistory,
-            { role: 'user', content: data.text, id: userMessageId },
+            { 
+              role: 'user', 
+              content: imageToSend ? `${data.text} [Image attached]` : data.text, 
+              id: userMessageId 
+            },
             { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
           ]);
         } catch (error) {
@@ -1312,6 +1331,8 @@ function ChatSessionWithSearchParams() {
         }
         setCameraEnabled(false);
         setCameraError(null);
+        // Clear any captured image when turning off camera
+        setCapturedImage(null);
       } else {
         // Turn on camera
         const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -1358,6 +1379,58 @@ function ChatSessionWithSearchParams() {
       setCameraError('Could not access camera. Please check permissions and try again.');
       setCameraEnabled(false);
     }
+  };
+  
+  // Function to capture image from camera
+  const captureImage = () => {
+    if (!videoRef.current || !cameraStream) {
+      console.error('Cannot capture image: video element or camera stream not available');
+      return;
+    }
+    
+    try {
+      // Create canvas if it doesn't exist
+      if (!canvasRef.current) {
+        const canvas = document.createElement('canvas');
+        canvasRef.current = canvas;
+      }
+      
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      
+      // Set canvas dimensions to match video
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      
+      // Draw the current video frame to the canvas
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        throw new Error('Could not get canvas context');
+      }
+      
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      // Convert canvas to data URL (base64 encoded image)
+      const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      setCapturedImage(imageDataUrl);
+      
+      console.log('Image captured successfully');
+      
+      // Play capture sound if available
+      const captureSound = new Audio('/sounds/camera-shutter.mp3');
+      captureSound.play().catch(e => console.log('Could not play capture sound', e));
+      
+      return imageDataUrl;
+    } catch (error) {
+      console.error('Error capturing image:', error);
+      setCameraError('Failed to capture image. Please try again.');
+      return null;
+    }
+  };
+  
+  // Function to discard captured image
+  const discardImage = () => {
+    setCapturedImage(null);
   };
   
   // Update camera preference
@@ -1591,14 +1664,24 @@ function ChatSessionWithSearchParams() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!message.trim() || sessionEnded) return;
+    if ((!message.trim() && !capturedImage) || sessionEnded) return;
     
     // Set sending flag to prevent message fetching during send
     setIsSendingMessage(true);
     
-    // Add user message to chat
+    // Prepare images array
+    const images: string[] = [];
+    if (capturedImage) {
+      images.push(capturedImage);
+    }
+    
+    // Add user message to chat with image if available
     const userMessageId = `user-${Date.now()}`;
-    setChatHistory([...chatHistory, { role: 'user', content: message, id: userMessageId }]);
+    setChatHistory([...chatHistory, { 
+      role: 'user', 
+      content: message || (capturedImage ? '[Image sent]' : ''), 
+      id: userMessageId 
+    }]);
     
     // Reset silence timer
     setLastUserMessageTime(new Date());
@@ -1607,6 +1690,10 @@ function ChatSessionWithSearchParams() {
     // Store the message to clear the input field
     const userMessage = message;
     setMessage('');
+    
+    // Clear the captured image after sending
+    const imageToSend = capturedImage;
+    setCapturedImage(null);
     
     // Set loading state
     const loadingId = Date.now().toString();
@@ -1622,7 +1709,7 @@ function ChatSessionWithSearchParams() {
         user?.firstName || 'Guest',
         user?.lastName || 'User',
         [], // attachments
-        [], // images
+        images, // Include any captured images
         sessionMode, // Add session mode
         selectedSpecialist // Add selected specialist
       );
@@ -1650,7 +1737,7 @@ function ChatSessionWithSearchParams() {
       // Save the conversation to local storage or your backend if needed
       saveConversation([
         ...chatHistory.filter(msg => msg.id !== loadingId),
-        { role: 'user', content: userMessage, id: userMessageId },
+        { role: 'user', content: userMessage || (imageToSend ? '[Image sent]' : ''), id: userMessageId },
         { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
       ]);
     } catch (error) {
@@ -2237,23 +2324,33 @@ function ChatSessionWithSearchParams() {
             {cameraEnabled && (
               <div className="card overflow-hidden bg-black rounded-lg mt-4">
                 <div className="relative aspect-[4/3]">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="w-full h-full object-cover"
-                    style={{ display: 'block' }} // Ensure video is displayed as block
-                    onLoadedMetadata={() => {
-                      console.log('Video metadata loaded');
-                      if (videoRef.current) {
-                        videoRef.current.play().catch(e => console.error('Error playing video:', e));
-                      }
-                    }}
-                  />
+                  {capturedImage ? (
+                    // Show captured image
+                    <img 
+                      src={capturedImage} 
+                      alt="Captured" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    // Show live camera feed
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
+                      muted
+                      className="w-full h-full object-cover"
+                      style={{ display: 'block' }} // Ensure video is displayed as block
+                      onLoadedMetadata={() => {
+                        console.log('Video metadata loaded');
+                        if (videoRef.current) {
+                          videoRef.current.play().catch(e => console.error('Error playing video:', e));
+                        }
+                      }}
+                    />
+                  )}
                   
                   {/* Fallback message if video isn't showing - only show when stream is null */}
-                  {!cameraStream && (
+                  {!cameraStream && !capturedImage && (
                     <div className="absolute inset-0 flex items-center justify-center text-white">
                       <span className="text-sm">Camera initializing...</span>
                     </div>
@@ -2261,14 +2358,56 @@ function ChatSessionWithSearchParams() {
                   
                   {/* Camera controls overlay */}
                   <div className="absolute bottom-2 right-2 flex space-x-2">
-                    <button
-                      onClick={toggleCamera}
-                      className="p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
+                    {capturedImage ? (
+                      <>
+                        {/* Discard button */}
+                        <button
+                          onClick={discardImage}
+                          className="p-2 bg-red-500/70 rounded-full text-white hover:bg-red-500/90 transition-colors"
+                          title="Discard image"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                        
+                        {/* Send button */}
+                        <button
+                          onClick={handleSubmit}
+                          className="p-2 bg-[var(--primary)]/70 rounded-full text-white hover:bg-[var(--primary)]/90 transition-colors"
+                          title="Send image"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                          </svg>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {/* Capture button */}
+                        <button
+                          onClick={captureImage}
+                          className="p-2 bg-white/70 rounded-full text-black hover:bg-white/90 transition-colors"
+                          title="Take photo"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </button>
+                        
+                        {/* Close camera button */}
+                        <button
+                          onClick={toggleCamera}
+                          className="p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
+                          title="Close camera"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
