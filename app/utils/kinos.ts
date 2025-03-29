@@ -51,6 +51,16 @@ export async function sendMessageToKinOS(
   try {
     console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}`);
     
+    // Log image information
+    if (images && images.length > 0) {
+      console.log(`Sending ${images.length} images to KinOS:`);
+      images.forEach((img, index) => {
+        console.log(`Image ${index + 1}: length ${img.length}, starts with: ${img.substring(0, 30)}...`);
+      });
+    } else {
+      console.log('No images being sent to KinOS');
+    }
+    
     // Create the request body with the mode parameter if provided
     const requestBody: any = {
       content,
@@ -71,6 +81,11 @@ export async function sendMessageToKinOS(
     }
     
     // Always use our API route - environment handling happens server-side
+    console.log('Sending request to KinOS API with body:', JSON.stringify({
+      ...requestBody,
+      images: images ? `[${images.length} images]` : '[]' // Don't log the full image data
+    }));
+    
     const response = await fetch('/api/kinos', {
       method: 'POST',
       headers: {

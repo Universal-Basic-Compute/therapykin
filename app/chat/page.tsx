@@ -1110,6 +1110,22 @@ function ChatSessionWithSearchParams() {
       
       console.log('Sending audio for transcription...');
       
+      // Prepare images array
+      const images: string[] = [];
+      if (capturedImage) {
+        images.push(capturedImage);
+        console.log(`Using existing captured image in voice message. Image data length: ${capturedImage.length}`);
+      } else if (cameraEnabled) {
+        // Capture a new image if camera is enabled but no image is captured yet
+        const imageData = captureImage();
+        if (imageData) {
+          images.push(imageData);
+          console.log(`Captured new image for voice message. Image data length: ${imageData.length}`);
+        } else {
+          console.log('Failed to capture image for voice message');
+        }
+      }
+      
       // Send to STT API
       const response = await fetch('/api/stt', {
         method: 'POST',
@@ -1403,6 +1419,7 @@ function ChatSessionWithSearchParams() {
       // Set canvas dimensions to match video
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
+      console.log(`Canvas dimensions set to ${canvas.width}x${canvas.height}`);
       
       // Draw the current video frame to the canvas
       const ctx = canvas.getContext('2d');
@@ -1414,9 +1431,8 @@ function ChatSessionWithSearchParams() {
       
       // Convert canvas to data URL (base64 encoded image)
       const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      console.log(`Image captured successfully. Data URL length: ${imageDataUrl.length}, starts with: ${imageDataUrl.substring(0, 50)}...`);
       setCapturedImage(imageDataUrl);
-      
-      console.log('Image captured successfully');
       
       // Play capture sound if available
       const captureSound = new Audio('/sounds/camera-shutter.mp3');
@@ -1675,6 +1691,7 @@ function ChatSessionWithSearchParams() {
     const images: string[] = [];
     if (capturedImage) {
       images.push(capturedImage);
+      console.log(`Including image in message. Image data length: ${capturedImage.length}`);
     }
     
     // Add user message to chat with image if available
@@ -1705,6 +1722,8 @@ function ChatSessionWithSearchParams() {
     ]);
     
     try {
+      console.log(`Sending message to KinOS with ${images.length} images`);
+      
       // Send message to KinOS API
       const response = await sendMessageToKinOS(
         userMessage,
@@ -1715,6 +1734,8 @@ function ChatSessionWithSearchParams() {
         sessionMode, // Add session mode
         selectedSpecialist // Add selected specialist
       );
+      
+      console.log(`Received response from KinOS after sending message with ${images.length} images`);
       
       // If voice mode is enabled, convert response to speech
       let audioUrl = '';
