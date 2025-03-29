@@ -1563,6 +1563,46 @@ function ChatSessionWithSearchParams() {
               </div>
             </div>
           </div>
+          
+          {/* Camera Display - Add this new section */}
+          {cameraEnabled && (
+            <div className="card overflow-hidden bg-black rounded-lg">
+              <div className="relative aspect-[4/3]">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* Camera controls overlay */}
+                <div className="absolute bottom-2 right-2 flex space-x-2">
+                  <button
+                    onClick={toggleCamera}
+                    className="p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Show camera error if any */}
+          {cameraError && (
+            <div className="card p-3 bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 mt-2">
+              <p className="text-sm">{cameraError}</p>
+              <button 
+                onClick={() => setCameraError(null)} 
+                className="text-xs underline mt-1"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
         </main>
       </div>
     );
@@ -1908,43 +1948,6 @@ function ChatSessionWithSearchParams() {
             
             {/* Chat history */}
             <div className="flex-grow card overflow-hidden">
-              {/* Camera display when enabled */}
-              {cameraEnabled && (
-                <div className="relative p-4 bg-black">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="w-full max-h-[240px] object-cover rounded-lg"
-                  />
-                  
-                  {/* Camera controls overlay */}
-                  <div className="absolute bottom-2 right-2 flex space-x-2">
-                    <button
-                      onClick={toggleCamera}
-                      className="p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {/* Show camera error if any */}
-              {cameraError && (
-                <div className="mx-4 mt-4 p-3 bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 rounded-lg">
-                  <p className="text-sm">{cameraError}</p>
-                  <button 
-                    onClick={() => setCameraError(null)} 
-                    className="text-xs underline mt-1"
-                  >
-                    Dismiss
-                  </button>
-                </div>
-              )}
               
               <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
                 <div className="space-y-4">
