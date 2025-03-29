@@ -92,17 +92,20 @@ export async function createSession(
     
     const createdAt = new Date().toISOString();
     
-    console.log(`Creating new session for ${email} with length ${sessionLength} and specialist ${specialist}`);
+    // Log the exact data being sent to Airtable
+    const sessionData = {
+      Email: email,
+      CreatedAt: createdAt,
+      SessionLength: sessionLength,
+      Specialist: specialist,
+      RatingSubmitted: false,
+    };
+    
+    console.log(`Creating new session for ${email} with data:`, JSON.stringify(sessionData, null, 2));
     
     const records = await sessionsTable.create([
       {
-        fields: {
-          Email: email,
-          CreatedAt: createdAt,
-          SessionLength: sessionLength,
-          Specialist: specialist,  // Add this field to store the specialist
-          RatingSubmitted: false,  // Initialize rating as not submitted
-        },
+        fields: sessionData,
       },
     ]);
     
@@ -123,14 +126,34 @@ export async function createSession(
     // Provide more detailed error information
     console.error('Error creating session:', error);
     
+    // Log the full error details
+    console.error('Detailed error creating session:', JSON.stringify(error, null, 2));
+    
     // Check for specific Airtable errors
     if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error name:', error.name);
+      
+      if ('statusCode' in error) {
+        console.error('Status code:', (error as any).statusCode);
+      }
+      
+      if ('type' in error) {
+        console.error('Error type:', (error as any).type);
+      }
+      
       if (error.message.includes('AUTHENTICATION_REQUIRED')) {
         console.error('Airtable authentication failed. Check your API key.');
       } else if (error.message.includes('NOT_FOUND')) {
         console.error('Airtable base or table not found. Check your base ID and table name.');
       } else if (error.message.includes('PERMISSION_DENIED')) {
         console.error('Permission denied. Check your Airtable permissions.');
+      } else if (error.message.includes('INVALID_PERMISSIONS')) {
+        console.error('Invalid permissions. Your API key may not have write access.');
+      } else if (error.message.includes('INVALID_VALUE_FOR_COLUMN')) {
+        console.error('Invalid value for a column. Check field types and formats.');
+      } else if (error.message.includes('UNKNOWN_FIELD_NAME')) {
+        console.error('Unknown field name. Verify field names match Airtable exactly (case-sensitive).');
       }
     }
     
