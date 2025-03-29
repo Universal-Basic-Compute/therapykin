@@ -1679,11 +1679,18 @@ function ChatSessionWithSearchParams() {
     // Set sending flag to prevent message fetching during send
     setIsSendingMessage(true);
     
+    // Capture image from camera if enabled and no image is already captured
+    let screenshot = capturedImage;
+    if (cameraEnabled && !capturedImage) {
+      screenshot = captureImage();
+      console.log(`Auto-captured image for message. Image data length: ${screenshot ? screenshot.length : 0}`);
+    }
+    
     // Add user message to chat with image if available
     const userMessageId = `user-${Date.now()}`;
     setChatHistory([...chatHistory, { 
       role: 'user', 
-      content: message || (capturedImage ? '[Image sent]' : ''), 
+      content: message || (screenshot ? '[Image sent]' : ''), 
       id: userMessageId 
     }]);
     
@@ -1695,8 +1702,7 @@ function ChatSessionWithSearchParams() {
     const userMessage = message;
     setMessage('');
     
-    // Store the captured image for sending
-    const screenshot = capturedImage;
+    // Clear the captured image after sending
     setCapturedImage(null);
     
     // Set loading state
