@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     
     // Update the session record in Airtable
     await base('SESSIONS').update(sessionId, {
-      image: imageUrl
+      SessionImage: imageUrl  // Changed from "image" to "SessionImage" to match Airtable field name
     });
     
     console.log(`Successfully updated session ${sessionId} with image URL`);
