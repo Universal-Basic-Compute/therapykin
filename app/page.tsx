@@ -28,7 +28,7 @@ export default function Home() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/30"></div> {/* Overlay for better text readability */}
+          <div className="absolute inset-0 bg-[#005a4e]/40"></div> {/* Dark green overlay with 40% opacity */}
         </div>
         
         <div className="animate-fade-in max-w-6xl mx-auto text-white z-10 relative">
