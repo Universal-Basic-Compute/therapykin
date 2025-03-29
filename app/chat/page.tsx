@@ -53,6 +53,9 @@ function ChatSessionWithSearchParams() {
   const [silenceMessageSent, setSilenceMessageSent] = useState(false);
   const [isTabActive, setIsTabActive] = useState(true);
   const [selectedSpecialist, setSelectedSpecialist] = useState<string>("generalist");
+  // Add state for session summary image
+  const [sessionImageRequested, setSessionImageRequested] = useState(false);
+  const [sessionImage, setSessionImage] = useState<string | null>(null);
   
   // Voice options
   const voiceOptions = [
@@ -536,11 +539,17 @@ function ChatSessionWithSearchParams() {
       const halfwayPoint = SESSION_DURATION / 2; // 50% of session
       const closingPhaseStart = Math.floor(SESSION_DURATION * 0.92); // ~92% of session
       
+      // Calculate the time point 3 minutes before the end
+      const imageGenerationPoint = SESSION_DURATION - 3;
+      
       // Check if we're at the halfway point (within a small margin to avoid missing it)
       const isAtHalfway = sessionDuration >= halfwayPoint - 0.5 && sessionDuration <= halfwayPoint + 0.5;
       
       // Check if we're at the closing phase start (within a small margin)
       const isAtClosingPhase = sessionDuration >= closingPhaseStart - 0.5 && sessionDuration <= closingPhaseStart + 0.5;
+      
+      // Check if we're at the image generation point (within a small margin)
+      const isAtImageGenerationPoint = sessionDuration >= imageGenerationPoint - 0.5 && sessionDuration <= imageGenerationPoint + 0.5;
       
       // Send halfway message if we're at the halfway point and haven't sent it yet
       if (isAtHalfway && !halfwayMessageSent && !sessionEnded) {
@@ -632,6 +641,12 @@ function ChatSessionWithSearchParams() {
         });
       }
       
+      // Request session summary image if we're at the image generation point and haven't requested it yet
+      if (isAtImageGenerationPoint && !sessionImageRequested && !sessionEnded) {
+        console.log(`Requesting session summary image at ${sessionDuration.toFixed(1)} minutes`);
+        requestSessionSummaryImage();
+      }
+      
       // First part of the session
       if (sessionDuration <= openingPhaseEnd) {
         setSessionMode('session_opening');
@@ -663,9 +678,9 @@ function ChatSessionWithSearchParams() {
     // Update immediately and then every 30 seconds to ensure we don't miss the halfway point
     updateSessionMode();
     const intervalId = setInterval(updateSessionMode, 30000); // check every 30 seconds
-    
+  
     return () => clearInterval(intervalId);
-  }, [sessionStartTime, sessionLength, halfwayMessageSent, closingMessageSent, user, sessionEnded, ratingSubmitted]); // Add ratingSubmitted as a dependency
+  }, [sessionStartTime, sessionLength, halfwayMessageSent, closingMessageSent, user, sessionEnded, ratingSubmitted, sessionImageRequested]); // Add sessionImageRequested as a dependency
   
   // Add effect to track tab visibility
   useEffect(() => {
@@ -1634,6 +1649,78 @@ function ChatSessionWithSearchParams() {
     };
   }, [isRecording]);
   
+  // Function to request session summary image
+  const requestSessionSummaryImage = async () => {
+    if (!user || !sessionId || sessionImageRequested) return;
+    
+    try {
+      console.log('Requesting session summary image...');
+      setSessionImageRequested(true);
+      
+      // Create a prompt for the image based on the session
+      const prompt = `<system>Please generate an image that captures the essence of this therapy session. Create a visual representation that reflects the themes, emotions, and progress we've discussed. The image should be abstract enough to maintain privacy while still being meaningful to the client.</system>`;
+      
+      // Send the request to KinOS
+      const response = await fetch('/api/kinos/image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: prompt,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          specialist: selectedSpecialist
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to request image: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Image generation response:', data);
+      
+      // Check if we have a valid image URL
+      if (data.result?.data?.[0]?.url) {
+        const imageUrl = data.result.data[0].url;
+        setSessionImage(imageUrl);
+        
+        // Add the image to the chat
+        const messageId = `session-image-${Date.now()}`;
+        const message = "Here's a visual representation of our session today. I hope it captures some of the themes we've explored together.";
+        
+        // Generate audio for the message if voice mode is on
+        let audioUrl = '';
+        if (voiceMode) {
+          audioUrl = await textToSpeech(message);
+        }
+        
+        // Add to chat history
+        setChatHistory(prev => [
+          ...prev,
+          { 
+            role: 'assistant', 
+            content: message,
+            id: messageId,
+            audio: audioUrl,
+            image: imageUrl
+          }
+        ]);
+        
+        // Play audio if voice mode is enabled
+        if (voiceMode && audioUrl) {
+          playAudio(audioUrl, messageId);
+        }
+        
+        console.log('Session summary image added to chat');
+      }
+    } catch (error) {
+      console.error('Error generating session summary image:', error);
+      // Don't set sessionImageRequested back to false on error to prevent repeated failures
+    }
+  };
+
   // Add cleanup for camera resources
   useEffect(() => {
     return () => {
@@ -2108,7 +2195,19 @@ function ChatSessionWithSearchParams() {
                       ) : (
                         <div>
                           <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
-                        
+                      
+                          {/* Display image if available */}
+                          {msg.image && (
+                            <div className="mt-3">
+                              <img 
+                                src={msg.image} 
+                                alt="Session visualization" 
+                                className="w-full h-auto rounded-lg shadow-md"
+                                loading="lazy"
+                              />
+                            </div>
+                          )}
+                    
                           {/* Add Rate Session button for the rate-session-prompt message */}
                           {msg.id === 'rate-session-prompt' && !ratingSubmitted && (
                             <div className="mt-3">
