@@ -41,15 +41,13 @@ export default function ForTherapists() {
               </p>
               
               <h3 className="text-2xl font-semibold mb-6 text-center">Our Proprietary DNA Extraction Process</h3>
-              <div className="mb-8 relative aspect-[2/1] w-full overflow-hidden rounded-xl shadow-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary-dark)]/20 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="text-[var(--primary)] mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <p className="text-foreground/60">The TherapyKin Extraction Process</p>
-                </div>
+              <div className="mb-8 relative aspect-[2/1] w-full overflow-hidden rounded-xl shadow-lg">
+                <Image 
+                  src="/for-therapists/tk-extraction-process.png" 
+                  alt="The TherapyKin Extraction Process" 
+                  fill
+                  className="object-cover"
+                />
               </div>
               
               <p className="text-lg text-foreground/80 mb-4">Our systematic method captures the essence of your therapeutic approach:</p>
@@ -243,15 +241,13 @@ export default function ForTherapists() {
           
           <section className="mb-16">
             <h2 className="text-3xl font-semibold mb-6 text-center">The Partnership Process</h2>
-            <div className="mb-8 relative aspect-[4/1] w-full overflow-hidden rounded-xl shadow-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary-dark)]/20 flex items-center justify-center">
-              <div className="text-center p-8">
-                <div className="text-[var(--primary)] mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <p className="text-foreground/60">Partnership Timeline</p>
-              </div>
+            <div className="mb-8 relative aspect-[4/1] w-full overflow-hidden rounded-xl shadow-lg">
+              <Image 
+                src="/for-therapists/partnership-timeline.png" 
+                alt="Partnership Timeline" 
+                fill
+                className="object-cover"
+              />
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
