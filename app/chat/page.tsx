@@ -2244,12 +2244,20 @@ function ChatSessionWithSearchParams() {
                     muted
                     className="w-full h-full object-cover"
                     style={{ display: 'block' }} // Ensure video is displayed as block
+                    onLoadedMetadata={() => {
+                      console.log('Video metadata loaded');
+                      if (videoRef.current) {
+                        videoRef.current.play().catch(e => console.error('Error playing video:', e));
+                      }
+                    }}
                   />
                   
-                  {/* Fallback message if video isn't showing */}
-                  <div className="absolute inset-0 flex items-center justify-center text-white">
-                    <span className="text-sm">Camera initializing...</span>
-                  </div>
+                  {/* Fallback message if video isn't showing - only show when stream is null */}
+                  {!cameraStream && (
+                    <div className="absolute inset-0 flex items-center justify-center text-white">
+                      <span className="text-sm">Camera initializing...</span>
+                    </div>
+                  )}
                   
                   {/* Camera controls overlay */}
                   <div className="absolute bottom-2 right-2 flex space-x-2">
