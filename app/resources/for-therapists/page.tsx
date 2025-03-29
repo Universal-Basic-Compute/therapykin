@@ -15,9 +15,9 @@ export default function ForTherapists() {
         <div className="relative overflow-hidden rounded-3xl mb-16 max-w-6xl mx-auto">
           <div className="absolute inset-0 bg-white"></div>
           <div className="absolute inset-0 bg-[url('/for-therapists/title-background.png')] bg-cover bg-center opacity-50"></div>
-          <div className="relative z-10 py-20 px-8 text-[var(--foreground)]">
+          <div className="relative z-10 py-20 px-8 text-black">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center">Extend Your Therapeutic Reach with TherapyKin</h1>
-            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-center text-[var(--foreground)]/80">
+            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-center text-black/80">
               Transform Your Practice, Preserve Your Essence
             </p>
           </div>
