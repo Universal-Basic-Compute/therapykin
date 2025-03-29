@@ -1425,11 +1425,7 @@ function ChatSessionWithSearchParams() {
       const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
       console.log(`Image captured successfully. Data URL length: ${imageDataUrl.length}, starts with: ${imageDataUrl.substring(0, 50)}...`);
       setCapturedImage(imageDataUrl);
-      
-      // Play capture sound if available
-      const captureSound = new Audio('/sounds/camera-shutter.mp3');
-      captureSound.play().catch(e => console.log('Could not play capture sound', e));
-      
+    
       return imageDataUrl;
     } catch (error) {
       console.error('Error capturing image:', error);
