@@ -1678,7 +1678,8 @@ function ChatSessionWithSearchParams() {
     // Capture image from camera if enabled and no image is already captured
     let screenshot = capturedImage;
     if (cameraEnabled && !capturedImage) {
-      screenshot = captureImage();
+      const capturedImg = captureImage();
+      screenshot = capturedImg || null; // Ensure it's either string or null, not undefined
       console.log(`Auto-captured image for message. Image data length: ${screenshot ? screenshot.length : 0}`);
     }
     
