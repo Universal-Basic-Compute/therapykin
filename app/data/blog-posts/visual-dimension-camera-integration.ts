@@ -133,7 +133,7 @@ export const post = {
     <h2>Key Benefits of Visual Communication in Therapy</h2>
     <p>Adding visual communication to digital therapy isn't just about mimicking in-person sessions—it creates unique advantages that enhance the therapeutic experience in several important ways:<sup><a href="#ref-1">1</a></sup><sup><a href="#ref-2">2</a></sup></p>
     
-    <div class="my-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="my-8 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="card p-5 shadow-sm hover:shadow-md transition-all">
         <div class="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 text-[var(--primary)]">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -165,7 +165,7 @@ export const post = {
       </div>
     </div>
     
-    <div class="my-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="my-8 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="card p-5 shadow-sm hover:shadow-md transition-all">
         <div class="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 text-[var(--primary)]">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -417,16 +417,16 @@ export const post = {
               <td class="px-4 py-3 font-medium">Text</td>
               <td class="px-4 py-3">
                 <ul class="space-y-1">
-                  <li>• Public settings where privacy is needed</li>
-                  <li>• Processing complex thoughts</li>
-                  <li>• When emotional distance is helpful</li>
+                  <li>Public settings where privacy is needed</li>
+                  <li>Processing complex thoughts</li>
+                  <li>When emotional distance is helpful</li>
                 </ul>
               </td>
               <td class="px-4 py-3">
                 <ul class="space-y-1">
-                  <li>• Missing non-verbal cues</li>
-                  <li>• Potential for misinterpretation</li>
-                  <li>• Slower relationship building</li>
+                  <li>Missing non-verbal cues</li>
+                  <li>Potential for misinterpretation</li>
+                  <li>Slower relationship building</li>
                 </ul>
               </td>
             </tr>
@@ -434,16 +434,16 @@ export const post = {
               <td class="px-4 py-3 font-medium">Voice</td>
               <td class="px-4 py-3">
                 <ul class="space-y-1">
-                  <li>• Adding emotional tone to communication</li>
-                  <li>• When typing is inconvenient</li>
-                  <li>• Multitasking situations</li>
+                  <li>Adding emotional tone to communication</li>
+                  <li>When typing is inconvenient</li>
+                  <li>Multitasking situations</li>
                 </ul>
               </td>
               <td class="px-4 py-3">
                 <ul class="space-y-1">
-                  <li>• Still missing visual cues</li>
-                  <li>• Requires audio privacy</li>
-                  <li>• Limited for technique demonstration</li>
+                  <li>Still missing visual cues</li>
+                  <li>Requires audio privacy</li>
+                  <li>Limited for technique demonstration</li>
                 </ul>
               </td>
             </tr>
@@ -451,16 +451,16 @@ export const post = {
               <td class="px-4 py-3 font-medium">Video</td>
               <td class="px-4 py-3">
                 <ul class="space-y-1">
-                  <li>• Building initial therapeutic alliance</li>
-                  <li>• Learning physical techniques</li>
-                  <li>• When emotional connection is crucial</li>
+                  <li>Building initial therapeutic alliance</li>
+                  <li>Learning physical techniques</li>
+                  <li>When emotional connection is crucial</li>
                 </ul>
               </td>
               <td class="px-4 py-3">
                 <ul class="space-y-1">
-                  <li>• Requires visual privacy</li>
-                  <li>• Higher bandwidth requirements</li>
-                  <li>• May feel more exposing for some users</li>
+                  <li>Requires visual privacy</li>
+                  <li>Higher bandwidth requirements</li>
+                  <li>May feel more exposing for some users</li>
                 </ul>
               </td>
             </tr>
@@ -468,7 +468,6 @@ export const post = {
         </table>
       </div>
       
-      {/* Mobile-friendly alternative display */}
       <div class="md:hidden mt-6 space-y-6">
         <div class="border border-foreground/10 rounded-lg overflow-hidden">
           <div class="bg-[var(--primary)]/10 px-4 py-2 font-medium">Text</div>
@@ -476,17 +475,17 @@ export const post = {
             <div>
               <div class="text-xs font-medium text-foreground/60">Best For:</div>
               <ul class="space-y-1 mt-1">
-                <li>• Public settings where privacy is needed</li>
-                <li>• Processing complex thoughts</li>
-                <li>• When emotional distance is helpful</li>
+                <li>Public settings where privacy is needed</li>
+                <li>Processing complex thoughts</li>
+                <li>When emotional distance is helpful</li>
               </ul>
             </div>
             <div>
               <div class="text-xs font-medium text-foreground/60">Limitations:</div>
               <ul class="space-y-1 mt-1">
-                <li>• Missing non-verbal cues</li>
-                <li>• Potential for misinterpretation</li>
-                <li>• Slower relationship building</li>
+                <li>Missing non-verbal cues</li>
+                <li>Potential for misinterpretation</li>
+                <li>Slower relationship building</li>
               </ul>
             </div>
           </div>
@@ -498,17 +497,17 @@ export const post = {
             <div>
               <div class="text-xs font-medium text-foreground/60">Best For:</div>
               <ul class="space-y-1 mt-1">
-                <li>• Adding emotional tone to communication</li>
-                <li>• When typing is inconvenient</li>
-                <li>• Multitasking situations</li>
+                <li>Adding emotional tone to communication</li>
+                <li>When typing is inconvenient</li>
+                <li>Multitasking situations</li>
               </ul>
             </div>
             <div>
               <div class="text-xs font-medium text-foreground/60">Limitations:</div>
               <ul class="space-y-1 mt-1">
-                <li>• Still missing visual cues</li>
-                <li>• Requires audio privacy</li>
-                <li>• Limited for technique demonstration</li>
+                <li>Still missing visual cues</li>
+                <li>Requires audio privacy</li>
+                <li>Limited for technique demonstration</li>
               </ul>
             </div>
           </div>
@@ -520,17 +519,17 @@ export const post = {
             <div>
               <div class="text-xs font-medium text-foreground/60">Best For:</div>
               <ul class="space-y-1 mt-1">
-                <li>• Building initial therapeutic alliance</li>
-                <li>• Learning physical techniques</li>
-                <li>• When emotional connection is crucial</li>
+                <li>Building initial therapeutic alliance</li>
+                <li>Learning physical techniques</li>
+                <li>When emotional connection is crucial</li>
               </ul>
             </div>
             <div>
               <div class="text-xs font-medium text-foreground/60">Limitations:</div>
               <ul class="space-y-1 mt-1">
-                <li>• Requires visual privacy</li>
-                <li>• Higher bandwidth requirements</li>
-                <li>• May feel more exposing for some users</li>
+                <li>Requires visual privacy</li>
+                <li>Higher bandwidth requirements</li>
+                <li>May feel more exposing for some users</li>
               </ul>
             </div>
           </div>
@@ -614,8 +613,8 @@ export const post = {
         </div>
         <div>
           <h4 class="text-lg font-semibold mb-2">Experience Enhanced Connection Today</h4>
-          <p class="text-foreground/80">Our camera integration feature is now available to all TherapyKin users at no additional cost. Experience the difference that visual communication can make in your therapeutic journey.</p>
-          <a href="/features/camera-integration" class="inline-block mt-4 px-4 py-2 bg-[var(--primary)] text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all">Learn More About Camera Features</a>
+          <p class="text-foreground/80">Our camera integration feature is now available to all TherapyKin users at no additional cost. Simply go to your chat session and enable the camera in settings to experience the difference visual communication can make.</p>
+          <a href="/chat" class="inline-block mt-4 px-4 py-2 bg-[var(--primary)] text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition-all">Try Camera Mode Now</a>
         </div>
       </div>
     </div>
