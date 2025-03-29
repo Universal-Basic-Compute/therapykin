@@ -33,6 +33,8 @@ export async function GET(request: NextRequest) {
     const preferences = {
       preferredSessionLength: userRecord.fields.PreferredSessionLength || 30,
       preferredVoice: userRecord.fields.PreferredVoice || 'UgBBYS2sOqTuMpoF3BR0',
+      preferredSpecialist: userRecord.fields.PreferredSpecialist || 'generalist',
+      cameraEnabled: userRecord.fields.CameraEnabled || false,
       // Add other preferences here as needed
     };
     
@@ -59,7 +61,12 @@ export async function POST(request: NextRequest) {
     }
     
     // Get request body
-    const { preferredSessionLength, preferredVoice } = await request.json();
+    const { 
+      preferredSessionLength, 
+      preferredVoice, 
+      preferredSpecialist,
+      cameraEnabled 
+    } = await request.json();
     
     // Validate input
     if (preferredSessionLength !== undefined && 
@@ -73,6 +80,21 @@ export async function POST(request: NextRequest) {
     if (preferredVoice !== undefined && typeof preferredVoice !== 'string') {
       return NextResponse.json(
         { error: 'Valid preferredVoice is required (string)' },
+        { status: 400 }
+      );
+    }
+    
+    if (preferredSpecialist !== undefined && 
+        !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney'].includes(preferredSpecialist)) {
+      return NextResponse.json(
+        { error: 'Valid preferredSpecialist is required' },
+        { status: 400 }
+      );
+    }
+    
+    if (cameraEnabled !== undefined && typeof cameraEnabled !== 'boolean') {
+      return NextResponse.json(
+        { error: 'Valid cameraEnabled is required (boolean)' },
         { status: 400 }
       );
     }
@@ -103,6 +125,14 @@ export async function POST(request: NextRequest) {
       updateFields.PreferredVoice = preferredVoice;
     }
     
+    if (preferredSpecialist !== undefined) {
+      updateFields.PreferredSpecialist = preferredSpecialist;
+    }
+    
+    if (cameraEnabled !== undefined) {
+      updateFields.CameraEnabled = cameraEnabled;
+    }
+    
     // Only update if there are fields to update
     if (Object.keys(updateFields).length > 0) {
       await usersTable.update([
@@ -120,6 +150,8 @@ export async function POST(request: NextRequest) {
       preferences: {
         preferredSessionLength: preferredSessionLength !== undefined ? preferredSessionLength : userRecord.fields.PreferredSessionLength || 30,
         preferredVoice: preferredVoice !== undefined ? preferredVoice : userRecord.fields.PreferredVoice || 'UgBBYS2sOqTuMpoF3BR0',
+        preferredSpecialist: preferredSpecialist !== undefined ? preferredSpecialist : userRecord.fields.PreferredSpecialist || 'generalist',
+        cameraEnabled: cameraEnabled !== undefined ? cameraEnabled : userRecord.fields.CameraEnabled || false,
         // Add other preferences here as needed
       }
     });
