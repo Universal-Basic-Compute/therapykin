@@ -1426,7 +1426,7 @@ function ChatSessionWithSearchParams() {
           // Calculate new dimensions while maintaining aspect ratio
           let width = img.width;
           let height = img.height;
-          const maxDimension = 512;
+          const maxDimension = 800; // Changed from 512 to 800
           
           if (width > height && width > maxDimension) {
             height = Math.round((height * maxDimension) / width);
