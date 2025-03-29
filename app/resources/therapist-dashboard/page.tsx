@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { useAuth } from "../../../contexts/AuthContext";
-import Header from "../../../components/Header";
-import Footer from "../../../components/Footer";
+import { useAuth } from "../../contexts/AuthContext";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import Link from "next/link";
 
 export default function TherapistDashboard() {
