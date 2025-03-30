@@ -99,17 +99,6 @@ export default function HerosJourneySpecialist() {
           </div>
         </div>
           
-          {/* Move the partnership banner below the hero section */}
-          <div className="bg-gradient-to-r from-[var(--background-alt)] to-[var(--primary)]/10 p-4 rounded-lg mb-12 max-w-3xl border border-[var(--primary)]/20">
-            <div className="flex items-center">
-              <svg className="w-6 h-6 text-[var(--primary)] mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-              </svg>
-              <p className="text-foreground/90 font-medium">
-                <span className="font-bold">Exclusive Partnership:</span> This specialist is powered by our therapeutic partnership with the Hero's Journey Academy, bringing their proven methodology directly to TherapyKin users.
-              </p>
-            </div>
-          </div>
           
           
           {/* Move the description paragraph below the partnership banner */}
@@ -655,6 +644,27 @@ export default function HerosJourneySpecialist() {
               <p className="text-foreground/70 max-w-2xl mx-auto">
                 By understanding these five minds, you can develop greater awareness of your thought patterns and learn to consciously choose which mind to engage with in different situations on your Hero's Journey.
               </p>
+            </div>
+          </div>
+          
+          {/* Exclusive Partnership Banner */}
+          <div className="bg-gradient-to-r from-[var(--accent)] to-[var(--primary-dark)] p-6 rounded-lg my-16 shadow-lg relative overflow-hidden">
+            {/* Add decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+            
+            <div className="flex items-center relative z-10">
+              <div className="bg-white/20 p-3 rounded-full mr-4 backdrop-blur-sm">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-white text-xl font-bold mb-1">Exclusive Partnership</h3>
+                <p className="text-white/90">
+                  This specialist is powered by our therapeutic partnership with the Hero's Journey Academy, bringing their proven methodology directly to TherapyKin users.
+                </p>
+              </div>
             </div>
           </div>
           
