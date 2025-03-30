@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import Link from 'next/link';
 import { sendMessageToKinOS } from '../utils/kinos';
 
 interface ChatMessage {
@@ -21,6 +22,7 @@ export default function AskAnything() {
     }
   ]);
   const [projectId, setProjectId] = useState<string | null>(null);
+  const [showRegisterCTA, setShowRegisterCTA] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Initialize project ID from session storage or create a new one
@@ -33,12 +35,29 @@ export default function AskAnything() {
     setProjectId(storedId);
   }, []);
 
-  // Auto-scroll to bottom when chat history changes
+  // Auto-scroll to bottom when chat history changes and check message count
   useEffect(() => {
+    // Auto-scroll to bottom when chat history changes
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [chatHistory]);
+    
+    // Check if we've reached 10 messages (5 user messages + 5 assistant messages)
+    // and haven't shown the CTA yet
+    if (chatHistory.length >= 10 && !showRegisterCTA) {
+      setShowRegisterCTA(true);
+      
+      // Add the CTA message to chat history
+      setChatHistory(prev => [
+        ...prev,
+        { 
+          role: 'assistant', 
+          content: "I've enjoyed our conversation! To continue with a full therapeutic experience and start your first real session, I'd recommend creating an account. Would you like to register now?", 
+          id: 'register-cta' 
+        }
+      ]);
+    }
+  }, [chatHistory, showRegisterCTA]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,7 +154,24 @@ export default function AskAnything() {
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                         </div>
                       ) : (
-                        <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
+                        <div>
+                          <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
+                          
+                          {/* Add register button for the CTA message */}
+                          {msg.id === 'register-cta' && (
+                            <div className="mt-3">
+                              <Link 
+                                href="/register" 
+                                className="px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary-dark)] transition-colors inline-flex items-center"
+                              >
+                                Register Now
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </Link>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
