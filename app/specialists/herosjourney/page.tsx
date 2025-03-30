@@ -533,51 +533,6 @@ export default function HerosJourneySpecialist() {
             </div>
           </div>
           
-          <div className="bg-[var(--background-alt)] p-8 rounded-lg mb-16">
-            <h2 className="text-2xl font-semibold mb-4">About the Hero's Journey Methodology</h2>
-            <p className="mb-4 text-foreground/80">
-              This therapeutic approach combines ancient wisdom from world mythologies with modern psychological understanding. Drawing from the work of Joseph Campbell and integrating insights from depth psychology, the Hero's Journey framework provides a map for navigating life's challenges and transforming them into opportunities for growth.
-            </p>
-            <p className="mb-4 text-foreground/80">
-              Through this process, you'll learn to recognize the synchronicities guiding your path, integrate your shadow aspects, balance your five minds, and become the hero of your own life story.
-            </p>
-            <div className="mt-6 pt-6 border-t border-foreground/10">
-              <h3 className="text-xl font-medium mb-3">Key Benefits</h3>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-                <li className="flex items-start">
-                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  <span>Transform your greatest challenges into your greatest strengths</span>
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  <span>Create harmony across all five dimensions of your life</span>
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  <span>Develop conscious choice over which mind guides your journey</span>
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  <span>Discover and live your unique quest in the world</span>
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  <span>Transform your journey into wisdom that helps others</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
           <div className="mb-16">
             <h2 className="text-2xl font-semibold mb-6 text-center">Transformation Stories</h2>
             
