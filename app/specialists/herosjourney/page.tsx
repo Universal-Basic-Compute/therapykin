@@ -533,6 +533,131 @@ export default function HerosJourneySpecialist() {
             </div>
           </div>
           
+          <div className="mt-16 mb-16">
+            <h2 className="text-2xl font-semibold mb-6 text-center">The Five Minds Framework</h2>
+            <p className="text-center text-foreground/80 mb-10 max-w-3xl mx-auto">
+              Understanding the five minds helps you navigate your Hero's Journey with greater awareness and intention.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {/* The Thinker Mind */}
+              <div className="bg-gradient-to-br from-white to-[var(--primary)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--primary)]/40 p-8 rounded-lg border border-[var(--primary)]/20 hover:shadow-md transition-shadow">
+                <div className="flex flex-col items-center mb-6">
+                  <div className="w-32 h-32 rounded-full overflow-hidden mb-4">
+                    <img 
+                      src="/HJ/thinker.png" 
+                      alt="The Thinker Mind" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center">The Thinker</h3>
+                </div>
+                <p className="text-foreground/70 mb-4 text-center">
+                  Active 24 hours a day, constantly processing information
+                </p>
+                <div className="bg-[var(--primary)]/10 p-4 rounded-lg">
+                  <p className="text-sm italic text-center">
+                    "What if I approached this challenge as an opportunity for growth rather than an obstacle?"
+                  </p>
+                </div>
+              </div>
+              
+              {/* The Observer Mind */}
+              <div className="bg-gradient-to-br from-white to-[var(--primary-dark)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--primary-dark)]/40 p-8 rounded-lg border border-[var(--primary-dark)]/20 hover:shadow-md transition-shadow">
+                <div className="flex flex-col items-center mb-6">
+                  <div className="w-32 h-32 rounded-full overflow-hidden mb-4">
+                    <img 
+                      src="/HJ/observer.png" 
+                      alt="The Observer Mind" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center">The Observer</h3>
+                </div>
+                <p className="text-foreground/70 mb-4 text-center">
+                  The ancient, wise mind that watches without judgment
+                </p>
+                <div className="bg-[var(--primary-dark)]/10 p-4 rounded-lg">
+                  <p className="text-sm italic text-center">
+                    "I notice these feelings arising within me, and I can watch them without becoming them."
+                  </p>
+                </div>
+              </div>
+              
+              {/* The Judge Mind */}
+              <div className="bg-gradient-to-br from-white to-[var(--accent)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--accent)]/40 p-8 rounded-lg border border-[var(--accent)]/20 hover:shadow-md transition-shadow">
+                <div className="flex flex-col items-center mb-6">
+                  <div className="w-32 h-32 rounded-full overflow-hidden mb-4">
+                    <img 
+                      src="/HJ/judge.png" 
+                      alt="The Judge Mind" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center">The Judge</h3>
+                </div>
+                <p className="text-foreground/70 mb-4 text-center">
+                  The mind that creates labels and evaluations
+                </p>
+                <div className="bg-[var(--accent)]/10 p-4 rounded-lg">
+                  <p className="text-sm italic text-center">
+                    "I recognize when I'm judging myself or others, and I can choose compassion instead."
+                  </p>
+                </div>
+              </div>
+              
+              {/* The Commentator Mind */}
+              <div className="bg-gradient-to-br from-white to-[var(--primary-light)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--primary-light)]/40 p-8 rounded-lg border border-[var(--primary-light)]/20 hover:shadow-md transition-shadow">
+                <div className="flex flex-col items-center mb-6">
+                  <div className="w-32 h-32 rounded-full overflow-hidden mb-4">
+                    <img 
+                      src="/HJ/commentator.png" 
+                      alt="The Commentator Mind" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center">The Commentator</h3>
+                </div>
+                <p className="text-foreground/70 mb-4 text-center">
+                  The voice that narrates and interprets your experience
+                </p>
+                <div className="bg-[var(--primary-light)]/10 p-4 rounded-lg">
+                  <p className="text-sm italic text-center">
+                    "I can rewrite the story I tell myself about this situation to empower rather than limit me."
+                  </p>
+                </div>
+              </div>
+              
+              {/* The Dreamer Mind */}
+              <div className="bg-gradient-to-br from-white to-[var(--accent-light)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--accent-light)]/40 p-8 rounded-lg border border-[var(--accent-light)]/20 hover:shadow-md transition-shadow">
+                <div className="flex flex-col items-center mb-6">
+                  <div className="w-32 h-32 rounded-full overflow-hidden mb-4">
+                    <img 
+                      src="/HJ/dreamer.png" 
+                      alt="The Dreamer Mind" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center">The Dreamer</h3>
+                </div>
+                <p className="text-foreground/70 mb-4 text-center">
+                  The creative mind that envisions possibilities beyond current reality
+                </p>
+                <div className="bg-[var(--accent-light)]/10 p-4 rounded-lg">
+                  <p className="text-sm italic text-center">
+                    "What would be possible if I allowed myself to imagine beyond my current limitations?"
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-center mt-8">
+              <p className="text-foreground/70 max-w-2xl mx-auto">
+                By understanding these five minds, you can develop greater awareness of your thought patterns and learn to consciously choose which mind to engage with in different situations on your Hero's Journey.
+              </p>
+            </div>
+          </div>
+          
           <div className="mb-16">
             <h2 className="text-2xl font-semibold mb-6 text-center">Transformation Stories</h2>
             
