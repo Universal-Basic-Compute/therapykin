@@ -83,7 +83,9 @@ export async function getOngoingSession(email: string): Promise<{
 export async function createSession(
   email: string, 
   sessionLength: number = 30,
-  specialist: string = 'generalist'  // Add specialist parameter with default value
+  specialist: string = 'generalist',
+  isDemo: boolean = false,
+  projectId?: string
 ): Promise<{ id: string, createdAt: string, sessionLength: number, specialist: string }> {
   try {
     if (!email) {
@@ -99,6 +101,8 @@ export async function createSession(
       SessionLength: sessionLength,
       Specialist: specialist,
       RatingSubmitted: false,
+      IsDemo: isDemo, // Add this field
+      ProjectId: projectId || '' // Add this field
     };
     
     console.log(`Creating new session for ${email} with data:`, JSON.stringify(sessionData, null, 2));

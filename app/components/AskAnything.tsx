@@ -23,6 +23,7 @@ export default function AskAnything() {
   ]);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [showRegisterCTA, setShowRegisterCTA] = useState(false);
+  const [sessionCreated, setSessionCreated] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Initialize project ID from session storage or create a new one
@@ -86,6 +87,35 @@ export default function AskAnything() {
       // Use first name and last name from project ID for demo purposes
       const firstName = 'Demo';
       const lastName = projectId || 'User';
+      
+      // Create a session if this is the first message and no session has been created yet
+      if (!sessionCreated) {
+        try {
+          // Call the API to create a session
+          const sessionResponse = await fetch('/api/sessions/create-demo', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: 'demo@therapykin.ai', // Use a placeholder email for demo users
+              sessionLength: 15, // Default to 15 minutes for demo sessions
+              specialist: 'welcome', // Use the welcome specialist
+              projectId: projectId // Pass the project ID for tracking
+            }),
+          });
+          
+          if (sessionResponse.ok) {
+            console.log('Demo session created successfully');
+            setSessionCreated(true);
+          } else {
+            console.error('Failed to create demo session:', sessionResponse.status);
+          }
+        } catch (error) {
+          console.error('Error creating demo session:', error);
+          // Continue with the chat even if session creation fails
+        }
+      }
       
       // Send message to KinOS API
       const response = await sendMessageToKinOS(
