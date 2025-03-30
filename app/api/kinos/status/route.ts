@@ -42,6 +42,13 @@ export async function GET(request: NextRequest) {
         : process.env.NODE_ENV === 'development'
           ? `http://localhost:5000/projects/therapykinexecutives/${projectId}/messages/${messageId}`
           : `https://api.kinos-engine.ai/projects/therapykinexecutives/${projectId}/messages/${messageId}`;
+    } else if (specialist === 'welcome') {
+      // For welcome specialist
+      baseUrl = process.env.KINOS_API_URL 
+        ? `${process.env.KINOS_API_URL}/projects/therapykinwelcome/${projectId}/messages/${messageId}`
+        : process.env.NODE_ENV === 'development'
+          ? `http://localhost:5000/projects/therapykinwelcome/${projectId}/messages/${messageId}`
+          : `https://api.kinos-engine.ai/projects/therapykinwelcome/${projectId}/messages/${messageId}`;
     } else {
       // For generalist (default)
       baseUrl = process.env.KINOS_API_URL 

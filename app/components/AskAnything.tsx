@@ -95,7 +95,7 @@ export default function AskAnything() {
         [], // attachments
         [], // images
         null, // mode
-        'generalist' // specialist
+        'welcome' // specialist - changed from 'generalist' to 'welcome'
       );
       
       // Update chat history with the response
