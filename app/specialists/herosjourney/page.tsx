@@ -104,48 +104,6 @@ export default function HerosJourneySpecialist() {
             </div>
           </div>
           
-          <div className="mt-12 mb-12 p-6 bg-[var(--background-alt)] rounded-lg">
-            <h3 className="text-xl font-semibold mb-4 text-center">Test Hover Elements</h3>
-            
-            <div className="flex justify-center space-x-8 mb-8">
-              {/* Test Item 1 */}
-              <div className="group relative">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer">
-                  <span className="font-bold">1</span>
-                </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20 hidden group-hover:block">
-                  <h4 className="font-bold text-sm">Test Item One</h4>
-                  <p className="text-xs text-foreground/70 mt-1">This is a test tooltip to verify hover functionality.</p>
-                </div>
-              </div>
-              
-              {/* Test Item 2 */}
-              <div className="group relative">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer">
-                  <span className="font-bold">2</span>
-                </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20 hidden group-hover:block">
-                  <h4 className="font-bold text-sm">Test Item Two</h4>
-                  <p className="text-xs text-foreground/70 mt-1">This is another test tooltip to verify hover functionality.</p>
-                </div>
-              </div>
-              
-              {/* Test Item 3 */}
-              <div className="group relative">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer">
-                  <span className="font-bold">3</span>
-                </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20 hidden group-hover:block">
-                  <h4 className="font-bold text-sm">Test Item Three</h4>
-                  <p className="text-xs text-foreground/70 mt-1">This is a third test tooltip to verify hover functionality.</p>
-                </div>
-              </div>
-            </div>
-            
-            <p className="text-center text-sm text-foreground/70">
-              Hover over each number above to test tooltip functionality
-            </p>
-          </div>
           
           {/* Move the description paragraph below the partnership banner */}
           <p className="text-xl text-foreground/80 mb-12 max-w-3xl">
@@ -170,148 +128,159 @@ export default function HerosJourneySpecialist() {
                 <span className="text-center">Hero's<br/>Journey</span>
               </div>
               
-              {/* Step circles with tooltips */}
-              <div className="absolute left-1/2 top-[5%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">1</span>
-                  </div>
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">The Ordinary World</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Where the hero begins, in their familiar environment with established patterns.</p>
-                  </div>
+              {/* Step 1: The Ordinary World */}
+              <div className="absolute left-1/2 top-[5%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("The Ordinary World: Where the hero begins, in their familiar environment with established patterns.")}
+                >
+                  <span className="font-bold">1</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Ordinary World</span>
                 </div>
               </div>
               
-              <div className="absolute left-[80%] top-[15%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">2</span>
-                  </div>
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">The Call to Adventure</h4>
-                    <p className="text-xs text-foreground/70 mt-1">A challenge or opportunity that disrupts the ordinary world.</p>
-                  </div>
+              {/* Step 2: The Call to Adventure */}
+              <div className="absolute left-[80%] top-[15%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("The Call to Adventure: A challenge or opportunity that disrupts the ordinary world.")}
+                >
+                  <span className="font-bold">2</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Call to Adventure</span>
                 </div>
               </div>
               
-              <div className="absolute left-[90%] top-[35%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">3</span>
-                  </div>
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 ml-16 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">Refusal of the Call</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Initial resistance to change or transformation due to fear or doubt.</p>
-                  </div>
+              {/* Step 3: Refusal of the Call */}
+              <div className="absolute left-[90%] top-[35%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Refusal of the Call: Initial resistance to change or transformation due to fear or doubt.")}
+                >
+                  <span className="font-bold">3</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Refusal</span>
                 </div>
               </div>
               
-              <div className="absolute left-[90%] top-[65%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">4</span>
-                  </div>
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 ml-16 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">Meeting the Mentor</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Encountering a guide who provides wisdom, tools, or support.</p>
-                  </div>
+              {/* Step 4: Meeting the Mentor */}
+              <div className="absolute left-[90%] top-[65%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Meeting the Mentor: Encountering a guide who provides wisdom, tools, or support.")}
+                >
+                  <span className="font-bold">4</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Meeting Mentor</span>
                 </div>
               </div>
               
-              <div className="absolute left-[80%] top-[85%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">5</span>
-                  </div>
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">Crossing the Threshold</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Moving from the familiar into the unknown, taking the first step.</p>
-                  </div>
+              {/* Step 5: Crossing the Threshold */}
+              <div className="absolute left-[80%] top-[85%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Crossing the Threshold: Moving from the familiar into the unknown, taking the first step.")}
+                >
+                  <span className="font-bold">5</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Threshold</span>
                 </div>
               </div>
               
-              <div className="absolute left-[50%] top-[95%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">6</span>
-                  </div>
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">Tests, Allies, and Enemies</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Facing challenges that test resolve and meeting supportive figures.</p>
-                  </div>
+              {/* Step 6: Tests, Allies, and Enemies */}
+              <div className="absolute left-[50%] top-[95%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Tests, Allies, and Enemies: Facing challenges that test resolve and meeting supportive figures.")}
+                >
+                  <span className="font-bold">6</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Tests & Allies</span>
                 </div>
               </div>
               
-              <div className="absolute left-[20%] top-[85%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">7</span>
-                  </div>
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">Approach to the Inmost Cave</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Preparing for the major challenge ahead with deepening self-awareness.</p>
-                  </div>
+              {/* Step 7: Approach to the Inmost Cave */}
+              <div className="absolute left-[20%] top-[85%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Approach to the Inmost Cave: Preparing for the major challenge ahead with deepening self-awareness.")}
+                >
+                  <span className="font-bold">7</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Approach</span>
                 </div>
               </div>
               
-              <div className="absolute left-[10%] top-[65%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">8</span>
-                  </div>
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 mr-16 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">The Ordeal</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Confronting the greatest fear or challenge, the pivotal transformation point.</p>
-                  </div>
+              {/* Step 8: The Ordeal */}
+              <div className="absolute left-[10%] top-[65%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("The Ordeal: Confronting the greatest fear or challenge, the pivotal transformation point.")}
+                >
+                  <span className="font-bold">8</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Ordeal</span>
                 </div>
               </div>
               
-              <div className="absolute left-[10%] top-[35%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">9</span>
-                  </div>
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 mr-16 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">Reward (Seizing the Sword)</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Claiming the treasure or insight gained from the ordeal.</p>
-                  </div>
+              {/* Step 9: Reward (Seizing the Sword) */}
+              <div className="absolute left-[10%] top-[35%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Reward (Seizing the Sword): Claiming the treasure or insight gained from the ordeal.")}
+                >
+                  <span className="font-bold">9</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Reward</span>
                 </div>
               </div>
               
-              <div className="absolute left-[20%] top-[15%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">10</span>
-                  </div>
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">The Road Back</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Beginning the return to the ordinary world with new knowledge.</p>
-                  </div>
+              {/* Step 10: The Road Back */}
+              <div className="absolute left-[20%] top-[15%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("The Road Back: Beginning the return to the ordinary world with new knowledge.")}
+                >
+                  <span className="font-bold">10</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Road Back</span>
                 </div>
               </div>
               
-              <div className="absolute left-[35%] top-[5%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">11</span>
-                  </div>
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">Resurrection</h4>
-                    <p className="text-xs text-foreground/70 mt-1">The final test that proves the transformation is complete.</p>
-                  </div>
+              {/* Step 11: Resurrection */}
+              <div className="absolute left-[35%] top-[5%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Resurrection: The final test that proves the transformation is complete.")}
+                >
+                  <span className="font-bold">11</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Resurrection</span>
                 </div>
               </div>
               
-              <div className="absolute left-[65%] top-[5%] -translate-x-1/2 group">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer">
-                    <span className="font-bold">12</span>
-                  </div>
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                    <h4 className="font-bold text-sm">Return with the Elixir</h4>
-                    <p className="text-xs text-foreground/70 mt-1">Bringing back wisdom to share with others and benefit the community.</p>
-                  </div>
+              {/* Step 12: Return with the Elixir */}
+              <div className="absolute left-[65%] top-[5%] -translate-x-1/2">
+                <div 
+                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Return with the Elixir: Bringing back wisdom to share with others and benefit the community.")}
+                >
+                  <span className="font-bold">12</span>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium">Return</span>
                 </div>
               </div>
               
@@ -328,7 +297,7 @@ export default function HerosJourneySpecialist() {
             
             <div className="text-center mt-8">
               <p className="text-foreground/70 max-w-2xl mx-auto">
-                Hover over each step to learn more about your Hero's Journey path. This ancient framework guides you through challenges toward transformation.
+                Click on each step to learn more about your Hero's Journey path. This ancient framework guides you through challenges toward transformation.
               </p>
             </div>
           </div>
