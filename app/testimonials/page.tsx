@@ -104,7 +104,16 @@ export default function Testimonials() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
-                <p className="mb-6 relative z-10">The story of the rock already inspired me to get my legs up to Stickle Tairn. It just shows the importance of trying every day, not giving up and persistently trying to 'move the rock' - that there is something good to come from it.</p>
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                    <img 
+                      src="/HJ/p1.png" 
+                      alt="Erin T." 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="relative z-10">The story of the rock already inspired me to get my legs up to Stickle Tairn. It just shows the importance of trying every day, not giving up and persistently trying to 'move the rock' - that there is something good to come from it.</p>
+                </div>
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">E</div>
                   <div>
@@ -116,7 +125,16 @@ export default function Testimonials() {
               
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
-                <p className="mb-6 relative z-10">I spent years battling depression, anxiety and mental health problems. I did the therapy and I've never felt happier in my life.</p>
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                    <img 
+                      src="/HJ/p2.png" 
+                      alt="Gabriel" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="relative z-10">I spent years battling depression, anxiety and mental health problems. I did the therapy and I've never felt happier in my life.</p>
+                </div>
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">G</div>
                   <div>
@@ -128,7 +146,16 @@ export default function Testimonials() {
               
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
-                <p className="mb-6 relative z-10">The call to adventure and rejection of the call resonated most with me because my anxiety has been known to hold me back.</p>
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                    <img 
+                      src="/HJ/p3.png" 
+                      alt="Rive" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="relative z-10">The call to adventure and rejection of the call resonated most with me because my anxiety has been known to hold me back.</p>
+                </div>
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">R</div>
                   <div>
@@ -140,12 +167,63 @@ export default function Testimonials() {
               
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
-                <p className="mb-6 relative z-10">I liked the story of Theseus pushing away the rock and finding the sword. It's important to not let one dimension let you lose sight of the other things that matter in life.</p>
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                    <img 
+                      src="/HJ/p4.png" 
+                      alt="Stephen" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="relative z-10">I liked the story of Theseus pushing away the rock and finding the sword. It's important to not let one dimension let you lose sight of the other things that matter in life.</p>
+                </div>
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">S</div>
                   <div>
                     <p className="font-semibold">Stephen</p>
                     <p className="text-sm text-foreground/60">IT Apprentice</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="card p-8 relative shadow-depth card-hover-lift">
+                <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                    <img 
+                      src="/HJ/p5.png" 
+                      alt="Stan" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="relative z-10">My view is that it's an important tool, journey to learn and embark on so I can promote self growth and eventually the growth of those around me.</p>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">S</div>
+                  <div>
+                    <p className="font-semibold">Stan</p>
+                    <p className="text-sm text-foreground/60">Counsellor</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="card p-8 relative shadow-depth card-hover-lift">
+                <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                    <img 
+                      src="/HJ/p6.png" 
+                      alt="Julian" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="relative z-10">We are what we believe and need mentors for all aspects of life.</p>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">J</div>
+                  <div>
+                    <p className="font-semibold">Julian</p>
+                    <p className="text-sm text-foreground/60">Workshop Participant</p>
                   </div>
                 </div>
               </div>
