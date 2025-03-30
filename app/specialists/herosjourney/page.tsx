@@ -126,32 +126,44 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Phase 1: Departure */}
-              <div className="absolute left-1/2 top-[10%] -translate-x-1/2">
+              <div className="absolute left-1/2 top-[10%] -translate-x-1/2 group relative">
                 <div 
                   className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Departure: The hero leaves the ordinary world and ventures into the unknown, facing initial challenges and meeting guides.")}
                 >
                   <span className="font-bold text-lg">Departure</span>
+                </div>
+                <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
+                  <div className="font-semibold mb-1">Departure</div>
+                  <p>The hero leaves the ordinary world and ventures into the unknown, facing initial challenges and meeting guides.</p>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
                 </div>
               </div>
               
               {/* Phase 2: Initiation */}
-              <div className="absolute left-[85%] top-[50%] -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute left-[85%] top-[50%] -translate-x-1/2 -translate-y-1/2 group relative">
                 <div 
                   className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Initiation: The hero faces the greatest challenges, confronts their deepest fears, and undergoes transformation.")}
                 >
                   <span className="font-bold text-lg">Initiation</span>
+                </div>
+                <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
+                  <div className="font-semibold mb-1">Initiation</div>
+                  <p>The hero faces the greatest challenges, confronts their deepest fears, and undergoes transformation.</p>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
                 </div>
               </div>
               
               {/* Phase 3: Return */}
-              <div className="absolute left-[15%] top-[50%] -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute left-[15%] top-[50%] -translate-x-1/2 -translate-y-1/2 group relative">
                 <div 
                   className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Return: The hero returns to the ordinary world with new wisdom, gifts, and purpose to share with others.")}
                 >
                   <span className="font-bold text-lg">Return</span>
+                </div>
+                <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
+                  <div className="font-semibold mb-1">Return</div>
+                  <p>The hero returns to the ordinary world with new wisdom, gifts, and purpose to share with others.</p>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
                 </div>
               </div>
               
