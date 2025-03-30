@@ -105,7 +105,7 @@ export default function Testimonials() {
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden flex-shrink-0">
                     <img 
                       src="/HJ/p1.png" 
                       alt="Erin T." 
@@ -126,7 +126,7 @@ export default function Testimonials() {
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden flex-shrink-0">
                     <img 
                       src="/HJ/p2.png" 
                       alt="Gabriel" 
@@ -147,7 +147,7 @@ export default function Testimonials() {
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden flex-shrink-0">
                     <img 
                       src="/HJ/p3.png" 
                       alt="Rive" 
@@ -168,7 +168,7 @@ export default function Testimonials() {
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden flex-shrink-0">
                     <img 
                       src="/HJ/p4.png" 
                       alt="Stephen" 
@@ -189,7 +189,7 @@ export default function Testimonials() {
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden flex-shrink-0">
                     <img 
                       src="/HJ/p5.png" 
                       alt="Stan" 
@@ -210,7 +210,7 @@ export default function Testimonials() {
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden flex-shrink-0">
                     <img 
                       src="/HJ/p6.png" 
                       alt="Julian" 
