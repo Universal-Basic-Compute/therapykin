@@ -197,4 +197,30 @@ export async function submitSessionRating(
   }
 }
 
+// Update session with summary image URL
+export async function updateSessionImage(
+  sessionId: string,
+  imageUrl: string
+): Promise<boolean> {
+  try {
+    console.log(`Updating session ${sessionId} with image URL: ${imageUrl}`);
+    
+    await sessionsTable.update([
+      {
+        id: sessionId,
+        fields: {
+          SummaryImage: imageUrl,
+          ImageGeneratedAt: new Date().toISOString()
+        },
+      },
+    ]);
+    
+    console.log('Session image updated successfully');
+    return true;
+  } catch (error) {
+    console.error('Error updating session image:', error);
+    return false;
+  }
+}
+
 export { base, usersTable };
