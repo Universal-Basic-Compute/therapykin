@@ -111,176 +111,47 @@ export default function HerosJourneySpecialist() {
           </p>
           
           <div className="mt-16 mb-20">
-            <h2 className="text-2xl font-semibold mb-6 text-center">The 12 Steps of the Hero's Journey</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-center">The Hero's Journey Path</h2>
             <p className="text-center text-foreground/80 mb-10 max-w-3xl mx-auto">
-              The Hero's Journey follows a circular path of transformation, guiding you through challenges toward greater wholeness and purpose.
+              The Hero's Journey follows three key phases that guide you through transformation.
             </p>
             
             <div className="relative w-full max-w-3xl mx-auto aspect-square">
               {/* Outer circle */}
               <div className="absolute inset-0 rounded-full border-2 border-[var(--primary)]/30"></div>
               
-              {/* Inner circle */}
-              <div className="absolute inset-8 rounded-full border-2 border-[var(--primary)]/20"></div>
-              
               {/* Center point */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center text-white font-bold shadow-lg z-10">
-                <span className="text-center">Hero's<br/>Journey</span>
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center text-white font-bold shadow-lg z-10">
+                <span className="text-center text-lg">Hero's<br/>Journey</span>
               </div>
               
-              {/* Step 1: The Ordinary World */}
-              <div className="absolute left-1/2 top-[5%] -translate-x-1/2">
+              {/* Phase 1: Departure */}
+              <div className="absolute left-1/2 top-[10%] -translate-x-1/2">
                 <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("The Ordinary World: Where the hero begins, in their familiar environment with established patterns.")}
+                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Departure: The hero leaves the ordinary world and ventures into the unknown, facing initial challenges and meeting guides.")}
                 >
-                  <span className="font-bold">1</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Ordinary World</span>
+                  <span className="font-bold text-lg">Departure</span>
                 </div>
               </div>
               
-              {/* Step 2: The Call to Adventure */}
-              <div className="absolute left-[80%] top-[15%] -translate-x-1/2">
+              {/* Phase 2: Initiation */}
+              <div className="absolute left-[85%] top-[50%] -translate-x-1/2 -translate-y-1/2">
                 <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("The Call to Adventure: A challenge or opportunity that disrupts the ordinary world.")}
+                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Initiation: The hero faces the greatest challenges, confronts their deepest fears, and undergoes transformation.")}
                 >
-                  <span className="font-bold">2</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Call to Adventure</span>
+                  <span className="font-bold text-lg">Initiation</span>
                 </div>
               </div>
               
-              {/* Step 3: Refusal of the Call */}
-              <div className="absolute left-[90%] top-[35%] -translate-x-1/2">
+              {/* Phase 3: Return */}
+              <div className="absolute left-[15%] top-[50%] -translate-x-1/2 -translate-y-1/2">
                 <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Refusal of the Call: Initial resistance to change or transformation due to fear or doubt.")}
+                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  onClick={() => alert("Return: The hero returns to the ordinary world with new wisdom, gifts, and purpose to share with others.")}
                 >
-                  <span className="font-bold">3</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Refusal</span>
-                </div>
-              </div>
-              
-              {/* Step 4: Meeting the Mentor */}
-              <div className="absolute left-[90%] top-[65%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Meeting the Mentor: Encountering a guide who provides wisdom, tools, or support.")}
-                >
-                  <span className="font-bold">4</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Meeting Mentor</span>
-                </div>
-              </div>
-              
-              {/* Step 5: Crossing the Threshold */}
-              <div className="absolute left-[80%] top-[85%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Crossing the Threshold: Moving from the familiar into the unknown, taking the first step.")}
-                >
-                  <span className="font-bold">5</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Threshold</span>
-                </div>
-              </div>
-              
-              {/* Step 6: Tests, Allies, and Enemies */}
-              <div className="absolute left-[50%] top-[95%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Tests, Allies, and Enemies: Facing challenges that test resolve and meeting supportive figures.")}
-                >
-                  <span className="font-bold">6</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Tests & Allies</span>
-                </div>
-              </div>
-              
-              {/* Step 7: Approach to the Inmost Cave */}
-              <div className="absolute left-[20%] top-[85%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Approach to the Inmost Cave: Preparing for the major challenge ahead with deepening self-awareness.")}
-                >
-                  <span className="font-bold">7</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Approach</span>
-                </div>
-              </div>
-              
-              {/* Step 8: The Ordeal */}
-              <div className="absolute left-[10%] top-[65%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("The Ordeal: Confronting the greatest fear or challenge, the pivotal transformation point.")}
-                >
-                  <span className="font-bold">8</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Ordeal</span>
-                </div>
-              </div>
-              
-              {/* Step 9: Reward (Seizing the Sword) */}
-              <div className="absolute left-[10%] top-[35%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Reward (Seizing the Sword): Claiming the treasure or insight gained from the ordeal.")}
-                >
-                  <span className="font-bold">9</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Reward</span>
-                </div>
-              </div>
-              
-              {/* Step 10: The Road Back */}
-              <div className="absolute left-[20%] top-[15%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("The Road Back: Beginning the return to the ordinary world with new knowledge.")}
-                >
-                  <span className="font-bold">10</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Road Back</span>
-                </div>
-              </div>
-              
-              {/* Step 11: Resurrection */}
-              <div className="absolute left-[35%] top-[5%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Resurrection: The final test that proves the transformation is complete.")}
-                >
-                  <span className="font-bold">11</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Resurrection</span>
-                </div>
-              </div>
-              
-              {/* Step 12: Return with the Elixir */}
-              <div className="absolute left-[65%] top-[5%] -translate-x-1/2">
-                <div 
-                  className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                  onClick={() => alert("Return with the Elixir: Bringing back wisdom to share with others and benefit the community.")}
-                >
-                  <span className="font-bold">12</span>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-xs font-medium">Return</span>
+                  <span className="font-bold text-lg">Return</span>
                 </div>
               </div>
               
@@ -289,15 +160,15 @@ export default function HerosJourneySpecialist() {
                 <path d="M50,20 C70,20 80,30 80,50 C80,70 70,80 50,80 C30,80 20,70 20,50 C20,30 30,20 50,20" 
                   fill="none" 
                   stroke="var(--primary)" 
-                  strokeWidth="0.5" 
-                  strokeDasharray="1,1" 
-                  className="opacity-50" />
+                  strokeWidth="1" 
+                  strokeDasharray="2,2" 
+                  className="opacity-70" />
               </svg>
             </div>
             
             <div className="text-center mt-8">
               <p className="text-foreground/70 max-w-2xl mx-auto">
-                Click on each step to learn more about your Hero's Journey path. This ancient framework guides you through challenges toward transformation.
+                Click on each phase to learn more about the Hero's Journey path. This simplified framework highlights the three major phases of transformation.
               </p>
             </div>
           </div>
