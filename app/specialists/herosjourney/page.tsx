@@ -478,36 +478,42 @@ export default function HerosJourneySpecialist() {
                 quote="The story of the rock already inspired me to get my legs up to Stickle Tairn. It just shows the importance of trying every day, not giving up and persistently trying to 'move the rock' - that there is something good to come from it."
                 author="Erin T."
                 title="Teacher"
+                imageSrc="/HJ/p1.png"
               />
               
               <Testimonial 
                 quote="I spent years battling depression, anxiety and mental health problems. I did the therapy and I've never felt happier in my life."
                 author="Gabriel"
                 title="Mental Health Journey"
+                imageSrc="/HJ/p2.png"
               />
               
               <Testimonial 
                 quote="The call to adventure and rejection of the call resonated most with me because my anxiety has been known to hold me back."
                 author="Rive"
                 title="Media Professional"
+                imageSrc="/HJ/p3.png"
               />
               
               <Testimonial 
                 quote="I liked the story of Theseus pushing away the rock and finding the sword. It's important to not let one dimension let you lose sight of the other things that matter in life."
                 author="Stephen"
                 title="IT Apprentice"
+                imageSrc="/HJ/p4.png"
               />
               
               <Testimonial 
                 quote="My view is that it's an important tool, journey to learn and embark on so I can promote self growth and eventually the growth of those around me."
                 author="Stan"
                 title="Counsellor"
+                imageSrc="/HJ/p5.png"
               />
               
               <Testimonial 
                 quote="We are what we believe and need mentors for all aspects of life."
                 author="Julian"
                 title="Workshop Participant"
+                imageSrc="/HJ/p6.png"
               />
             </div>
           </div>
