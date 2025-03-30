@@ -486,7 +486,7 @@ export default function HerosJourneySpecialist() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {/* Spiritual Dimension */}
-              <div className="bg-gradient-to-br from-white to-[var(--primary)]/20 dark:from-[var(--background-alt)]/70 dark:to-[var(--primary)]/30 p-8 rounded-lg border border-[var(--primary)]/10 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--primary)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--primary)]/40 p-8 rounded-lg border border-[var(--primary)]/20 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -511,7 +511,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Emotional Dimension */}
-              <div className="bg-gradient-to-br from-white to-[var(--primary-dark)]/20 dark:from-[var(--background-alt)]/70 dark:to-[var(--primary-dark)]/30 p-8 rounded-lg border border-[var(--primary-dark)]/10 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--primary-dark)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--primary-dark)]/40 p-8 rounded-lg border border-[var(--primary-dark)]/20 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -536,7 +536,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Social Dimension */}
-              <div className="bg-gradient-to-br from-white to-[var(--accent)]/20 dark:from-[var(--background-alt)]/70 dark:to-[var(--accent)]/30 p-8 rounded-lg border border-[var(--accent)]/10 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--accent)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--accent)]/40 p-8 rounded-lg border border-[var(--accent)]/20 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -561,7 +561,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Professional Dimension */}
-              <div className="bg-gradient-to-br from-white to-[var(--primary-light)]/20 dark:from-[var(--background-alt)]/70 dark:to-[var(--primary-light)]/30 p-8 rounded-lg border border-[var(--primary-light)]/10 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--primary-light)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--primary-light)]/40 p-8 rounded-lg border border-[var(--primary-light)]/20 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -586,7 +586,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Biological Dimension */}
-              <div className="bg-gradient-to-br from-white to-[var(--accent-light)]/20 dark:from-[var(--background-alt)]/70 dark:to-[var(--accent-light)]/30 p-8 rounded-lg border border-[var(--accent-light)]/10 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--accent-light)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--accent-light)]/40 p-8 rounded-lg border border-[var(--accent-light)]/20 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -705,9 +705,9 @@ export default function HerosJourneySpecialist() {
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-[var(--primary)]/90 via-[var(--primary-light)]/80 to-[var(--accent)]/80 p-8 rounded-lg mb-16 text-white shadow-lg relative overflow-hidden">
+          <div className="bg-gradient-to-r from-[var(--primary)]/80 via-[var(--primary-light)]/70 to-[var(--accent)]/70 p-8 rounded-lg mb-16 text-white shadow-lg relative overflow-hidden">
             {/* Add a subtle overlay to reduce brightness */}
-            <div className="absolute inset-0 bg-black/10"></div>
+            <div className="absolute inset-0 bg-black/20"></div>
             
             {/* Make content relative to appear above the overlay */}
             <div className="relative z-10">
