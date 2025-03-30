@@ -23,6 +23,23 @@ export default function ForTherapists() {
           </div>
         </div>
         
+        {/* Video section */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <div className="relative rounded-xl overflow-hidden shadow-lg">
+            <video 
+              className="w-full" 
+              controls 
+              poster="/for-therapists/video-poster.png"
+            >
+              <source src="/for-therapists.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p className="text-center text-sm text-foreground/60 mt-3">
+            Watch: How TherapyKin extends your therapeutic approach
+          </p>
+        </div>
+        
         <div className="max-w-4xl mx-auto">
           <section className="mb-16">
             <p className="text-xl text-foreground/70 mb-8 leading-relaxed">
