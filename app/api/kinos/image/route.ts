@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
     } = await request.json();
     
     console.log(`Requesting image generation for user: ${firstName} ${lastName}${specialist ? `, specialist: ${specialist}` : ''}`);
+    console.log(`Using API key: ${process.env.KINOS_API_KEY ? 'Key is set (not showing for security)' : 'Key is NOT set!'}`);
     
     // Create the project ID by combining firstName and lastName
     const projectId = `${firstName}${lastName}`;
@@ -60,6 +61,13 @@ export async function POST(request: NextRequest) {
       magic_prompt_option: "AUTO"
     };
     
+    // Log the request details (excluding sensitive data)
+    console.log('Sending image generation request to:', baseUrl);
+    console.log('Request body:', JSON.stringify({
+      ...requestBody,
+      message: requestBody.message.length > 50 ? requestBody.message.substring(0, 50) + '...' : requestBody.message
+    }));
+    
     // Forward the request to the KinOS API
     const response = await fetch(baseUrl, {
       method: 'POST',
@@ -74,7 +82,8 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`KinOS API error (${response.status}): ${errorText}`);
-      throw new Error(`KinOS API returned status ${response.status}`);
+      console.error(`Request failed with status: ${response.status}, headers:`, response.headers);
+      throw new Error(`KinOS API returned status ${response.status}: ${errorText.substring(0, 200)}`);
     }
 
     // Get the response from KinOS API

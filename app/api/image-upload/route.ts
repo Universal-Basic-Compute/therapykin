@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
     // 2. Return a URL to the uploaded image
     // 3. Store the image reference in your database
     
-    console.log('Image processed successfully');
+    // Log image data length for debugging
+    console.log(`Image processed successfully. Data length: ${image.length}`);
     
     return NextResponse.json({ 
       success: true,
