@@ -120,111 +120,242 @@ export default function HerosJourneySpecialist() {
           <div className="mt-16 mb-20">
             <h2 className="text-2xl font-semibold mb-6 text-center">The Hero's Journey Path</h2>
             <p className="text-center text-foreground/80 mb-10 max-w-3xl mx-auto">
-              The Hero's Journey follows three key phases that guide you through transformation.
+              The Hero's Journey follows twelve key stages that guide you through transformation.
             </p>
             
-            <div className="relative w-full max-w-4xl mx-auto py-16">
-              {/* Linear path with zigzag arrows */}
-              <div className="flex flex-col items-center">
-                {/* First row - Departure with right arrow */}
-                <div className="flex items-center w-full mb-16">
-                  {/* Departure circle */}
-                  <div className="group relative">
-                    <div 
-                      className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
-                    >
-                      <span className="font-bold text-lg">Departure</span>
-                    </div>
-                    <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
-                      <div className="font-semibold mb-1">Departure</div>
-                      <p>The hero leaves the ordinary world and ventures into the unknown, facing initial challenges and meeting guides.</p>
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
-                    </div>
-                  </div>
-                  
-                  {/* Arrow pointing right */}
-                  <div className="flex-grow flex justify-center items-center px-4">
-                    <div className="h-2 bg-[var(--primary)] flex-grow relative">
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 border-t-2 border-r-2 border-[var(--primary)] transform rotate-45"></div>
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-t-transparent border-b-transparent border-l-[var(--primary)]"></div>
-                    </div>
-                    <div className="text-center text-[var(--primary)] font-medium ml-4">
-                      The Call to Adventure
-                    </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {/* Card 1: The Ordinary World */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/1.png" 
+                    alt="The Ordinary World" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">1. Ordinary World</h3>
                   </div>
                 </div>
-                
-                {/* Vertical arrow pointing down */}
-                <div className="h-16 w-2 bg-[var(--primary)] relative mb-4">
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-[var(--primary)]"></div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero begins in their familiar environment, unaware of the adventures to come.
+                  </p>
                 </div>
-                
-                {/* Second row - Initiation with left arrow */}
-                <div className="flex flex-row-reverse items-center w-full mb-16">
-                  {/* Initiation circle */}
-                  <div className="group relative">
-                    <div 
-                      className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary-dark)] hover:bg-[var(--primary-dark)] hover:text-white transition-all cursor-pointer"
-                    >
-                      <span className="font-bold text-lg">Initiation</span>
-                    </div>
-                    <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
-                      <div className="font-semibold mb-1">Initiation</div>
-                      <p>The hero faces the greatest challenges, confronts their deepest fears, and undergoes transformation.</p>
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
-                    </div>
-                  </div>
-                  
-                  {/* Arrow pointing left */}
-                  <div className="flex-grow flex justify-center items-center px-4">
-                    <div className="text-center text-[var(--primary-dark)] font-medium mr-4">
-                      The Supreme Ordeal
-                    </div>
-                    <div className="h-2 bg-[var(--primary-dark)] flex-grow relative">
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 border-b-2 border-l-2 border-[var(--primary-dark)] transform rotate-45"></div>
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-r-8 border-t-transparent border-b-transparent border-r-[var(--primary-dark)]"></div>
-                    </div>
+              </div>
+              
+              {/* Card 2: Call to Adventure */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/2.png" 
+                    alt="Call to Adventure" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">2. Call to Adventure</h3>
                   </div>
                 </div>
-                
-                {/* Vertical arrow pointing down */}
-                <div className="h-16 w-2 bg-[var(--accent)] relative mb-4">
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-[var(--accent)]"></div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero is presented with a challenge, problem, or adventure to undertake.
+                  </p>
                 </div>
-                
-                {/* Third row - Return with right arrow */}
-                <div className="flex items-center w-full">
-                  {/* Return circle */}
-                  <div className="group relative">
-                    <div 
-                      className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--accent)] hover:bg-[var(--accent)] hover:text-white transition-all cursor-pointer"
-                    >
-                      <span className="font-bold text-lg">Return</span>
-                    </div>
-                    <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
-                      <div className="font-semibold mb-1">Return</div>
-                      <p>The hero returns to the ordinary world with new wisdom, gifts, and purpose to share with others.</p>
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
-                    </div>
+              </div>
+              
+              {/* Card 3: Refusal of the Call */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/3.png" 
+                    alt="Refusal of the Call" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">3. Refusal of the Call</h3>
                   </div>
-                  
-                  {/* Arrow pointing right */}
-                  <div className="flex-grow flex justify-center items-center px-4">
-                    <div className="h-2 bg-[var(--accent)] flex-grow relative">
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 border-t-2 border-r-2 border-[var(--accent)] transform rotate-45"></div>
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-t-transparent border-b-transparent border-l-[var(--accent)]"></div>
-                    </div>
-                    <div className="text-center text-[var(--accent)] font-medium ml-4">
-                      Return with the Elixir
-                    </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero initially refuses the adventure because of fear, insecurity, or other obligations.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 4: Meeting the Mentor */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/4.png" 
+                    alt="Meeting the Mentor" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">4. Meeting the Mentor</h3>
                   </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero encounters a mentor who provides guidance, wisdom, or magical gifts to help on the journey.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 5: Crossing the Threshold */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/5.png" 
+                    alt="Crossing the Threshold" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">5. Crossing the Threshold</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero commits to the adventure and crosses into the special world where the rules are different.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 6: Tests, Allies, Enemies */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/6.png" 
+                    alt="Tests, Allies, Enemies" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">6. Tests, Allies, Enemies</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero faces tests, encounters allies, and confronts enemies as they learn the rules of the special world.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 7: Approach to the Inmost Cave */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/7.png" 
+                    alt="Approach to the Inmost Cave" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">7. Approach to the Inmost Cave</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero prepares for the major challenge in the special world, facing deep inner conflicts.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 8: The Ordeal */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/8.png" 
+                    alt="The Ordeal" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">8. The Ordeal</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero faces their greatest fear, confronts death, and experiences a "death and rebirth" transformation.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 9: Reward (Seizing the Sword) */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/9.png" 
+                    alt="Reward (Seizing the Sword)" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">9. Reward (Seizing the Sword)</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero takes possession of the treasure, reward, or elixir they sought, gaining new knowledge or power.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 10: The Road Back */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/10.png" 
+                    alt="The Road Back" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">10. The Road Back</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero begins the journey back to the ordinary world, often pursued by remaining threats.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 11: Resurrection */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/11.png" 
+                    alt="Resurrection" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">11. Resurrection</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero faces a final test where everything is at stake, experiencing a final moment of death and rebirth.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Card 12: Return with the Elixir */}
+              <div className="card card-hover-lift overflow-hidden">
+                <div className="relative h-48">
+                  <img 
+                    src="/TK/12.png" 
+                    alt="Return with the Elixir" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <h3 className="text-white font-semibold p-4">12. Return with the Elixir</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-foreground/70">
+                    The hero returns to the ordinary world with the elixir, treasure, or lesson that can benefit others.
+                  </p>
                 </div>
               </div>
             </div>
             
             <div className="text-center mt-8">
               <p className="text-foreground/70 max-w-2xl mx-auto">
-                Hover over each phase to learn more about the Hero's Journey path. This simplified framework highlights the three major phases of transformation.
+                Each card represents a stage in the Hero's Journey as described by Joseph Campbell. This framework highlights the universal pattern of transformation found in myths and stories across cultures.
               </p>
             </div>
           </div>
