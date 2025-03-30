@@ -128,7 +128,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/1.png" 
+                    src="/HJ/1.png" 
                     alt="The Ordinary World" 
                     className="w-full h-full object-cover"
                   />
@@ -147,7 +147,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/2.png" 
+                    src="/HJ/2.png" 
                     alt="Call to Adventure" 
                     className="w-full h-full object-cover"
                   />
@@ -166,7 +166,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/3.png" 
+                    src="/HJ/3.png" 
                     alt="Refusal of the Call" 
                     className="w-full h-full object-cover"
                   />
@@ -185,7 +185,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/4.png" 
+                    src="/HJ/4.png" 
                     alt="Meeting the Mentor" 
                     className="w-full h-full object-cover"
                   />
@@ -204,7 +204,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/5.png" 
+                    src="/HJ/5.png" 
                     alt="Crossing the Threshold" 
                     className="w-full h-full object-cover"
                   />
@@ -223,7 +223,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/6.png" 
+                    src="/HJ/6.png" 
                     alt="Tests, Allies, Enemies" 
                     className="w-full h-full object-cover"
                   />
@@ -242,7 +242,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/7.png" 
+                    src="/HJ/7.png" 
                     alt="Approach to the Inmost Cave" 
                     className="w-full h-full object-cover"
                   />
@@ -261,7 +261,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/8.png" 
+                    src="/HJ/8.png" 
                     alt="The Ordeal" 
                     className="w-full h-full object-cover"
                   />
@@ -280,7 +280,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/9.png" 
+                    src="/HJ/9.png" 
                     alt="Reward (Seizing the Sword)" 
                     className="w-full h-full object-cover"
                   />
@@ -299,7 +299,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/10.png" 
+                    src="/HJ/10.png" 
                     alt="The Road Back" 
                     className="w-full h-full object-cover"
                   />
@@ -318,7 +318,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/11.png" 
+                    src="/HJ/11.png" 
                     alt="Resurrection" 
                     className="w-full h-full object-cover"
                   />
@@ -337,7 +337,7 @@ export default function HerosJourneySpecialist() {
               <div className="card card-hover-lift overflow-hidden">
                 <div className="relative h-48">
                   <img 
-                    src="/TK/12.png" 
+                    src="/HJ/12.png" 
                     alt="Return with the Elixir" 
                     className="w-full h-full object-cover"
                   />
