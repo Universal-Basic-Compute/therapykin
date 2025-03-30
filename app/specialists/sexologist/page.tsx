@@ -54,6 +54,21 @@ export default function SexologistSpecialist() {
             </nav>
           </div>
           
+          {/* Hero Image */}
+          <div className="mb-12 relative rounded-xl overflow-hidden">
+            <img 
+              src="/sexologist/hero.png" 
+              alt="Sexual Health Specialist" 
+              className="w-full h-auto object-cover rounded-xl"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent flex items-end">
+              <div className="p-6 md:p-8 text-white max-w-2xl">
+                <h2 className="text-2xl md:text-3xl font-bold mb-2">Sexual Health Specialist</h2>
+                <p className="text-lg opacity-90">A private space for your most intimate questions</p>
+              </div>
+            </div>
+          </div>
+          
           <div className="mb-12">
             <span className="px-3 py-1 bg-[var(--primary)]/10 text-[var(--primary)] rounded-full text-sm font-medium">
               Specialized Support
