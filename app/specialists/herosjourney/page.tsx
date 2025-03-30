@@ -122,71 +122,108 @@ export default function HerosJourneySpecialist() {
               The Hero's Journey follows three key phases that guide you through transformation.
             </p>
             
-            <div className="relative w-full max-w-3xl mx-auto aspect-square">
-              {/* Outer circle */}
-              <div className="absolute inset-0 rounded-full border-2 border-[var(--primary)]/30"></div>
-              
-              {/* Center point */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-[var(--primary)] via-[var(--accent)] to-[var(--primary-dark)] flex items-center justify-center text-white font-bold shadow-lg z-10">
-                <span className="text-center text-lg">Hero's<br/>Journey</span>
+            <div className="relative w-full max-w-4xl mx-auto py-16">
+              {/* Linear path with zigzag arrows */}
+              <div className="flex flex-col items-center">
+                {/* First row - Departure with right arrow */}
+                <div className="flex items-center w-full mb-16">
+                  {/* Departure circle */}
+                  <div className="group relative">
+                    <div 
+                      className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                    >
+                      <span className="font-bold text-lg">Departure</span>
+                    </div>
+                    <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
+                      <div className="font-semibold mb-1">Departure</div>
+                      <p>The hero leaves the ordinary world and ventures into the unknown, facing initial challenges and meeting guides.</p>
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
+                    </div>
+                  </div>
+                  
+                  {/* Arrow pointing right */}
+                  <div className="flex-grow flex justify-center items-center px-4">
+                    <div className="h-2 bg-[var(--primary)] flex-grow relative">
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 border-t-2 border-r-2 border-[var(--primary)] transform rotate-45"></div>
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-t-transparent border-b-transparent border-l-[var(--primary)]"></div>
+                    </div>
+                    <div className="text-center text-[var(--primary)] font-medium ml-4">
+                      The Call to Adventure
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Vertical arrow pointing down */}
+                <div className="h-16 w-2 bg-[var(--primary)] relative mb-4">
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-[var(--primary)]"></div>
+                </div>
+                
+                {/* Second row - Initiation with left arrow */}
+                <div className="flex flex-row-reverse items-center w-full mb-16">
+                  {/* Initiation circle */}
+                  <div className="group relative">
+                    <div 
+                      className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary-dark)] hover:bg-[var(--primary-dark)] hover:text-white transition-all cursor-pointer"
+                    >
+                      <span className="font-bold text-lg">Initiation</span>
+                    </div>
+                    <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
+                      <div className="font-semibold mb-1">Initiation</div>
+                      <p>The hero faces the greatest challenges, confronts their deepest fears, and undergoes transformation.</p>
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
+                    </div>
+                  </div>
+                  
+                  {/* Arrow pointing left */}
+                  <div className="flex-grow flex justify-center items-center px-4">
+                    <div className="text-center text-[var(--primary-dark)] font-medium mr-4">
+                      The Supreme Ordeal
+                    </div>
+                    <div className="h-2 bg-[var(--primary-dark)] flex-grow relative">
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 border-b-2 border-l-2 border-[var(--primary-dark)] transform rotate-45"></div>
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-r-8 border-t-transparent border-b-transparent border-r-[var(--primary-dark)]"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Vertical arrow pointing down */}
+                <div className="h-16 w-2 bg-[var(--accent)] relative mb-4">
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-[var(--accent)]"></div>
+                </div>
+                
+                {/* Third row - Return with right arrow */}
+                <div className="flex items-center w-full">
+                  {/* Return circle */}
+                  <div className="group relative">
+                    <div 
+                      className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--accent)] hover:bg-[var(--accent)] hover:text-white transition-all cursor-pointer"
+                    >
+                      <span className="font-bold text-lg">Return</span>
+                    </div>
+                    <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
+                      <div className="font-semibold mb-1">Return</div>
+                      <p>The hero returns to the ordinary world with new wisdom, gifts, and purpose to share with others.</p>
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
+                    </div>
+                  </div>
+                  
+                  {/* Arrow pointing right */}
+                  <div className="flex-grow flex justify-center items-center px-4">
+                    <div className="h-2 bg-[var(--accent)] flex-grow relative">
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 border-t-2 border-r-2 border-[var(--accent)] transform rotate-45"></div>
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-t-transparent border-b-transparent border-l-[var(--accent)]"></div>
+                    </div>
+                    <div className="text-center text-[var(--accent)] font-medium ml-4">
+                      Return with the Elixir
+                    </div>
+                  </div>
+                </div>
               </div>
-              
-              {/* Phase 1: Departure */}
-              <div className="absolute left-1/2 top-[10%] -translate-x-1/2 group relative">
-                <div 
-                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-gradient-to-r hover:from-[var(--primary)] hover:to-[var(--primary-light)] hover:text-white transition-all cursor-pointer"
-                >
-                  <span className="font-bold text-lg">Departure</span>
-                </div>
-                <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
-                  <div className="font-semibold mb-1">Departure</div>
-                  <p>The hero leaves the ordinary world and ventures into the unknown, facing initial challenges and meeting guides.</p>
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
-                </div>
-              </div>
-              
-              {/* Phase 2: Initiation */}
-              <div className="absolute right-[5%] top-[50%] -translate-y-1/2 group relative">
-                <div 
-                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary-dark)] hover:bg-gradient-to-r hover:from-[var(--primary-dark)] hover:to-[var(--accent)] hover:text-white transition-all cursor-pointer"
-                >
-                  <span className="font-bold text-lg">Initiation</span>
-                </div>
-                <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
-                  <div className="font-semibold mb-1">Initiation</div>
-                  <p>The hero faces the greatest challenges, confronts their deepest fears, and undergoes transformation.</p>
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
-                </div>
-              </div>
-              
-              {/* Phase 3: Return */}
-              <div className="absolute left-[5%] top-[50%] -translate-y-1/2 group relative">
-                <div 
-                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--accent)] hover:bg-gradient-to-r hover:from-[var(--accent)] hover:to-[var(--accent-light)] hover:text-white transition-all cursor-pointer"
-                >
-                  <span className="font-bold text-lg">Return</span>
-                </div>
-                <div className="absolute opacity-0 group-hover:opacity-100 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg text-sm text-foreground/80 transition-opacity duration-200 pointer-events-none z-20">
-                  <div className="font-semibold mb-1">Return</div>
-                  <p>The hero returns to the ordinary world with new wisdom, gifts, and purpose to share with others.</p>
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white dark:bg-[var(--background-alt)]"></div>
-                </div>
-              </div>
-              
-              {/* Connecting lines */}
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50,20 C70,20 80,30 80,50 C80,70 70,80 50,80 C30,80 20,70 20,50 C20,30 30,20 50,20" 
-                  fill="none" 
-                  stroke="var(--primary)" 
-                  strokeWidth="1" 
-                  strokeDasharray="2,2" 
-                  className="opacity-70" />
-              </svg>
             </div>
             
             <div className="text-center mt-8">
               <p className="text-foreground/70 max-w-2xl mx-auto">
-                Click on each phase to learn more about the Hero's Journey path. This simplified framework highlights the three major phases of transformation.
+                Hover over each phase to learn more about the Hero's Journey path. This simplified framework highlights the three major phases of transformation.
               </p>
             </div>
           </div>
