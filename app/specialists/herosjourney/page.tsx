@@ -99,7 +99,7 @@ export default function HerosJourneySpecialist() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
               </svg>
               <p className="text-foreground/90 font-medium">
-                <span className="font-bold">Exclusive Partnership:</span> This specialist is powered by our therapeutic partnership with the Hero's Journey Institute, bringing their proven methodology directly to TherapyKin users.
+                <span className="font-bold">Exclusive Partnership:</span> This specialist is powered by our therapeutic partnership with the Hero's Journey Academy, bringing their proven methodology directly to TherapyKin users.
               </p>
             </div>
           </div>
