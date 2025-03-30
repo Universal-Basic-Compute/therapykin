@@ -132,7 +132,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">1</span>
                 </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">The Ordinary World</h4>
                   <p className="text-xs text-foreground/70 mt-1">Where the hero begins, in their familiar environment with established patterns.</p>
                 </div>
@@ -143,7 +143,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">2</span>
                 </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">The Call to Adventure</h4>
                   <p className="text-xs text-foreground/70 mt-1">A challenge or opportunity that disrupts the ordinary world.</p>
                 </div>
@@ -154,7 +154,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">3</span>
                 </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute left-auto right-0 top-1/2 -translate-y-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">Refusal of the Call</h4>
                   <p className="text-xs text-foreground/70 mt-1">Initial resistance to change or transformation due to fear or doubt.</p>
                 </div>
@@ -176,7 +176,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">5</span>
                 </div>
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute bottom-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">Crossing the Threshold</h4>
                   <p className="text-xs text-foreground/70 mt-1">Moving from the familiar into the unknown, taking the first step.</p>
                 </div>
@@ -187,7 +187,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">6</span>
                 </div>
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute bottom-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">Tests, Allies, and Enemies</h4>
                   <p className="text-xs text-foreground/70 mt-1">Facing challenges that test resolve and meeting supportive figures.</p>
                 </div>
@@ -198,7 +198,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">7</span>
                 </div>
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute bottom-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">Approach to the Inmost Cave</h4>
                   <p className="text-xs text-foreground/70 mt-1">Preparing for the major challenge ahead with deepening self-awareness.</p>
                 </div>
@@ -209,7 +209,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">8</span>
                 </div>
-                <div className="absolute top-1/2 left-full -translate-y-1/2 ml-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute left-0 right-auto top-1/2 -translate-y-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">The Ordeal</h4>
                   <p className="text-xs text-foreground/70 mt-1">Confronting the greatest fear or challenge, the pivotal transformation point.</p>
                 </div>
@@ -220,7 +220,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">9</span>
                 </div>
-                <div className="absolute top-1/2 left-full -translate-y-1/2 ml-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute left-0 right-auto top-1/2 -translate-y-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">Reward (Seizing the Sword)</h4>
                   <p className="text-xs text-foreground/70 mt-1">Claiming the treasure or insight gained from the ordeal.</p>
                 </div>
@@ -231,7 +231,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">10</span>
                 </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">The Road Back</h4>
                   <p className="text-xs text-foreground/70 mt-1">Beginning the return to the ordinary world with new knowledge.</p>
                 </div>
@@ -242,7 +242,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">11</span>
                 </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">Resurrection</h4>
                   <p className="text-xs text-foreground/70 mt-1">The final test that proves the transformation is complete.</p>
                 </div>
@@ -253,7 +253,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">12</span>
                 </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">Return with the Elixir</h4>
                   <p className="text-xs text-foreground/70 mt-1">Bringing back wisdom to share with others and benefit the community.</p>
                 </div>
