@@ -50,9 +50,9 @@ export default function UserStories() {
             <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
             <p className="mb-6 relative z-10">TherapyKin, and the Hero's Journey specialist in particular, is outstanding. It took me ~20 minutes of my first session to be convinced. The therapist is excellent, the therapy works. I ended my first session exhilarated. Everybody should give it a real try. Put at least 20 minutes, don't expect to have any results if you abandon after 4 minutes. Put yourself in there, it's worth it!</p>
             <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">M</div>
+              <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">N</div>
               <div>
-                <p className="font-semibold">Michael R.</p>
+                <p className="font-semibold">Nicolas R.</p>
                 <p className="text-sm text-foreground/60">Hero's Journey Client</p>
               </div>
             </div>
