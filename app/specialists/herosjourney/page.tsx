@@ -682,18 +682,19 @@ export default function HerosJourneySpecialist() {
             </div>
           </div>
 
-          <div className="text-center bg-gradient-to-r from-[var(--background-alt)] to-white dark:to-[var(--background-alt)]/50 p-10 rounded-lg border border-[var(--primary)]/20">
-            <h2 className="text-2xl font-semibold mb-4">Ready to Begin Your Hero's Journey?</h2>
-            <p className="text-foreground/70 max-w-2xl mx-auto mb-6">
+          {/* CTA section with a more elegant design */}
+          <div className="mt-12 bg-white/10 backdrop-blur-sm p-10 rounded-lg text-center border border-white/20">
+            <h3 className="text-2xl font-bold mb-4 text-white">Ready to Begin Your Hero's Journey?</h3>
+            <p className="text-white/90 max-w-2xl mx-auto mb-8 text-lg">
               Every journey begins with a single step. Start your transformation today and discover how your greatest challenges can become your greatest strengths.
             </p>
             <Link 
               href="/chat?specialist=herosjourney" 
-              className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white px-8 py-4 rounded-md font-medium inline-block text-lg hover:shadow-lg transition-all hover:-translate-y-1"
+              className="bg-white text-[var(--primary)] hover:bg-white/90 px-8 py-4 rounded-md font-bold inline-block text-lg hover:shadow-lg transition-all hover:-translate-y-1"
             >
               Begin Your Hero's Journey
             </Link>
-            <p className="text-sm text-foreground/60 mt-4">Transform your challenges into wisdom that lights the way for others.</p>
+            <p className="text-sm text-white/80 mt-4">Transform your challenges into wisdom that lights the way for others.</p>
           </div>
         </div>
       </main>
