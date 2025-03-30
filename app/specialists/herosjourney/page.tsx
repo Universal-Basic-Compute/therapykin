@@ -165,7 +165,7 @@ export default function HerosJourneySpecialist() {
                 <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
                   <span className="font-bold">4</span>
                 </div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                <div className="absolute left-auto right-0 top-1/2 -translate-y-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
                   <h4 className="font-bold text-sm">Meeting the Mentor</h4>
                   <p className="text-xs text-foreground/70 mt-1">Encountering a guide who provides wisdom, tools, or support.</p>
                 </div>
