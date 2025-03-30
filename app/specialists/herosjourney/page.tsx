@@ -128,134 +128,158 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Step 1: The Ordinary World */}
-              <div className="absolute left-1/2 top-[5%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">1</span>
-                </div>
-                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">The Ordinary World</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Where the hero begins, in their familiar environment with established patterns.</p>
+              <div className="absolute left-1/2 top-[5%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">1</span>
+                  </div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">The Ordinary World</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Where the hero begins, in their familiar environment with established patterns.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 2: The Call to Adventure */}
-              <div className="absolute left-[80%] top-[15%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">2</span>
-                </div>
-                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">The Call to Adventure</h4>
-                  <p className="text-xs text-foreground/70 mt-1">A challenge or opportunity that disrupts the ordinary world.</p>
+              <div className="absolute left-[80%] top-[15%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">2</span>
+                  </div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">The Call to Adventure</h4>
+                    <p className="text-xs text-foreground/70 mt-1">A challenge or opportunity that disrupts the ordinary world.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 3: Refusal of the Call */}
-              <div className="absolute left-[90%] top-[35%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">3</span>
-                </div>
-                <div className="absolute left-auto right-0 top-1/2 -translate-y-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">Refusal of the Call</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Initial resistance to change or transformation due to fear or doubt.</p>
+              <div className="absolute left-[90%] top-[35%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">3</span>
+                  </div>
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 ml-16 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">Refusal of the Call</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Initial resistance to change or transformation due to fear or doubt.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 4: Meeting the Mentor */}
-              <div className="absolute left-[90%] top-[65%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">4</span>
-                </div>
-                <div className="absolute left-auto right-0 top-1/2 -translate-y-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">Meeting the Mentor</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Encountering a guide who provides wisdom, tools, or support.</p>
+              <div className="absolute left-[90%] top-[65%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">4</span>
+                  </div>
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 ml-16 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">Meeting the Mentor</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Encountering a guide who provides wisdom, tools, or support.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 5: Crossing the Threshold */}
-              <div className="absolute left-[80%] top-[85%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">5</span>
-                </div>
-                <div className="absolute bottom-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">Crossing the Threshold</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Moving from the familiar into the unknown, taking the first step.</p>
+              <div className="absolute left-[80%] top-[85%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">5</span>
+                  </div>
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">Crossing the Threshold</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Moving from the familiar into the unknown, taking the first step.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 6: Tests, Allies, and Enemies */}
-              <div className="absolute left-[50%] top-[95%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">6</span>
-                </div>
-                <div className="absolute bottom-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">Tests, Allies, and Enemies</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Facing challenges that test resolve and meeting supportive figures.</p>
+              <div className="absolute left-[50%] top-[95%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">6</span>
+                  </div>
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">Tests, Allies, and Enemies</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Facing challenges that test resolve and meeting supportive figures.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 7: Approach to the Inmost Cave */}
-              <div className="absolute left-[20%] top-[85%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">7</span>
-                </div>
-                <div className="absolute bottom-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">Approach to the Inmost Cave</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Preparing for the major challenge ahead with deepening self-awareness.</p>
+              <div className="absolute left-[20%] top-[85%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">7</span>
+                  </div>
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">Approach to the Inmost Cave</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Preparing for the major challenge ahead with deepening self-awareness.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 8: The Ordeal */}
-              <div className="absolute left-[10%] top-[65%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">8</span>
-                </div>
-                <div className="absolute left-0 right-auto top-1/2 -translate-y-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">The Ordeal</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Confronting the greatest fear or challenge, the pivotal transformation point.</p>
+              <div className="absolute left-[10%] top-[65%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">8</span>
+                  </div>
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 mr-16 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">The Ordeal</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Confronting the greatest fear or challenge, the pivotal transformation point.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 9: Reward (Seizing the Sword) */}
-              <div className="absolute left-[10%] top-[35%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">9</span>
-                </div>
-                <div className="absolute left-0 right-auto top-1/2 -translate-y-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">Reward (Seizing the Sword)</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Claiming the treasure or insight gained from the ordeal.</p>
+              <div className="absolute left-[10%] top-[35%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">9</span>
+                  </div>
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 mr-16 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">Reward (Seizing the Sword)</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Claiming the treasure or insight gained from the ordeal.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 10: The Road Back */}
-              <div className="absolute left-[20%] top-[15%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">10</span>
-                </div>
-                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">The Road Back</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Beginning the return to the ordinary world with new knowledge.</p>
+              <div className="absolute left-[20%] top-[15%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">10</span>
+                  </div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">The Road Back</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Beginning the return to the ordinary world with new knowledge.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 11: Resurrection */}
-              <div className="absolute left-[35%] top-[5%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">11</span>
-                </div>
-                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">Resurrection</h4>
-                  <p className="text-xs text-foreground/70 mt-1">The final test that proves the transformation is complete.</p>
+              <div className="absolute left-[35%] top-[5%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">11</span>
+                  </div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">Resurrection</h4>
+                    <p className="text-xs text-foreground/70 mt-1">The final test that proves the transformation is complete.</p>
+                  </div>
                 </div>
               </div>
               
               {/* Step 12: Return with the Elixir */}
-              <div className="absolute left-[65%] top-[5%] -translate-x-1/2 transform hover:scale-110 transition-transform cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
-                  <span className="font-bold">12</span>
-                </div>
-                <div className="absolute top-[105%] left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
-                  <h4 className="font-bold text-sm">Return with the Elixir</h4>
-                  <p className="text-xs text-foreground/70 mt-1">Bringing back wisdom to share with others and benefit the community.</p>
+              <div className="absolute left-[65%] top-[5%] -translate-x-1/2 group">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] group-hover:bg-[var(--primary)] group-hover:text-white transition-colors">
+                    <span className="font-bold">12</span>
+                  </div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 invisible group-hover:visible bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20">
+                    <h4 className="font-bold text-sm">Return with the Elixir</h4>
+                    <p className="text-xs text-foreground/70 mt-1">Bringing back wisdom to share with others and benefit the community.</p>
+                  </div>
                 </div>
               </div>
               
