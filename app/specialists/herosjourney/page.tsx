@@ -604,15 +604,39 @@ export default function HerosJourneySpecialist() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Testimonial 
-                quote="The Hero's journey literally saved my life, helping me navigate one of the most challenging periods a person can endure. What began as my darkest moment became the catalyst for my greatest transformation."
-                author="Michael R."
-                title="Recovered from Addiction"
+                quote="The story of the rock already inspired me to get my legs up to Stickle Tairn. It just shows the importance of trying every day, not giving up and persistently trying to 'move the rock' - that there is something good to come from it."
+                author="Erin T."
+                title="Teacher"
               />
               
               <Testimonial 
-                quote="He has succeeded in overcoming addictions and self-sabotaging behaviours that derailed his progress for years. His story, like mine, serves as proof that this ancient framework can guide anyone through self-healing and recovery."
-                author="Sarah J."
-                title="Trauma Survivor"
+                quote="I spent years battling depression, anxiety and mental health problems. I did the therapy and I've never felt happier in my life."
+                author="Gabriel"
+                title="Mental Health Journey"
+              />
+              
+              <Testimonial 
+                quote="The call to adventure and rejection of the call resonated most with me because my anxiety has been known to hold me back."
+                author="Rive"
+                title="Media Professional"
+              />
+              
+              <Testimonial 
+                quote="I liked the story of Theseus pushing away the rock and finding the sword. It's important to not let one dimension let you lose sight of the other things that matter in life."
+                author="Stephen"
+                title="IT Apprentice"
+              />
+              
+              <Testimonial 
+                quote="My view is that it's an important tool, journey to learn and embark on so I can promote self growth and eventually the growth of those around me."
+                author="Stan"
+                title="Counsellor"
+              />
+              
+              <Testimonial 
+                quote="We are what we believe and need mentors for all aspects of life."
+                author="Julian"
+                title="Workshop Participant"
               />
             </div>
           </div>
