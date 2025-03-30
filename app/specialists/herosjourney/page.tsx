@@ -555,24 +555,24 @@ export default function HerosJourneySpecialist() {
                 </div>
               </div>
               
-              {/* The Dreamer Mind */}
+              {/* The Doer Mind */}
               <div className="bg-gradient-to-br from-white to-[var(--accent-light)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--accent-light)]/40 p-8 rounded-lg border border-[var(--accent-light)]/20 hover:shadow-md transition-shadow">
                 <div className="flex flex-col items-center mb-6">
                   <div className="w-32 h-32 rounded-full overflow-hidden mb-4">
                     <img 
-                      src="/HJ/dreamer.png" 
-                      alt="The Dreamer Mind" 
+                      src="/HJ/doer.png" 
+                      alt="The Doer Mind" 
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold text-center">The Dreamer</h3>
+                  <h3 className="text-xl font-semibold text-center">The Doer</h3>
                 </div>
                 <p className="text-foreground/70 mb-4 text-center">
-                  The creative mind that envisions possibilities beyond current reality
+                  The mind that takes action based on the other minds
                 </p>
                 <div className="bg-[var(--accent-light)]/10 p-4 rounded-lg">
                   <p className="text-sm italic text-center">
-                    "What would be possible if I allowed myself to imagine beyond my current limitations?"
+                    "The Doer is the mind that takes action and executes instructions from the other four minds, whether helpful or harmful, simply following the directive to 'just do it' without questioning the wisdom of those choices."
                   </p>
                 </div>
               </div>
