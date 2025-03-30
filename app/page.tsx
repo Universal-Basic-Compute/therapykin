@@ -10,6 +10,7 @@ import CommunicationFlexibility from "./components/CommunicationFlexibility";
 import TherapyComparison from "./components/TherapyComparison";
 import GettingStarted from "./components/GettingStarted";
 import PricingTiers from "./components/PricingTiers";
+import AskAnything from "./components/AskAnything";
 
 export default function Home() {
   return (
@@ -55,6 +56,9 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {/* Ask Anything - Interactive Demo */}
+      <AskAnything />
 
       {/* Flexible Usage Scenarios - NEW SECTION */}
       <FlexibleUsage />
