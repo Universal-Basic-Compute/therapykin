@@ -98,6 +98,12 @@ export default function Header() {
                   <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-[var(--background-alt)] ring-1 ring-black/5 dark:ring-white/10 z-50">
                     <div className="py-1">
                       <Link 
+                        href="/specialists/herosjourney" 
+                        className="block px-4 py-2 text-sm font-medium text-[var(--accent)] hover:bg-[var(--accent)]/10 hover:text-[var(--accent)] border-l-2 border-[var(--accent)]"
+                      >
+                        Hero's Journey Specialist <span className="ml-1 text-xs bg-[var(--accent)]/20 px-1.5 py-0.5 rounded-full">Partner</span>
+                      </Link>
+                      <Link 
                         href="/specialists/generalist" 
                         className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
                       >
@@ -120,12 +126,6 @@ export default function Header() {
                         className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
                       >
                         Executives Specialist
-                      </Link>
-                      <Link 
-                        href="/specialists/herosjourney" 
-                        className="block px-4 py-2 text-sm font-medium text-[var(--accent)] hover:bg-[var(--accent)]/10 hover:text-[var(--accent)] border-l-2 border-[var(--accent)]"
-                      >
-                        Hero's Journey Specialist <span className="ml-1 text-xs bg-[var(--accent)]/20 px-1.5 py-0.5 rounded-full">Partner</span>
                       </Link>
                     </div>
                   </div>
@@ -330,6 +330,13 @@ export default function Header() {
             <div className="border-t border-foreground/10 pt-2 mt-2">
               <p className="px-3 py-1 text-xs uppercase text-foreground/40 font-semibold">Our Specialists</p>
               <Link 
+                href="/specialists/herosjourney" 
+                className="text-[var(--accent)] hover:text-[var(--accent)] block px-3 py-2 text-base font-medium border-l-2 border-[var(--accent)]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Hero's Journey Specialist <span className="ml-1 text-xs bg-[var(--accent)]/20 px-1.5 py-0.5 rounded-full">Partner</span>
+              </Link>
+              <Link 
                 href="/specialists/generalist" 
                 className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
                 onClick={() => setMobileMenuOpen(false)}
@@ -356,13 +363,6 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Executives Specialist
-              </Link>
-              <Link 
-                href="/specialists/herosjourney" 
-                className="text-[var(--accent)] hover:text-[var(--accent)] block px-3 py-2 text-base font-medium border-l-2 border-[var(--accent)]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Hero's Journey Specialist <span className="ml-1 text-xs bg-[var(--accent)]/20 px-1.5 py-0.5 rounded-full">Partner</span>
               </Link>
               
               <p className="px-3 py-1 text-xs uppercase text-foreground/40 font-semibold mt-2">Resources</p>
