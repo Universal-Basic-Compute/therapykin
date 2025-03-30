@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       body: kinosFormData,
       headers: {
-        // Add any API keys if needed
-        ...(process.env.KINOS_API_KEY && { 'Authorization': `Bearer ${process.env.KINOS_API_KEY}` })
+        // Add API key
+        'X-API-Key': process.env.KINOS_API_KEY || ''
       }
     });
     

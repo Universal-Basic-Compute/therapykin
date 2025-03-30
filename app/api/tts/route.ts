@@ -39,8 +39,8 @@ export async function POST(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'audio/mpeg, audio/*',  // Accept multiple audio formats
-        // Add any API keys if needed
-        ...(process.env.KINOS_API_KEY && { 'Authorization': `Bearer ${process.env.KINOS_API_KEY}` })
+        // Add API key
+        'X-API-Key': process.env.KINOS_API_KEY || ''
       },
       body: JSON.stringify({
         text,
