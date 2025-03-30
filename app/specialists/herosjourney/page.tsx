@@ -655,13 +655,13 @@ export default function HerosJourneySpecialist() {
             
             <div className="flex items-center relative z-10">
               <div className="bg-white/20 p-3 rounded-full mr-4 backdrop-blur-sm">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
               </div>
               <div>
-                <h3 className="text-white text-xl font-bold mb-1">Exclusive Partnership</h3>
-                <p className="text-white/90">
+                <h3 className="text-black text-xl font-bold mb-1">Exclusive Partnership</h3>
+                <p className="text-black">
                   This specialist is powered by our therapeutic partnership with the Hero's Journey Academy, bringing their proven methodology directly to TherapyKin users.
                 </p>
               </div>
