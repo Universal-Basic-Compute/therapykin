@@ -13,10 +13,12 @@ import { post as mentalPerformancePitfallsPost } from './mental-performance-pitf
 import { post as therapyWaitlistsPost } from './navigating-therapy-waitlists';
 import { post as alternativeMentalHealthResourcesPost } from './alternative-mental-health-resources';
 import { post as visualDimensionCameraPost } from './visual-dimension-camera-integration';
+import { post as unspokenSideOfIntimacyPost } from './unspoken-side-of-intimacy';
 
 // Export all posts in an array
 export const blogPosts = [
-  visualDimensionCameraPost, // Add the new post at the top to feature it
+  unspokenSideOfIntimacyPost, // Add the new post at the top to feature it
+  visualDimensionCameraPost,
   alternativeMentalHealthResourcesPost,
   therapyWaitlistsPost,
   mentalPerformancePitfallsPost,
@@ -50,7 +52,8 @@ export {
   mentalPerformancePitfallsPost,
   therapyWaitlistsPost,
   alternativeMentalHealthResourcesPost,
-  visualDimensionCameraPost, // Add the export for the new post
+  visualDimensionCameraPost,
+  unspokenSideOfIntimacyPost, // Add the export for the new post
 };
 
 // Helper function to get a post by slug
