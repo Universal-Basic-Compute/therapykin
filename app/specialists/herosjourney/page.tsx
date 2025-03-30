@@ -140,7 +140,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Phase 2: Initiation */}
-              <div className="absolute left-[85%] top-[50%] -translate-x-1/2 -translate-y-1/2 group relative">
+              <div className="absolute right-[5%] top-[50%] -translate-y-1/2 group relative">
                 <div 
                   className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
                 >
@@ -154,7 +154,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Phase 3: Return */}
-              <div className="absolute left-[15%] top-[50%] -translate-x-1/2 -translate-y-1/2 group relative">
+              <div className="absolute left-[5%] top-[50%] -translate-y-1/2 group relative">
                 <div 
                   className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
                 >
