@@ -20,7 +20,13 @@ export default function HerosJourneySpecialist() {
       </Head>
       <Header />
       
-      <main className="flex-grow pt-24 pb-16 px-4">
+      <main className="flex-grow pt-24 pb-16 px-4 relative">
+        {/* Add this decorative background element */}
+        <div className="absolute top-0 right-0 w-full h-full overflow-hidden -z-10 opacity-10">
+          <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-[var(--primary-light)] blur-3xl"></div>
+          <div className="absolute bottom-40 left-20 w-80 h-80 rounded-full bg-[var(--accent)] blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/3 w-72 h-72 rounded-full bg-[var(--primary-dark)] blur-3xl"></div>
+        </div>
         <div className="max-w-6xl mx-auto">
           {/* Breadcrumbs */}
           <div className="mb-8">
@@ -63,7 +69,7 @@ export default function HerosJourneySpecialist() {
                 alt="Hero's Journey" 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-[var(--primary-dark)]/70 via-[var(--primary)]/50 to-[var(--accent)]/30"></div>
             </div>
             
             <div className="relative z-10 pt-20 pb-24 px-6">
@@ -93,7 +99,7 @@ export default function HerosJourneySpecialist() {
           </div>
           
           {/* Move the partnership banner below the hero section */}
-          <div className="bg-[var(--background-alt)] p-4 rounded-lg mb-12 max-w-3xl">
+          <div className="bg-gradient-to-r from-[var(--background-alt)] to-[var(--primary)]/10 p-4 rounded-lg mb-12 max-w-3xl border border-[var(--primary)]/20">
             <div className="flex items-center">
               <svg className="w-6 h-6 text-[var(--primary)] mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
@@ -121,14 +127,14 @@ export default function HerosJourneySpecialist() {
               <div className="absolute inset-0 rounded-full border-2 border-[var(--primary)]/30"></div>
               
               {/* Center point */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center text-white font-bold shadow-lg z-10">
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-[var(--primary)] via-[var(--accent)] to-[var(--primary-dark)] flex items-center justify-center text-white font-bold shadow-lg z-10">
                 <span className="text-center text-lg">Hero's<br/>Journey</span>
               </div>
               
               {/* Phase 1: Departure */}
               <div className="absolute left-1/2 top-[10%] -translate-x-1/2 group relative">
                 <div 
-                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-gradient-to-r hover:from-[var(--primary)] hover:to-[var(--primary-light)] hover:text-white transition-all cursor-pointer"
                 >
                   <span className="font-bold text-lg">Departure</span>
                 </div>
@@ -142,7 +148,7 @@ export default function HerosJourneySpecialist() {
               {/* Phase 2: Initiation */}
               <div className="absolute right-[5%] top-[50%] -translate-y-1/2 group relative">
                 <div 
-                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary-dark)] hover:bg-gradient-to-r hover:from-[var(--primary-dark)] hover:to-[var(--accent)] hover:text-white transition-all cursor-pointer"
                 >
                   <span className="font-bold text-lg">Initiation</span>
                 </div>
@@ -156,7 +162,7 @@ export default function HerosJourneySpecialist() {
               {/* Phase 3: Return */}
               <div className="absolute left-[5%] top-[50%] -translate-y-1/2 group relative">
                 <div 
-                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer"
+                  className="w-24 h-24 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--accent)] hover:bg-gradient-to-r hover:from-[var(--accent)] hover:to-[var(--accent-light)] hover:text-white transition-all cursor-pointer"
                 >
                   <span className="font-bold text-lg">Return</span>
                 </div>
@@ -311,7 +317,7 @@ export default function HerosJourneySpecialist() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {/* Spiritual Dimension */}
-              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--primary)]/10 dark:from-[var(--background-alt)]/80 dark:to-[var(--primary)]/20 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -336,7 +342,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Emotional Dimension */}
-              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--primary-dark)]/10 dark:from-[var(--background-alt)]/80 dark:to-[var(--primary-dark)]/20 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -386,7 +392,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Professional Dimension */}
-              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--primary-light)]/10 dark:from-[var(--background-alt)]/80 dark:to-[var(--primary-light)]/20 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -411,7 +417,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Biological Dimension */}
-              <div className="bg-white dark:bg-[var(--background-alt)]/50 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
+              <div className="bg-gradient-to-br from-white to-[var(--accent-light)]/10 dark:from-[var(--background-alt)]/80 dark:to-[var(--accent-light)]/20 p-8 rounded-lg border border-foreground/5 hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-6">
                   <div className="bg-[var(--primary)]/10 p-3 rounded-full mr-4">
                     <svg className="w-8 h-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -530,22 +536,22 @@ export default function HerosJourneySpecialist() {
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-[var(--primary)]/20 to-[var(--primary)]/5 p-8 rounded-lg mb-16">
+          <div className="bg-gradient-to-r from-[var(--primary)] via-[var(--primary-light)] to-[var(--accent)] p-8 rounded-lg mb-16 text-white shadow-lg">
             <h2 className="text-2xl font-semibold mb-4">The Gifts of Your Journey</h2>
             <div className="flex flex-col md:flex-row gap-8 items-center">
               <div className="md:w-2/3">
-                <p className="mb-4 text-foreground/80">
+                <p className="mb-4 text-white/90">
                   Every Hero's Journey begins with a single step - recognizing the call to adventure. What's your rock? What challenge is inviting you to transformation?
                 </p>
-                <p className="text-foreground/80">
+                <p className="text-white/90">
                   It doesn't matter how difficult your challenges have been or how badly you feel you've managed your life, there is always a path to light. That's the Hero's journey.
                 </p>
               </div>
               <div className="md:w-1/3 flex justify-center">
-                <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-full h-40 w-40 flex items-center justify-center shadow-lg">
+                <div className="bg-white p-6 rounded-full h-40 w-40 flex items-center justify-center shadow-lg">
                   <div className="text-center">
                     <p className="text-[var(--primary)] font-bold text-xl">Begin Your</p>
-                    <p className="text-3xl font-bold">Journey</p>
+                    <p className="text-3xl font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] bg-clip-text text-transparent">Journey</p>
                     <p className="text-sm text-foreground/60 mt-1">Transform today</p>
                   </div>
                 </div>
@@ -553,14 +559,14 @@ export default function HerosJourneySpecialist() {
             </div>
           </div>
 
-          <div className="text-center bg-[var(--background-alt)] p-10 rounded-lg">
+          <div className="text-center bg-gradient-to-r from-[var(--background-alt)] to-white dark:to-[var(--background-alt)]/50 p-10 rounded-lg border border-[var(--primary)]/20">
             <h2 className="text-2xl font-semibold mb-4">Ready to Begin Your Hero's Journey?</h2>
             <p className="text-foreground/70 max-w-2xl mx-auto mb-6">
               Every journey begins with a single step. Start your transformation today and discover how your greatest challenges can become your greatest strengths.
             </p>
             <Link 
               href="/chat?specialist=herosjourney" 
-              className="btn-primary text-white px-8 py-4 rounded-md font-medium inline-block text-lg"
+              className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white px-8 py-4 rounded-md font-medium inline-block text-lg hover:shadow-lg transition-all hover:-translate-y-1"
             >
               Begin Your Hero's Journey
             </Link>
