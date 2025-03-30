@@ -100,7 +100,10 @@ export default function Testimonials() {
           
           {/* Hero's Journey Testimonials */}
           <div className="mb-16">
-            <h2 className="text-2xl font-bold mb-6 text-center">Hero's Journey Specialist Testimonials</h2>
+            <h2 className="text-2xl font-bold mb-2 text-center">Hero's Journey Specialist Testimonials</h2>
+            <p className="text-center text-foreground/70 mb-8 max-w-3xl mx-auto">
+              Images are representations to preserve client anonymity and confidentiality
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="card p-8 relative shadow-depth card-hover-lift">
                 <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
