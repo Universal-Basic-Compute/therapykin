@@ -104,6 +104,49 @@ export default function HerosJourneySpecialist() {
             </div>
           </div>
           
+          <div className="mt-12 mb-12 p-6 bg-[var(--background-alt)] rounded-lg">
+            <h3 className="text-xl font-semibold mb-4 text-center">Test Hover Elements</h3>
+            
+            <div className="flex justify-center space-x-8 mb-8">
+              {/* Test Item 1 */}
+              <div className="group relative">
+                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer">
+                  <span className="font-bold">1</span>
+                </div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20 hidden group-hover:block">
+                  <h4 className="font-bold text-sm">Test Item One</h4>
+                  <p className="text-xs text-foreground/70 mt-1">This is a test tooltip to verify hover functionality.</p>
+                </div>
+              </div>
+              
+              {/* Test Item 2 */}
+              <div className="group relative">
+                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer">
+                  <span className="font-bold">2</span>
+                </div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20 hidden group-hover:block">
+                  <h4 className="font-bold text-sm">Test Item Two</h4>
+                  <p className="text-xs text-foreground/70 mt-1">This is another test tooltip to verify hover functionality.</p>
+                </div>
+              </div>
+              
+              {/* Test Item 3 */}
+              <div className="group relative">
+                <div className="w-16 h-16 rounded-full bg-white dark:bg-[var(--background-alt)] shadow-md flex items-center justify-center border-2 border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all cursor-pointer">
+                  <span className="font-bold">3</span>
+                </div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white dark:bg-[var(--background-alt)] p-3 rounded-lg shadow-lg z-20 hidden group-hover:block">
+                  <h4 className="font-bold text-sm">Test Item Three</h4>
+                  <p className="text-xs text-foreground/70 mt-1">This is a third test tooltip to verify hover functionality.</p>
+                </div>
+              </div>
+            </div>
+            
+            <p className="text-center text-sm text-foreground/70">
+              Hover over each number above to test tooltip functionality
+            </p>
+          </div>
+          
           {/* Move the description paragraph below the partnership banner */}
           <p className="text-xl text-foreground/80 mb-12 max-w-3xl">
             Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
