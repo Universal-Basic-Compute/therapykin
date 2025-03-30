@@ -492,7 +492,7 @@ export default function HerosJourneySpecialist() {
               {/* The Observer Mind */}
               <div className="bg-gradient-to-br from-white to-[var(--primary-dark)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--primary-dark)]/40 p-8 rounded-lg border border-[var(--primary-dark)]/20 hover:shadow-md transition-shadow">
                 <div className="flex flex-col items-center mb-6">
-                  <div className="w-48 h-48 rounded-full overflow-hidden mb-4">
+                  <div className="w-64 h-64 rounded-full overflow-hidden mb-4">
                     <img 
                       src="/HJ/observer.png" 
                       alt="The Observer Mind" 
@@ -514,7 +514,7 @@ export default function HerosJourneySpecialist() {
               {/* The Judge Mind */}
               <div className="bg-gradient-to-br from-white to-[var(--accent)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--accent)]/40 p-8 rounded-lg border border-[var(--accent)]/20 hover:shadow-md transition-shadow">
                 <div className="flex flex-col items-center mb-6">
-                  <div className="w-48 h-48 rounded-full overflow-hidden mb-4">
+                  <div className="w-64 h-64 rounded-full overflow-hidden mb-4">
                     <img 
                       src="/HJ/judge.png" 
                       alt="The Judge Mind" 
@@ -536,7 +536,7 @@ export default function HerosJourneySpecialist() {
               {/* The Commentator Mind */}
               <div className="bg-gradient-to-br from-white to-[var(--primary-light)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--primary-light)]/40 p-8 rounded-lg border border-[var(--primary-light)]/20 hover:shadow-md transition-shadow">
                 <div className="flex flex-col items-center mb-6">
-                  <div className="w-48 h-48 rounded-full overflow-hidden mb-4">
+                  <div className="w-64 h-64 rounded-full overflow-hidden mb-4">
                     <img 
                       src="/HJ/commentator.png" 
                       alt="The Commentator Mind" 
@@ -558,7 +558,7 @@ export default function HerosJourneySpecialist() {
               {/* The Doer Mind */}
               <div className="bg-gradient-to-br from-white to-[var(--accent-light)]/30 dark:from-[var(--background-alt)]/60 dark:to-[var(--accent-light)]/40 p-8 rounded-lg border border-[var(--accent-light)]/20 hover:shadow-md transition-shadow">
                 <div className="flex flex-col items-center mb-6">
-                  <div className="w-48 h-48 rounded-full overflow-hidden mb-4">
+                  <div className="w-64 h-64 rounded-full overflow-hidden mb-4">
                     <img 
                       src="/HJ/doer.png" 
                       alt="The Doer Mind" 
