@@ -73,15 +73,15 @@ export default function HerosJourneySpecialist() {
             </div>
             
             <div className="relative z-10 pt-20 pb-24 px-6">
-              <span className="px-3 py-1 bg-white/20 text-white rounded-full text-sm font-medium backdrop-blur-sm">
+              <span className="px-3 py-1 bg-white/20 text-black rounded-full text-sm font-medium backdrop-blur-sm">
                 Transformational Specialist
               </span>
-              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-white max-w-3xl">
+              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-black max-w-3xl">
                 The Hero's Journey: A Path to Transformation
               </h1>
               
               <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-xl">
-                <p className="text-xl text-white/90">
+                <p className="text-xl text-black/90">
                   "The worst that happened to you can become the best that happened to you when you embark on your Hero's Journey."
                 </p>
               </div>
