@@ -121,11 +121,9 @@ export default function HerosJourneySpecialist() {
                     alt="The Ordinary World" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">1. Ordinary World</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">1. Ordinary World</h3>
                   <p className="text-sm text-foreground/70">
                     The hero begins in their familiar environment, unaware of the adventures to come.
                   </p>
@@ -140,11 +138,9 @@ export default function HerosJourneySpecialist() {
                     alt="Call to Adventure" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">2. Call to Adventure</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">2. Call to Adventure</h3>
                   <p className="text-sm text-foreground/70">
                     The hero is presented with a challenge, problem, or adventure to undertake.
                   </p>
@@ -159,11 +155,9 @@ export default function HerosJourneySpecialist() {
                     alt="Refusal of the Call" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">3. Refusal of the Call</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">3. Refusal of the Call</h3>
                   <p className="text-sm text-foreground/70">
                     The hero initially refuses the adventure because of fear, insecurity, or other obligations.
                   </p>
@@ -178,11 +172,9 @@ export default function HerosJourneySpecialist() {
                     alt="Meeting the Mentor" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">4. Meeting the Mentor</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">4. Meeting the Mentor</h3>
                   <p className="text-sm text-foreground/70">
                     The hero encounters a mentor who provides guidance, wisdom, or magical gifts to help on the journey.
                   </p>
@@ -197,11 +189,9 @@ export default function HerosJourneySpecialist() {
                     alt="Crossing the Threshold" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">5. Crossing the Threshold</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">5. Crossing the Threshold</h3>
                   <p className="text-sm text-foreground/70">
                     The hero commits to the adventure and crosses into the special world where the rules are different.
                   </p>
@@ -216,11 +206,9 @@ export default function HerosJourneySpecialist() {
                     alt="Tests, Allies, Enemies" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">6. Tests, Allies, Enemies</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">6. Tests, Allies, Enemies</h3>
                   <p className="text-sm text-foreground/70">
                     The hero faces tests, encounters allies, and confronts enemies as they learn the rules of the special world.
                   </p>
@@ -235,11 +223,9 @@ export default function HerosJourneySpecialist() {
                     alt="Approach to the Inmost Cave" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">7. Approach to the Inmost Cave</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">7. Approach to the Inmost Cave</h3>
                   <p className="text-sm text-foreground/70">
                     The hero prepares for the major challenge in the special world, facing deep inner conflicts.
                   </p>
@@ -254,11 +240,9 @@ export default function HerosJourneySpecialist() {
                     alt="The Ordeal" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">8. The Ordeal</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">8. The Ordeal</h3>
                   <p className="text-sm text-foreground/70">
                     The hero faces their greatest fear, confronts death, and experiences a "death and rebirth" transformation.
                   </p>
@@ -273,11 +257,9 @@ export default function HerosJourneySpecialist() {
                     alt="Reward (Seizing the Sword)" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">9. Reward (Seizing the Sword)</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">9. Reward (Seizing the Sword)</h3>
                   <p className="text-sm text-foreground/70">
                     The hero takes possession of the treasure, reward, or elixir they sought, gaining new knowledge or power.
                   </p>
@@ -292,11 +274,9 @@ export default function HerosJourneySpecialist() {
                     alt="The Road Back" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">10. The Road Back</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">10. The Road Back</h3>
                   <p className="text-sm text-foreground/70">
                     The hero begins the journey back to the ordinary world, often pursued by remaining threats.
                   </p>
@@ -311,11 +291,9 @@ export default function HerosJourneySpecialist() {
                     alt="Resurrection" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">11. Resurrection</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">11. Resurrection</h3>
                   <p className="text-sm text-foreground/70">
                     The hero faces a final test where everything is at stake, experiencing a final moment of death and rebirth.
                   </p>
@@ -330,11 +308,9 @@ export default function HerosJourneySpecialist() {
                     alt="Return with the Elixir" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                    <h3 className="text-white font-semibold p-4">12. Return with the Elixir</h3>
-                  </div>
                 </div>
                 <div className="p-4">
+                  <h3 className="font-semibold mb-2">12. Return with the Elixir</h3>
                   <p className="text-sm text-foreground/70">
                     The hero returns to the ordinary world with the elixir, treasure, or lesson that can benefit others.
                   </p>
