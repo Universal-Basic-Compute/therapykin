@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Add any required API keys or authentication headers here
+        'X-API-Key': process.env.KINOS_API_KEY || '', // Add the API key
       },
     });
     

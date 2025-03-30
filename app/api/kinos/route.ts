@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Add any required API keys or authentication headers here
+        'X-API-Key': process.env.KINOS_API_KEY || '', // Add the API key
       },
       body: JSON.stringify(requestBody),
     });

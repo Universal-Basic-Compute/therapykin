@@ -65,6 +65,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-Key': process.env.KINOS_API_KEY || '', // Add the API key
       },
       body: JSON.stringify(requestBody),
     });
