@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate specialist value
-    const validSpecialists = ['generalist', 'crypto', 'athletes', 'executives', 'herosjourney'];
+    const validSpecialists = ['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'];
     if (!validSpecialists.includes(specialist)) {
       return NextResponse.json(
         { error: 'Invalid specialist value' },

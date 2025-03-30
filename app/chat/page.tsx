@@ -2420,6 +2420,16 @@ Important style requirements:
                   >
                     Hero's Journey
                   </button>
+                  <button
+                    onClick={() => updateSelectedSpecialist("sexologist")}
+                    className={`p-2 rounded-lg border text-sm ${
+                      selectedSpecialist === "sexologist" 
+                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
+                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                    }`}
+                  >
+                    Sexual Health
+                  </button>
                 </div>
                 <p className="text-xs text-foreground/60 mt-2">
                   {selectedSpecialist === "generalist" 
