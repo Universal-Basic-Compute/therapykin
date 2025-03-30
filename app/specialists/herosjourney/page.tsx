@@ -69,7 +69,7 @@ export default function HerosJourneySpecialist() {
                 alt="Hero's Journey" 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-[var(--primary-dark)]/50 via-[var(--primary)]/30 to-[var(--accent)]/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-[var(--primary-dark)]/40 via-[var(--primary)]/25 to-[var(--accent)]/15"></div>
             </div>
             
             <div className="relative z-10 pt-20 pb-24 px-6">
