@@ -98,10 +98,9 @@ export default function AskAnything() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              email: 'demo@therapykin.ai', // Use a placeholder email for demo users
               sessionLength: 15, // Default to 15 minutes for demo sessions
               specialist: 'welcome', // Use the welcome specialist
-              projectId: projectId // Pass the project ID for tracking
+              projectId: projectId // Pass the project ID as the main identifier
             }),
           });
           

@@ -84,8 +84,7 @@ export async function createSession(
   email: string, 
   sessionLength: number = 30,
   specialist: string = 'generalist',
-  isDemo: boolean = false,
-  projectId?: string
+  isDemo: boolean = false
 ): Promise<{ id: string, createdAt: string, sessionLength: number, specialist: string }> {
   try {
     if (!email) {
@@ -101,8 +100,7 @@ export async function createSession(
       SessionLength: sessionLength,
       Specialist: specialist,
       RatingSubmitted: false,
-      IsDemo: isDemo, // Add this field
-      ProjectId: projectId || '' // Add this field
+      IsDemo: isDemo // Add this field
     };
     
     console.log(`Creating new session for ${email} with data:`, JSON.stringify(sessionData, null, 2));
