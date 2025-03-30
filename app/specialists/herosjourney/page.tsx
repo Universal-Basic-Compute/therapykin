@@ -63,50 +63,51 @@ export default function HerosJourneySpecialist() {
                 alt="Hero's Journey" 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/30"></div>
             </div>
             
-            <div className="relative z-10 pt-16 pb-20 px-6">
+            <div className="relative z-10 pt-20 pb-24 px-6">
               <span className="px-3 py-1 bg-white/20 text-white rounded-full text-sm font-medium backdrop-blur-sm">
                 Transformational Specialist
               </span>
-              <h1 className="text-3xl md:text-5xl font-bold mt-4 mb-6 text-white">The Hero's Journey: A Path to Transformation</h1>
+              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-white max-w-3xl">
+                The Hero's Journey: A Path to Transformation
+              </h1>
               
-              <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-2xl">
-                <h2 className="text-xl md:text-2xl font-semibold mb-3 text-white">Discover Your Heroic Path</h2>
-                <p className="text-lg text-white/90">
+              <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-xl">
+                <p className="text-xl text-white/90">
                   "The worst that happened to you can become the best that happened to you when you embark on your Hero's Journey."
                 </p>
               </div>
               
-              <p className="text-xl text-white/90 mb-4 max-w-2xl">
-                Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
-              </p>
-              
-              {/* Partnership banner */}
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-lg mb-8 max-w-2xl">
-                <div className="flex items-center">
-                  <svg className="w-6 h-6 text-white mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                  </svg>
-                  <p className="text-white/90 font-medium">
-                    <span className="font-bold">Exclusive Partnership:</span> This specialist is powered by our therapeutic partnership with the Hero's Journey Institute, bringing their proven methodology directly to TherapyKin users.
-                  </p>
-                </div>
-              </div>
-              
               {/* Add the CTA button here */}
-              <div className="mt-6 mb-8">
+              <div className="mt-8">
                 <Link 
                   href="/chat?specialist=herosjourney" 
                   className="bg-white text-[var(--primary)] hover:bg-white/90 px-6 py-3 rounded-md font-medium inline-block text-lg transition-all"
                 >
                   Begin Your Hero's Journey
                 </Link>
-                <span className="ml-4 text-sm text-white/80">Transform your challenges into strengths</span>
               </div>
             </div>
           </div>
+          
+          {/* Move the partnership banner below the hero section */}
+          <div className="bg-[var(--background-alt)] p-4 rounded-lg mb-12 max-w-3xl">
+            <div className="flex items-center">
+              <svg className="w-6 h-6 text-[var(--primary)] mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <p className="text-foreground/90 font-medium">
+                <span className="font-bold">Exclusive Partnership:</span> This specialist is powered by our therapeutic partnership with the Hero's Journey Institute, bringing their proven methodology directly to TherapyKin users.
+              </p>
+            </div>
+          </div>
+          
+          {/* Move the description paragraph below the partnership banner */}
+          <p className="text-xl text-foreground/80 mb-12 max-w-3xl">
+            Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
+          </p>
           
           <div className="flex flex-col md:flex-row gap-6 mt-8 mb-16">
             <div className="flex-1 bg-white dark:bg-[var(--background-alt)]/50 p-5 rounded-lg border border-[var(--primary)] shadow-sm">
