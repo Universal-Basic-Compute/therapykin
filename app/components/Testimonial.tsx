@@ -19,8 +19,8 @@ export default function Testimonial({ quote, author, title, imageSrc }: Testimon
             <Image 
               src={imageSrc} 
               alt={`${author}`} 
-              width={96} 
-              height={96} 
+              width={128} 
+              height={128} 
               className="rounded-full border-2 border-[var(--primary)]/20"
             />
           </div>
