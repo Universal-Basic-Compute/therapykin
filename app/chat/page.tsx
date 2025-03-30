@@ -2440,6 +2440,10 @@ Important style requirements:
                     ? "Mental performance support for athletes and competitors"
                     : selectedSpecialist === "executives"
                     ? "Leadership and executive performance support"
+                    : selectedSpecialist === "herosjourney"
+                    ? "Transform challenges into strengths with the Hero's Journey"
+                    : selectedSpecialist === "sexologist"
+                    ? "Private support for sexual health and intimacy concerns"
                     : "Transform challenges into strengths with the Hero's Journey"}
                 </p>
               </div>
