@@ -549,7 +549,8 @@ function ChatSessionWithSearchParams() {
       const isAtClosingPhase = sessionDuration >= closingPhaseStart - 0.5 && sessionDuration <= closingPhaseStart + 0.5;
       
       // Check if we're at the image generation point (within a small margin)
-      const isAtImageGenerationPoint = sessionDuration >= imageGenerationPoint - 0.5 && sessionDuration <= imageGenerationPoint + 0.5;
+      // Increase the margin to make sure we don't miss it
+      const isAtImageGenerationPoint = sessionDuration >= imageGenerationPoint - 1.0 && sessionDuration <= imageGenerationPoint + 0.5;
       
       // Send halfway message if we're at the halfway point and haven't sent it yet
       if (isAtHalfway && !halfwayMessageSent && !sessionEnded) {
@@ -675,9 +676,10 @@ function ChatSessionWithSearchParams() {
       }
     };
 
-    // Update immediately and then every 30 seconds to ensure we don't miss the halfway point
+    // Update immediately and then every 15 seconds to ensure we don't miss the image generation point
+    // Change from 30 seconds to 15 seconds to make it more precise
     updateSessionMode();
-    const intervalId = setInterval(updateSessionMode, 30000); // check every 30 seconds
+    const intervalId = setInterval(updateSessionMode, 15000); // check every 15 seconds
   
     return () => clearInterval(intervalId);
   }, [sessionStartTime, sessionLength, halfwayMessageSent, closingMessageSent, user, sessionEnded, ratingSubmitted, sessionImageRequested]); // Add sessionImageRequested as a dependency
@@ -1663,6 +1665,7 @@ function ChatSessionWithSearchParams() {
     
     try {
       console.log('Requesting session summary image...');
+      // Set this flag immediately to prevent multiple requests
       setSessionImageRequested(true);
       
       // Create a prompt for the image based on the session with specific style requirements
@@ -1698,6 +1701,7 @@ Important style requirements:
       // Check if we have a valid image URL
       if (data.result?.data?.[0]?.url) {
         const imageUrl = data.result.data[0].url;
+        console.log(`Successfully received image URL: ${imageUrl}`);
         setSessionImage(imageUrl);
         
         // Save the image URL to Airtable
@@ -1750,6 +1754,8 @@ Important style requirements:
         }
         
         console.log('Session summary image added to chat');
+      } else {
+        console.error('No valid image URL in the response:', data);
       }
     } catch (error) {
       console.error('Error generating session summary image:', error);

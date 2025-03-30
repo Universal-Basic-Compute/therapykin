@@ -79,7 +79,14 @@ export async function POST(request: NextRequest) {
 
     // Get the response from KinOS API
     const data = await response.json();
-    console.log('KinOS API image generation response received');
+    console.log('KinOS API image generation response received:', JSON.stringify(data).substring(0, 200) + '...');
+
+    // Check if the response contains the expected data structure
+    if (data.result?.data?.[0]?.url) {
+      console.log(`Successfully generated image URL: ${data.result.data[0].url}`);
+    } else {
+      console.warn('Image generation response does not contain expected URL structure:', JSON.stringify(data).substring(0, 200) + '...');
+    }
     
     // Return the response to the client
     return NextResponse.json(data);
