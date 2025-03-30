@@ -653,3 +653,20 @@ sup a:hover {
     color: white;
   }
 }
+
+/* Add these styles for chat bubbles */
+.user-message-bubble {
+  background-color: var(--primary);
+  color: white;
+  position: relative;
+}
+
+.assistant-message-bubble {
+  background-color: var(--background-alt);
+  color: var(--foreground);
+  position: relative;
+}
+
+.text-bubble {
+  word-break: break-word;
+}
