@@ -102,7 +102,7 @@ export default function HerosJourneySpecialist() {
           
           
           {/* Move the description paragraph below the partnership banner */}
-          <p className="text-xl text-foreground/80 mb-12 max-w-3xl">
+          <p className="text-xl text-foreground/80 mb-12 max-w-3xl mx-auto text-center">
             Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
           </p>
           
