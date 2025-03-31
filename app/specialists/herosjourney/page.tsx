@@ -6,10 +6,36 @@ import Testimonial from "../../components/Testimonial";
 import Link from "next/link";
 import Head from "next/head";
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 export default function HerosJourneySpecialist() {
+  const [showFloatingCTA, setShowFloatingCTA] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show floating CTA after scrolling down 500px
+      if (window.scrollY > 500) {
+        setShowFloatingCTA(true);
+      } else {
+        setShowFloatingCTA(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+      `}</style>
       <Head>
         <title>Hero's Journey Specialist | TherapyKin</title>
         <meta name="description" content="Embark on your Hero's Journey with specialized therapeutic support. Transform your challenges into strengths and discover your authentic path through ancient wisdom and modern psychology." />
@@ -697,6 +723,20 @@ export default function HerosJourneySpecialist() {
             <p className="text-sm text-white/80 mt-4">Transform your challenges into wisdom that lights the way for others.</p>
           </div>
         </div>
+
+        {showFloatingCTA && (
+          <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
+            <Link 
+              href="/chat?specialist=herosjourney" 
+              className="flex items-center gap-2 bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white px-6 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              Start Your Hero's Journey
+            </Link>
+          </div>
+        )}
       </main>
       
       <Footer />
