@@ -346,7 +346,7 @@ export default function HerosJourneySpecialist() {
             
             <div className="text-center mt-8">
               <p className="text-foreground/70 max-w-2xl mx-auto">
-                Each card represents a stage in the Hero's Journey as described by Joseph Campbell. This framework highlights the universal pattern of transformation found in myths and stories across cultures.
+                Each card represents a stage in the Hero's Journey, first introduced by the Ancient Priests of Kemet (Ancient Egypt). This framework highlights the universal pattern of transformation found in myths and stories across cultures.
               </p>
             </div>
           </div>
