@@ -773,7 +773,7 @@ export default function HerosJourneySpecialist() {
               href="/chat?specialist=herosjourney" 
               className="bg-white text-[var(--primary)] hover:bg-white/90 px-8 py-4 rounded-md font-bold inline-block text-lg hover:shadow-lg transition-all hover:-translate-y-1"
             >
-              Begin Your Hero's Journey
+              Start Your Hero's Journey
             </Link>
             <p className="text-sm text-white/80 mt-4">Transform your challenges into wisdom that lights the way for others.</p>
           </div>
