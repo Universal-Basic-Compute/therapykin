@@ -355,7 +355,7 @@ export default function HerosJourneySpecialist() {
           <div className="mt-16 mb-16">
             <h2 className="text-2xl font-semibold mb-6 text-center">The Five Dimensions of Transformation</h2>
             <p className="text-center text-foreground/80 mb-10 max-w-3xl mx-auto">
-              The Hero's Journey approach addresses all five dimensions of your life, creating holistic transformation and balance.
+              The Hero's Journey therapy addresses all five dimensions of your life, creating holistic transformation and balance.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
