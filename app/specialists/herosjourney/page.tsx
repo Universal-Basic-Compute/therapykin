@@ -108,7 +108,7 @@ export default function HerosJourneySpecialist() {
               
               <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-xl">
                 <p className="text-xl text-black/90">
-                  "The worst that happened to you can become the best that happened to you when you embark on your Hero's Journey."
+                  "Your childhood trauma, your depression, your anxiety, your mental health challenges, your addictions are paths to deep personal transformation because everything happens for a reason."
                 </p>
               </div>
               
