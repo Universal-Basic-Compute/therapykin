@@ -17,7 +17,7 @@ export default function UserStories() {
               <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">A</div>
               <div>
                 <p className="font-semibold">Alex</p>
-                <p className="text-sm text-foreground/60">Project Manager</p>
+                <p className="text-sm text-foreground/60">On Telegram</p>
               </div>
             </div>
           </div>
