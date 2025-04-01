@@ -103,7 +103,7 @@ export default function HerosJourneySpecialist() {
                 Transformational Specialist
               </span>
               <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-black max-w-3xl">
-                The Hero's Journey: A Path to Transformation
+                The Hero's Journey: A path to self healing & Transformation
               </h1>
               
               <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-xl">
