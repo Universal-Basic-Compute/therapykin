@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const axios = require('axios');
 require('dotenv').config(); // Load environment variables from .env file
 
@@ -8,13 +6,7 @@ const API_BASE_URL = process.env.KINOS_API_URL || 'https://api.kinos-engine.ai';
 const API_KEY = process.env.KINOS_API_KEY;
 const CUSTOMER = 'therapykinwelcome';
 
-// Create output directory if it doesn't exist
-const OUTPUT_DIR = path.join(__dirname, 'welcome_messages');
-if (!fs.existsSync(OUTPUT_DIR)) {
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-}
-
-// Helper function to format messages for display and saving
+// Helper function to format messages for display
 function formatMessages(messages) {
   return messages.map(msg => {
     const timestamp = new Date(msg.timestamp).toLocaleString();
@@ -39,7 +31,9 @@ async function getWelcomeMessages() {
     
     // Process each project
     for (const projectId of projects) {
-      console.log(`\nFetching messages for project: ${projectId}`);
+      console.log(`\n${'='.repeat(80)}`);
+      console.log(`PROJECT: ${projectId}`);
+      console.log(`${'='.repeat(80)}\n`);
       
       try {
         // Get messages for this project
@@ -56,22 +50,11 @@ async function getWelcomeMessages() {
         console.log(`Found ${messages.length} messages for project ${projectId}`);
         
         if (messages.length > 0) {
-          // Format messages for display
+          // Format and display messages
           const formattedMessages = formatMessages(messages);
-          
-          // Display first and last message to console
-          console.log(`First message: ${messages[0].content.substring(0, 100)}...`);
-          console.log(`Last message: ${messages[messages.length - 1].content.substring(0, 100)}...`);
-          
-          // Save messages to file
-          const outputFile = path.join(OUTPUT_DIR, `${projectId}.txt`);
-          fs.writeFileSync(outputFile, formattedMessages);
-          console.log(`Saved messages to ${outputFile}`);
-          
-          // Also save as JSON for further processing if needed
-          const jsonOutputFile = path.join(OUTPUT_DIR, `${projectId}.json`);
-          fs.writeFileSync(jsonOutputFile, JSON.stringify(messages, null, 2));
-          console.log(`Saved JSON data to ${jsonOutputFile}`);
+          console.log(formattedMessages);
+        } else {
+          console.log("No messages found for this project.");
         }
       } catch (error) {
         console.error(`Error fetching messages for project ${projectId}:`, error.message);
