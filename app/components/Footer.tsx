@@ -23,7 +23,7 @@ export default function Footer() {
               <li><Link href="/features" className="text-foreground/70 hover:text-[var(--primary)]">Features</Link></li>
               <li><Link href="/pricing" className="text-foreground/70 hover:text-[var(--primary)]">Pricing</Link></li>
               <li><Link href="/faq" className="text-foreground/70 hover:text-[var(--primary)]">FAQ</Link></li>
-              <li><Link href="/testimonials" className="text-foreground/70 hover:text-[var(--primary)]">Testimonials</Link></li>
+              <li><Link href="/stories" className="text-foreground/70 hover:text-[var(--primary)]">Stories</Link></li>
             </ul>
           </div>
           
