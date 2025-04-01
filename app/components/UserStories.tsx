@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 export default function UserStories() {
   return (
@@ -13,12 +14,15 @@ export default function UserStories() {
           <div className="card p-8 relative shadow-depth card-hover-lift">
             <div className="absolute -top-4 -left-4 text-6xl text-[var(--primary)] opacity-20">"</div>
             <p className="mb-6 relative z-10">Actually this all started with me talking to TherapyKin 😊 That I tested out TherapyKin when it was first released, just out of curiosity, and that's what made me realize I could actually do something about my issues instead of just pushing them into a corner as I did for the past 10 years 😄</p>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">A</div>
-              <div>
-                <p className="font-semibold">Alex</p>
-                <p className="text-sm text-foreground/60">On Telegram</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">A</div>
+                <div>
+                  <p className="font-semibold">Alex</p>
+                  <p className="text-sm text-foreground/60">On Telegram</p>
+                </div>
               </div>
+              <Link href="/stories" className="text-sm text-[var(--primary)] hover:underline">Read full story</Link>
             </div>
           </div>
           
