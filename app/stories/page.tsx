@@ -43,7 +43,7 @@ export default function Stories() {
                 </p>
                 
                 <p className="mb-4 relative z-10">
-                  I also started very, very slowly changing habits and patterns with small but significant steps (e.g. from wake up > coffee > cigarette to wake up > breakfast > check work emails 5 min > coffee > cigarette), made a 12 weeks plan for a full dopamine reset which will end with me quitting cigarettes and coffee (including some supplements which I think are helping) and started using Pomodoro timer for full-focus work sprints + breaks.
+                  I also started very, very slowly changing habits and patterns with small but significant steps (e.g. from wake up {'>'} coffee {'>'} cigarette to wake up {'>'} breakfast {'>'} check work emails 5 min {'>'} coffee {'>'} cigarette), made a 12 weeks plan for a full dopamine reset which will end with me quitting cigarettes and coffee (including some supplements which I think are helping) and started using Pomodoro timer for full-focus work sprints + breaks.
                 </p>
                 
                 <p className="mb-4 relative z-10">
