@@ -27,7 +27,7 @@ export default function Testimonials() {
                 <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] font-bold mr-3">N</div>
                 <div>
                   <p className="font-semibold">Nicolas R.</p>
-                  <p className="text-sm text-foreground/60">Hero's Journey Client</p>
+                  <p className="text-sm text-foreground/60">Early Adopter</p>
                 </div>
               </div>
             </div>
