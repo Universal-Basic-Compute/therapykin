@@ -765,7 +765,7 @@ export default function HerosJourneySpecialist() {
 
           {/* CTA section with a more elegant design */}
           <div className="mt-12 bg-white/10 backdrop-blur-sm p-10 rounded-lg text-center border border-white/20">
-            <h3 className="text-2xl font-bold mb-4 text-white">Ready to Begin Your Hero's Journey?</h3>
+            <h3 className="text-2xl font-bold mb-4 text-white">Ready to Start Your Hero's Journey?</h3>
             <p className="text-white/90 max-w-2xl mx-auto mb-8 text-lg">
               Every journey begins with a single step. Start your transformation today and discover how your greatest challenges can become your greatest strengths.
             </p>
