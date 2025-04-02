@@ -95,19 +95,19 @@ export default function HerosJourneySpecialist() {
                 alt="Hero's Journey" 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-[var(--primary-dark)]/40 via-[var(--primary)]/25 to-[var(--accent)]/15"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-[var(--primary-dark)]/60 via-[var(--primary)]/40 to-[var(--accent)]/30"></div>
             </div>
             
             <div className="relative z-10 pt-20 pb-24 px-6">
               <span className="px-3 py-1 bg-white/20 text-black rounded-full text-sm font-medium backdrop-blur-sm">
                 Transformational Specialist
               </span>
-              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-black max-w-3xl">
+              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-yellow-300 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] max-w-3xl">
                 The Hero's Journey: A path to self healing & Transformation
               </h1>
               
               <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-xl">
-                <p className="text-xl text-black/90">
+                <p className="text-xl text-yellow-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                   "Your childhood trauma, your depression, your anxiety, your mental health challenges, your addictions are paths to deep personal transformation because everything happens for a reason."
                 </p>
               </div>
@@ -128,7 +128,7 @@ export default function HerosJourneySpecialist() {
           
           
           {/* Move the description paragraph below the partnership banner */}
-          <p className="text-xl text-foreground/80 mb-12 max-w-3xl mx-auto text-center">
+          <p className="text-xl text-yellow-300 mb-12 max-w-3xl mx-auto text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
             Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
           </p>
           
