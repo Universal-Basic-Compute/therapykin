@@ -31,6 +31,15 @@ interface ClientData {
   status: 'Active' | 'On Hold' | 'Inactive';
 }
 
+interface InsightsModalState {
+  isOpen: boolean;
+  clientId: string;
+  clientName: string;
+  loading: boolean;
+  insights: string;
+  error: string;
+}
+
 interface SessionData {
   id: string;
   clientId: string;
@@ -54,6 +63,14 @@ export default function TherapistDashboard() {
     pastSessions: []
   });
   const [loadingSessions, setLoadingSessions] = useState(false);
+  const [insightsModal, setInsightsModal] = useState<InsightsModalState>({
+    isOpen: false,
+    clientId: '',
+    clientName: '',
+    loading: false,
+    insights: '',
+    error: ''
+  });
   
   // Check if user is authorized to view this page
   useEffect(() => {
@@ -263,6 +280,55 @@ export default function TherapistDashboard() {
     }
   }, [user, activeTab]);
 
+  // Generate client insights using KinOS engine
+  const generateClientInsights = async (clientId: string, clientName: string) => {
+    setInsightsModal({
+      isOpen: true,
+      clientId,
+      clientName,
+      loading: true,
+      insights: '',
+      error: ''
+    });
+    
+    try {
+      const response = await fetch('/api/kinos-engine/analysis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `Please provide a comprehensive analysis of client ${clientId}. Include: 
+          1. An overview of their recent therapy sessions
+          2. A detailed psychological profile based on session content
+          3. Key patterns in their communication and emotional responses
+          4. Potential therapeutic approaches that might be effective
+          5. Areas of progress and concern to monitor`,
+          model: 'claude-3-5-haiku-latest'
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      setInsightsModal(prev => ({
+        ...prev,
+        loading: false,
+        insights: data.response
+      }));
+    } catch (error) {
+      console.error('Error generating client insights:', error);
+      setInsightsModal(prev => ({
+        ...prev,
+        loading: false,
+        error: 'Failed to generate insights. Please try again later.'
+      }));
+    }
+  };
+
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -437,7 +503,7 @@ export default function TherapistDashboard() {
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Last Session</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Recent Sessions</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Total Minutes</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Total Sessions</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Actions</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-foreground/10">
@@ -471,7 +537,12 @@ export default function TherapistDashboard() {
                                     {client.totalMinutes}
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                    {client.totalSessions} sessions
+                                    <button 
+                                      onClick={() => generateClientInsights(client.id, client.name)}
+                                      className="text-sm px-3 py-1 border border-[var(--primary)]/50 text-[var(--primary)] rounded hover:bg-[var(--primary)]/10"
+                                    >
+                                      AI Insights
+                                    </button>
                                   </td>
                                 </tr>
                               ))}
@@ -560,6 +631,65 @@ export default function TherapistDashboard() {
       </main>
       
       <Footer />
+      
+      {/* AI Insights Modal */}
+      {insightsModal.isOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[var(--background)] rounded-lg shadow-xl w-full max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
+            <div className="p-4 border-b border-foreground/10 flex justify-between items-center">
+              <h3 className="text-xl font-semibold">
+                AI Insights: <span style={{ color: clients.find(c => c.id === insightsModal.clientId)?.color }}>
+                  {insightsModal.clientName}
+                </span>
+              </h3>
+              <button 
+                onClick={() => setInsightsModal(prev => ({ ...prev, isOpen: false }))}
+                className="text-foreground/60 hover:text-foreground"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-grow">
+              {insightsModal.loading ? (
+                <div className="flex flex-col items-center justify-center h-64">
+                  <div className="w-12 h-12 border-4 border-[var(--primary)]/30 border-t-[var(--primary)] rounded-full animate-spin mb-4"></div>
+                  <p className="text-foreground/70">Generating insights...</p>
+                </div>
+              ) : insightsModal.error ? (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-4 text-red-700 dark:text-red-300">
+                  {insightsModal.error}
+                </div>
+              ) : (
+                <div className="prose dark:prose-invert max-w-none">
+                  {insightsModal.insights.split('\n').map((paragraph, index) => (
+                    paragraph.trim() ? <p key={index}>{paragraph}</p> : <br key={index} />
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <div className="p-4 border-t border-foreground/10 flex justify-end">
+              <button 
+                onClick={() => setInsightsModal(prev => ({ ...prev, isOpen: false }))}
+                className="btn-secondary mr-2"
+              >
+                Close
+              </button>
+              {!insightsModal.loading && !insightsModal.error && (
+                <button 
+                  onClick={() => {/* Add functionality to save insights */}}
+                  className="btn-primary"
+                >
+                  Save to Client Notes
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
