@@ -304,7 +304,7 @@ export default function TherapistDashboard() {
           3. Key patterns in their communication and emotional responses
           4. Potential therapeutic approaches that might be effective
           5. Areas of progress and concern to monitor`,
-          model: 'claude-3-5-haiku-latest'
+          model: 'claude-3-7-sonnet-latest'
         })
       });
       
