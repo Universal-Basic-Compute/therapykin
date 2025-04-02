@@ -31,6 +31,15 @@ interface ClientData {
   status: 'Active' | 'On Hold' | 'Inactive';
 }
 
+interface SessionData {
+  id: string;
+  clientId: string;
+  clientColor: string;
+  timestamp: string;
+  minutesActive: number;
+  rating: number | null;
+}
+
 export default function TherapistDashboard() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
@@ -39,6 +48,12 @@ export default function TherapistDashboard() {
   const [stats, setStats] = useState<TherapistStats | null>(null);
   const [clients, setClients] = useState<ClientData[]>([]);
   const [loadingClients, setLoadingClients] = useState(false);
+  const [sessions, setSessions] = useState<{
+    pastSessions: SessionData[];
+  }>({
+    pastSessions: []
+  });
+  const [loadingSessions, setLoadingSessions] = useState(false);
   
   // Check if user is authorized to view this page
   useEffect(() => {
@@ -190,6 +205,61 @@ export default function TherapistDashboard() {
 
     if (activeTab === 'clients') {
       fetchClientData();
+    }
+  }, [user, activeTab]);
+  
+  // Fetch session data
+  useEffect(() => {
+    async function fetchSessionData() {
+      if (!user) return;
+      
+      let isAuthorized = false;
+      
+      if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+        console.log('User is admin or has authorized email, authorized to fetch session data');
+        isAuthorized = true;
+      } else if (user.isTherapist) {
+        try {
+          console.log('Checking therapist types for session fetch:', user.isTherapist);
+          const therapistTypes = JSON.parse(user.isTherapist);
+          isAuthorized = Array.isArray(therapistTypes) && therapistTypes.length > 0;
+          console.log('Authorized based on parsed therapist types:', isAuthorized);
+        } catch (error) {
+          console.error('Error parsing therapist types for session fetch:', error);
+          // If parsing fails, check if it's a string that contains "herosjourney"
+          if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+            console.log('String contains herosjourney, authorized to fetch session data');
+            isAuthorized = true;
+          }
+        }
+      }
+      
+      if (!isAuthorized) {
+        console.log('Not authorized to fetch session data');
+        return;
+      }
+      
+      setLoadingSessions(true);
+      try {
+        const response = await fetch('/api/sessions/therapist-sessions');
+        
+        if (!response.ok) {
+          console.error('Failed to fetch session data:', response.status, response.statusText);
+          setLoadingSessions(false);
+          return;
+        }
+        
+        const data = await response.json();
+        setSessions(data.sessions);
+      } catch (error) {
+        console.error('Error fetching session data:', error);
+      } finally {
+        setLoadingSessions(false);
+      }
+    }
+
+    if (activeTab === 'sessions') {
+      fetchSessionData();
     }
   }, [user, activeTab]);
 
@@ -418,55 +488,41 @@ export default function TherapistDashboard() {
                       <button className="btn-primary text-sm px-4 py-2">Schedule Session</button>
                     </div>
                     
-                    <div className="mb-8">
-                      <h3 className="text-lg font-medium mb-3">Upcoming Sessions</h3>
-                      <div className="bg-[var(--background-alt)] rounded-lg overflow-hidden">
-                        <div className="p-4 border-b border-foreground/10 flex justify-between items-center">
-                          <div>
-                            <p className="font-medium">Jane Smith (TK-2023-042)</p>
-                            <p className="text-foreground/60 text-sm mt-1">Oct 22, 2023 • 10:00 AM - 11:00 AM</p>
-                          </div>
-                          <div className="flex space-x-2">
-                            <button className="text-sm px-3 py-1 border border-foreground/20 rounded hover:bg-foreground/5">Reschedule</button>
-                            <button className="text-sm px-3 py-1 bg-[var(--primary)] text-white rounded">Join</button>
-                          </div>
-                        </div>
-                        <div className="p-4 border-b border-foreground/10 flex justify-between items-center">
-                          <div>
-                            <p className="font-medium">Michael Johnson (TK-2023-067)</p>
-                            <p className="text-foreground/60 text-sm mt-1">Oct 23, 2023 • 2:00 PM - 3:00 PM</p>
-                          </div>
-                          <div className="flex space-x-2">
-                            <button className="text-sm px-3 py-1 border border-foreground/20 rounded hover:bg-foreground/5">Reschedule</button>
-                            <button className="text-sm px-3 py-1 bg-[var(--primary)] text-white rounded">Join</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
                     <h3 className="text-lg font-medium mb-3">Past Sessions</h3>
-                    <div className="bg-[var(--background-alt)] rounded-lg overflow-hidden">
-                      <div className="p-4 border-b border-foreground/10 flex justify-between items-center">
-                        <div>
-                          <p className="font-medium">Jane Smith (TK-2023-042)</p>
-                          <p className="text-foreground/60 text-sm mt-1">Oct 15, 2023 • 10:00 AM - 11:00 AM</p>
-                        </div>
-                        <div className="flex space-x-2">
-                          <button className="text-sm px-3 py-1 border border-foreground/20 rounded hover:bg-foreground/5">View Notes</button>
-                          <button className="text-sm px-3 py-1 border border-[var(--primary)]/50 text-[var(--primary)] rounded hover:bg-[var(--primary)]/10">AI Analysis</button>
-                        </div>
+                    {loadingSessions ? (
+                      <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--primary)]"></div>
                       </div>
-                      <div className="p-4 border-b border-foreground/10 flex justify-between items-center">
-                        <div>
-                          <p className="font-medium">Michael Johnson (TK-2023-067)</p>
-                          <p className="text-foreground/60 text-sm mt-1">Oct 18, 2023 • 2:00 PM - 3:00 PM</p>
-                        </div>
-                        <div className="flex space-x-2">
-                          <button className="text-sm px-3 py-1 border border-foreground/20 rounded hover:bg-foreground/5">View Notes</button>
-                          <button className="text-sm px-3 py-1 border border-[var(--primary)]/50 text-[var(--primary)] rounded hover:bg-[var(--primary)]/10">AI Analysis</button>
-                        </div>
+                    ) : sessions.pastSessions.length === 0 ? (
+                      <div className="bg-[var(--background-alt)] rounded-lg p-8 text-center">
+                        <p className="text-foreground/70">No past sessions found.</p>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="bg-[var(--background-alt)] rounded-lg overflow-hidden">
+                        {sessions.pastSessions.map((session) => (
+                          <div key={session.id} className="p-4 border-b border-foreground/10 flex justify-between items-center">
+                            <div>
+                              <p className="font-medium">
+                                <span style={{ color: session.clientColor }}>{session.clientId}</span>
+                              </p>
+                              <p className="text-foreground/60 text-sm mt-1">
+                                {formatDate(session.timestamp)} • {session.minutesActive} minutes
+                              </p>
+                            </div>
+                            <div className="flex space-x-2 items-center">
+                              {session.rating && (
+                                <div className="flex items-center mr-4">
+                                  <span className="text-yellow-500 mr-1">★</span>
+                                  <span className="text-sm font-medium">{session.rating}</span>
+                                </div>
+                              )}
+                              <button className="text-sm px-3 py-1 border border-foreground/20 rounded hover:bg-foreground/5">View Notes</button>
+                              <button className="text-sm px-3 py-1 border border-[var(--primary)]/50 text-[var(--primary)] rounded hover:bg-[var(--primary)]/10">AI Analysis</button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
                 
