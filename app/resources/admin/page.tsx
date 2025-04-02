@@ -7,7 +7,7 @@ import Footer from '@/app/components/Footer';
 import { useRouter } from 'next/navigation';
 import { 
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
-  Tooltip, Legend, ResponsiveContainer 
+  Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts';
 
 // Define types for our session data
@@ -33,17 +33,23 @@ interface RatingStats {
   totalRatings: number;
 }
 
+interface SpecialistStat {
+  name: string;
+  value: number;
+}
+
 export default function AdminPage() {
   const { user } = useAuth();
   const router = useRouter();
   const [sessionStats, setSessionStats] = useState<SessionStats | null>(null);
   const [dailyStats, setDailyStats] = useState<DailyStats[]>([]);
   const [ratingStats, setRatingStats] = useState<RatingStats | null>(null);
+  const [specialistStats, setSpecialistStats] = useState<SpecialistStat[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Colors for charts
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#8dd1e1', '#a4de6c', '#d0ed57'];
 
   useEffect(() => {
     // Check if user is authorized
@@ -80,6 +86,14 @@ export default function AdminPage() {
         }
         const ratingData = await ratingResponse.json();
         setRatingStats(ratingData.ratingStats);
+        
+        // Fetch specialist stats
+        const specialistResponse = await fetch('/api/sessions/specialist-stats');
+        if (!specialistResponse.ok) {
+          throw new Error('Failed to fetch specialist statistics');
+        }
+        const specialistData = await specialistResponse.json();
+        setSpecialistStats(specialistData.specialistStats);
         
         setLoading(false);
       } catch (err) {
@@ -214,6 +228,34 @@ export default function AdminPage() {
                         activeDot={{ r: 8 }} 
                       />
                     </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              
+              {/* Specialist Distribution Chart */}
+              <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-lg shadow mb-8">
+                <h2 className="text-xl font-semibold mb-4">Sessions per Specialist</h2>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={specialistStats}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                        nameKey="name"
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {specialistStats.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value, name, props) => [`${value} sessions`, name]} />
+                      <Legend />
+                    </PieChart>
                   </ResponsiveContainer>
                 </div>
               </div>
