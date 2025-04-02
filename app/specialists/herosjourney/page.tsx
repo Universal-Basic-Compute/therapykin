@@ -102,18 +102,18 @@ export default function HerosJourneySpecialist() {
               <span className="px-3 py-1 bg-white/60 text-[var(--primary-dark)] rounded-full text-sm font-medium backdrop-blur-sm">
                 Transformational Specialist
               </span>
-              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-yellow-200 drop-shadow-[0_3px_3px_rgba(0,0,0,0.9)] max-w-3xl">
+              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-yellow-200 max-w-3xl mx-auto text-center">
                 The Hero's Journey: A path to self healing & Transformation
               </h1>
               
-              <div className="bg-white/60 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-xl">
-                <p className="text-xl text-[var(--primary)] drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]">
+              <div className="bg-white/60 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-xl mx-auto">
+                <p className="text-xl text-[var(--primary)] text-center">
                   "Your childhood trauma, your depression, your anxiety, your mental health challenges, your addictions are paths to deep personal transformation because everything happens for a reason."
                 </p>
               </div>
               
-              <div className="bg-white/60 backdrop-blur-md p-6 rounded-lg border border-white/20 mt-4 max-w-xl">
-                <p className="text-xl text-[var(--primary)] drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]">
+              <div className="bg-white/60 backdrop-blur-md p-6 rounded-lg border border-white/20 mt-4 max-w-xl mx-auto">
+                <p className="text-xl text-[var(--primary)] text-center">
                   Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
                 </p>
               </div>
