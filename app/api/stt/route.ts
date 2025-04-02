@@ -25,13 +25,36 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    // Log more details about the file for debugging
+    console.log(`STT request: Processing audio file of type ${file.type}, size ${file.size} bytes`);
+    
+    // If file has no type, try to infer it from the filename
+    let fileToSend = file;
+    if (file instanceof File) {
+      const fileName = file.name || '';
+      console.log(`File name: ${fileName}`);
+      
+      if (!file.type) {
+        const fileExt = fileName.split('.').pop()?.toLowerCase();
+        if (fileExt) {
+          console.log(`File has no MIME type, inferring from extension: .${fileExt}`);
+          // Create a new blob with the correct type
+          if (fileExt === 'webm') {
+            fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/webm' });
+          } else if (fileExt === 'mp4' || fileExt === 'm4a') {
+            fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/mp4' });
+          } else if (fileExt === 'wav') {
+            fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/wav' });
+          }
+        }
+      }
+    }
+    
     // Get optional parameters
     const model = formData.get('model') || 'whisper-1';
     const language = formData.get('language') || 'en';
     const prompt = formData.get('prompt') || '';
     const responseFormat = formData.get('response_format') || 'json';
-    
-    console.log(`STT request: Processing audio file of size ${file.size} bytes`);
     console.log(`STT request params: model=${model}, language=${language}`);
     
     // Determine the base URL based on environment
@@ -45,7 +68,7 @@ export async function POST(request: NextRequest) {
     
     // Create a new FormData object to send to the KinOS API
     const kinosFormData = new FormData();
-    kinosFormData.append('file', file);
+    kinosFormData.append('file', fileToSend);
     kinosFormData.append('model', model as string);
     kinosFormData.append('language', language as string);
     

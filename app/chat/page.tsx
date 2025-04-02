@@ -1024,7 +1024,19 @@ function ChatSessionWithSearchParams() {
     }
   };
 
-  // Function to start recording
+  // Add state to check if MediaRecorder is supported
+  const [isMediaRecorderSupported, setIsMediaRecorderSupported] = useState(true);
+  
+  // Check for MediaRecorder support
+  useEffect(() => {
+    // Check if MediaRecorder is supported
+    if (typeof MediaRecorder === 'undefined') {
+      setIsMediaRecorderSupported(false);
+      console.warn('MediaRecorder API is not supported in this browser');
+    }
+  }, []);
+  
+  // Function to start recording with better iOS compatibility
   const startRecording = async () => {
     try {
       // Reset audio chunks
@@ -1033,8 +1045,32 @@ function ChatSessionWithSearchParams() {
       // Request microphone access
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       
-      // Create media recorder
-      const mediaRecorder = new MediaRecorder(stream);
+      // Check for supported MIME types
+      const mimeTypes = [
+        'audio/webm',
+        'audio/mp4',
+        'audio/aac',
+        'audio/wav',
+        'audio/ogg'
+      ];
+      
+      let selectedType = '';
+      for (const type of mimeTypes) {
+        if (MediaRecorder.isTypeSupported(type)) {
+          selectedType = type;
+          console.log(`Using supported audio MIME type: ${type}`);
+          break;
+        }
+      }
+      
+      // If no supported type found, use default
+      if (!selectedType) {
+        console.warn('No tested MIME types supported, using browser default');
+      }
+      
+      // Create media recorder with options
+      const options = selectedType ? { mimeType: selectedType } : {};
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       
       // Set up event handlers
@@ -1097,13 +1133,20 @@ function ChatSessionWithSearchParams() {
       const recordedTime = recordingTime;
       setRecordingTime(0);
       
-      // Create audio blob from chunks
-      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-      console.log(`Audio recording complete, size: ${audioBlob.size} bytes`);
+      // Get the MIME type from the MediaRecorder if available
+      const mimeType = mediaRecorderRef.current?.mimeType || 'audio/webm';
+      console.log(`Using MIME type for blob: ${mimeType}`);
+      
+      // Create audio blob from chunks with the detected MIME type
+      const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+      console.log(`Audio recording complete, size: ${audioBlob.size} bytes, type: ${audioBlob.type}`);
       
       if (audioBlob.size > 0) {
         // Send to STT API
         await sendAudioForTranscription(audioBlob);
+      } else {
+        console.error('Empty audio recording detected');
+        alert('No audio was recorded. Please try again and speak clearly.');
       }
     } catch (error) {
       console.error('Error handling recording stop:', error);
@@ -1118,7 +1161,21 @@ function ChatSessionWithSearchParams() {
       
       // Create form data
       const formData = new FormData();
-      formData.append('file', audioBlob, 'recording.webm');
+      
+      // For iOS compatibility, check and log the blob type
+      console.log(`Audio blob type: ${audioBlob.type}, size: ${audioBlob.size} bytes`);
+      
+      // If the blob has no type or is empty, show an error
+      if (audioBlob.size === 0) {
+        throw new Error('Empty audio recording detected');
+      }
+      
+      // Append with explicit filename and type for better server handling
+      const fileExtension = audioBlob.type.includes('webm') ? 'webm' : 
+                           audioBlob.type.includes('mp4') ? 'mp4' : 
+                           audioBlob.type.includes('wav') ? 'wav' : 'audio';
+      
+      formData.append('file', audioBlob, `recording.${fileExtension}`);
       formData.append('model', 'whisper-1');
       formData.append('language', 'en'); // Default to English
       
@@ -1133,7 +1190,7 @@ function ChatSessionWithSearchParams() {
         }
       ]);
       
-      console.log('Sending audio for transcription...');
+      console.log(`Sending audio for transcription (${fileExtension} format)...`);
     
       // Store the captured image for sending
       const screenshot = capturedImage;
@@ -2690,6 +2747,13 @@ Important style requirements:
               disabled={isRecording || sessionEnded}
             />
             
+            {/* Warning for unsupported browsers */}
+            {!isMediaRecorderSupported && (
+              <div className="absolute bottom-16 left-0 right-0 mx-auto w-full max-w-md text-yellow-600 text-sm p-2 bg-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-300 rounded-lg mb-2 text-center">
+                Voice recording is not supported in your browser. Please type your message instead.
+              </div>
+            )}
+            
             {/* Microphone button */}
             <button 
               type="button"
@@ -2698,8 +2762,8 @@ Important style requirements:
                 isRecording 
                   ? 'bg-[var(--primary-dark)] text-white animate-pulse' 
                   : 'bg-[var(--background-alt)] text-foreground/70 hover:bg-[var(--primary)]/10'
-              } ${sessionEnded ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={sessionEnded}
+              } ${sessionEnded || !isMediaRecorderSupported ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={sessionEnded || !isMediaRecorderSupported}
             >
               {isRecording ? (
                 <>
