@@ -150,12 +150,26 @@ export default function AdminPage() {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={dailyStats}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 40 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
+                      <XAxis 
+                        dataKey="date" 
+                        tickFormatter={(date) => {
+                          const d = new Date(date);
+                          return `${d.getDate()} ${d.toLocaleString('default', { month: 'short' })}`;
+                        }}
+                        angle={-45}
+                        textAnchor="end"
+                        height={60}
+                      />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip 
+                        labelFormatter={(date) => {
+                          const d = new Date(date);
+                          return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                        }}
+                      />
                       <Legend />
                       <Bar dataKey="regularSessions" name="Regular Sessions" fill="#0088FE" />
                       <Bar dataKey="welcomeSessions" name="Welcome Sessions" fill="#00C49F" />
@@ -171,12 +185,26 @@ export default function AdminPage() {
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={dailyStats}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 40 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
+                      <XAxis 
+                        dataKey="date" 
+                        tickFormatter={(date) => {
+                          const d = new Date(date);
+                          return `${d.getDate()} ${d.toLocaleString('default', { month: 'short' })}`;
+                        }}
+                        angle={-45}
+                        textAnchor="end"
+                        height={60}
+                      />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip 
+                        labelFormatter={(date) => {
+                          const d = new Date(date);
+                          return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                        }}
+                      />
                       <Legend />
                       <Line 
                         type="monotone" 
