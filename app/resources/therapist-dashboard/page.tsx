@@ -365,7 +365,7 @@ export default function TherapistDashboard() {
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Last Session</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Recent Sessions</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Total Minutes</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Actions</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Total Sessions</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-foreground/10">
@@ -398,8 +398,8 @@ export default function TherapistDashboard() {
                                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     {client.totalMinutes}
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--primary)]">
-                                    <button className="hover:underline">View Profile</button>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    {client.totalSessions} sessions
                                   </td>
                                 </tr>
                               ))}
