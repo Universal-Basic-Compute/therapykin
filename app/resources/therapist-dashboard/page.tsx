@@ -292,16 +292,8 @@ export default function TherapistDashboard() {
     });
     
     try {
-      // Use the specialist as the customer and the client name as the project_id
-      // Assuming the specialist is the current user's name or a fixed value
-      const specialist = user?.firstName && user?.lastName 
-        ? `${user.firstName}${user.lastName}` 
-        : 'TherapistSpecialist';
-      
-      // Format the client name to be used as project_id (remove spaces)
-      const formattedClientName = clientName.replace(/\s+/g, '');
-      
-      const response = await fetch(`/projects/${specialist}/${formattedClientName}/analysis`, {
+      // Update to the correct endpoint format
+      const response = await fetch(`/projects/therapykinherosjourney/${clientName.replace(/\s+/g, '')}/analysis`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
