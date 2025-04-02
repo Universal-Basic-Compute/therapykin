@@ -102,12 +102,12 @@ export default function HerosJourneySpecialist() {
               <span className="px-3 py-1 bg-white/20 text-black rounded-full text-sm font-medium backdrop-blur-sm">
                 Transformational Specialist
               </span>
-              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-yellow-300 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] max-w-3xl">
+              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-yellow-200 drop-shadow-[0_3px_3px_rgba(0,0,0,0.9)] max-w-3xl">
                 The Hero's Journey: A path to self healing & Transformation
               </h1>
               
               <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8 max-w-xl">
-                <p className="text-xl text-yellow-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+                <p className="text-xl text-yellow-200 drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)]">
                   "Your childhood trauma, your depression, your anxiety, your mental health challenges, your addictions are paths to deep personal transformation because everything happens for a reason."
                 </p>
               </div>
@@ -128,7 +128,7 @@ export default function HerosJourneySpecialist() {
           
           
           {/* Move the description paragraph below the partnership banner */}
-          <p className="text-xl text-yellow-300 mb-12 max-w-3xl mx-auto text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
+          <p className="text-xl text-yellow-200 mb-12 max-w-3xl mx-auto text-center drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
           </p>
           
