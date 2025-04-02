@@ -124,7 +124,7 @@ export default function HerosJourneySpecialist() {
               <div className="mt-8 flex justify-center">
                 <Link 
                   href="/chat?specialist=herosjourney" 
-                  className="bg-white text-[var(--primary)] hover:bg-white/90 px-6 py-3 rounded-md font-medium inline-block text-lg transition-all"
+                  className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white hover:opacity-90 px-6 py-3 rounded-md font-medium inline-block text-lg transition-all shadow-md hover:shadow-lg"
                 >
                   Start Your Hero's Journey
                 </Link>
