@@ -14,6 +14,7 @@ interface TherapistStats {
     id: string;
     type: string;
     clientId: string;
+    clientColor: string;
     timestamp: string;
     minutesActive: number;
   }>;
@@ -227,7 +228,7 @@ export default function TherapistDashboard() {
                                'Session completed'}
                             </p>
                             <p className="text-foreground/60 text-sm mt-1">
-                              Client ID: {activity.clientId} • {formatDate(activity.timestamp)}
+                              Client: <span style={{ color: activity.clientColor, fontWeight: 'bold' }}>{activity.clientId}</span> • {formatDate(activity.timestamp)}
                               {activity.minutesActive > 0 && ` • ${activity.minutesActive} minutes`}
                             </p>
                           </div>
