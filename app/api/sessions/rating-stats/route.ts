@@ -31,14 +31,6 @@ export async function GET(request: NextRequest) {
     let totalRemembering = 0;
     let totalRatings = 0;
     
-    // For rating distribution
-    const ratingCounts = {
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0
-    };
     
     records.forEach((record: any) => {
       const overallRating = parseInt(record.fields.Rating) || 0;
@@ -50,11 +42,6 @@ export async function GET(request: NextRequest) {
       if (overallRating > 0) {
         totalOverall += overallRating;
         totalRatings++;
-        
-        // Update rating distribution
-        if (ratingCounts[overallRating as keyof typeof ratingCounts] !== undefined) {
-          ratingCounts[overallRating as keyof typeof ratingCounts]++;
-        }
       }
       
       if (understandingRating > 0) totalUnderstanding += understandingRating;
@@ -70,12 +57,6 @@ export async function GET(request: NextRequest) {
     const averageFlow = totalRatings > 0 ? totalFlow / totalRatings : 0;
     const averageRemembering = totalRatings > 0 ? totalRemembering / totalRatings : 0;
     
-    // Format rating distribution for chart
-    const ratingDistribution = Object.entries(ratingCounts).map(([rating, count]) => ({
-      rating: parseInt(rating),
-      count
-    }));
-    
     return NextResponse.json({
       ratingStats: {
         averageOverall,
@@ -83,8 +64,7 @@ export async function GET(request: NextRequest) {
         averageHelpfulness,
         averageFlow,
         averageRemembering,
-        totalRatings,
-        ratingDistribution
+        totalRatings
       }
     });
   } catch (error) {

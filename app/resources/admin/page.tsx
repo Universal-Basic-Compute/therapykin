@@ -7,7 +7,7 @@ import Footer from '@/app/components/Footer';
 import { useRouter } from 'next/navigation';
 import { 
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
-  Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell 
+  Tooltip, Legend, ResponsiveContainer 
 } from 'recharts';
 
 // Define types for our session data
@@ -31,10 +31,6 @@ interface RatingStats {
   averageFlow: number;
   averageRemembering: number;
   totalRatings: number;
-  ratingDistribution: {
-    rating: number;
-    count: number;
-  }[];
 }
 
 export default function AdminPage() {
@@ -47,7 +43,7 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null);
 
   // Colors for charts
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   useEffect(() => {
     // Check if user is authorized
@@ -229,34 +225,6 @@ export default function AdminPage() {
                       <p className="text-2xl font-bold text-[var(--primary)]">
                         {ratingStats.averageRemembering.toFixed(1)}
                       </p>
-                    </div>
-                  </div>
-                  
-                  {/* Rating Distribution Chart */}
-                  <div className="bg-white dark:bg-[var(--background-alt)] p-6 rounded-lg shadow mb-8">
-                    <h2 className="text-xl font-semibold mb-4">Rating Distribution</h2>
-                    <div className="h-80">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={ratingStats.ratingDistribution}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                            outerRadius={80}
-                            fill="#8884d8"
-                            dataKey="count"
-                            nameKey="rating"
-                          >
-                            {ratingStats.ratingDistribution.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                          </Pie>
-                          <Tooltip />
-                          <Legend />
-                        </PieChart>
-                      </ResponsiveContainer>
                     </div>
                   </div>
                 </>

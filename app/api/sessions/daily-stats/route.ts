@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       
       const date = new Date(record.fields.CreatedAt as string).toISOString().split('T')[0];
       const minutesActive = record.fields.MinutesActive as number || 0;
-      const isWelcomeSession = (record.fields.SessionType === 'welcome');
+      const isWelcomeSession = (record.fields.Specialist === 'welcome');
       
       if (!dailyStatsMap.has(date)) {
         dailyStatsMap.set(date, {
