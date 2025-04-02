@@ -292,8 +292,12 @@ export default function TherapistDashboard() {
     });
     
     try {
-      // Update to the correct endpoint format
-      const response = await fetch(`/projects/therapykinherosjourney/${clientName.replace(/\s+/g, '')}/analysis`, {
+      // Use the user's name directly from the user object
+      const userName = user?.firstName && user?.lastName 
+        ? `${user.firstName}${user.lastName}` 
+        : 'NicolasReynolds'; // Default to NicolasReynolds if user name not available
+      
+      const response = await fetch(`/projects/therapykinherosjourney/${userName}/analysis`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
