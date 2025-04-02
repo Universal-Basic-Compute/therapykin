@@ -119,7 +119,7 @@ export default function HerosJourneySpecialist() {
               </div>
               
               {/* Add the CTA button here */}
-              <div className="mt-8">
+              <div className="mt-8 flex justify-center">
                 <Link 
                   href="/chat?specialist=herosjourney" 
                   className="bg-white text-[var(--primary)] hover:bg-white/90 px-6 py-3 rounded-md font-medium inline-block text-lg transition-all"
