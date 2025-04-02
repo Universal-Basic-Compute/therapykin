@@ -102,7 +102,7 @@ export default function HerosJourneySpecialist() {
               <span className="px-3 py-1 bg-white/60 text-[var(--primary-dark)] rounded-full text-sm font-medium backdrop-blur-sm">
                 Transformational Specialist
               </span>
-              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-yellow-200 max-w-3xl mx-auto text-center">
+              <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6 text-yellow-200 max-w-3xl mx-auto text-center drop-shadow-[0_3px_3px_rgba(0,0,0,0.9)]">
                 The Hero's Journey: A path to self healing & Transformation
               </h1>
               
