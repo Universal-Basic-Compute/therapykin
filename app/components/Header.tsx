@@ -290,7 +290,7 @@ export default function Header() {
                         )}
                         <button 
                           onClick={logout}
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          className="block w-full text-left px-4 py-2 text-sm text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/20"
                         >
                           Sign Out
                         </button>
@@ -507,7 +507,7 @@ export default function Header() {
                       logout();
                       setMobileMenuOpen(false);
                     }}
-                    className="text-red-600 hover:text-red-800 block w-full text-left px-3 py-2 text-base font-medium"
+                    className="text-violet-600 hover:text-violet-800 block w-full text-left px-3 py-2 text-base font-medium"
                   >
                     Sign Out
                   </button>
