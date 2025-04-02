@@ -343,23 +343,25 @@ export default function TherapistDashboard() {
                   </button>
                   <button
                     onClick={() => setActiveTab('insights')}
-                    className={`py-4 px-1 font-medium text-sm border-b-2 ${
+                    className={`py-4 px-1 font-medium text-sm border-b-2 opacity-50 cursor-not-allowed ${
                       activeTab === 'insights'
                         ? 'border-[var(--primary)] text-[var(--primary)]'
-                        : 'border-transparent text-foreground/60 hover:text-foreground/80 hover:border-foreground/30'
+                        : 'border-transparent text-foreground/60'
                     }`}
+                    disabled
                   >
-                    AI Insights
+                    AI Insights (Coming Soon)
                   </button>
                   <button
                     onClick={() => setActiveTab('settings')}
-                    className={`py-4 px-1 font-medium text-sm border-b-2 ${
+                    className={`py-4 px-1 font-medium text-sm border-b-2 opacity-50 cursor-not-allowed ${
                       activeTab === 'settings'
                         ? 'border-[var(--primary)] text-[var(--primary)]'
-                        : 'border-transparent text-foreground/60 hover:text-foreground/80 hover:border-foreground/30'
+                        : 'border-transparent text-foreground/60'
                     }`}
+                    disabled
                   >
-                    Settings
+                    Settings (Coming Soon)
                   </button>
                 </nav>
               </div>
@@ -527,153 +529,27 @@ export default function TherapistDashboard() {
                 )}
                 
                 {activeTab === 'insights' && (
-                  <div>
-                    <h2 className="text-xl font-semibold mb-6">AI Insights Dashboard</h2>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                      <div className="bg-[var(--background-alt)] p-6 rounded-lg">
-                        <h3 className="text-lg font-medium mb-3">Sentiment Analysis</h3>
-                        <p className="text-foreground/70 mb-4">Aggregate emotional trends across all client sessions</p>
-                        <div className="h-40 bg-foreground/5 rounded flex items-center justify-center">
-                          <p className="text-foreground/40">Sentiment chart visualization</p>
-                        </div>
-                      </div>
-                      <div className="bg-[var(--background-alt)] p-6 rounded-lg">
-                        <h3 className="text-lg font-medium mb-3">Topic Clustering</h3>
-                        <p className="text-foreground/70 mb-4">Common themes emerging across client conversations</p>
-                        <div className="h-40 bg-foreground/5 rounded flex items-center justify-center">
-                          <p className="text-foreground/40">Topic cluster visualization</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <h3 className="text-lg font-medium mb-3">Recent AI-Generated Insights</h3>
-                    <div className="bg-[var(--background-alt)] rounded-lg overflow-hidden">
-                      <div className="p-4 border-b border-foreground/10">
-                        <div className="flex justify-between">
-                          <p className="font-medium">Client Progress Analysis</p>
-                          <span className="text-xs text-foreground/60">Oct 19, 2023</span>
-                        </div>
-                        <p className="text-foreground/70 text-sm mt-2">Analysis of Jane Smith's progress over the last 3 months shows significant improvement in anxiety management techniques.</p>
-                        <button className="text-[var(--primary)] text-sm mt-2 hover:underline">View Full Report</button>
-                      </div>
-                      <div className="p-4 border-b border-foreground/10">
-                        <div className="flex justify-between">
-                          <p className="font-medium">Treatment Recommendation</p>
-                          <span className="text-xs text-foreground/60">Oct 17, 2023</span>
-                        </div>
-                        <p className="text-foreground/70 text-sm mt-2">Based on Michael Johnson's recent sessions, AI suggests exploring mindfulness-based cognitive therapy approaches.</p>
-                        <button className="text-[var(--primary)] text-sm mt-2 hover:underline">View Full Report</button>
-                      </div>
-                      <div className="p-4">
-                        <div className="flex justify-between">
-                          <p className="font-medium">Risk Assessment Alert</p>
-                          <span className="text-xs text-foreground/60">Oct 16, 2023</span>
-                        </div>
-                        <p className="text-foreground/70 text-sm mt-2">Potential increased risk factors detected in Sarah Williams' recent session transcripts.</p>
-                        <button className="text-[var(--primary)] text-sm mt-2 hover:underline">View Full Report</button>
-                      </div>
+                  <div className="text-center py-16">
+                    <div className="inline-block p-6 bg-[var(--background-alt)] rounded-lg shadow-md">
+                      <h2 className="text-2xl font-semibold mb-4">AI Insights Coming Soon</h2>
+                      <p className="text-foreground/70 mb-6 max-w-md mx-auto">
+                        We're working on advanced AI analytics to help you gain deeper insights into your client sessions.
+                        This feature will be available in an upcoming update.
+                      </p>
+                      <div className="w-16 h-16 border-4 border-[var(--primary)]/30 border-t-[var(--primary)] rounded-full animate-spin mx-auto"></div>
                     </div>
                   </div>
                 )}
                 
                 {activeTab === 'settings' && (
-                  <div>
-                    <h2 className="text-xl font-semibold mb-6">Therapist Settings</h2>
-                    
-                    <div className="bg-[var(--background-alt)] rounded-lg p-6 mb-6">
-                      <h3 className="text-lg font-medium mb-4">Profile Information</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-foreground/70 mb-1">Full Name</label>
-                          <input 
-                            type="text" 
-                            className="w-full p-2 border border-foreground/20 rounded bg-background"
-                            defaultValue="Dr. Nicole Richards"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-foreground/70 mb-1">Email Address</label>
-                          <input 
-                            type="email" 
-                            className="w-full p-2 border border-foreground/20 rounded bg-background"
-                            defaultValue="nlr@universalbasiccompute.ai"
-                            disabled
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-foreground/70 mb-1">Specialization</label>
-                          <input 
-                            type="text" 
-                            className="w-full p-2 border border-foreground/20 rounded bg-background"
-                            defaultValue="Cognitive Behavioral Therapy"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-foreground/70 mb-1">License Number</label>
-                          <input 
-                            type="text" 
-                            className="w-full p-2 border border-foreground/20 rounded bg-background"
-                            defaultValue="PSY12345"
-                          />
-                        </div>
-                      </div>
-                      <button className="btn-primary text-sm px-4 py-2 mt-4">Save Changes</button>
-                    </div>
-                    
-                    <div className="bg-[var(--background-alt)] rounded-lg p-6 mb-6">
-                      <h3 className="text-lg font-medium mb-4">Notification Preferences</h3>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium">Email Notifications</p>
-                            <p className="text-sm text-foreground/60">Receive email alerts for new appointments</p>
-                          </div>
-                          <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                            <input type="checkbox" id="email-toggle" defaultChecked className="sr-only" />
-                            <label htmlFor="email-toggle" className="block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-gray-700 cursor-pointer">
-                              <span className="block h-6 w-6 rounded-full bg-white dark:bg-gray-200 transform translate-x-0 checked:translate-x-4 transition"></span>
-                            </label>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium">SMS Notifications</p>
-                            <p className="text-sm text-foreground/60">Receive text messages for appointment reminders</p>
-                          </div>
-                          <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                            <input type="checkbox" id="sms-toggle" defaultChecked className="sr-only" />
-                            <label htmlFor="sms-toggle" className="block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-gray-700 cursor-pointer">
-                              <span className="block h-6 w-6 rounded-full bg-white dark:bg-gray-200 transform translate-x-0 checked:translate-x-4 transition"></span>
-                            </label>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium">AI Insight Alerts</p>
-                            <p className="text-sm text-foreground/60">Get notified when AI generates new insights</p>
-                          </div>
-                          <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                            <input type="checkbox" id="ai-toggle" defaultChecked className="sr-only" />
-                            <label htmlFor="ai-toggle" className="block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-gray-700 cursor-pointer">
-                              <span className="block h-6 w-6 rounded-full bg-white dark:bg-gray-200 transform translate-x-0 checked:translate-x-4 transition"></span>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-6">
-                      <h3 className="text-lg font-medium text-red-800 dark:text-red-200 mb-2">Danger Zone</h3>
-                      <p className="text-red-700 dark:text-red-300 mb-4">These actions cannot be undone.</p>
-                      <div className="flex space-x-4">
-                        <button className="px-4 py-2 bg-white dark:bg-background border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-sm font-medium">
-                          Archive All Client Data
-                        </button>
-                        <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm font-medium">
-                          Delete Account
-                        </button>
-                      </div>
+                  <div className="text-center py-16">
+                    <div className="inline-block p-6 bg-[var(--background-alt)] rounded-lg shadow-md">
+                      <h2 className="text-2xl font-semibold mb-4">Settings Coming Soon</h2>
+                      <p className="text-foreground/70 mb-6 max-w-md mx-auto">
+                        Account settings and preferences will be available in an upcoming update.
+                        You'll be able to customize your profile, notification preferences, and more.
+                      </p>
+                      <div className="w-16 h-16 border-4 border-[var(--primary)]/30 border-t-[var(--primary)] rounded-full animate-spin mx-auto"></div>
                     </div>
                   </div>
                 )}
