@@ -2,6 +2,37 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sessionsTable } from '@/app/utils/airtable';
 import { getCurrentUser } from '@/app/utils/auth';
 
+// List of adjectives and animals for generating client names
+const adjectives = [
+  'Brave', 'Calm', 'Clever', 'Curious', 'Determined', 'Eager', 'Friendly', 'Gentle', 
+  'Happy', 'Honest', 'Hopeful', 'Joyful', 'Kind', 'Loyal', 'Mindful', 'Optimistic', 
+  'Patient', 'Peaceful', 'Playful', 'Polite', 'Proud', 'Quiet', 'Resilient', 'Sincere', 
+  'Thoughtful', 'Trustworthy', 'Warm', 'Wise'
+];
+
+const animals = [
+  'Panda', 'Tiger', 'Dolphin', 'Eagle', 'Fox', 'Koala', 'Lion', 'Owl', 
+  'Penguin', 'Wolf', 'Bear', 'Deer', 'Elephant', 'Giraffe', 'Hedgehog', 'Kangaroo', 
+  'Leopard', 'Monkey', 'Otter', 'Rabbit', 'Squirrel', 'Turtle', 'Zebra', 'Butterfly',
+  'Hummingbird', 'Seahorse', 'Whale', 'Lynx'
+];
+
+// Function to generate a consistent name from an email
+function generateNameFromEmail(email: string): string {
+  // Create a simple hash of the email
+  let hash = 0;
+  for (let i = 0; i < email.length; i++) {
+    hash = ((hash << 5) - hash) + email.charCodeAt(i);
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  // Use the hash to select an adjective and animal
+  const adjectiveIndex = Math.abs(hash) % adjectives.length;
+  const animalIndex = Math.abs(hash >> 8) % animals.length; // Shift the bits to get a different index
+  
+  return `${adjectives[adjectiveIndex]} ${animals[animalIndex]}`;
+}
+
 export async function GET(request: NextRequest) {
   try {
     // Get the current user
@@ -85,7 +116,7 @@ export async function GET(request: NextRequest) {
         recentActivity.push({
           id: record.id,
           type: record.fields.SessionType || 'session',
-          clientId: record.fields.Email ? `TK-${record.fields.Email.substring(0, 8)}` : 'Unknown',
+          clientId: record.fields.Email ? generateNameFromEmail(record.fields.Email) : 'Unknown Client',
           timestamp: record.fields.CreatedAt,
           minutesActive: record.fields.MinutesActive || 0
         });
