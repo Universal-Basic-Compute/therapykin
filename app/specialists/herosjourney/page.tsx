@@ -112,6 +112,12 @@ export default function HerosJourneySpecialist() {
                 </p>
               </div>
               
+              <div className="bg-white/60 backdrop-blur-md p-6 rounded-lg border border-white/20 mt-4 max-w-xl">
+                <p className="text-xl text-[var(--primary)] drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]">
+                  Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
+                </p>
+              </div>
+              
               {/* Add the CTA button here */}
               <div className="mt-8">
                 <Link 
@@ -127,10 +133,7 @@ export default function HerosJourneySpecialist() {
           
           
           
-          {/* Move the description paragraph below the partnership banner */}
-          <p className="text-xl text-[var(--primary)] mb-12 max-w-3xl mx-auto text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]">
-            Every human being has two journeys available: the Victim's Journey or the Hero's Journey. The Hero's Journey is an ancient framework for personal transformation that guides you through the challenges of life toward greater wholeness, purpose, and authenticity.
-          </p>
+          {/* Description paragraph moved to hero section */}
           
           <div className="mt-16 mb-20">
             <h2 className="text-2xl font-semibold mb-6 text-center">The Hero's Journey Path</h2>
