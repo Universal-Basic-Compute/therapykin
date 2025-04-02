@@ -6,10 +6,25 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Link from "next/link";
 
+interface TherapistStats {
+  activeClients: number;
+  sessionsThisWeek: number;
+  clientSatisfaction: string;
+  recentActivity: Array<{
+    id: string;
+    type: string;
+    clientId: string;
+    timestamp: string;
+    minutesActive: number;
+  }>;
+}
+
 export default function TherapistDashboard() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [authorized, setAuthorized] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<TherapistStats | null>(null);
   
   // Check if user is authorized to view this page
   useEffect(() => {
@@ -19,6 +34,51 @@ export default function TherapistDashboard() {
       setAuthorized(false);
     }
   }, [user]);
+
+  // Fetch therapist stats
+  useEffect(() => {
+    async function fetchTherapistStats() {
+      if (!user || user.email !== 'nlr@universalbasiccompute.ai') return;
+      
+      setLoading(true);
+      try {
+        const response = await fetch('/api/sessions/therapist-stats');
+        
+        if (!response.ok) {
+          console.error('Failed to fetch therapist stats:', response.status, response.statusText);
+          setLoading(false);
+          return;
+        }
+        
+        const data = await response.json();
+        setStats(data.stats);
+      } catch (error) {
+        console.error('Error fetching therapist stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchTherapistStats();
+  }, [user]);
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+      return 'Today';
+    } else if (diffDays === 1) {
+      return 'Yesterday';
+    } else if (diffDays < 7) {
+      return `${diffDays} days ago`;
+    } else {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -40,6 +100,10 @@ export default function TherapistDashboard() {
                   Learn more about partnering with TherapyKin
                 </Link>
               </div>
+            </div>
+          ) : loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--primary)]"></div>
             </div>
           ) : (
             <>
@@ -107,39 +171,39 @@ export default function TherapistDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                       <div className="bg-[var(--background-alt)] p-6 rounded-lg">
                         <h3 className="text-lg font-medium mb-2">Active Clients</h3>
-                        <p className="text-3xl font-bold">24</p>
-                        <p className="text-foreground/60 text-sm mt-1">+3 this month</p>
+                        <p className="text-3xl font-bold">{stats?.activeClients || 0}</p>
                       </div>
                       <div className="bg-[var(--background-alt)] p-6 rounded-lg">
                         <h3 className="text-lg font-medium mb-2">Sessions This Week</h3>
-                        <p className="text-3xl font-bold">18</p>
-                        <p className="text-foreground/60 text-sm mt-1">2 scheduled today</p>
+                        <p className="text-3xl font-bold">{stats?.sessionsThisWeek || 0}</p>
                       </div>
                       <div className="bg-[var(--background-alt)] p-6 rounded-lg">
                         <h3 className="text-lg font-medium mb-2">Client Satisfaction</h3>
-                        <p className="text-3xl font-bold">4.8/5</p>
-                        <p className="text-foreground/60 text-sm mt-1">Based on 42 reviews</p>
+                        <p className="text-3xl font-bold">{stats?.clientSatisfaction || '0.0'}/5</p>
                       </div>
                     </div>
                     
                     <h3 className="text-lg font-semibold mb-3">Recent Activity</h3>
                     <div className="bg-[var(--background-alt)] rounded-lg overflow-hidden">
-                      <div className="p-4 border-b border-foreground/10">
-                        <p className="font-medium">New client assessment completed</p>
-                        <p className="text-foreground/60 text-sm mt-1">Client ID: TK-2023-089 • 2 hours ago</p>
-                      </div>
-                      <div className="p-4 border-b border-foreground/10">
-                        <p className="font-medium">Session notes updated</p>
-                        <p className="text-foreground/60 text-sm mt-1">Client ID: TK-2023-042 • Yesterday</p>
-                      </div>
-                      <div className="p-4 border-b border-foreground/10">
-                        <p className="font-medium">AI generated insight report</p>
-                        <p className="text-foreground/60 text-sm mt-1">Client ID: TK-2023-067 • Yesterday</p>
-                      </div>
-                      <div className="p-4">
-                        <p className="font-medium">New appointment scheduled</p>
-                        <p className="text-foreground/60 text-sm mt-1">Client ID: TK-2023-055 • 2 days ago</p>
-                      </div>
+                      {stats?.recentActivity && stats.recentActivity.length > 0 ? (
+                        stats.recentActivity.map((activity, index) => (
+                          <div key={activity.id} className={`p-4 ${index < stats.recentActivity.length - 1 ? 'border-b border-foreground/10' : ''}`}>
+                            <p className="font-medium">
+                              {activity.type === 'assessment' ? 'New client assessment completed' : 
+                               activity.type === 'notes' ? 'Session notes updated' :
+                               'Session completed'}
+                            </p>
+                            <p className="text-foreground/60 text-sm mt-1">
+                              Client ID: {activity.clientId} • {formatDate(activity.timestamp)}
+                              {activity.minutesActive > 0 && ` • ${activity.minutesActive} minutes`}
+                            </p>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-4 text-center text-foreground/60">
+                          No recent activity found
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
