@@ -30,6 +30,14 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   
+  // Debug isAdmin value
+  useEffect(() => {
+    if (user) {
+      console.log('User isAdmin value:', user.isAdmin);
+      console.log('User isAdmin type:', typeof user.isAdmin);
+    }
+  }, [user]);
+  
   // State for dropdown menus
   const [resourcesDropdownOpen, setResourcesDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
@@ -272,7 +280,7 @@ export default function Header() {
                             Therapist Dashboard
                           </Link>
                         )}
-                        {user?.isAdmin && (
+                        {(user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1") && (
                           <Link 
                             href="/resources/admin" 
                             className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
@@ -485,7 +493,7 @@ export default function Header() {
                       Therapist Dashboard
                     </Link>
                   )}
-                  {user?.isAdmin && (
+                  {(user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1") && (
                     <Link 
                       href="/resources/admin" 
                       className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"

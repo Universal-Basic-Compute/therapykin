@@ -53,7 +53,10 @@ export default function AdminPage() {
 
   useEffect(() => {
     // Check if user is authorized based on IsAdmin flag
-    if (user && !user.isAdmin) {
+    // Handle different data types for isAdmin (string "true", boolean true, etc.)
+    const isUserAdmin = user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1";
+    
+    if (user && !isUserAdmin) {
       router.push('/');
       return;
     }
@@ -102,13 +105,13 @@ export default function AdminPage() {
       }
     };
 
-    if (user && user.isAdmin) {
+    if (user && (user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1")) {
       fetchStats();
     }
   }, [user, router]);
 
   // If user is not authorized, don't render the page content
-  if (!user || !user.isAdmin) {
+  if (!user || !(user.isAdmin === true || user.isAdmin === "true" || user.isAdmin === 1 || user.isAdmin === "1")) {
     return (
       <div className="flex flex-col min-h-screen">
         <Header />

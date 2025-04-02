@@ -7,7 +7,9 @@ export async function GET(request: NextRequest) {
     // Get the current user
     const currentUser = await getCurrentUser();
     
-    if (!currentUser || !currentUser.isAdmin) {
+    const isUserAdmin = currentUser.isAdmin === true || currentUser.isAdmin === "true" || currentUser.isAdmin === 1 || currentUser.isAdmin === "1";
+    
+    if (!currentUser || !isUserAdmin) {
       return NextResponse.json(
         { error: 'Not authorized' },
         { status: 403 }
