@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     // Get the current user
     const currentUser = await getCurrentUser();
     
-    if (!currentUser || currentUser.email !== 'nlr@universalbasiccompute.ai') {
+    if (!currentUser || !currentUser.isAdmin) {
       return NextResponse.json(
         { error: 'Not authorized' },
         { status: 403 }

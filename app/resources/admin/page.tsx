@@ -52,8 +52,8 @@ export default function AdminPage() {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#8dd1e1', '#a4de6c', '#d0ed57'];
 
   useEffect(() => {
-    // Check if user is authorized
-    if (user && user.email !== 'nlr@universalbasiccompute.ai') {
+    // Check if user is authorized based on IsAdmin flag
+    if (user && !user.isAdmin) {
       router.push('/');
       return;
     }
@@ -102,13 +102,13 @@ export default function AdminPage() {
       }
     };
 
-    if (user && user.email === 'nlr@universalbasiccompute.ai') {
+    if (user && user.isAdmin) {
       fetchStats();
     }
   }, [user, router]);
 
   // If user is not authorized, don't render the page content
-  if (!user || user.email !== 'nlr@universalbasiccompute.ai') {
+  if (!user || !user.isAdmin) {
     return (
       <div className="flex flex-col min-h-screen">
         <Header />

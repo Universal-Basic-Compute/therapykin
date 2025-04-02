@@ -28,7 +28,7 @@ export default function TherapistDashboard() {
   
   // Check if user is authorized to view this page
   useEffect(() => {
-    if (user && (user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com')) {
+    if (user && (user.isAdmin || user.isTherapist)) {
       setAuthorized(true);
     } else {
       setAuthorized(false);
@@ -38,7 +38,7 @@ export default function TherapistDashboard() {
   // Fetch therapist stats
   useEffect(() => {
     async function fetchTherapistStats() {
-      if (!user || (user.email !== 'nlr@universalbasiccompute.ai' && user.email !== 'theherosjourneyteam@gmail.com')) return;
+      if (!user || (!user.isAdmin && !user.isTherapist)) return;
       
       setLoading(true);
       try {
