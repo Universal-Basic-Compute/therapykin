@@ -292,13 +292,22 @@ export default function TherapistDashboard() {
     });
     
     try {
-      const response = await fetch('/api/kinos-engine/analysis', {
+      // Use the specialist as the customer and the client name as the project_id
+      // Assuming the specialist is the current user's name or a fixed value
+      const specialist = user?.firstName && user?.lastName 
+        ? `${user.firstName}${user.lastName}` 
+        : 'TherapistSpecialist';
+      
+      // Format the client name to be used as project_id (remove spaces)
+      const formattedClientName = clientName.replace(/\s+/g, '');
+      
+      const response = await fetch(`/projects/${specialist}/${formattedClientName}/analysis`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: `Please provide a comprehensive analysis of client ${clientId}. Include: 
+          message: `Please provide a comprehensive analysis of client ${clientName}. Include: 
           1. An overview of their recent therapy sessions
           2. A detailed psychological profile based on session content
           3. Key patterns in their communication and emotional responses
