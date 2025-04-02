@@ -29,27 +29,44 @@ export default function TherapistDashboard() {
   
   // Check if user is authorized to view this page
   useEffect(() => {
+    console.log('Therapist dashboard - user object:', user);
+    console.log('Therapist dashboard - isTherapist value:', user?.isTherapist);
+    console.log('Therapist dashboard - isTherapist type:', typeof user?.isTherapist);
+    
     if (user) {
       if (user.isAdmin) {
+        console.log('User is admin, granting access');
         setAuthorized(true);
       } else if (user.isTherapist) {
         try {
           // Parse the JSON string to get the array of specialist types
+          console.log('Attempting to parse isTherapist:', user.isTherapist);
           const therapistTypes = JSON.parse(user.isTherapist);
+          console.log('Parsed therapistTypes:', therapistTypes);
           // Check if the user is authorized for any specialist type
           if (Array.isArray(therapistTypes) && therapistTypes.length > 0) {
+            console.log('Valid therapist types found');
             setAuthorized(true);
           } else {
+            console.log('No valid therapist types found');
             setAuthorized(false);
           }
         } catch (error) {
           console.error('Error parsing therapist types:', error);
-          setAuthorized(false);
+          // If parsing fails, check if it's a string that contains "herosjourney"
+          if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+            console.log('String contains herosjourney, granting access');
+            setAuthorized(true);
+          } else {
+            setAuthorized(false);
+          }
         }
       } else {
+        console.log('User is not admin or therapist');
         setAuthorized(false);
       }
     } else {
+      console.log('No user found');
       setAuthorized(false);
     }
   }, [user]);
@@ -62,17 +79,28 @@ export default function TherapistDashboard() {
       let isAuthorized = false;
       
       if (user.isAdmin) {
+        console.log('User is admin, authorized to fetch stats');
         isAuthorized = true;
       } else if (user.isTherapist) {
         try {
+          console.log('Checking therapist types for stats fetch:', user.isTherapist);
           const therapistTypes = JSON.parse(user.isTherapist);
           isAuthorized = Array.isArray(therapistTypes) && therapistTypes.length > 0;
+          console.log('Authorized based on parsed therapist types:', isAuthorized);
         } catch (error) {
-          console.error('Error parsing therapist types:', error);
+          console.error('Error parsing therapist types for stats fetch:', error);
+          // If parsing fails, check if it's a string that contains "herosjourney"
+          if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+            console.log('String contains herosjourney, authorized to fetch stats');
+            isAuthorized = true;
+          }
         }
       }
       
-      if (!isAuthorized) return;
+      if (!isAuthorized) {
+        console.log('Not authorized to fetch therapist stats');
+        return;
+      }
       
       setLoading(true);
       try {

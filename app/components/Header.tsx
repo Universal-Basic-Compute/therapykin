@@ -10,14 +10,29 @@ import { usePathname } from "next/navigation";
 const isUserTherapist = (user: any) => {
   if (!user) return false;
   
-  if (user.isAdmin) return true;
+  console.log('Checking isTherapist for user:', user.email);
+  console.log('isTherapist value:', user.isTherapist);
+  
+  if (user.isAdmin) {
+    console.log('User is admin, granting therapist access');
+    return true;
+  }
   
   if (user.isTherapist) {
     try {
+      console.log('Attempting to parse isTherapist:', user.isTherapist);
       const therapistTypes = JSON.parse(user.isTherapist);
-      return Array.isArray(therapistTypes) && therapistTypes.length > 0;
+      console.log('Parsed therapistTypes:', therapistTypes);
+      const isValid = Array.isArray(therapistTypes) && therapistTypes.length > 0;
+      console.log('Is valid therapist?', isValid);
+      return isValid;
     } catch (error) {
       console.error('Error parsing therapist types:', error);
+      // If parsing fails, check if it's a string that contains "herosjourney"
+      if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+        console.log('String contains herosjourney, granting access');
+        return true;
+      }
       return false;
     }
   }
@@ -30,11 +45,13 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   
-  // Debug isAdmin value
+  // Debug user values
   useEffect(() => {
     if (user) {
       console.log('User isAdmin value:', user.isAdmin);
       console.log('User isAdmin type:', typeof user.isAdmin);
+      console.log('User isTherapist value:', user.isTherapist);
+      console.log('User isTherapist type:', typeof user.isTherapist);
     }
   }, [user]);
   
