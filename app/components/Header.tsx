@@ -6,6 +6,25 @@ import { useAuth } from "../contexts/AuthContext";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
+// Helper function to check if user is a therapist
+const isUserTherapist = (user: any) => {
+  if (!user) return false;
+  
+  if (user.isAdmin) return true;
+  
+  if (user.isTherapist) {
+    try {
+      const therapistTypes = JSON.parse(user.isTherapist);
+      return Array.isArray(therapistTypes) && therapistTypes.length > 0;
+    } catch (error) {
+      console.error('Error parsing therapist types:', error);
+      return false;
+    }
+  }
+  
+  return false;
+};
+
 export default function Header() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -195,7 +214,7 @@ export default function Header() {
                       >
                         For Therapists
                       </Link>
-                      {(user?.email === 'nlr@universalbasiccompute.ai' || user?.email === 'theherosjourneyteam@gmail.com') && (
+                      {isUserTherapist(user) && (
                         <Link 
                           href="/resources/therapist-dashboard" 
                           className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)] border-t border-foreground/10 mt-1 pt-1"
@@ -429,7 +448,7 @@ export default function Header() {
               >
                 For Therapists
               </Link>
-              {(user?.email === 'nlr@universalbasiccompute.ai' || user?.email === 'theherosjourneyteam@gmail.com') && (
+              {isUserTherapist(user) && (
                 <Link 
                   href="/resources/therapist-dashboard" 
                   className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium border-l-2 border-[var(--primary)]"

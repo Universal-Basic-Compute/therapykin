@@ -28,8 +28,26 @@ export default function TherapistDashboard() {
   
   // Check if user is authorized to view this page
   useEffect(() => {
-    if (user && (user.isAdmin || user.isTherapist)) {
-      setAuthorized(true);
+    if (user) {
+      if (user.isAdmin) {
+        setAuthorized(true);
+      } else if (user.isTherapist) {
+        try {
+          // Parse the JSON string to get the array of specialist types
+          const therapistTypes = JSON.parse(user.isTherapist);
+          // Check if the user is authorized for any specialist type
+          if (Array.isArray(therapistTypes) && therapistTypes.length > 0) {
+            setAuthorized(true);
+          } else {
+            setAuthorized(false);
+          }
+        } catch (error) {
+          console.error('Error parsing therapist types:', error);
+          setAuthorized(false);
+        }
+      } else {
+        setAuthorized(false);
+      }
     } else {
       setAuthorized(false);
     }
@@ -38,7 +56,22 @@ export default function TherapistDashboard() {
   // Fetch therapist stats
   useEffect(() => {
     async function fetchTherapistStats() {
-      if (!user || (!user.isAdmin && !user.isTherapist)) return;
+      if (!user) return;
+      
+      let isAuthorized = false;
+      
+      if (user.isAdmin) {
+        isAuthorized = true;
+      } else if (user.isTherapist) {
+        try {
+          const therapistTypes = JSON.parse(user.isTherapist);
+          isAuthorized = Array.isArray(therapistTypes) && therapistTypes.length > 0;
+        } catch (error) {
+          console.error('Error parsing therapist types:', error);
+        }
+      }
+      
+      if (!isAuthorized) return;
       
       setLoading(true);
       try {

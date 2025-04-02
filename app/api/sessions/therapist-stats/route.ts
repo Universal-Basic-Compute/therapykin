@@ -7,7 +7,28 @@ export async function GET(request: NextRequest) {
     // Get the current user
     const currentUser = await getCurrentUser();
     
-    if (!currentUser || (!currentUser.isAdmin && !currentUser.isTherapist)) {
+    if (!currentUser) {
+      return NextResponse.json(
+        { error: 'Not authorized' },
+        { status: 403 }
+      );
+    }
+
+    let isAuthorized = false;
+
+    if (currentUser.isAdmin) {
+      isAuthorized = true;
+    } else if (currentUser.isTherapist) {
+      try {
+        const therapistTypes = JSON.parse(currentUser.isTherapist);
+        // Check if the user is a herosjourney therapist
+        isAuthorized = Array.isArray(therapistTypes) && therapistTypes.includes('herosjourney');
+      } catch (error) {
+        console.error('Error parsing therapist types:', error);
+      }
+    }
+
+    if (!isAuthorized) {
       return NextResponse.json(
         { error: 'Not authorized' },
         { status: 403 }
