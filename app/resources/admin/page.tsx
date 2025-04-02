@@ -54,16 +54,16 @@ export default function AdminPage() {
   useEffect(() => {
     // Debug logging to help diagnose the issue
     console.log('Admin page - user object:', user);
-    console.log('Admin page - isAdmin value:', user?.isAdmin);
-    console.log('Admin page - isAdmin type:', typeof user?.isAdmin);
+    console.log('Admin page - isAdmin value:', (user as any)?.isAdmin);
+    console.log('Admin page - isAdmin type:', typeof (user as any)?.isAdmin);
     console.log('Admin page - user email:', user?.email);
     
     // Check if user is authorized based on IsAdmin flag
     // Handle different data types for isAdmin (string "true", boolean true, etc.)
-    const isUserAdmin = user?.isAdmin === true || 
-                       user?.isAdmin === "true" || 
-                       user?.isAdmin === 1 || 
-                       user?.isAdmin === "1" ||
+    const isUserAdmin = (user as any)?.isAdmin === true || 
+                       (user as any)?.isAdmin === "true" || 
+                       (user as any)?.isAdmin === 1 || 
+                       (user as any)?.isAdmin === "1" ||
                        user?.email === 'nlr@universalbasiccompute.ai'; // Fallback to email check
     
     if (user && !isUserAdmin) {
@@ -115,13 +115,13 @@ export default function AdminPage() {
       }
     };
 
-    if (user && (user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1" || user?.email === 'nlr@universalbasiccompute.ai')) {
+    if (user && ((user as any)?.isAdmin === true || (user as any)?.isAdmin === "true" || (user as any)?.isAdmin === 1 || (user as any)?.isAdmin === "1" || user?.email === 'nlr@universalbasiccompute.ai')) {
       fetchStats();
     }
   }, [user, router]);
 
   // If user is not authorized, don't render the page content
-  if (!user || !(user.isAdmin === true || user.isAdmin === "true" || user.isAdmin === 1 || user.isAdmin === "1" || user.email === 'nlr@universalbasiccompute.ai')) {
+  if (!user || !((user as any).isAdmin === true || (user as any).isAdmin === "true" || (user as any).isAdmin === 1 || (user as any).isAdmin === "1" || user.email === 'nlr@universalbasiccompute.ai')) {
     return (
       <div className="flex flex-col min-h-screen">
         <Header />

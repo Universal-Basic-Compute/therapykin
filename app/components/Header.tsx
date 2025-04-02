@@ -11,18 +11,18 @@ const isUserTherapist = (user: any) => {
   if (!user) return false;
   
   console.log('Checking isTherapist for user:', user.email);
-  console.log('isTherapist value:', user.isTherapist);
+  console.log('isTherapist value:', (user as any).isTherapist);
   
   // Check if user is admin or has a specific email
-  if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+  if ((user as any).isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
     console.log('User is admin or has authorized email, granting therapist access');
     return true;
   }
   
-  if (user.isTherapist) {
+  if ((user as any).isTherapist) {
     try {
-      console.log('Attempting to parse isTherapist:', user.isTherapist);
-      const therapistTypes = JSON.parse(user.isTherapist);
+      console.log('Attempting to parse isTherapist:', (user as any).isTherapist);
+      const therapistTypes = JSON.parse((user as any).isTherapist);
       console.log('Parsed therapistTypes:', therapistTypes);
       const isValid = Array.isArray(therapistTypes) && therapistTypes.length > 0;
       console.log('Is valid therapist?', isValid);
@@ -30,7 +30,7 @@ const isUserTherapist = (user: any) => {
     } catch (error) {
       console.error('Error parsing therapist types:', error);
       // If parsing fails, check if it's a string that contains "herosjourney"
-      if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+      if (typeof (user as any).isTherapist === 'string' && (user as any).isTherapist.includes('herosjourney')) {
         console.log('String contains herosjourney, granting access');
         return true;
       }
@@ -49,10 +49,10 @@ export default function Header() {
   // Debug user values
   useEffect(() => {
     if (user) {
-      console.log('User isAdmin value:', user.isAdmin);
-      console.log('User isAdmin type:', typeof user.isAdmin);
-      console.log('User isTherapist value:', user.isTherapist);
-      console.log('User isTherapist type:', typeof user.isTherapist);
+      console.log('User isAdmin value:', (user as any).isAdmin);
+      console.log('User isAdmin type:', typeof (user as any).isAdmin);
+      console.log('User isTherapist value:', (user as any).isTherapist);
+      console.log('User isTherapist type:', typeof (user as any).isTherapist);
     }
   }, [user]);
   
@@ -298,7 +298,7 @@ export default function Header() {
                             Therapist Dashboard
                           </Link>
                         )}
-                        {(user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1" || user?.email === 'nlr@universalbasiccompute.ai') && (
+                        {((user as any)?.isAdmin === true || (user as any)?.isAdmin === "true" || (user as any)?.isAdmin === 1 || (user as any)?.isAdmin === "1" || user?.email === 'nlr@universalbasiccompute.ai') && (
                           <Link 
                             href="/resources/admin" 
                             className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
@@ -511,7 +511,7 @@ export default function Header() {
                       Therapist Dashboard
                     </Link>
                   )}
-                  {(user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1" || user?.email === 'nlr@universalbasiccompute.ai') && (
+                  {((user as any)?.isAdmin === true || (user as any)?.isAdmin === "true" || (user as any)?.isAdmin === 1 || (user as any)?.isAdmin === "1" || user?.email === 'nlr@universalbasiccompute.ai') && (
                     <Link 
                       href="/resources/admin" 
                       className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"

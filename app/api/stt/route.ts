@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     console.log(`STT request: Processing audio file of type ${file.type}, size ${file.size} bytes`);
     
     // If file has no type, try to infer it from the filename
-    let fileToSend = file;
+    let fileToSend: File | Blob = file;
     if (file instanceof File) {
       const fileName = file.name || '';
       console.log(`File name: ${fileName}`);

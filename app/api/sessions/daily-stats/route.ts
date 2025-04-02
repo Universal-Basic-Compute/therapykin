@@ -7,13 +7,20 @@ export async function GET(request: NextRequest) {
     // Get the current user
     const currentUser = await getCurrentUser();
     
-    const isUserAdmin = currentUser.isAdmin === true || 
-                       currentUser.isAdmin === "true" || 
-                       currentUser.isAdmin === 1 || 
-                       currentUser.isAdmin === "1" ||
+    if (!currentUser) {
+      return NextResponse.json(
+        { error: 'Not authorized' },
+        { status: 403 }
+      );
+    }
+    
+    const isUserAdmin = (currentUser as any).isAdmin === true || 
+                       (currentUser as any).isAdmin === "true" || 
+                       (currentUser as any).isAdmin === 1 || 
+                       (currentUser as any).isAdmin === "1" ||
                        currentUser.email === 'nlr@universalbasiccompute.ai'; // Fallback to email check
     
-    if (!currentUser || !isUserAdmin) {
+    if (!isUserAdmin) {
       return NextResponse.json(
         { error: 'Not authorized' },
         { status: 403 }

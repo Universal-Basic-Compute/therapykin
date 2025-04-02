@@ -108,17 +108,17 @@ export async function GET(request: NextRequest) {
 
     let isAuthorized = false;
 
-    if (currentUser.isAdmin || currentUser.email === 'nlr@universalbasiccompute.ai' || currentUser.email === 'theherosjourneyteam@gmail.com') {
+    if ((currentUser as any).isAdmin || currentUser.email === 'nlr@universalbasiccompute.ai' || currentUser.email === 'theherosjourneyteam@gmail.com') {
       isAuthorized = true;
-    } else if (currentUser.isTherapist) {
+    } else if ((currentUser as any).isTherapist) {
       try {
-        const therapistTypes = JSON.parse(currentUser.isTherapist);
+        const therapistTypes = JSON.parse((currentUser as any).isTherapist);
         // Check if the user is a herosjourney therapist
         isAuthorized = Array.isArray(therapistTypes) && therapistTypes.includes('herosjourney');
       } catch (error) {
         console.error('Error parsing therapist types:', error);
         // If parsing fails, check if it's a string that contains "herosjourney"
-        if (typeof currentUser.isTherapist === 'string' && currentUser.isTherapist.includes('herosjourney')) {
+        if (typeof (currentUser as any).isTherapist === 'string' && (currentUser as any).isTherapist.includes('herosjourney')) {
           isAuthorized = true;
         }
       }
@@ -143,7 +143,14 @@ export async function GET(request: NextRequest) {
     
     // Process records to get session data
     const now = new Date();
-    const pastSessions = [];
+    const pastSessions: Array<{
+      id: string;
+      clientId: string;
+      clientColor: string;
+      timestamp: string;
+      minutesActive: number;
+      rating: number | null;
+    }> = [];
     
     // Get the 10 most recent sessions
     records.forEach((record: any) => {

@@ -75,19 +75,19 @@ export default function TherapistDashboard() {
   // Check if user is authorized to view this page
   useEffect(() => {
     console.log('Therapist dashboard - user object:', user);
-    console.log('Therapist dashboard - isTherapist value:', user?.isTherapist);
-    console.log('Therapist dashboard - isTherapist type:', typeof user?.isTherapist);
+    console.log('Therapist dashboard - isTherapist value:', (user as any)?.isTherapist);
+    console.log('Therapist dashboard - isTherapist type:', typeof (user as any)?.isTherapist);
     
     if (user) {
       // Allow specific emails to access the dashboard
-      if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+      if ((user as any).isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
         console.log('User is admin or has authorized email, granting access');
         setAuthorized(true);
-      } else if (user.isTherapist) {
+      } else if ((user as any).isTherapist) {
         try {
           // Parse the JSON string to get the array of specialist types
-          console.log('Attempting to parse isTherapist:', user.isTherapist);
-          const therapistTypes = JSON.parse(user.isTherapist);
+          console.log('Attempting to parse isTherapist:', (user as any).isTherapist);
+          const therapistTypes = JSON.parse((user as any).isTherapist);
           console.log('Parsed therapistTypes:', therapistTypes);
           // Check if the user is authorized for any specialist type
           if (Array.isArray(therapistTypes) && therapistTypes.length > 0) {
@@ -100,7 +100,7 @@ export default function TherapistDashboard() {
         } catch (error) {
           console.error('Error parsing therapist types:', error);
           // If parsing fails, check if it's a string that contains "herosjourney"
-          if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+          if (typeof (user as any).isTherapist === 'string' && (user as any).isTherapist.includes('herosjourney')) {
             console.log('String contains herosjourney, granting access');
             setAuthorized(true);
           } else {
@@ -124,19 +124,19 @@ export default function TherapistDashboard() {
       
       let isAuthorized = false;
       
-      if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+      if ((user as any).isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
         console.log('User is admin or has authorized email, authorized to fetch stats');
         isAuthorized = true;
-      } else if (user.isTherapist) {
+      } else if ((user as any).isTherapist) {
         try {
-          console.log('Checking therapist types for stats fetch:', user.isTherapist);
-          const therapistTypes = JSON.parse(user.isTherapist);
+          console.log('Checking therapist types for stats fetch:', (user as any).isTherapist);
+          const therapistTypes = JSON.parse((user as any).isTherapist);
           isAuthorized = Array.isArray(therapistTypes) && therapistTypes.length > 0;
           console.log('Authorized based on parsed therapist types:', isAuthorized);
         } catch (error) {
           console.error('Error parsing therapist types for stats fetch:', error);
           // If parsing fails, check if it's a string that contains "herosjourney"
-          if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+          if (typeof (user as any).isTherapist === 'string' && (user as any).isTherapist.includes('herosjourney')) {
             console.log('String contains herosjourney, authorized to fetch stats');
             isAuthorized = true;
           }
@@ -177,19 +177,19 @@ export default function TherapistDashboard() {
       
       let isAuthorized = false;
       
-      if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+      if ((user as any).isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
         console.log('User is admin or has authorized email, authorized to fetch client data');
         isAuthorized = true;
-      } else if (user.isTherapist) {
+      } else if ((user as any).isTherapist) {
         try {
-          console.log('Checking therapist types for client fetch:', user.isTherapist);
-          const therapistTypes = JSON.parse(user.isTherapist);
+          console.log('Checking therapist types for client fetch:', (user as any).isTherapist);
+          const therapistTypes = JSON.parse((user as any).isTherapist);
           isAuthorized = Array.isArray(therapistTypes) && therapistTypes.length > 0;
           console.log('Authorized based on parsed therapist types:', isAuthorized);
         } catch (error) {
           console.error('Error parsing therapist types for client fetch:', error);
           // If parsing fails, check if it's a string that contains "herosjourney"
-          if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+          if (typeof (user as any).isTherapist === 'string' && (user as any).isTherapist.includes('herosjourney')) {
             console.log('String contains herosjourney, authorized to fetch client data');
             isAuthorized = true;
           }
@@ -232,19 +232,19 @@ export default function TherapistDashboard() {
       
       let isAuthorized = false;
       
-      if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+      if ((user as any).isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
         console.log('User is admin or has authorized email, authorized to fetch session data');
         isAuthorized = true;
-      } else if (user.isTherapist) {
+      } else if ((user as any).isTherapist) {
         try {
-          console.log('Checking therapist types for session fetch:', user.isTherapist);
-          const therapistTypes = JSON.parse(user.isTherapist);
+          console.log('Checking therapist types for session fetch:', (user as any).isTherapist);
+          const therapistTypes = JSON.parse((user as any).isTherapist);
           isAuthorized = Array.isArray(therapistTypes) && therapistTypes.length > 0;
           console.log('Authorized based on parsed therapist types:', isAuthorized);
         } catch (error) {
           console.error('Error parsing therapist types for session fetch:', error);
           // If parsing fails, check if it's a string that contains "herosjourney"
-          if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+          if (typeof (user as any).isTherapist === 'string' && (user as any).isTherapist.includes('herosjourney')) {
             console.log('String contains herosjourney, authorized to fetch session data');
             isAuthorized = true;
           }

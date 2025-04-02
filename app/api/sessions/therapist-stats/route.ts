@@ -108,11 +108,11 @@ export async function GET(request: NextRequest) {
 
     let isAuthorized = false;
 
-    if (currentUser.isAdmin || currentUser.email === 'nlr@universalbasiccompute.ai' || currentUser.email === 'theherosjourneyteam@gmail.com') {
+    if ((currentUser as any).isAdmin || currentUser.email === 'nlr@universalbasiccompute.ai' || currentUser.email === 'theherosjourneyteam@gmail.com') {
       isAuthorized = true;
-    } else if (currentUser.isTherapist) {
+    } else if ((currentUser as any).isTherapist) {
       try {
-        const therapistTypes = JSON.parse(currentUser.isTherapist);
+        const therapistTypes = JSON.parse((currentUser as any).isTherapist);
         // Check if the user is a herosjourney therapist
         isAuthorized = Array.isArray(therapistTypes) && therapistTypes.includes('herosjourney');
       } catch (error) {
@@ -150,7 +150,14 @@ export async function GET(request: NextRequest) {
     startOfWeek.setHours(0, 0, 0, 0);
     
     // Recent activity for display
-    const recentActivity = [];
+    const recentActivity: Array<{
+      id: string;
+      type: string;
+      clientId: string;
+      clientColor: string;
+      timestamp: string;
+      minutesActive: number;
+    }> = [];
     
     records.forEach((record: any) => {
       // Count unique clients
