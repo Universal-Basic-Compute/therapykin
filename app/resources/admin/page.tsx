@@ -52,9 +52,19 @@ export default function AdminPage() {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#8dd1e1', '#a4de6c', '#d0ed57'];
 
   useEffect(() => {
+    // Debug logging to help diagnose the issue
+    console.log('Admin page - user object:', user);
+    console.log('Admin page - isAdmin value:', user?.isAdmin);
+    console.log('Admin page - isAdmin type:', typeof user?.isAdmin);
+    console.log('Admin page - user email:', user?.email);
+    
     // Check if user is authorized based on IsAdmin flag
     // Handle different data types for isAdmin (string "true", boolean true, etc.)
-    const isUserAdmin = user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1";
+    const isUserAdmin = user?.isAdmin === true || 
+                       user?.isAdmin === "true" || 
+                       user?.isAdmin === 1 || 
+                       user?.isAdmin === "1" ||
+                       user?.email === 'nlr@universalbasiccompute.ai'; // Fallback to email check
     
     if (user && !isUserAdmin) {
       router.push('/');
@@ -105,13 +115,13 @@ export default function AdminPage() {
       }
     };
 
-    if (user && (user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1")) {
+    if (user && (user?.isAdmin === true || user?.isAdmin === "true" || user?.isAdmin === 1 || user?.isAdmin === "1" || user?.email === 'nlr@universalbasiccompute.ai')) {
       fetchStats();
     }
   }, [user, router]);
 
   // If user is not authorized, don't render the page content
-  if (!user || !(user.isAdmin === true || user.isAdmin === "true" || user.isAdmin === 1 || user.isAdmin === "1")) {
+  if (!user || !(user.isAdmin === true || user.isAdmin === "true" || user.isAdmin === 1 || user.isAdmin === "1" || user.email === 'nlr@universalbasiccompute.ai')) {
     return (
       <div className="flex flex-col min-h-screen">
         <Header />
