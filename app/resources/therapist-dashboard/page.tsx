@@ -34,8 +34,9 @@ export default function TherapistDashboard() {
     console.log('Therapist dashboard - isTherapist type:', typeof user?.isTherapist);
     
     if (user) {
-      if (user.isAdmin) {
-        console.log('User is admin, granting access');
+      // Allow specific emails to access the dashboard
+      if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+        console.log('User is admin or has authorized email, granting access');
         setAuthorized(true);
       } else if (user.isTherapist) {
         try {
@@ -78,8 +79,8 @@ export default function TherapistDashboard() {
       
       let isAuthorized = false;
       
-      if (user.isAdmin) {
-        console.log('User is admin, authorized to fetch stats');
+      if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+        console.log('User is admin or has authorized email, authorized to fetch stats');
         isAuthorized = true;
       } else if (user.isTherapist) {
         try {

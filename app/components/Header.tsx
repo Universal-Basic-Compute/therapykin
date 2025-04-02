@@ -13,8 +13,9 @@ const isUserTherapist = (user: any) => {
   console.log('Checking isTherapist for user:', user.email);
   console.log('isTherapist value:', user.isTherapist);
   
-  if (user.isAdmin) {
-    console.log('User is admin, granting therapist access');
+  // Check if user is admin or has a specific email
+  if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+    console.log('User is admin or has authorized email, granting therapist access');
     return true;
   }
   

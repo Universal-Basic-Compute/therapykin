@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
 
     let isAuthorized = false;
 
-    if (currentUser.isAdmin) {
+    if (currentUser.isAdmin || currentUser.email === 'nlr@universalbasiccompute.ai' || currentUser.email === 'theherosjourneyteam@gmail.com') {
       isAuthorized = true;
     } else if (currentUser.isTherapist) {
       try {
