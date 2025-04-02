@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     
     // Query for all sessions with ratings
     const records = await sessionsTable.select({
-      filterByFormula: 'NOT({OverallRating} = "")',
+      filterByFormula: 'NOT({Rating} = "")',
     }).all();
     
     console.log(`Found ${records.length} sessions with ratings`);
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     };
     
     records.forEach((record: any) => {
-      const overallRating = parseInt(record.fields.OverallRating) || 0;
+      const overallRating = parseInt(record.fields.Rating) || 0;
       const understandingRating = parseInt(record.fields.UnderstandingEmpathy) || 0;
       const helpfulnessRating = parseInt(record.fields.HelpfulnessOfAdvice) || 0;
       const flowRating = parseInt(record.fields.SessionFlow) || 0;
