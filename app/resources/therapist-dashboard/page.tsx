@@ -20,12 +20,25 @@ interface TherapistStats {
   }>;
 }
 
+interface ClientData {
+  id: string;
+  name: string;
+  color: string;
+  totalSessions: number;
+  recentSessions: number;
+  totalMinutes: number;
+  lastSession: string | null;
+  status: 'Active' | 'On Hold' | 'Inactive';
+}
+
 export default function TherapistDashboard() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<TherapistStats | null>(null);
+  const [clients, setClients] = useState<ClientData[]>([]);
+  const [loadingClients, setLoadingClients] = useState(false);
   
   // Check if user is authorized to view this page
   useEffect(() => {
@@ -124,6 +137,61 @@ export default function TherapistDashboard() {
 
     fetchTherapistStats();
   }, [user]);
+  
+  // Fetch client data
+  useEffect(() => {
+    async function fetchClientData() {
+      if (!user) return;
+      
+      let isAuthorized = false;
+      
+      if (user.isAdmin || user.email === 'nlr@universalbasiccompute.ai' || user.email === 'theherosjourneyteam@gmail.com') {
+        console.log('User is admin or has authorized email, authorized to fetch client data');
+        isAuthorized = true;
+      } else if (user.isTherapist) {
+        try {
+          console.log('Checking therapist types for client fetch:', user.isTherapist);
+          const therapistTypes = JSON.parse(user.isTherapist);
+          isAuthorized = Array.isArray(therapistTypes) && therapistTypes.length > 0;
+          console.log('Authorized based on parsed therapist types:', isAuthorized);
+        } catch (error) {
+          console.error('Error parsing therapist types for client fetch:', error);
+          // If parsing fails, check if it's a string that contains "herosjourney"
+          if (typeof user.isTherapist === 'string' && user.isTherapist.includes('herosjourney')) {
+            console.log('String contains herosjourney, authorized to fetch client data');
+            isAuthorized = true;
+          }
+        }
+      }
+      
+      if (!isAuthorized) {
+        console.log('Not authorized to fetch client data');
+        return;
+      }
+      
+      setLoadingClients(true);
+      try {
+        const response = await fetch('/api/sessions/therapist-clients');
+        
+        if (!response.ok) {
+          console.error('Failed to fetch client data:', response.status, response.statusText);
+          setLoadingClients(false);
+          return;
+        }
+        
+        const data = await response.json();
+        setClients(data.clients);
+      } catch (error) {
+        console.error('Error fetching client data:', error);
+      } finally {
+        setLoadingClients(false);
+      }
+    }
+
+    if (activeTab === 'clients') {
+      fetchClientData();
+    }
+  }, [user, activeTab]);
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -278,54 +346,68 @@ export default function TherapistDashboard() {
                       <button className="btn-primary text-sm px-4 py-2">Add New Client</button>
                     </div>
                     
-                    <div className="bg-[var(--background-alt)] rounded-lg overflow-hidden">
-                      <table className="min-w-full divide-y divide-foreground/10">
-                        <thead className="bg-foreground/5">
-                          <tr>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Client ID</th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Name</th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Status</th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Last Session</th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-foreground/10">
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">TK-2023-042</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">Jane Smith</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Active</span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">Oct 15, 2023</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--primary)]">
-                              <button className="hover:underline">View Profile</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">TK-2023-067</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">Michael Johnson</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Active</span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">Oct 18, 2023</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--primary)]">
-                              <button className="hover:underline">View Profile</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">TK-2023-055</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">Sarah Williams</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">On Hold</span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">Oct 10, 2023</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--primary)]">
-                              <button className="hover:underline">View Profile</button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                    {loadingClients ? (
+                      <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--primary)]"></div>
+                      </div>
+                    ) : clients.length === 0 ? (
+                      <div className="bg-[var(--background-alt)] rounded-lg p-8 text-center">
+                        <p className="text-foreground/70">No clients found.</p>
+                      </div>
+                    ) : (
+                      <div className="bg-[var(--background-alt)] rounded-lg overflow-hidden">
+                        <div className="overflow-x-auto">
+                          <table className="min-w-full divide-y divide-foreground/10">
+                            <thead className="bg-foreground/5">
+                              <tr>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Client</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Status</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Last Session</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Recent Sessions</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Total Minutes</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-foreground/70 uppercase tracking-wider">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-foreground/10">
+                              {clients.map((client) => (
+                                <tr key={client.id}>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                      <div className="text-sm font-medium" style={{ color: client.color }}>
+                                        {client.name}
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                      client.status === 'Active' 
+                                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                                        : client.status === 'On Hold'
+                                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                                          : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                    }`}>
+                                      {client.status}
+                                    </span>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    {client.lastSession ? formatDate(client.lastSession) : 'Never'}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    {client.recentSessions} <span className="text-foreground/50 text-xs">(last 30 days)</span>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    {client.totalMinutes}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--primary)]">
+                                    <button className="hover:underline">View Profile</button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
                 
