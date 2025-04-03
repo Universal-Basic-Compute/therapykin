@@ -545,15 +545,20 @@ function ChatSessionWithSearchParams() {
   useEffect(() => {
     if (!sessionStartTime || !user) return;
 
+    // Create a stable reference to the session length
+    const currentSessionLength = sessionLength;
+    
     const updateSessionMode = () => {
       const now = new Date();
       const sessionDuration = (now.getTime() - sessionStartTime.getTime()) / 1000 / 60; // in minutes
       
-      // Use the dynamic session length (default 30 minutes)
-      const SESSION_DURATION = sessionLength;
+      // Use the dynamic session length
+      const SESSION_DURATION = currentSessionLength;
       
-      // Log the current session status
-      console.log(`Session status: ${sessionDuration.toFixed(1)}/${SESSION_DURATION} minutes elapsed`);
+      // Only log every 30 seconds to reduce console noise
+      if (Math.round(sessionDuration * 2) % 1 === 0) {
+        console.log(`Session status: ${sessionDuration.toFixed(1)}/${SESSION_DURATION} minutes elapsed`);
+      }
       
       // Scale opening and closing phases based on session length
       const openingPhaseEnd = Math.max(1, Math.floor(SESSION_DURATION * 0.08)); // ~8% of session
@@ -1855,10 +1860,21 @@ Important style requirements:
     return () => {
       // Stop camera stream if component unmounts while camera is on
       if (cameraStream) {
-        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream.getTracks().forEach(track => {
+          try {
+            track.stop();
+          } catch (error) {
+            console.error('Error stopping camera track:', error);
+          }
+        });
+      }
+      
+      // Clear any captured image when unmounting
+      if (capturedImage) {
+        URL.revokeObjectURL(capturedImage);
       }
     };
-  }, [cameraStream]);
+  }, [cameraStream, capturedImage]);
 
   if (loading || isCheckingSubscription) {
     return (
@@ -2690,8 +2706,10 @@ Important style requirements:
                   : 'bg-[var(--background-alt)] text-foreground/70 hover:bg-[var(--primary)]/10'
               } ${sessionEnded ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={sessionEnded}
+              aria-label={cameraEnabled ? "Turn camera off" : "Turn camera on"}
+              aria-pressed={cameraEnabled}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
             </button>
@@ -2739,22 +2757,24 @@ Important style requirements:
                   : 'bg-[var(--background-alt)] text-foreground/70 hover:bg-[var(--primary)]/10'
               } ${sessionEnded || !isMediaRecorderSupported ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={sessionEnded || !isMediaRecorderSupported}
+              aria-label={isRecording ? "Stop recording" : "Start voice recording"}
+              aria-pressed={isRecording}
             >
               {isRecording ? (
                 <>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                   </svg>
                   <span className="sr-only">Stop Recording</span>
                   {recordingTime > 0 && (
-                    <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full px-1">
+                    <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full px-1" aria-live="polite">
                       {formatTime(recordingTime)}
                     </span>
                   )}
                 </>
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
               )}
@@ -2767,8 +2787,9 @@ Important style requirements:
                 sessionEnded ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               disabled={isRecording || sessionEnded}
+              aria-label="Send message"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
               </svg>
             </button>
@@ -2784,21 +2805,26 @@ Important style requirements:
   );
 }
 
-// Main component with Suspense boundary
+// Import ErrorBoundary
+import ErrorBoundary from '../components/ErrorBoundary';
+
+// Main component with Suspense boundary and ErrorBoundary
 export default function ChatPage() {
   return (
-    <Suspense fallback={
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p>Loading your session...</p>
-          </div>
-        </main>
-      </div>
-    }>
-      <ChatSessionWithSearchParams />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p>Loading your session...</p>
+            </div>
+          </main>
+        </div>
+      }>
+        <ChatSessionWithSearchParams />
+      </Suspense>
+    </ErrorBoundary>
   );
 }

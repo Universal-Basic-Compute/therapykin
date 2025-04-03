@@ -112,10 +112,16 @@ export async function getOngoingSession(email: string): Promise<{
   ratingSubmitted?: boolean
 } | null> {
   try {
+    if (!email) {
+      console.error('Email is required for getOngoingSession');
+      return null;
+    }
+    
     // Get the most recent session for this user
+    // Use a safer approach with explicit field comparison
     const escapedEmail = escapeAirtableString(email);
     const records = await sessionsTable.select({
-      filterByFormula: `{Email} = '${escapedEmail}'`,
+      filterByFormula: `LOWER({Email}) = LOWER('${escapedEmail}')`,
       sort: [{ field: 'CreatedAt', direction: 'desc' }],
       maxRecords: 1
     }).firstPage();

@@ -1,10 +1,21 @@
 // Client-side utility for fetching specialists
 
 /**
+ * Interface for specialist data
+ */
+export interface Specialist {
+  id: string;
+  name: string;
+  description: string;
+  sortOrder?: number;
+  isActive?: boolean;
+}
+
+/**
  * Fetches the list of available specialists from the API
  * @returns Promise resolving to an array of specialist objects
  */
-export async function fetchSpecialists(): Promise<Array<{id: string, name: string, description: string, sortOrder?: number}>> {
+export async function fetchSpecialists(): Promise<Array<Specialist>> {
   try {
     const response = await fetch('/api/specialists');
     if (!response.ok) {
@@ -38,12 +49,13 @@ export function isValidSpecialist(specialist: string, includeWelcome = false): b
   if (specialist === 'generalist') return true;
   if (includeWelcome && specialist === 'welcome') return true;
   
-  // Common specialists that should be valid without API check
-  const knownSpecialists = [
-    'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'
-  ];
-  
-  if (knownSpecialists.includes(specialist)) return true;
+  // Check for common specialists using pattern matching instead of hardcoding
+  const specialistPattern = /^[a-z0-9-]+$/;
+  if (specialistPattern.test(specialist) && 
+      specialist.length >= 3 && 
+      specialist.length <= 30) {
+    return true;
+  }
   
   // For all other specialists, use a naming convention check
   const specialistPattern = /^[a-z0-9-]+$/;

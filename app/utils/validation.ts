@@ -16,9 +16,15 @@ const CACHE_DURATION = 3600000; // 1 hour in milliseconds
  * @returns Boolean indicating if the specialist is valid
  */
 export function isValidSpecialist(specialist: string, includeWelcome = false): boolean {
+  // Handle null or undefined input
+  if (!specialist) return false;
+  
+  // Normalize the specialist string
+  const normalizedSpecialist = specialist.trim().toLowerCase();
+  
   // Special cases that should always be checked explicitly
-  if (specialist === 'generalist') return true;
-  if (includeWelcome && specialist === 'welcome') return true;
+  if (normalizedSpecialist === 'generalist') return true;
+  if (includeWelcome && normalizedSpecialist === 'welcome') return true;
   
   // For all other specialists, use a naming convention check
   // This assumes all valid specialists follow a certain pattern:
@@ -27,13 +33,13 @@ export function isValidSpecialist(specialist: string, includeWelcome = false): b
   
   // Additional validation logic if needed
   // For example, you might want to exclude certain words or patterns
-  const excludedSpecialists = ['admin', 'test', 'debug'];
+  const excludedSpecialists = ['admin', 'test', 'debug', 'undefined', 'null'];
   
   return (
-    specialistPattern.test(specialist) && 
-    !excludedSpecialists.includes(specialist) &&
-    specialist.length >= 3 && 
-    specialist.length <= 30
+    specialistPattern.test(normalizedSpecialist) && 
+    !excludedSpecialists.includes(normalizedSpecialist) &&
+    normalizedSpecialist.length >= 3 && 
+    normalizedSpecialist.length <= 30
   );
 }
 
@@ -71,11 +77,22 @@ export async function isValidSpecialistAsync(specialist: string, includeWelcome 
  * @returns A URL-safe version of the pseudonym
  */
 export function sanitizePseudonym(pseudonym: string): string {
+  if (!pseudonym) return 'anonymous_user';
+  
+  // Convert to lowercase for consistency
+  const lowercased = pseudonym.toLowerCase();
+  
   // Replace spaces and special characters with underscores
-  return pseudonym
-    .replace(/[^a-zA-Z0-9]/g, '_')
+  const sanitized = lowercased
+    .replace(/[^a-z0-9]/g, '_') // Only allow lowercase letters and numbers
     .replace(/_+/g, '_') // Replace multiple underscores with a single one
     .replace(/^_|_$/g, ''); // Remove leading/trailing underscores
+  
+  // If sanitization removed everything, return a default
+  if (!sanitized) return 'anonymous_user';
+  
+  // Ensure the result is not too long (max 50 chars)
+  return sanitized.substring(0, 50);
 }
 
 /**
@@ -92,28 +109,42 @@ export function createKinId(options: {
 }): string {
   const { pseudonym, email, firstName, lastName, kinId } = options;
   
-  // Use pseudonym if provided
-  if (pseudonym) {
+  // Use pseudonym if provided and not empty
+  if (pseudonym && pseudonym.trim()) {
     return sanitizePseudonym(pseudonym);
   }
   
-  // Use kinId if provided
-  if (kinId) {
+  // Use kinId if provided and not empty
+  if (kinId && kinId.trim()) {
     return sanitizePseudonym(kinId);
   }
   
-  // Use email if provided
-  if (email) {
-    return sanitizePseudonym(email.split('@')[0]);
+  // Use email if provided and not empty
+  if (email && email.trim()) {
+    // Extract username part before @ and sanitize
+    const emailParts = email.split('@');
+    if (emailParts.length > 0 && emailParts[0].trim()) {
+      return sanitizePseudonym(emailParts[0]);
+    }
   }
   
-  // Use firstName + lastName if provided
-  if (firstName && lastName) {
+  // Use firstName + lastName if both provided and not empty
+  if (firstName && firstName.trim() && lastName && lastName.trim()) {
     return sanitizePseudonym(`${firstName}${lastName}`);
   }
   
-  // Fallback to a random ID
-  return `user_${Date.now()}`;
+  // Use just firstName if provided and not empty
+  if (firstName && firstName.trim()) {
+    return sanitizePseudonym(`${firstName}_user`);
+  }
+  
+  // Use just lastName if provided and not empty
+  if (lastName && lastName.trim()) {
+    return sanitizePseudonym(`user_${lastName}`);
+  }
+  
+  // Fallback to a random ID with timestamp for uniqueness
+  return `user_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
 }
 
 /**
@@ -128,10 +159,18 @@ export function createKinOsApiUrl(options: {
   messageId?: string;
   queryParams?: Record<string, string>;
 }): string {
-  const { endpoint, specialist = 'generalist', kinId, messageId, queryParams } = options;
+  const { endpoint, specialist, kinId, messageId, queryParams } = options;
+  
+  // Validate inputs
+  if (!kinId) {
+    throw new Error('kinId is required for createKinOsApiUrl');
+  }
+  
+  // Validate and normalize specialist
+  const validatedSpecialist = specialist && isValidSpecialist(specialist) ? specialist : 'generalist';
   
   // Create the blueprint name based on specialist
-  const blueprintName = specialist === 'generalist' ? 'therapykin' : `therapykin${specialist}`;
+  const blueprintName = validatedSpecialist === 'generalist' ? 'therapykin' : `therapykin${validatedSpecialist}`;
   
   // Determine the base URL based on environment
   const baseApiUrl = process.env.KINOS_API_URL || 
@@ -159,8 +198,12 @@ export function createKinOsApiUrl(options: {
   // Add query parameters if provided
   if (queryParams && Object.keys(queryParams).length > 0) {
     const params = new URLSearchParams();
+    
+    // Filter out null/undefined values and encode properly
     Object.entries(queryParams).forEach(([key, value]) => {
-      if (value) params.append(key, value);
+      if (value !== null && value !== undefined && String(value).trim() !== '') {
+        params.append(key, String(value).trim());
+      }
     });
     
     const queryString = params.toString();
