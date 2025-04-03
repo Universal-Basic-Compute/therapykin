@@ -9,7 +9,6 @@ import Footer from '../components/Footer';
 export default function Trial() {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -18,7 +17,7 @@ export default function Trial() {
     setLoading(true);
     
     // Directly redirect to register with pre-filled information
-    router.push(`/register?email=${encodeURIComponent(email)}&firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}`);
+    router.push(`/register?email=${encodeURIComponent(email)}&firstName=${encodeURIComponent(firstName)}`);
   };
 
   return (
@@ -50,19 +49,6 @@ export default function Trial() {
                 />
               </div>
               
-              <div className="mb-4">
-                <label htmlFor="lastName" className="block text-sm font-medium mb-1">
-                  Last Name
-                </label>
-                <input
-                  id="lastName"
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="w-full p-2 border border-black/10 dark:border-white/10 rounded-lg"
-                  required
-                />
-              </div>
               
               <div className="mb-6">
                 <label htmlFor="email" className="block text-sm font-medium mb-1">

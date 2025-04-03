@@ -11,7 +11,6 @@ import Footer from '../components/Footer';
 function RegisterForm() {
   const searchParams = useSearchParams();
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -22,11 +21,9 @@ function RegisterForm() {
   React.useEffect(() => {
     const emailParam = searchParams.get('email');
     const firstNameParam = searchParams.get('firstName');
-    const lastNameParam = searchParams.get('lastName');
     
     if (emailParam) setEmail(emailParam);
     if (firstNameParam) setFirstName(firstNameParam);
-    if (lastNameParam) setLastName(lastNameParam);
   }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,7 +38,7 @@ function RegisterForm() {
     }
     
     setPasswordError('');
-    await register(email, firstName, lastName, password);
+    await register(email, firstName, password);
     console.log('Registration function completed');
     // After successful registration, the user will be automatically redirected to the dashboard
     // by the register function in the AuthContext
@@ -58,34 +55,18 @@ function RegisterForm() {
       )}
           
           <form onSubmit={handleSubmit} className="card p-6 shadow-depth">
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-medium mb-1">
-                  First Name
-                </label>
-                <input
-                  id="firstName"
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full p-2 border border-black/10 dark:border-white/10 rounded-lg"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-medium mb-1">
-                  Last Name
-                </label>
-                <input
-                  id="lastName"
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="w-full p-2 border border-black/10 dark:border-white/10 rounded-lg"
-                  required
-                />
-              </div>
+            <div className="mb-4">
+              <label htmlFor="firstName" className="block text-sm font-medium mb-1">
+                First Name
+              </label>
+              <input
+                id="firstName"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full p-2 border border-black/10 dark:border-white/10 rounded-lg"
+                required
+              />
             </div>
             
             <div className="mb-4">

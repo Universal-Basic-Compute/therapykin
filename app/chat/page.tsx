@@ -436,7 +436,6 @@ function ChatSessionWithSearchParams() {
       const response = await sendMessageToKinOS(
         welcomeMessage,
         user.firstName,
-        user.lastName,
         [], // attachments
         [], // images
         'session_opening', // Use session_opening mode
@@ -586,7 +585,6 @@ function ChatSessionWithSearchParams() {
         sendMessageToKinOS(
           "<system>Info: Session halfway</system>",
           user.firstName,
-          user.lastName,
           [], // attachments
           [], // images
           "journey", // Use journey mode
@@ -633,7 +631,6 @@ function ChatSessionWithSearchParams() {
         sendMessageToKinOS(
           "<system>Info: Session is closing soon</system>",
           user.firstName,
-          user.lastName,
           [], // attachments
           [], // images
           "journey", // Use journey mode
@@ -782,7 +779,6 @@ function ChatSessionWithSearchParams() {
         sendMessageToKinOS(
           "<system>Info: The user stayed silent, maybe try to drive the conversation elsewhere? (make sure you don't repeat yourself)</system>",
           user.firstName,
-          user.lastName,
           [], // attachments
           [], // images
           "journey", // Use journey mode
@@ -1284,7 +1280,6 @@ function ChatSessionWithSearchParams() {
           const response = await sendMessageToKinOS(
             data.text,
             user?.firstName || 'Guest',
-            user?.lastName || 'User',
             [], // attachments
             [], // empty images array
             sessionMode, // Add session mode
@@ -1695,7 +1690,6 @@ function ChatSessionWithSearchParams() {
           const response = await sendMessageToKinOS(
             welcomeMessage,
             user?.firstName || 'Guest',
-            user?.lastName || 'User',
             [], // attachments
             [], // images
             'session_opening', // Use session_opening mode
@@ -2006,7 +2000,6 @@ Important style requirements:
       const response = await sendMessageToKinOS(
         userMessage,
         user?.firstName || 'Guest',
-        user?.lastName || 'User',
         [], // attachments
         [], // empty images array
         sessionMode, // Add session mode

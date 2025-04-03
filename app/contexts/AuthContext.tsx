@@ -7,7 +7,6 @@ interface User {
   id: string;
   email: string;
   firstName: string;
-  lastName: string;
   pseudonym?: string; // Add pseudonym field
   subscription?: {
     plan: string;
@@ -88,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Register function
-  const register = async (email: string, firstName: string, lastName: string, password: string) => {
+  const register = async (email: string, firstName: string, password: string) => {
     setLoading(true);
     setError(null);
     
@@ -97,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, firstName, lastName, password }),
+        body: JSON.stringify({ email, firstName, password }),
         credentials: 'include', // Important for cookies
       });
       

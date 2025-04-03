@@ -7,7 +7,6 @@ interface KinOSResponse {
 // Function to fetch messages from KinOS
 export async function fetchMessagesFromKinOS(
   firstName: string,
-  lastName: string,
   since?: string,
   specialist: string = 'generalist', // Add specialist parameter with default
   pseudonym?: string // Add pseudonym parameter
@@ -19,10 +18,10 @@ export async function fetchMessagesFromKinOS(
       specialist = 'generalist';
     }
     
-    console.log(`Fetching messages for ${firstName} ${lastName}${since ? ` since ${since}` : ''} (specialist: ${specialist})`);
+    console.log(`Fetching messages for ${firstName}${since ? ` since ${since}` : ''} (specialist: ${specialist})`);
     
     // Build the URL with query parameters
-    let url = `/api/kinos/messages?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&specialist=${encodeURIComponent(specialist)}`;
+    let url = `/api/kinos/messages?firstName=${encodeURIComponent(firstName)}&specialist=${encodeURIComponent(specialist)}`;
     if (since) {
       url += `&since=${encodeURIComponent(since)}`;
     }
@@ -52,7 +51,6 @@ export async function fetchMessagesFromKinOS(
 export async function sendMessageToKinOS(
   content: string, 
   firstName: string, 
-  lastName: string,
   attachments: any[] = [],
   images: string[] = [],
   mode: string | null = null,
@@ -94,7 +92,6 @@ export async function sendMessageToKinOS(
     const requestBody: any = {
       content,
       firstName,
-      lastName,
       attachments,
       images,
       pseudonym, // Add pseudonym to request body
@@ -179,7 +176,6 @@ export async function sendMessageToKinOS(
 async function pollForResponse(
   messageId: string,
   firstName: string,
-  lastName: string,
   maxAttempts = 10,
   delayMs = 1000,
   specialist = 'generalist', // Add specialist parameter with default
@@ -210,7 +206,7 @@ async function pollForResponse(
       await new Promise(resolve => setTimeout(resolve, delayMs));
       
       // Try to fetch the response using our API route
-      const response = await fetch(`${statusEndpoint}?messageId=${messageId}&firstName=${firstName}&lastName=${lastName}&specialist=${specialist}${pseudonym ? `&pseudonym=${pseudonym}` : ''}`);
+      const response = await fetch(`${statusEndpoint}?messageId=${messageId}&firstName=${firstName}&specialist=${specialist}${pseudonym ? `&pseudonym=${pseudonym}` : ''}`);
       
       if (!response.ok) {
         console.log(`Polling attempt ${attempt} failed with status ${response.status}`);

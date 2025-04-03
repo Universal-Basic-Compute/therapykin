@@ -95,7 +95,6 @@ export async function getUserByEmail(email: string) {
       id: user.id,
       email: user.fields.Email as string,
       firstName: user.fields.FirstName as string,
-      lastName: user.fields.LastName as string,
       passwordHash: user.fields.PasswordHash as string,
       passwordSalt: user.fields.PasswordSalt as string,
       createdAt: user.fields.CreatedAt as string,
@@ -111,12 +110,11 @@ export async function getUserByEmail(email: string) {
 export async function createUser(userData: {
   email: string;
   firstName: string;
-  lastName: string;
   password: string;
   preferredSpecialist?: string;
 }) {
   try {
-    const { email, firstName, lastName, password, preferredSpecialist } = userData;
+    const { email, firstName, password, preferredSpecialist } = userData;
     
     // Check if user already exists
     const existingUser = await getUserByEmail(email);
@@ -133,7 +131,6 @@ export async function createUser(userData: {
         fields: {
           Email: email,
           FirstName: firstName,
-          LastName: lastName,
           PasswordHash: hashedPassword,
           PasswordSalt: salt,
           CreatedAt: new Date().toISOString(),
@@ -147,7 +144,6 @@ export async function createUser(userData: {
       id: newUser.id,
       email: newUser.fields.Email as string,
       firstName: newUser.fields.FirstName as string,
-      lastName: newUser.fields.LastName as string,
     };
   } catch (error) {
     console.error('Error creating user:', error);
@@ -178,7 +174,6 @@ export async function getCurrentUser() {
     id: user.id,
     email: user.email,
     firstName: user.firstName,
-    lastName: user.lastName,
     pseudonym: user.fields?.Pseudonym as string || null,
     isTherapist: user.fields?.IsTherapist === true || 
                 user.fields?.IsTherapist === "true" || 

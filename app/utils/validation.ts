@@ -104,10 +104,9 @@ export function createKinId(options: {
   pseudonym?: string | null;
   email?: string | null;
   firstName?: string;
-  lastName?: string;
   kinId?: string;
 }): string {
-  const { pseudonym, email, firstName, lastName, kinId } = options;
+  const { pseudonym, email, firstName, kinId } = options;
   
   // Use pseudonym if provided and not empty
   if (pseudonym && pseudonym.trim()) {
@@ -128,19 +127,9 @@ export function createKinId(options: {
     }
   }
   
-  // Use firstName + lastName if both provided and not empty
-  if (firstName && firstName.trim() && lastName && lastName.trim()) {
-    return sanitizePseudonym(`${firstName}${lastName}`);
-  }
-  
   // Use just firstName if provided and not empty
   if (firstName && firstName.trim()) {
     return sanitizePseudonym(`${firstName}_user`);
-  }
-  
-  // Use just lastName if provided and not empty
-  if (lastName && lastName.trim()) {
-    return sanitizePseudonym(`user_${lastName}`);
   }
   
   // Fallback to a random ID with timestamp for uniqueness
