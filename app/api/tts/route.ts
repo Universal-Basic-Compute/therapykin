@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, voiceId = 'UgBBYS2sOqTuMpoF3BR0', model = 'eleven_flash_v2_5' } = await request.json();
+    const { text, voiceId = 'L0Dsvb3SLTyegXwtm47J', model = 'eleven_flash_v2_5' } = await request.json();
     
     // Validate input
     if (!text) {

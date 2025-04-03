@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     // Extract preferences
     const preferences = {
       preferredSessionLength: userRecord.fields.PreferredSessionLength || 30,
-      preferredVoice: userRecord.fields.PreferredVoice || 'UgBBYS2sOqTuMpoF3BR0',
+      preferredVoice: userRecord.fields.PreferredVoice || 'L0Dsvb3SLTyegXwtm47J',
       preferredSpecialist: userRecord.fields.PreferredSpecialist || 'generalist',
       cameraEnabled: userRecord.fields.CameraEnabled || false,
       // Add other preferences here as needed
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
       success: true,
       preferences: {
         preferredSessionLength: preferredSessionLength !== undefined ? preferredSessionLength : userRecord.fields.PreferredSessionLength || 30,
-        preferredVoice: preferredVoice !== undefined ? preferredVoice : userRecord.fields.PreferredVoice || 'UgBBYS2sOqTuMpoF3BR0',
+        preferredVoice: preferredVoice !== undefined ? preferredVoice : userRecord.fields.PreferredVoice || 'L0Dsvb3SLTyegXwtm47J',
         preferredSpecialist: preferredSpecialist !== undefined ? preferredSpecialist : userRecord.fields.PreferredSpecialist || 'generalist',
         cameraEnabled: cameraEnabled !== undefined ? cameraEnabled : userRecord.fields.CameraEnabled || false,
         // Add other preferences here as needed
