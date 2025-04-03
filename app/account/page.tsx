@@ -145,7 +145,7 @@ export default function Account() {
                       </label>
                       <input
                         type="text"
-                        defaultValue={user?.lastName}
+                        defaultValue=""
                         className="w-full p-2 border border-black/10 dark:border-white/10 rounded-lg"
                       />
                     </div>
