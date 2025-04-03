@@ -539,7 +539,7 @@ function ChatSessionWithSearchParams() {
           console.log('Fetching previous messages for existing session...');
           
           // Use the user's pseudonym or generate one if missing
-          let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
+          let userPseudonym = user?.pseudonym;
           if (!userPseudonym) {
             console.log('Pseudonym missing for user:', user.email);
             console.log('User object structure:', JSON.stringify(user, null, 2));
