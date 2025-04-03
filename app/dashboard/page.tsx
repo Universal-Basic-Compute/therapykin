@@ -248,10 +248,12 @@ export default function Dashboard() {
               <div className="card p-4 bg-[var(--primary)]/5 text-center">
                 <h3 className="font-medium mb-1">Days Active</h3>
                 <p className="text-2xl font-bold">{sessionStats?.daysActive || 1}</p>
+                <p className="text-xs text-foreground/60 mt-1">(with >5 min sessions)</p>
               </div>
               <div className="card p-4 bg-[var(--primary)]/5 text-center">
-                <h3 className="font-medium mb-1">Total Sessions</h3>
+                <h3 className="font-medium mb-1">Active Sessions</h3>
                 <p className="text-2xl font-bold">{sessionStats?.totalSessions || 0}</p>
+                <p className="text-xs text-foreground/60 mt-1">(>5 min activity)</p>
               </div>
             </div>
           </div>
