@@ -220,7 +220,8 @@ function ChatSessionWithSearchParams() {
       if (!user) return;
       
       try {
-        console.log('Fetching user preferences...');
+        console.log('Fetching user preferences...', user);
+        console.log('User pseudonym:', user.pseudonym || user.Pseudonym || user.fields?.Pseudonym || 'none');
         const response = await fetch('/api/users/preferences');
         
         if (response.ok) {

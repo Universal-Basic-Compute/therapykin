@@ -40,6 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const response = await fetch('/api/auth/me');
         if (response.ok) {
           const data = await response.json();
+          console.log('Loaded user from API:', data.user);
+          console.log('User pseudonym:', data.user?.pseudonym || data.user?.Pseudonym || 'none');
           setUser(data.user);
         }
       } catch (error) {
