@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/app/utils/stripe';
 import { getCurrentUser } from '@/app/utils/auth';
-import { usersTable } from '@/app/utils/airtable';
+import { usersTable, escapeAirtableString } from '@/app/utils/airtable';
 
 export async function GET(request: NextRequest) {
   try {
@@ -47,8 +47,9 @@ export async function GET(request: NextRequest) {
 async function getStripeCustomerIdFromDatabase(userId: string): Promise<string | null> {
   try {
     // This is a placeholder - implement based on your database
+    const escapedUserId = escapeAirtableString(userId);
     const records = await usersTable.select({
-      filterByFormula: `{ID} = '${userId}'`,
+      filterByFormula: `{ID} = '${escapedUserId}'`,
       maxRecords: 1,
     }).firstPage();
     

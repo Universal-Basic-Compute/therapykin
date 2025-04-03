@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUser, generateToken, setAuthCookie } from '@/app/utils/auth';
 import { isValidSpecialist } from '@/app/utils/validation';
-import { createErrorResponse, logError } from '@/app/utils/error-handling';
+import { createErrorResponse } from '@/app/utils/error-handling';
 
 export async function POST(request: NextRequest) {
   try {

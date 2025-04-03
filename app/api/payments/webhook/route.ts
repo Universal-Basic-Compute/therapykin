@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/app/utils/stripe';
 import { headers } from 'next/headers';
-import { usersTable } from '@/app/utils/airtable';
+import { usersTable, escapeAirtableString } from '@/app/utils/airtable';
 
 // Disable body parsing, we need the raw body for Stripe webhook verification
 export const config = {
@@ -202,8 +202,9 @@ export async function POST(request: NextRequest) {
 async function getUserIdByStripeCustomerId(stripeCustomerId: string): Promise<string | null> {
   try {
     // This is a placeholder - implement based on your database
+    const escapedCustomerId = escapeAirtableString(stripeCustomerId);
     const records = await usersTable.select({
-      filterByFormula: `{StripeCustomerId} = '${stripeCustomerId}'`,
+      filterByFormula: `{StripeCustomerId} = '${escapedCustomerId}'`,
       maxRecords: 1,
     }).firstPage();
     

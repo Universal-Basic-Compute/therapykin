@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { usersTable } from '@/app/utils/airtable';
+import { usersTable, escapeAirtableString } from '@/app/utils/airtable';
 import { getCurrentUser } from '@/app/utils/auth';
 import { isValidSpecialist } from '@/app/utils/validation';
 
@@ -16,8 +16,9 @@ export async function GET(request: NextRequest) {
     }
     
     // Find the user in Airtable
+    const escapedEmail = escapeAirtableString(currentUser.email);
     const records = await usersTable.select({
-      filterByFormula: `{Email} = '${currentUser.email}'`,
+      filterByFormula: `{Email} = '${escapedEmail}'`,
       maxRecords: 1
     }).firstPage();
     
@@ -100,8 +101,9 @@ export async function POST(request: NextRequest) {
     }
     
     // Find the user in Airtable
+    const escapedEmail = escapeAirtableString(currentUser.email);
     const records = await usersTable.select({
-      filterByFormula: `{Email} = '${currentUser.email}'`,
+      filterByFormula: `{Email} = '${escapedEmail}'`,
       maxRecords: 1
     }).firstPage();
     

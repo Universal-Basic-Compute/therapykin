@@ -54,6 +54,7 @@ export async function POST(request: NextRequest) {
       }
     });
   } catch (error) {
+    logError('Login', 'Authentication failed', error);
     return createErrorResponse(500, 'Login failed', error);
   }
 }

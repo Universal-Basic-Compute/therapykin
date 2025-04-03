@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Airtable from 'airtable';
-
-// Initialize Airtable
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  process.env.AIRTABLE_BASE_ID || ''
-);
+import { sessionsTable } from '@/app/utils/airtable';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,9 +16,12 @@ export async function POST(request: NextRequest) {
     console.log(`Updating session ${sessionId} with image URL: ${imageUrl}`);
     
     // Update the session record in Airtable
-    await base('SESSIONS').update(sessionId, {
-      SessionImage: imageUrl  // Changed from "image" to "SessionImage" to match Airtable field name
-    });
+    await sessionsTable.update([{
+      id: sessionId,
+      fields: {
+        SessionImage: imageUrl
+      }
+    }]);
     
     console.log(`Successfully updated session ${sessionId} with image URL`);
     

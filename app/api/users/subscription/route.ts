@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { usersTable } from '@/app/utils/airtable';
+import { usersTable, escapeAirtableString } from '@/app/utils/airtable';
 import { getCurrentUser } from '@/app/utils/auth';
 
 export async function GET(request: NextRequest) {
@@ -17,8 +17,9 @@ export async function GET(request: NextRequest) {
     console.log('Fetching subscription data for user:', currentUser.email);
     
     // Find the user in Airtable by email
+    const escapedEmail = escapeAirtableString(currentUser.email);
     const records = await usersTable.select({
-      filterByFormula: `{Email} = '${currentUser.email}'`,
+      filterByFormula: `{Email} = '${escapedEmail}'`,
       maxRecords: 1
     }).firstPage();
     

@@ -66,11 +66,23 @@ export async function clearAuthCookie() {
   cookieStore.delete('auth_token');
 }
 
+/**
+ * Escapes single quotes in Airtable formula strings to prevent injection
+ * @param value - The string value to escape
+ * @returns The escaped string
+ */
+function escapeAirtableString(value: string): string {
+  if (!value) return '';
+  // Replace single quotes with escaped single quotes
+  return value.replace(/'/g, "\\'");
+}
+
 // Get user by email
 export async function getUserByEmail(email: string) {
   try {
+    const escapedEmail = escapeAirtableString(email);
     const records = await usersTable.select({
-      filterByFormula: `{Email} = '${email}'`,
+      filterByFormula: `{Email} = '${escapedEmail}'`,
       maxRecords: 1,
     }).firstPage();
     

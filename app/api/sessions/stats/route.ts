@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { sessionsTable } from '@/app/utils/airtable';
+import { sessionsTable, escapeAirtableString } from '@/app/utils/airtable';
 import { getCurrentUser } from '@/app/utils/auth';
 
 export async function GET(request: NextRequest) {
@@ -17,8 +17,9 @@ export async function GET(request: NextRequest) {
     console.log('Fetching session stats for user:', currentUser.email);
     
     // Query for all sessions for this user
+    const escapedEmail = escapeAirtableString(currentUser.email);
     const records = await sessionsTable.select({
-      filterByFormula: `{Email} = '${currentUser.email}'`,
+      filterByFormula: `{Email} = '${escapedEmail}'`,
       sort: [{ field: 'CreatedAt', direction: 'desc' }]
     }).all();
     

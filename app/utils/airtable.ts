@@ -39,21 +39,46 @@ export const sessionsTable = base('SESSIONS');
 // Get the specialists table
 export const specialistsTable = base('SPECIALISTS');
 
+// Cache for specialists to avoid frequent database calls
+let specialistsCache: Array<{id: string, name: string, description: string, sortOrder: number}> = [];
+let specialistsCacheExpiry = 0;
+const SPECIALISTS_CACHE_DURATION = 3600000; // 1 hour in milliseconds
+
 // Function to get all active specialists
 export async function getActiveSpecialists() {
+  // Check cache first
+  const now = Date.now();
+  if (specialistsCacheExpiry > now && specialistsCache.length > 0) {
+    return [...specialistsCache]; // Return a copy of the cache
+  }
   try {
+    // Query all specialists and filter active ones in code
+    // This is more resilient if the IsActive field is missing
     const records = await specialistsTable.select({
-      // Filter for active specialists if you have an IsActive field
-      filterByFormula: '{IsActive} = TRUE()',
       fields: ['Name', 'DisplayName', 'Description', 'IsActive', 'SortOrder']
     }).all();
     
-    return records.map(record => ({
+    // Filter for active specialists (default to active if IsActive field is missing)
+    const activeRecords = records.filter(record => 
+      record.fields.IsActive === undefined || 
+      record.fields.IsActive === true || 
+      record.fields.IsActive === 'true' || 
+      record.fields.IsActive === 1 || 
+      record.fields.IsActive === '1'
+    );
+    
+    const specialists = activeRecords.map(record => ({
       id: record.fields.Name, // Using "Name" field as the ID/slug
       name: record.fields.DisplayName || record.fields.Name,
       description: record.fields.Description || '',
       sortOrder: record.fields.SortOrder || 999 // Optional sort order field
     }));
+    
+    // Update cache
+    specialistsCache = [...specialists];
+    specialistsCacheExpiry = now + SPECIALISTS_CACHE_DURATION;
+    
+    return specialists;
   } catch (error) {
     console.error('Error fetching specialists:', error);
     // Return at least the generalist as a fallback
@@ -88,8 +113,9 @@ export async function getOngoingSession(email: string): Promise<{
 } | null> {
   try {
     // Get the most recent session for this user
+    const escapedEmail = escapeAirtableString(email);
     const records = await sessionsTable.select({
-      filterByFormula: `{Email} = '${email}'`,
+      filterByFormula: `{Email} = '${escapedEmail}'`,
       sort: [{ field: 'CreatedAt', direction: 'desc' }],
       maxRecords: 1
     }).firstPage();
@@ -132,11 +158,21 @@ export async function createSession(
       throw new Error('Email is required for creating a session');
     }
     
-    // Validate specialist value using the validation utility
-    const { isValidSpecialist } = require('@/app/utils/validation');
-    if (!isValidSpecialist(specialist, true)) { // true to include 'welcome'
-      console.warn(`Invalid specialist value: ${specialist}, defaulting to generalist`);
-      specialist = 'generalist';
+    // Import isValidSpecialist at the top of the file instead of using require
+    // This is just a validation check - if the specialist is invalid, default to generalist
+    if (specialist !== 'generalist' && specialist !== 'welcome') {
+      const specialistPattern = /^[a-z0-9-]+$/;
+      const excludedSpecialists = ['admin', 'test', 'debug'];
+      
+      const isValid = specialistPattern.test(specialist) && 
+                      !excludedSpecialists.includes(specialist) &&
+                      specialist.length >= 3 && 
+                      specialist.length <= 30;
+                      
+      if (!isValid) {
+        console.warn(`Invalid specialist value: ${specialist}, defaulting to generalist`);
+        specialist = 'generalist';
+      }
     }
     
     const createdAt = new Date().toISOString();
@@ -273,65 +309,6 @@ export async function updateSessionImage(
   }
 }
 
-/**
- * Checks if a user is authorized for a specific specialist role
- * @param user - The user object
- * @param specialistType - The specialist type to check for
- * @returns Boolean indicating if the user is authorized
- */
-export function isAuthorizedForSpecialist(user: any, specialistType: string): boolean {
-  // Admin users are authorized for all specialist types
-  if (isAdmin(user)) {
-    return true;
-  }
-  
-  // Check if user is a therapist with access to the specific specialist
-  if (user.isTherapist === true || 
-      user.isTherapist === "true" || 
-      user.isTherapist === 1 || 
-      user.isTherapist === "1") {
-    
-    // If they're a therapist, check their specialists access list
-    if (user.specialistsAccess) {
-      try {
-        // Parse specialists access if it's a JSON string
-        const specialistsAccess = typeof user.specialistsAccess === 'string' && 
-          user.specialistsAccess.startsWith('[') ? 
-          JSON.parse(user.specialistsAccess) : 
-          user.specialistsAccess;
-        
-        // Check if user has access to the requested specialist type
-        if (Array.isArray(specialistsAccess)) {
-          return specialistsAccess.includes(specialistType);
-        } else if (typeof specialistsAccess === 'string') {
-          return specialistsAccess === specialistType || specialistsAccess.includes(specialistType);
-        } else if (specialistsAccess === true) {
-          // If specialistsAccess is true, they have access to all specialists
-          return true;
-        }
-      } catch (error) {
-        console.error('Error parsing specialists access:', error);
-      }
-    } else {
-      // If they're a therapist but don't have a specialists access list,
-      // default to allowing access to all specialists
-      return true;
-    }
-  }
-  
-  return false;
-}
+// These functions have been moved to auth.ts to avoid duplication
 
-/**
- * Checks if a user is an admin
- * @param user - The user object
- * @returns Boolean indicating if the user is an admin
- */
-export function isAdmin(user: any): boolean {
-  return user.isAdmin === true || 
-         user.isAdmin === "true" || 
-         user.isAdmin === 1 || 
-         user.isAdmin === "1";
-}
-
-export { base, usersTable };
+export { base, usersTable, escapeAirtableString };
