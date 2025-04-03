@@ -167,6 +167,15 @@ export async function getCurrentUser() {
     email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,
+    isTherapist: user.fields?.IsTherapist === true || 
+                user.fields?.IsTherapist === "true" || 
+                user.fields?.IsTherapist === 1 || 
+                user.fields?.IsTherapist === "1",
+    specialistsAccess: user.fields?.SpecialistsAccess,
+    isAdmin: user.fields?.IsAdmin === true || 
+             user.fields?.IsAdmin === "true" || 
+             user.fields?.IsAdmin === 1 || 
+             user.fields?.IsAdmin === "1",
     subscription: user.fields && user.fields.SubscriptionPlan ? {
       plan: user.fields.SubscriptionPlan as string,
       status: user.fields.SubscriptionStatus as string,
@@ -174,4 +183,64 @@ export async function getCurrentUser() {
       currentPeriodEnd: user.fields.SubscriptionCurrentPeriodEnd as number,
     } : null
   };
+}
+/**
+ * Checks if a user is authorized for a specific specialist role
+ * @param user - The user object
+ * @param specialistType - The specialist type to check for
+ * @returns Boolean indicating if the user is authorized
+ */
+export function isAuthorizedForSpecialist(user: any, specialistType: string): boolean {
+  // Admin users are authorized for all specialist types
+  if (isAdmin(user)) {
+    return true;
+  }
+  
+  // Check if user is a therapist with access to the specific specialist
+  if (user.isTherapist === true || 
+      user.isTherapist === "true" || 
+      user.isTherapist === 1 || 
+      user.isTherapist === "1") {
+    
+    // If they're a therapist, check their specialists access list
+    if (user.specialistsAccess) {
+      try {
+        // Parse specialists access if it's a JSON string
+        const specialistsAccess = typeof user.specialistsAccess === 'string' && 
+          user.specialistsAccess.startsWith('[') ? 
+          JSON.parse(user.specialistsAccess) : 
+          user.specialistsAccess;
+        
+        // Check if user has access to the requested specialist type
+        if (Array.isArray(specialistsAccess)) {
+          return specialistsAccess.includes(specialistType);
+        } else if (typeof specialistsAccess === 'string') {
+          return specialistsAccess === specialistType || specialistsAccess.includes(specialistType);
+        } else if (specialistsAccess === true) {
+          // If specialistsAccess is true, they have access to all specialists
+          return true;
+        }
+      } catch (error) {
+        console.error('Error parsing specialists access:', error);
+      }
+    } else {
+      // If they're a therapist but don't have a specialists access list,
+      // default to allowing access to all specialists
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+/**
+ * Checks if a user is an admin
+ * @param user - The user object
+ * @returns Boolean indicating if the user is an admin
+ */
+export function isAdmin(user: any): boolean {
+  return user.isAdmin === true || 
+         user.isAdmin === "true" || 
+         user.isAdmin === 1 || 
+         user.isAdmin === "1";
 }

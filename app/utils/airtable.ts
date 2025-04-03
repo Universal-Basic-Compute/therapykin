@@ -281,32 +281,41 @@ export async function updateSessionImage(
  */
 export function isAuthorizedForSpecialist(user: any, specialistType: string): boolean {
   // Admin users are authorized for all specialist types
-  if (user.isAdmin === true || 
-      user.isAdmin === "true" || 
-      user.isAdmin === 1 || 
-      user.isAdmin === "1") {
+  if (isAdmin(user)) {
     return true;
   }
   
-  // Check if user is a therapist
-  if (user.isTherapist) {
-    try {
-      // Parse therapist types if it's a JSON string
-      const therapistTypes = typeof user.isTherapist === 'string' && 
-        user.isTherapist.startsWith('[') ? 
-        JSON.parse(user.isTherapist) : 
-        user.isTherapist;
-      
-      // Check if user is authorized for the requested specialist type
-      if (Array.isArray(therapistTypes)) {
-        return therapistTypes.includes(specialistType);
-      } else if (typeof therapistTypes === 'string') {
-        return therapistTypes === specialistType || therapistTypes.includes(specialistType);
-      } else if (therapistTypes === true) {
-        return true;
+  // Check if user is a therapist with access to the specific specialist
+  if (user.isTherapist === true || 
+      user.isTherapist === "true" || 
+      user.isTherapist === 1 || 
+      user.isTherapist === "1") {
+    
+    // If they're a therapist, check their specialists access list
+    if (user.specialistsAccess) {
+      try {
+        // Parse specialists access if it's a JSON string
+        const specialistsAccess = typeof user.specialistsAccess === 'string' && 
+          user.specialistsAccess.startsWith('[') ? 
+          JSON.parse(user.specialistsAccess) : 
+          user.specialistsAccess;
+        
+        // Check if user has access to the requested specialist type
+        if (Array.isArray(specialistsAccess)) {
+          return specialistsAccess.includes(specialistType);
+        } else if (typeof specialistsAccess === 'string') {
+          return specialistsAccess === specialistType || specialistsAccess.includes(specialistType);
+        } else if (specialistsAccess === true) {
+          // If specialistsAccess is true, they have access to all specialists
+          return true;
+        }
+      } catch (error) {
+        console.error('Error parsing specialists access:', error);
       }
-    } catch (error) {
-      console.error('Error parsing therapist types:', error);
+    } else {
+      // If they're a therapist but don't have a specialists access list,
+      // default to allowing access to all specialists
+      return true;
     }
   }
   
