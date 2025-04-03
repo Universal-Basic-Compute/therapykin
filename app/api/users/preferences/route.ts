@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     }
     
     if (preferredSpecialist !== undefined && 
-        !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney'].includes(preferredSpecialist)) {
+        !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(preferredSpecialist)) {
       return NextResponse.json(
         { error: 'Valid preferredSpecialist is required' },
         { status: 400 }

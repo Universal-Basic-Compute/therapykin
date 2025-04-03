@@ -43,6 +43,12 @@ export async function POST(request: NextRequest) {
         : process.env.NODE_ENV === 'development'
           ? `http://localhost:5000/projects/therapykinherosjourney/${projectId}/image`
           : `https://api.kinos-engine.ai/projects/therapykinherosjourney/${projectId}/image`;
+    } else if (specialist === 'sexologist') {
+      baseUrl = process.env.KINOS_API_URL 
+        ? `${process.env.KINOS_API_URL}/projects/therapykinsexologist/${projectId}/image`
+        : process.env.NODE_ENV === 'development'
+          ? `http://localhost:5000/projects/therapykinsexologist/${projectId}/image`
+          : `https://api.kinos-engine.ai/projects/therapykinsexologist/${projectId}/image`;
     } else {
       baseUrl = process.env.KINOS_API_URL 
         ? `${process.env.KINOS_API_URL}/projects/therapykin/${projectId}/image`

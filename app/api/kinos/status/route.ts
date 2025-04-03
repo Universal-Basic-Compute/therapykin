@@ -49,6 +49,13 @@ export async function GET(request: NextRequest) {
         : process.env.NODE_ENV === 'development'
           ? `http://localhost:5000/projects/therapykinwelcome/${projectId}/messages/${messageId}`
           : `https://api.kinos-engine.ai/projects/therapykinwelcome/${projectId}/messages/${messageId}`;
+    } else if (specialist === 'sexologist') {
+      // For sexologist specialist
+      baseUrl = process.env.KINOS_API_URL 
+        ? `${process.env.KINOS_API_URL}/projects/therapykinsexologist/${projectId}/messages/${messageId}`
+        : process.env.NODE_ENV === 'development'
+          ? `http://localhost:5000/projects/therapykinsexologist/${projectId}/messages/${messageId}`
+          : `https://api.kinos-engine.ai/projects/therapykinsexologist/${projectId}/messages/${messageId}`;
     } else {
       // For generalist (default)
       baseUrl = process.env.KINOS_API_URL 
