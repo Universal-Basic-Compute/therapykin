@@ -21,14 +21,14 @@ export async function POST(request: NextRequest) {
     
     console.log(`Requesting image generation for user: ${firstName} ${lastName}${specialist ? `, specialist: ${specialist}` : ''}`);
     
-    // Create a consistent project ID
-    const projectId = createProjectId({ pseudonym, firstName, lastName });
+    // Create a consistent KinId
+    const kinId = createKinId({ pseudonym, firstName, lastName });
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({
       endpoint: 'image',
       specialist: specialist || 'generalist',
-      projectId
+      kinId
     });
     
     console.log(`Using API endpoint for image generation: ${baseUrl}`);

@@ -26,14 +26,14 @@ export async function POST(request: NextRequest) {
     
     console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
-    // Create a consistent project ID
-    const projectId = createProjectId({ pseudonym, email, firstName, lastName });
+    // Create a consistent KinId
+    const kinId = createKinId({ pseudonym, email, firstName, lastName });
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({
       endpoint: 'messages',
       specialist: specialist || 'generalist',
-      projectId
+      kinId
     });
     
     console.log(`Using API endpoint: ${baseUrl}`);

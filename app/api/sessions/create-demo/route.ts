@@ -23,13 +23,13 @@ export async function POST(request: NextRequest) {
     
     console.log(`Creating demo session for kin ID ${kinId} with specialist ${specialist || 'welcome'}`);
     
-    // Create a consistent project ID
-    const projectId = createProjectId({ pseudonym, kinId, email });
+    // Create a consistent KinId
+    const generatedKinId = createKinId({ pseudonym, kinId, email });
     
-    console.log(`Using projectId: ${projectId} for demo session`);
+    console.log(`Using kinId: ${generatedKinId} for demo session`);
     
-    // Use the email parameter for createSession if provided, otherwise use projectId
-    const sessionIdentifier = email || projectId;
+    // Use the email parameter for createSession if provided, otherwise use generatedKinId
+    const sessionIdentifier = email || generatedKinId;
     
     const session = await createSession(
       sessionIdentifier, 

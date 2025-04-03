@@ -25,14 +25,14 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Create a consistent project ID
-    const projectId = createProjectId({ pseudonym, firstName, lastName });
+    // Create a consistent KinId
+    const kinId = createKinId({ pseudonym, firstName, lastName });
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({
       endpoint: 'messages',
       specialist,
-      projectId,
+      kinId,
       messageId
     });
     

@@ -79,11 +79,11 @@ export function sanitizePseudonym(pseudonym: string): string {
 }
 
 /**
- * Creates a consistent project ID from user information
+ * Creates a consistent KinId from user information
  * @param options - Object containing user information
- * @returns A URL-safe project ID
+ * @returns A URL-safe KinId
  */
-export function createProjectId(options: {
+export function createKinId(options: {
   pseudonym?: string | null;
   email?: string | null;
   firstName?: string;
@@ -117,18 +117,18 @@ export function createProjectId(options: {
 }
 
 /**
- * Creates a KinOS API URL for a specific blueprint and project
+ * Creates a KinOS API URL for a specific blueprint and kin
  * @param options - Object containing URL parameters
  * @returns The constructed API URL
  */
 export function createKinOsApiUrl(options: {
   endpoint: string;
   specialist?: string | null;
-  projectId: string;
+  kinId: string;
   messageId?: string;
   queryParams?: Record<string, string>;
 }): string {
-  const { endpoint, specialist = 'generalist', projectId, messageId, queryParams } = options;
+  const { endpoint, specialist = 'generalist', kinId, messageId, queryParams } = options;
   
   // Create the blueprint name based on specialist
   const blueprintName = specialist === 'generalist' ? 'therapykin' : `therapykin${specialist}`;
@@ -141,8 +141,8 @@ export function createKinOsApiUrl(options: {
   
   // Construct the URL path with proper encoding for each component
   const encodedBlueprintName = encodeURIComponent(blueprintName);
-  const encodedProjectId = encodeURIComponent(projectId);
-  let url = `${baseApiUrl}/v2/blueprints/${encodedBlueprintName}/kins/${encodedProjectId}`;
+  const encodedKinId = encodeURIComponent(kinId);
+  let url = `${baseApiUrl}/v2/blueprints/${encodedBlueprintName}/kins/${encodedKinId}`;
   
   // Add endpoint (e.g., /messages, /image)
   if (endpoint) {
