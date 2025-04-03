@@ -2362,6 +2362,9 @@ Important style requirements:
 - Keep the style clean, modern, and therapeutic
 - Ensure the image feels calming and supportive</system>`;
       
+      // Log the pseudonym being used
+      console.log(`Using pseudonym for illustration: ${userPseudonym}`);
+      
       // Send the request to KinOS
       const response = await fetch('/api/kinos/image', {
         method: 'POST',
@@ -2372,7 +2375,7 @@ Important style requirements:
           message: prompt,
           firstName: user.firstName,
           specialist: selectedSpecialist,
-          pseudonym: user.pseudonym
+          pseudonym: userPseudonym // Use the correct pseudonym
         }),
       });
       

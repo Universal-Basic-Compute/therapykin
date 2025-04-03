@@ -165,7 +165,15 @@ export function createKinOsApiUrl(options: {
   const validatedSpecialist = specialist && isValidSpecialist(specialist) ? specialist : 'generalist';
   
   // Create the blueprint name based on specialist
-  const blueprintName = validatedSpecialist === 'generalist' ? 'therapykin' : `therapykin${validatedSpecialist}`;
+  // Special case for herosjourney - use the generalist blueprint
+  let blueprintName;
+  if (validatedSpecialist === 'generalist' || validatedSpecialist === 'herosjourney') {
+    blueprintName = 'therapykin';
+  } else {
+    blueprintName = `therapykin${validatedSpecialist}`;
+  }
+  
+  console.log(`Creating KinOS API URL with blueprint: ${blueprintName} for specialist: ${validatedSpecialist}`);
   
   // Determine the base URL based on environment
   const baseApiUrl = process.env.KINOS_API_URL || 

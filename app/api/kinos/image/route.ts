@@ -10,8 +10,17 @@ export async function POST(request: NextRequest) {
       pseudonym = null
     } = await request.json();
     
+    // Log the full request for debugging
+    console.log('Image generation request:', {
+      message: message.substring(0, 50) + '...',
+      firstName,
+      specialist,
+      pseudonym
+    });
+    
     // Validate specialist value if provided
     if (specialist && !isValidSpecialist(specialist)) {
+      console.error(`Invalid specialist value: ${specialist}`);
       return NextResponse.json(
         { error: 'Invalid specialist value' },
         { status: 400 }
@@ -22,6 +31,7 @@ export async function POST(request: NextRequest) {
     
     // Ensure pseudonym is provided
     if (!pseudonym) {
+      console.error('Missing pseudonym in image generation request');
       return NextResponse.json(
         { error: 'Pseudonym is required' },
         { status: 400 }
@@ -30,6 +40,7 @@ export async function POST(request: NextRequest) {
     
     // Use pseudonym directly as kinId
     const kinId = pseudonym;
+    console.log(`Using kinId for image generation: ${kinId}`);
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({
@@ -40,6 +51,13 @@ export async function POST(request: NextRequest) {
     
     console.log(`Using API endpoint for image generation: ${baseUrl}`);
     
+    // Special handling for herosjourney specialist
+    let effectiveSpecialist = specialist || 'generalist';
+    if (effectiveSpecialist === 'herosjourney') {
+      console.log('Using special handling for herosjourney specialist');
+      effectiveSpecialist = 'generalist'; // Use generalist blueprint for herosjourney
+    }
+    
     // Create the request body
     const requestBody = {
       message,
@@ -47,6 +65,11 @@ export async function POST(request: NextRequest) {
       model: "V_2",
       magic_prompt_option: "AUTO"
     };
+    
+    // Add debug information to the message for troubleshooting
+    if (process.env.NODE_ENV === 'development') {
+      requestBody.message = `${requestBody.message}\n\nDebug Info: kinId=${kinId}, specialist=${specialist || 'generalist'}`;
+    }
     
     // Log the request details (excluding sensitive data)
     console.log('Sending image generation request to:', baseUrl);
