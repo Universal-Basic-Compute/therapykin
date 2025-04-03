@@ -108,14 +108,14 @@ export function createKinId(options: {
 }): string {
   const { pseudonym, email, firstName, kinId } = options;
   
-  // Use pseudonym if provided and not empty
+  // Use pseudonym directly if provided and not empty
   if (pseudonym && pseudonym.trim()) {
-    return sanitizePseudonym(pseudonym);
+    return pseudonym.trim(); // Don't sanitize if it's already a pseudonym
   }
   
   // Use kinId if provided and not empty
   if (kinId && kinId.trim()) {
-    return sanitizePseudonym(kinId);
+    return kinId.trim(); // Don't sanitize if it's already a kinId
   }
   
   // Use email if provided and not empty

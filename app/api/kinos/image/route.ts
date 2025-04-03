@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
     
     console.log(`Requesting image generation for user: ${firstName}${specialist ? `, specialist: ${specialist}` : ''}${pseudonym ? `, pseudonym: ${pseudonym}` : ''}`);
     
-    // Create a consistent KinId
-    const kinId = createKinId({ pseudonym, firstName });
+    // Use pseudonym directly as kinId if available, otherwise create one
+    const kinId = pseudonym || createKinId({ firstName });
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({

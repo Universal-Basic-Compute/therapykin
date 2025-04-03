@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Create a consistent KinId
-    const kinId = createKinId({ pseudonym, firstName });
+    // Use pseudonym directly as kinId if available, otherwise create one
+    const kinId = pseudonym || createKinId({ firstName });
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({

@@ -26,8 +26,8 @@ export async function POST(request: NextRequest) {
     
     console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
-    // Create a consistent KinId
-    const kinId = createKinId({ pseudonym, email, firstName, lastName });
+    // Use pseudonym directly as kinId if available, otherwise create one
+    const kinId = pseudonym || createKinId({ email, firstName, lastName });
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({
