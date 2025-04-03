@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
     const firstName = searchParams.get('firstName');
     const lastName = searchParams.get('lastName');
     const specialist = searchParams.get('specialist') || 'generalist'; // Get specialist parameter with default
+    const pseudonym = searchParams.get('pseudonym'); // Get pseudonym parameter
     
     if (!messageId || !firstName || !lastName) {
       return NextResponse.json(
@@ -24,9 +25,8 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const identifier = `${firstName}${lastName}`;
-    const pseudonym = generatePseudonymFromEmail(identifier);
-    const projectId = pseudonym.name.replace(/\s+/g, ''); // Remove spaces from pseudonym
+    // Use the provided pseudonym or generate one if not provided
+    const projectId = pseudonym || `${firstName}${lastName}`;
     
     // Determine the base URL based on environment and specialist
     let baseUrl;

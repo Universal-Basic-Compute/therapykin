@@ -12,7 +12,8 @@ export async function POST(request: NextRequest) {
       images = [], 
       mode = null, 
       specialist = null,
-      screenshot = null // Add screenshot parameter
+      screenshot = null, // Add screenshot parameter
+      pseudonym = null // Add pseudonym parameter
     } = await request.json();
     
     // Validate specialist value if provided
@@ -25,10 +26,8 @@ export async function POST(request: NextRequest) {
     
     console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
-    // Generate a pseudonym from email or firstName+lastName
-    const identifier = email || `${firstName}${lastName}`;
-    const pseudonym = generatePseudonymFromEmail(identifier);
-    const projectId = pseudonym.name.replace(/\s+/g, ''); // Remove spaces from pseudonym
+    // Use the provided pseudonym or generate one if not provided
+    const projectId = pseudonym || (email || `${firstName}${lastName}`);
     
     // Determine the base URL based on environment and specialist
     let baseUrl;

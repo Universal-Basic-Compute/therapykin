@@ -4,7 +4,7 @@ import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, sessionLength, specialist, kinId } = await request.json();
+    const { email, sessionLength, specialist, kinId, pseudonym = null } = await request.json();
     
     if (!kinId) {
       return NextResponse.json(
@@ -23,9 +23,8 @@ export async function POST(request: NextRequest) {
     
     console.log(`Creating demo session for kin ID ${kinId} with specialist ${specialist || 'welcome'}`);
     
-    // Generate a pseudonym from kinId
-    const pseudonym = generatePseudonymFromEmail(kinId);
-    const projectId = pseudonym.name.replace(/\s+/g, '');
+    // Use the provided pseudonym or use kinId if not provided
+    const projectId = pseudonym || kinId;
     
     console.log(`Using pseudonym: ${projectId} for demo session`);
     

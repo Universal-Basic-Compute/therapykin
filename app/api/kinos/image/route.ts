@@ -7,7 +7,8 @@ export async function POST(request: NextRequest) {
       message, 
       firstName, 
       lastName,
-      specialist = null
+      specialist = null,
+      pseudonym = null // Add pseudonym parameter
     } = await request.json();
     
     // Validate specialist value if provided
@@ -21,10 +22,8 @@ export async function POST(request: NextRequest) {
     console.log(`Requesting image generation for user: ${firstName} ${lastName}${specialist ? `, specialist: ${specialist}` : ''}`);
     console.log(`Using API key: ${process.env.KINOS_API_KEY ? 'Key is set (not showing for security)' : 'Key is NOT set!'}`);
     
-    // Generate a pseudonym from firstName+lastName
-    const identifier = `${firstName}${lastName}`;
-    const pseudonym = generatePseudonymFromEmail(identifier);
-    const projectId = pseudonym.name.replace(/\s+/g, ''); // Remove spaces from pseudonym
+    // Use the provided pseudonym or generate one if not provided
+    const projectId = pseudonym || `${firstName}${lastName}`;
     
     // Determine the base URL based on environment and specialist
     let baseUrl;
