@@ -26,7 +26,7 @@ function ChatSessionWithSearchParams() {
   const [voiceMode, setVoiceMode] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlayingId, setCurrentPlayingId] = useState<string | null>(null);
-  const [selectedVoice, setSelectedVoice] = useState('UgBBYS2sOqTuMpoF3BR0'); // Default to Mark - Natural
+  const [selectedVoice, setSelectedVoice] = useState('L0Dsvb3SLTyegXwtm47J'); // Default to Archer - Calm British
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
