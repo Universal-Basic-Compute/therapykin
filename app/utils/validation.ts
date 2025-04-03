@@ -35,6 +35,12 @@ export function isValidSpecialist(specialist: string, includeWelcome = false): b
   // For example, you might want to exclude certain words or patterns
   const excludedSpecialists = ['admin', 'test', 'debug', 'undefined', 'null'];
   
+  // Log the validation process for debugging
+  console.log(`Validating specialist: ${normalizedSpecialist}`);
+  console.log(`Pattern test: ${specialistPattern.test(normalizedSpecialist)}`);
+  console.log(`Not excluded: ${!excludedSpecialists.includes(normalizedSpecialist)}`);
+  console.log(`Length check: ${normalizedSpecialist.length >= 3 && normalizedSpecialist.length <= 30}`);
+  
   return (
     specialistPattern.test(normalizedSpecialist) && 
     !excludedSpecialists.includes(normalizedSpecialist) &&
