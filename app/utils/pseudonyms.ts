@@ -10,7 +10,17 @@ const adjectives = [
   'Lively', 'Loving', 'Magnificent', 'Majestic', 'Motivated', 'Noble', 'Nurturing',
   'Passionate', 'Persistent', 'Radiant', 'Respectful', 'Serene', 'Spirited', 'Steadfast',
   'Tenacious', 'Thankful', 'Vibrant', 'Vigilant', 'Visionary', 'Vivacious', 'Whimsical',
-  'Witty', 'Wonderful', 'Zestful'
+  'Witty', 'Wonderful', 'Zestful',
+  // Additional adjectives to expand the list
+  'Adaptable', 'Affectionate', 'Agreeable', 'Amiable', 'Amused', 'Appreciative', 'Attentive', 'Authentic',
+  'Benevolent', 'Blissful', 'Bold', 'Brilliant', 'Candid', 'Capable', 'Captivating', 'Centered',
+  'Charismatic', 'Charming', 'Compassionate', 'Confident', 'Considerate', 'Courageous', 'Courteous', 'Dazzling',
+  'Dedicated', 'Dependable', 'Diplomatic', 'Dynamic', 'Easygoing', 'Effervescent', 'Efficient', 'Elated',
+  'Eloquent', 'Empathetic', 'Enchanting', 'Encouraging', 'Endearing', 'Engaged', 'Enlightened', 'Exuberant',
+  'Fascinating', 'Flourishing', 'Focused', 'Forgiving', 'Fortuitous', 'Friendly', 'Fulfilled', 'Genuine',
+  'Glowing', 'Good-natured', 'Grounded', 'Hardworking', 'Healthy', 'Heartfelt', 'Humorous', 'Idealistic',
+  'Illuminated', 'Innovative', 'Insightful', 'Intelligent', 'Jubilant', 'Keen', 'Lighthearted', 'Lucid',
+  'Luminous', 'Marvelous', 'Meditative', 'Mellow', 'Methodical', 'Meticulous', 'Moderate', 'Modest'
 ];
 
 const animals = [
@@ -23,7 +33,17 @@ const animals = [
   'Vulture', 'Walrus', 'Xerus', 'Yak', 'Antelope', 'Bison', 'Chameleon', 'Dingo',
   'Ermine', 'Flamingo', 'Gorilla', 'Hippo', 'Iguana', 'Jellyfish', 'Kingfisher', 'Lobster',
   'Manatee', 'Nightingale', 'Ocelot', 'Peacock', 'Quail', 'Reindeer', 'Starfish', 'Tapir',
-  'Uakari', 'Viper', 'Wombat', 'Xerus', 'Yellowjacket', 'Zebu'
+  'Uakari', 'Viper', 'Wombat', 'Xerus', 'Yellowjacket', 'Zebu',
+  // Additional animals to expand the list
+  'Aardvark', 'Albatross', 'Alligator', 'Armadillo', 'Axolotl', 'Baboon', 'Barracuda', 'Beaver',
+  'Beetle', 'Beluga', 'Bumblebee', 'Camel', 'Capybara', 'Cardinal', 'Caribou', 'Cassowary',
+  'Caterpillar', 'Centipede', 'Chinchilla', 'Chipmunk', 'Cicada', 'Cobra', 'Cockatoo', 'Condor',
+  'Cormorant', 'Coyote', 'Cricket', 'Crocodile', 'Crow', 'Cuttlefish', 'Dodo', 'Dove',
+  'Dragon', 'Duck', 'Echidna', 'Eel', 'Ferret', 'Finch', 'Firefly', 'Flounder',
+  'Frog', 'Gerbil', 'Gibbon', 'Gopher', 'Grasshopper', 'Griffin', 'Hamster', 'Hare',
+  'Heron', 'Herring', 'Hornet', 'Horse', 'Hummingbird', 'Hyena', 'Impala', 'Jackal',
+  'Jay', 'Katydid', 'Komodo', 'Ladybug', 'Lamprey', 'Lark', 'Llama', 'Loris',
+  'Magpie', 'Mallard', 'Mammoth', 'Mantis', 'Marlin', 'Marmot', 'Mink', 'Mockingbird'
 ];
 
 // Define a list of readable colors for the names
@@ -88,8 +108,11 @@ export function generatePseudonymFromEmail(email: string): { name: string; color
   const animalIndex = Math.abs(hash >> 8) % animals.length; // Shift the bits to get a different index
   const colorIndex = Math.abs(hash >> 16) % nameColors.length; // Shift more bits for color
   
+  // Generate a 2-digit number from the hash for additional uniqueness
+  const number = Math.abs(hash >> 24) % 100;
+  
   return {
-    name: `${adjectives[adjectiveIndex]} ${animals[animalIndex]}`,
+    name: `${adjectives[adjectiveIndex]} ${animals[animalIndex]} ${number}`,
     color: nameColors[colorIndex]
   };
 }
