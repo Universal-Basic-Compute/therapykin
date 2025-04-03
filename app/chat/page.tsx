@@ -1950,7 +1950,7 @@ Important style requirements:
           message: prompt,
           firstName: user.firstName,
           specialist: selectedSpecialist,
-          pseudonym: user.pseudonym
+          pseudonym: userPseudonym
         }),
       });
       
@@ -2308,13 +2308,50 @@ Important style requirements:
   // Function to generate an illustration for a message
   const generateIllustrationForMessage = async (messageContent: string, messageId: string) => {
     try {
-      // Only allow this for assistant messages
-      if (!user?.pseudonym) {
-        console.error('Cannot generate illustration: missing user pseudonym');
+      // Make sure we have the user object
+      if (!user) {
+        console.error('Cannot generate illustration: user is not authenticated');
         return;
       }
       
-      console.log(`Requesting illustration for message: ${messageId}`);
+      // Check if pseudonym exists, if not try to get it or generate it
+      let userPseudonym = user.pseudonym;
+      if (!userPseudonym) {
+        console.log('Pseudonym missing for user:', user.email);
+        
+        // Generate a pseudonym from the email
+        const generatedPseudonym = generatePseudonymFromEmail(user.email || '');
+        userPseudonym = generatedPseudonym.name;
+        console.log(`Generated pseudonym for user: ${userPseudonym}`);
+        
+        // Save this pseudonym to the user's record
+        try {
+          const response = await fetch('/api/users/update-pseudonym', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              pseudonym: userPseudonym
+            }),
+          });
+          
+          if (response.ok) {
+            console.log('Saved generated pseudonym to user record');
+          } else {
+            console.error('Failed to save generated pseudonym');
+          }
+        } catch (error) {
+          console.error('Error saving generated pseudonym:', error);
+        }
+      }
+      
+      if (!userPseudonym) {
+        console.error('Cannot generate illustration: unable to get or generate pseudonym');
+        return;
+      }
+      
+      console.log(`Requesting illustration for message: ${messageId} with pseudonym: ${userPseudonym}`);
       
       // Create a prompt for the image based on the message content
       const prompt = `<system>Please generate an illustration based on this text: ${messageContent}
