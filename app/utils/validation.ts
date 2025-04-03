@@ -2,28 +2,32 @@
  * Validation utilities for API routes
  */
 
-// Valid specialist types
-export const VALID_SPECIALISTS = [
-  'generalist',
-  'crypto',
-  'athletes',
-  'executives',
-  'herosjourney',
-  'sexologist',
-  'welcome'
-];
-
 /**
- * Validates if a specialist value is valid
+ * Validates if a specialist value is valid using a pattern-based approach
  * @param specialist - The specialist value to validate
  * @param includeWelcome - Whether to include 'welcome' as a valid specialist
  * @returns Boolean indicating if the specialist is valid
  */
 export function isValidSpecialist(specialist: string, includeWelcome = false): boolean {
-  if (includeWelcome) {
-    return VALID_SPECIALISTS.includes(specialist);
-  }
-  return VALID_SPECIALISTS.filter(s => s !== 'welcome').includes(specialist);
+  // Special cases that should always be checked explicitly
+  if (specialist === 'generalist') return true;
+  if (includeWelcome && specialist === 'welcome') return true;
+  
+  // For all other specialists, use a naming convention check
+  // This assumes all valid specialists follow a certain pattern:
+  // lowercase, alphanumeric with possible hyphens
+  const specialistPattern = /^[a-z0-9-]+$/;
+  
+  // Additional validation logic if needed
+  // For example, you might want to exclude certain words or patterns
+  const excludedSpecialists = ['admin', 'test', 'debug'];
+  
+  return (
+    specialistPattern.test(specialist) && 
+    !excludedSpecialists.includes(specialist) &&
+    specialist.length >= 3 && 
+    specialist.length <= 30
+  );
 }
 
 /**
