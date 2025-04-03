@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserByEmail, verifyPassword, generateToken, setAuthCookie } from '@/app/utils/auth';
+import { createErrorResponse, logError } from '@/app/utils/error-handling';
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,10 +54,6 @@ export async function POST(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Login error:', error);
-    return NextResponse.json(
-      { error: 'Login failed' },
-      { status: 500 }
-    );
+    return createErrorResponse(500, 'Login failed', error);
   }
 }

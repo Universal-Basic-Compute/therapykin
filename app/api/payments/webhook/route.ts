@@ -25,15 +25,19 @@ export async function POST(request: NextRequest) {
     // Verify the webhook signature
     let event;
     try {
+      if (!process.env.STRIPE_WEBHOOK_SECRET) {
+        throw new Error('STRIPE_WEBHOOK_SECRET is not defined');
+      }
+      
       event = stripe.webhooks.constructEvent(
         body,
         signature,
-        process.env.STRIPE_WEBHOOK_SECRET!
+        process.env.STRIPE_WEBHOOK_SECRET
       );
     } catch (err: any) {
       console.error(`Webhook signature verification failed: ${err.message}`);
       return NextResponse.json(
-        { error: `Webhook signature verification failed: ${err.message}` },
+        { error: `Webhook signature verification failed` },
         { status: 400 }
       );
     }

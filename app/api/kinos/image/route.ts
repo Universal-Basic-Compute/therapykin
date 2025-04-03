@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
+import { isValidSpecialist, createProjectId, createKinOsApiUrl } from '@/app/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,11 +8,11 @@ export async function POST(request: NextRequest) {
       firstName, 
       lastName,
       specialist = null,
-      pseudonym = null // Add pseudonym parameter
+      pseudonym = null
     } = await request.json();
     
     // Validate specialist value if provided
-    if (specialist && !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+    if (specialist && !isValidSpecialist(specialist)) {
       return NextResponse.json(
         { error: 'Invalid specialist value' },
         { status: 400 }
@@ -20,23 +20,16 @@ export async function POST(request: NextRequest) {
     }
     
     console.log(`Requesting image generation for user: ${firstName} ${lastName}${specialist ? `, specialist: ${specialist}` : ''}`);
-    console.log(`Using API key: ${process.env.KINOS_API_KEY ? 'Key is set (not showing for security)' : 'Key is NOT set!'}`);
     
-    // Use the provided pseudonym or generate one if not provided
-    const projectId = pseudonym || `${firstName}${lastName}`;
+    // Create a consistent project ID
+    const projectId = createProjectId({ pseudonym, firstName, lastName });
     
-    // Determine the base URL based on environment and specialist
-    let baseUrl;
-    
-    // Create the blueprint name based on specialist
-    const blueprintName = specialist === 'generalist' ? 'therapykin' : `therapykin${specialist}`;
-    
-    // Use the new v2 API path structure
-    baseUrl = process.env.KINOS_API_URL 
-      ? `${process.env.KINOS_API_URL}/v2/blueprints/${blueprintName}/kins/${projectId}/image`
-      : process.env.NODE_ENV === 'development'
-        ? `http://localhost:5000/v2/blueprints/${blueprintName}/kins/${projectId}/image`
-        : `https://api.kinos-engine.ai/v2/blueprints/${blueprintName}/kins/${projectId}/image`;
+    // Create the KinOS API URL
+    const baseUrl = createKinOsApiUrl({
+      endpoint: 'image',
+      specialist: specialist || 'generalist',
+      projectId
+    });
     
     console.log(`Using API endpoint for image generation: ${baseUrl}`);
     

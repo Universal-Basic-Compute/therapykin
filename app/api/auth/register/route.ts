@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUser, generateToken, setAuthCookie } from '@/app/utils/auth';
+import { isValidSpecialist } from '@/app/utils/validation';
+import { createErrorResponse, logError } from '@/app/utils/error-handling';
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,7 +18,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate specialist if provided
-    if (specialist && !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+    if (specialist && !isValidSpecialist(specialist)) {
       return NextResponse.json(
         { error: 'Invalid specialist value' },
         { status: 400 }
@@ -54,8 +56,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
-    console.error('Registration error:', error);
-    
+    // Handle specific known errors
     if (error.message === 'User with this email already exists') {
       return NextResponse.json(
         { error: 'User with this email already exists' },
@@ -63,9 +64,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    return NextResponse.json(
-      { error: 'Registration failed' },
-      { status: 500 }
-    );
+    // Use our error handling utility for unexpected errors
+    return createErrorResponse(500, 'Registration failed', error);
   }
 }

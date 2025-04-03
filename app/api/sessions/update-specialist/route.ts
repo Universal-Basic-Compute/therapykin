@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '../../../utils/auth';
 import { sessionsTable } from '../../../utils/airtable';
+import { isValidSpecialist } from '@/app/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,8 +26,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate specialist value
-    const validSpecialists = ['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'];
-    if (!validSpecialists.includes(specialist)) {
+    if (!isValidSpecialist(specialist)) {
       return NextResponse.json(
         { error: 'Invalid specialist value' },
         { status: 400 }

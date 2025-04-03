@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { usersTable } from '@/app/utils/airtable';
 import { getCurrentUser } from '@/app/utils/auth';
+import { isValidSpecialist } from '@/app/utils/validation';
 
 export async function GET(request: NextRequest) {
   try {
@@ -84,8 +85,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    if (preferredSpecialist !== undefined && 
-        !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(preferredSpecialist)) {
+    if (preferredSpecialist !== undefined && !isValidSpecialist(preferredSpecialist)) {
       return NextResponse.json(
         { error: 'Valid preferredSpecialist is required' },
         { status: 400 }

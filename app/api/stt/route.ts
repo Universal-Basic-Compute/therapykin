@@ -25,27 +25,27 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Log more details about the file for debugging
-    console.log(`STT request: Processing audio file of type ${file.type}, size ${file.size} bytes`);
+    // Log minimal information in production
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`STT request: Processing audio file of type ${file.type}, size ${file.size} bytes`);
+    } else {
+      console.log(`STT request: Processing ${file.size} bytes audio file`);
+    }
     
     // If file has no type, try to infer it from the filename
     let fileToSend: File | Blob = file;
-    if (file instanceof File) {
+    if (file instanceof File && !file.type) {
       const fileName = file.name || '';
-      console.log(`File name: ${fileName}`);
+      const fileExt = fileName.split('.').pop()?.toLowerCase();
       
-      if (!file.type) {
-        const fileExt = fileName.split('.').pop()?.toLowerCase();
-        if (fileExt) {
-          console.log(`File has no MIME type, inferring from extension: .${fileExt}`);
-          // Create a new blob with the correct type
-          if (fileExt === 'webm') {
-            fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/webm' });
-          } else if (fileExt === 'mp4' || fileExt === 'm4a') {
-            fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/mp4' });
-          } else if (fileExt === 'wav') {
-            fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/wav' });
-          }
+      if (fileExt) {
+        // Create a new blob with the correct type
+        if (fileExt === 'webm') {
+          fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/webm' });
+        } else if (fileExt === 'mp4' || fileExt === 'm4a') {
+          fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/mp4' });
+        } else if (fileExt === 'wav') {
+          fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/wav' });
         }
       }
     }
@@ -55,16 +55,13 @@ export async function POST(request: NextRequest) {
     const language = formData.get('language') || 'en';
     const prompt = formData.get('prompt') || '';
     const responseFormat = formData.get('response_format') || 'json';
-    console.log(`STT request params: model=${model}, language=${language}`);
     
     // Determine the base URL based on environment
     const baseUrl = process.env.KINOS_STT_API_URL || (
       process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000/v2/stt'  // Use local server in development with v2 path
-        : 'https://api.kinos-engine.ai/v2/stt'  // Use KinOS API in production with v2 path
+        ? 'http://localhost:5000/v2/stt'
+        : 'https://api.kinos-engine.ai/v2/stt'
     );
-    
-    console.log(`STT API URL: ${baseUrl}`);
     
     // Create a new FormData object to send to the KinOS API
     const kinosFormData = new FormData();
@@ -90,22 +87,20 @@ export async function POST(request: NextRequest) {
       }
     });
     
-    // Log response status and headers
+    // Log minimal response info
     console.log(`STT API response status: ${response.status}`);
-    console.log('STT API response headers:', Object.fromEntries(response.headers.entries()));
     
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`STT API error (${response.status}): ${errorText}`);
       return NextResponse.json(
-        { error: `STT API returned status ${response.status}: ${errorText}` },
+        { error: 'Failed to transcribe audio' },
         { status: response.status }
       );
     }
     
     // Get the transcription result
     const data = await response.json();
-    console.log('STT API response:', data);
     
     // Return the transcription
     return NextResponse.json({

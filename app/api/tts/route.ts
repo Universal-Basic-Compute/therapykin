@@ -13,25 +13,20 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log(`TTS request: Converting text to speech (${text.length} chars)`);
-    console.log(`TTS request params: voiceId=${voiceId}, model=${model}`);
+    // Log minimal information in production, more in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`TTS request: Converting text to speech (${text.length} chars)`);
+      console.log(`TTS request params: voiceId=${voiceId}, model=${model}`);
+    } else {
+      console.log(`TTS request: ${text.length} chars, voice=${voiceId}`);
+    }
     
     // Determine the base URL based on environment
     const baseUrl = process.env.KINOS_TTS_API_URL || (
       process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000/v2/tts'  // Use local server in development with v2 path
-        : 'https://api.kinos-engine.ai/v2/tts'  // Use KinOS API in production with v2 path
+        ? 'http://localhost:5000/v2/tts'
+        : 'https://api.kinos-engine.ai/v2/tts'
     );
-    
-    console.log(`TTS API URL: ${baseUrl}`);
-    
-    // Log the request we're about to make
-    console.log(`Received voiceId parameter: ${voiceId}`);
-    console.log('TTS API request body:', JSON.stringify({
-      text: text.substring(0, 50) + (text.length > 50 ? '...' : ''),
-      voice_id: voiceId,
-      model
-    }));
     
     // Call TTS API
     const response = await fetch(baseUrl, {
@@ -49,29 +44,27 @@ export async function POST(request: NextRequest) {
       })
     });
     
-    // Log response status and headers
+    // Log minimal response info
     console.log(`TTS API response status: ${response.status}`);
-    console.log('TTS API response headers:', Object.fromEntries(response.headers.entries()));
     
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`TTS API error (${response.status}): ${errorText}`);
       return NextResponse.json(
-        { error: `TTS API returned status ${response.status}: ${errorText}` },
+        { error: `Failed to convert text to speech` },
         { status: response.status }
       );
     }
     
     // Check content type to ensure we're getting audio
     const contentType = response.headers.get('content-type');
-    console.log(`TTS API response content type: ${contentType}`);
     
     if (contentType && contentType.includes('application/json')) {
       // If we got JSON instead of audio, it's likely an error
       const jsonData = await response.json();
-      console.error('TTS API returned JSON instead of audio:', jsonData);
+      console.error('TTS API returned JSON instead of audio');
       return NextResponse.json(
-        { error: 'TTS API returned JSON instead of audio', details: jsonData },
+        { error: 'Failed to convert text to speech' },
         { status: 500 }
       );
     }
@@ -79,29 +72,13 @@ export async function POST(request: NextRequest) {
     // Get the audio data
     const audioData = await response.arrayBuffer();
     
-    // Log audio data details
-    console.log(`TTS API response audio data size: ${audioData.byteLength} bytes`);
-    
-    // Log the first few bytes of the audio data (as hex) to check format
-    const dataView = new DataView(audioData);
-    let hexBytes = [];
-    for (let i = 0; i < Math.min(audioData.byteLength, 32); i++) {
-      hexBytes.push(dataView.getUint8(i).toString(16).padStart(2, '0'));
-    }
-    console.log(`TTS API response first ${hexBytes.length} bytes: ${hexBytes.join(' ')}`);
-    
     // Verify we have actual data
     if (audioData.byteLength === 0) {
       console.error('TTS API returned empty audio data');
       return NextResponse.json(
-        { error: 'TTS API returned empty audio data' },
+        { error: 'Failed to convert text to speech' },
         { status: 500 }
       );
-    }
-    
-    if (audioData.byteLength < 100) {
-      console.error(`TTS API returned very small audio data: ${audioData.byteLength} bytes`);
-      // Continue anyway, but log the warning
     }
     
     // Return the audio stream with explicit content type

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
+import { isValidSpecialist, createProjectId, createKinOsApiUrl } from '@/app/utils/validation';
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,8 +7,8 @@ export async function GET(request: NextRequest) {
     const messageId = searchParams.get('messageId');
     const firstName = searchParams.get('firstName');
     const lastName = searchParams.get('lastName');
-    const specialist = searchParams.get('specialist') || 'generalist'; // Get specialist parameter with default
-    const pseudonym = searchParams.get('pseudonym'); // Get pseudonym parameter
+    const specialist = searchParams.get('specialist') || 'generalist';
+    const pseudonym = searchParams.get('pseudonym');
     
     if (!messageId || !firstName || !lastName) {
       return NextResponse.json(
@@ -18,28 +18,23 @@ export async function GET(request: NextRequest) {
     }
     
     // Validate specialist value
-    if (!['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+    if (!isValidSpecialist(specialist)) {
       return NextResponse.json(
         { error: 'Invalid specialist value' },
         { status: 400 }
       );
     }
     
-    // Use the provided pseudonym or generate one if not provided
-    const projectId = pseudonym || `${firstName}${lastName}`;
+    // Create a consistent project ID
+    const projectId = createProjectId({ pseudonym, firstName, lastName });
     
-    // Determine the base URL based on environment and specialist
-    let baseUrl;
-    
-    // Create the blueprint name based on specialist
-    const blueprintName = specialist === 'generalist' ? 'therapykin' : `therapykin${specialist}`;
-    
-    // Use the new v2 API path structure
-    baseUrl = process.env.KINOS_API_URL 
-      ? `${process.env.KINOS_API_URL}/v2/blueprints/${blueprintName}/kins/${projectId}/messages/${messageId}`
-      : process.env.NODE_ENV === 'development'
-        ? `http://localhost:5000/v2/blueprints/${blueprintName}/kins/${projectId}/messages/${messageId}`
-        : `https://api.kinos-engine.ai/v2/blueprints/${blueprintName}/kins/${projectId}/messages/${messageId}`;
+    // Create the KinOS API URL
+    const baseUrl = createKinOsApiUrl({
+      endpoint: 'messages',
+      specialist,
+      projectId,
+      messageId
+    });
     
     // Call the appropriate API to check the status of the message
     const response = await fetch(baseUrl, {

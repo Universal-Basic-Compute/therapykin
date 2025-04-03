@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSession } from '../../../utils/airtable';
-import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
+import { isValidSpecialist, createProjectId } from '@/app/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate specialist if provided
-    if (specialist && !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist', 'welcome'].includes(specialist)) {
+    if (specialist && !isValidSpecialist(specialist, true)) {
       return NextResponse.json(
         { error: 'Invalid specialist value' },
         { status: 400 }
@@ -23,8 +23,8 @@ export async function POST(request: NextRequest) {
     
     console.log(`Creating demo session for kin ID ${kinId} with specialist ${specialist || 'welcome'}`);
     
-    // Use the provided pseudonym or use kinId if not provided
-    const projectId = pseudonym || kinId;
+    // Create a consistent project ID
+    const projectId = createProjectId({ pseudonym, kinId });
     
     console.log(`Using pseudonym: ${projectId} for demo session`);
     
