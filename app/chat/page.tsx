@@ -434,11 +434,35 @@ function ChatSessionWithSearchParams() {
       
       // Send the "New session started" message to the API
       const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
-      // Use the user's pseudonym
+      // Use the user's pseudonym or generate one if missing
       let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
       if (!userPseudonym) {
-        console.error('Missing pseudonym for user:', user.email);
-        return;
+        console.log('Pseudonym missing for user:', user.email);
+        // Generate a pseudonym from the email
+        const generatedPseudonym = generatePseudonymFromEmail(user.email);
+        userPseudonym = generatedPseudonym.name;
+        console.log(`Generated pseudonym for user: ${userPseudonym}`);
+        
+        // Save this pseudonym to the user's record
+        try {
+          const response = await fetch('/api/users/update-pseudonym', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              pseudonym: userPseudonym
+            }),
+          });
+          
+          if (response.ok) {
+            console.log('Saved generated pseudonym to user record');
+          } else {
+            console.error('Failed to save generated pseudonym');
+          }
+        } catch (error) {
+          console.error('Error saving generated pseudonym:', error);
+        }
       }
       console.log(`Using pseudonym for welcome message: ${userPseudonym}`);
           
@@ -513,12 +537,36 @@ function ChatSessionWithSearchParams() {
         if (minutesActive > 0 && !isSendingMessage) {
           console.log('Fetching previous messages for existing session...');
           
-          // Use the user's pseudonym
+          // Use the user's pseudonym or generate one if missing
           let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
           if (!userPseudonym) {
-            console.error('Missing pseudonym for user:', user.email);
+            console.log('Pseudonym missing for user:', user.email);
             console.log('User object structure:', JSON.stringify(user, null, 2));
-            return; // Exit early if pseudonym is missing
+            // Generate a pseudonym from the email
+            const generatedPseudonym = generatePseudonymFromEmail(user.email);
+            userPseudonym = generatedPseudonym.name;
+            console.log(`Generated pseudonym for user: ${userPseudonym}`);
+            
+            // Save this pseudonym to the user's record
+            try {
+              const response = await fetch('/api/users/update-pseudonym', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  pseudonym: userPseudonym
+                }),
+              });
+              
+              if (response.ok) {
+                console.log('Saved generated pseudonym to user record');
+              } else {
+                console.error('Failed to save generated pseudonym');
+              }
+            } catch (error) {
+              console.error('Error saving generated pseudonym:', error);
+            }
           }
           console.log(`Using pseudonym for fetching messages: ${userPseudonym}`);
           
@@ -599,11 +647,14 @@ function ChatSessionWithSearchParams() {
         console.log(`Sending halfway message at ${sessionDuration.toFixed(1)} minutes`);
           
         // Send the halfway message
-        // Use the user's pseudonym
+        // Use the user's pseudonym or generate one if missing
         let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
         if (!userPseudonym) {
-          console.error('Missing pseudonym for user:', user.email);
-          return;
+          console.log('Pseudonym missing for user:', user.email);
+          // Generate a pseudonym from the email
+          const generatedPseudonym = generatePseudonymFromEmail(user.email);
+          userPseudonym = generatedPseudonym.name;
+          console.log(`Generated pseudonym for user: ${userPseudonym}`);
         }
         console.log(`Using pseudonym for halfway message: ${userPseudonym}`);
         
@@ -653,11 +704,14 @@ function ChatSessionWithSearchParams() {
         console.log(`Sending closing message at ${sessionDuration.toFixed(1)} minutes`);
           
         // Send the closing message
-        // Use the user's pseudonym
+        // Use the user's pseudonym or generate one if missing
         let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
         if (!userPseudonym) {
-          console.error('Missing pseudonym for user:', user.email);
-          return;
+          console.log('Pseudonym missing for user:', user.email);
+          // Generate a pseudonym from the email
+          const generatedPseudonym = generatePseudonymFromEmail(user.email);
+          userPseudonym = generatedPseudonym.name;
+          console.log(`Generated pseudonym for user: ${userPseudonym}`);
         }
         console.log(`Using pseudonym for closing message: ${userPseudonym}`);
         
@@ -809,11 +863,14 @@ function ChatSessionWithSearchParams() {
         }
         
         // Send the silence message
-        // Use the user's pseudonym
+        // Use the user's pseudonym or generate one if missing
         let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
         if (!userPseudonym) {
-          console.error('Missing pseudonym for user:', user.email);
-          return;
+          console.log('Pseudonym missing for user:', user.email);
+          // Generate a pseudonym from the email
+          const generatedPseudonym = generatePseudonymFromEmail(user.email);
+          userPseudonym = generatedPseudonym.name;
+          console.log(`Generated pseudonym for user: ${userPseudonym}`);
         }
         console.log(`Using pseudonym for silence notification: ${userPseudonym}`);
         
@@ -1317,11 +1374,35 @@ function ChatSessionWithSearchParams() {
         ]);
         
         try {
-          // Use the user's pseudonym
+          // Use the user's pseudonym or generate one if missing
           let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
           if (!userPseudonym) {
-            console.error('Missing pseudonym for user:', user?.email);
-            return;
+            console.log('Pseudonym missing for user:', user?.email);
+            // Generate a pseudonym from the email
+            const generatedPseudonym = generatePseudonymFromEmail(user?.email);
+            userPseudonym = generatedPseudonym.name;
+            console.log(`Generated pseudonym for user: ${userPseudonym}`);
+            
+            // Save this pseudonym to the user's record
+            try {
+              const response = await fetch('/api/users/update-pseudonym', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  pseudonym: userPseudonym
+                }),
+              });
+              
+              if (response.ok) {
+                console.log('Saved generated pseudonym to user record');
+              } else {
+                console.error('Failed to save generated pseudonym');
+              }
+            } catch (error) {
+              console.error('Error saving generated pseudonym:', error);
+            }
           }
           console.log(`Using pseudonym for voice message: ${userPseudonym}`);
           
@@ -1736,11 +1817,35 @@ function ChatSessionWithSearchParams() {
           
           // Send the correct system message format
           const welcomeMessage = `<system>New ${sessionLength} minute session starting with ${user?.firstName || 'Guest'}</system>`;
-          // Use the user's pseudonym
+          // Use the user's pseudonym or generate one if missing
           let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
           if (!userPseudonym) {
-            console.error('Missing pseudonym for user:', user?.email);
-            return;
+            console.log('Pseudonym missing for user:', user?.email);
+            // Generate a pseudonym from the email
+            const generatedPseudonym = generatePseudonymFromEmail(user?.email);
+            userPseudonym = generatedPseudonym.name;
+            console.log(`Generated pseudonym for user: ${userPseudonym}`);
+            
+            // Save this pseudonym to the user's record
+            try {
+              const response = await fetch('/api/users/update-pseudonym', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  pseudonym: userPseudonym
+                }),
+              });
+              
+              if (response.ok) {
+                console.log('Saved generated pseudonym to user record');
+              } else {
+                console.error('Failed to save generated pseudonym');
+              }
+            } catch (error) {
+              console.error('Error saving generated pseudonym:', error);
+            }
           }
           console.log(`Using pseudonym for specialist change: ${userPseudonym}`);
           
@@ -2053,11 +2158,35 @@ Important style requirements:
     try {
       console.log(`Sending message to KinOS${screenshot ? ' with screenshot' : ''}`);
       
-      // Use the user's pseudonym
+      // Use the user's pseudonym or generate one if missing
       let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
       if (!userPseudonym) {
-        console.error('Missing pseudonym for user:', user?.email);
-        return;
+        console.log('Pseudonym missing for user:', user?.email);
+        // Generate a pseudonym from the email
+        const generatedPseudonym = generatePseudonymFromEmail(user?.email);
+        userPseudonym = generatedPseudonym.name;
+        console.log(`Generated pseudonym for user: ${userPseudonym}`);
+        
+        // Save this pseudonym to the user's record
+        try {
+          const response = await fetch('/api/users/update-pseudonym', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              pseudonym: userPseudonym
+            }),
+          });
+          
+          if (response.ok) {
+            console.log('Saved generated pseudonym to user record');
+          } else {
+            console.error('Failed to save generated pseudonym');
+          }
+        } catch (error) {
+          console.error('Error saving generated pseudonym:', error);
+        }
       }
       console.log(`Using pseudonym for message: ${userPseudonym}`);
       
