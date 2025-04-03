@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isValidSpecialist, createProjectId, createKinOsApiUrl } from '@/app/utils/validation';
+import { isValidSpecialist, createKinId, createKinOsApiUrl } from '@/app/utils/validation';
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const firstName = searchParams.get('firstName');
-    const lastName = searchParams.get('lastName');
     const since = searchParams.get('since'); // Optional timestamp
     const specialist = searchParams.get('specialist') || 'generalist';
     const pseudonym = searchParams.get('pseudonym');
     
-    if (!firstName || !lastName) {
+    if (!firstName) {
       return NextResponse.json(
-        { error: 'Missing required parameters: firstName, lastName' },
+        { error: 'Missing required parameter: firstName' },
         { status: 400 }
       );
     }
@@ -25,8 +24,8 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Create a consistent KinId
-    const kinId = createKinId({ pseudonym, firstName, lastName });
+    // Create a consistent KinId using pseudonym and firstName
+    const kinId = createKinId({ pseudonym, firstName });
     
     // Create the KinOS API URL with query parameters
     const baseUrl = createKinOsApiUrl({
