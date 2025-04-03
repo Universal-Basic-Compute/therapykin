@@ -14,6 +14,13 @@ export async function GET() {
       });
     }
     
+    // Sort specialists alphabetically by name, but keep generalist first
+    specialists.sort((a, b) => {
+      if (a.id === 'generalist') return -1;
+      if (b.id === 'generalist') return 1;
+      return a.name.localeCompare(b.name);
+    });
+    
     return NextResponse.json({ specialists });
   } catch (error) {
     console.error('Error in specialists API:', error);

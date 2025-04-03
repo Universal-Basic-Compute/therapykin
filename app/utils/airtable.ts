@@ -43,20 +43,21 @@ export const specialistsTable = base('SPECIALISTS');
 export async function getActiveSpecialists() {
   try {
     const records = await specialistsTable.select({
-      // If you have an IsActive field, use this filter:
-      // filterByFormula: '{IsActive} = TRUE()',
-      fields: ['Name', 'DisplayName', 'Description']
+      // Filter for active specialists if you have an IsActive field
+      filterByFormula: '{IsActive} = TRUE()',
+      fields: ['Name', 'DisplayName', 'Description', 'IsActive', 'SortOrder']
     }).all();
     
     return records.map(record => ({
       id: record.fields.Name, // Using "Name" field as the ID/slug
       name: record.fields.DisplayName || record.fields.Name,
-      description: record.fields.Description || ''
+      description: record.fields.Description || '',
+      sortOrder: record.fields.SortOrder || 999 // Optional sort order field
     }));
   } catch (error) {
     console.error('Error fetching specialists:', error);
     // Return at least the generalist as a fallback
-    return [{ id: 'generalist', name: 'General Therapist', description: '' }];
+    return [{ id: 'generalist', name: 'General Therapist', description: '', sortOrder: 0 }];
   }
 }
 
@@ -131,8 +132,9 @@ export async function createSession(
       throw new Error('Email is required for creating a session');
     }
     
-    // Validate specialist value
-    if (!['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist', 'welcome'].includes(specialist)) {
+    // Validate specialist value using the validation utility
+    const { isValidSpecialist } = require('@/app/utils/validation');
+    if (!isValidSpecialist(specialist, true)) { // true to include 'welcome'
       console.warn(`Invalid specialist value: ${specialist}, defaulting to generalist`);
       specialist = 'generalist';
     }
