@@ -144,7 +144,7 @@ export async function GET(request: NextRequest) {
     // Return a default subscription in case of error
     // Try to count sessions even in error case
     try {
-      const email = user?.email;
+      const email = currentUser?.email;
       if (email) {
         const escapedEmail = escapeAirtableString(email);
         const sessionsRecords = await sessionsTable.select({
