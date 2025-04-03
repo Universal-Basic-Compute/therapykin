@@ -628,8 +628,8 @@ function ChatSessionWithSearchParams() {
       // Scale opening and closing phases based on session length
       const openingPhaseEnd = Math.max(1, Math.floor(SESSION_DURATION * 0.08)); // ~8% of session
       const halfwayPoint = SESSION_DURATION / 2; // 50% of session
-      const closingPhaseStart = Math.floor(SESSION_DURATION * 0.92); // ~92% of session
-      
+      const closingPhaseStart = SESSION_DURATION - 2; // 2 minutes before the end
+    
       // Calculate the time point 3 minutes before the end
       const imageGenerationPoint = SESSION_DURATION - 3;
       
