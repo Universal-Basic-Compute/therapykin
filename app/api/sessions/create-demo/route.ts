@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSession } from '../../../utils/airtable';
+import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,9 +23,15 @@ export async function POST(request: NextRequest) {
     
     console.log(`Creating demo session for kin ID ${kinId} with specialist ${specialist || 'welcome'}`);
     
-    // Use kinId as the email for demo sessions, but don't pass kinId separately
+    // Generate a pseudonym from kinId
+    const pseudonym = generatePseudonymFromEmail(kinId);
+    const projectId = pseudonym.name.replace(/\s+/g, '');
+    
+    console.log(`Using pseudonym: ${projectId} for demo session`);
+    
+    // Use pseudonym-based projectId instead of kinId
     const session = await createSession(
-      kinId, // Use kinId instead of email
+      projectId, 
       sessionLength || 15, 
       specialist || 'welcome',
       true // Mark as demo session

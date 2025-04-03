@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,7 +24,9 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const projectId = `${firstName}${lastName}`;
+    const identifier = `${firstName}${lastName}`;
+    const pseudonym = generatePseudonymFromEmail(identifier);
+    const projectId = pseudonym.name.replace(/\s+/g, ''); // Remove spaces from pseudonym
     
     // Determine the base URL based on environment and specialist
     let baseUrl;

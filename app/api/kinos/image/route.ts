@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,8 +21,10 @@ export async function POST(request: NextRequest) {
     console.log(`Requesting image generation for user: ${firstName} ${lastName}${specialist ? `, specialist: ${specialist}` : ''}`);
     console.log(`Using API key: ${process.env.KINOS_API_KEY ? 'Key is set (not showing for security)' : 'Key is NOT set!'}`);
     
-    // Create the project ID by combining firstName and lastName
-    const projectId = `${firstName}${lastName}`;
+    // Generate a pseudonym from firstName+lastName
+    const identifier = `${firstName}${lastName}`;
+    const pseudonym = generatePseudonymFromEmail(identifier);
+    const projectId = pseudonym.name.replace(/\s+/g, ''); // Remove spaces from pseudonym
     
     // Determine the base URL based on environment and specialist
     let baseUrl;
