@@ -9,13 +9,32 @@ const usersTable = base('Users');
 // KinOS API configuration
 const KINOS_API_URL = process.env.KINOS_API_URL || 'https://api.kinos-engine.ai';
 const KINOS_API_KEY = process.env.KINOS_API_KEY;
-const BLUEPRINT_ID = 'kinos'; // Default blueprint ID
+const BASE_BLUEPRINT_ID = 'therapykin'; // Base blueprint ID
 
-// Function to rename a kin in KinOS Engine
-async function renameKin(kinId, newName) {
+// List of all available specialists
+const SPECIALISTS = [
+  'generalist',
+  'anxiety',
+  'depression',
+  'relationships',
+  'stress',
+  'grief',
+  'trauma',
+  'selfesteem',
+  'addiction',
+  'anger',
+  'sleep',
+  'parenting',
+  'career',
+  'herosjourney',
+  'welcome'
+];
+
+// Function to rename a kin in a specific blueprint
+async function renameKinInBlueprint(blueprintId, kinId, newName) {
   try {
     const response = await axios.post(
-      `${KINOS_API_URL}/v2/blueprints/${BLUEPRINT_ID}/kins/${kinId}/rename`,
+      `${KINOS_API_URL}/v2/blueprints/${blueprintId}/kins/${kinId}/rename`,
       { new_name: newName },
       {
         headers: {
@@ -25,12 +44,50 @@ async function renameKin(kinId, newName) {
       }
     );
     
-    console.log(`Successfully renamed kin ${kinId} to ${newName}`);
-    return response.data;
+    console.log(`Successfully renamed kin ${kinId} to ${newName} in blueprint ${blueprintId}`);
+    return { success: true, data: response.data };
   } catch (error) {
-    console.error(`Error renaming kin ${kinId}:`, error.response?.data || error.message);
-    return null;
+    console.error(`Error renaming kin ${kinId} in blueprint ${blueprintId}:`, error.response?.data || error.message);
+    return { success: false, error: error.response?.data || error.message };
   }
+}
+
+// Function to rename a kin across all blueprints
+async function renameKinAcrossBlueprints(kinId, newName) {
+  const results = {
+    success: 0,
+    errors: 0,
+    details: []
+  };
+  
+  // First rename in the base blueprint
+  const baseResult = await renameKinInBlueprint(BASE_BLUEPRINT_ID, kinId, newName);
+  if (baseResult.success) {
+    results.success++;
+  } else {
+    results.errors++;
+  }
+  results.details.push({ blueprint: BASE_BLUEPRINT_ID, ...baseResult });
+  
+  // Then rename in each specialist blueprint
+  for (const specialist of SPECIALISTS) {
+    if (specialist === 'generalist') continue; // Skip generalist as it's the base blueprint
+    
+    const specialistBlueprintId = `${BASE_BLUEPRINT_ID}${specialist}`;
+    const specialistResult = await renameKinInBlueprint(specialistBlueprintId, kinId, newName);
+    
+    if (specialistResult.success) {
+      results.success++;
+    } else {
+      results.errors++;
+    }
+    results.details.push({ blueprint: specialistBlueprintId, ...specialistResult });
+    
+    // Add a small delay between requests to avoid rate limiting
+    await new Promise(resolve => setTimeout(resolve, 200));
+  }
+  
+  return results;
 }
 
 // Main function to process all users
@@ -45,8 +102,8 @@ async function processUsers() {
     
     console.log(`Found ${records.length} users with pseudonyms in Airtable`);
     
-    let successCount = 0;
-    let errorCount = 0;
+    let totalSuccess = 0;
+    let totalErrors = 0;
     
     // Process each user
     for (const record of records) {
@@ -59,29 +116,27 @@ async function processUsers() {
       // Skip if missing required fields
       if (!email || !firstName || !pseudonym) {
         console.log(`Skipping user ${record.id}: Missing email, firstName, or pseudonym`);
-        errorCount++;
+        totalErrors++;
         continue;
       }
       
       // The original kin ID would be FirstNameLastName (without spaces)
       const originalKinId = `${firstName}${lastName}`.replace(/\s+/g, '');
       
-      // Rename the kin
-      console.log(`Renaming kin ${originalKinId} to ${pseudonym}...`);
-      const result = await renameKin(originalKinId, pseudonym);
+      // Rename the kin across all blueprints
+      console.log(`Renaming kin ${originalKinId} to ${pseudonym} across all blueprints...`);
+      const results = await renameKinAcrossBlueprints(originalKinId, pseudonym);
       
-      if (result) {
-        successCount++;
-      } else {
-        errorCount++;
-      }
+      console.log(`Completed renaming for ${email}: ${results.success} successful, ${results.errors} errors`);
+      totalSuccess += results.success;
+      totalErrors += results.errors;
       
-      // Add a small delay to avoid rate limiting
+      // Add a small delay between users to avoid rate limiting
       await new Promise(resolve => setTimeout(resolve, 500));
     }
     
     console.log(`Completed processing ${records.length} users`);
-    console.log(`Success: ${successCount}, Errors: ${errorCount}`);
+    console.log(`Total renames: Success: ${totalSuccess}, Errors: ${totalErrors}`);
     
   } catch (error) {
     console.error('Error processing users:', error.message);
