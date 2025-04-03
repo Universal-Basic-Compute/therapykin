@@ -2305,6 +2305,71 @@ Important style requirements:
     }
   };
 
+  // Function to generate an illustration for a message
+  const generateIllustrationForMessage = async (messageContent: string, messageId: string) => {
+    try {
+      // Only allow this for assistant messages
+      if (!user?.pseudonym) {
+        console.error('Cannot generate illustration: missing user pseudonym');
+        return;
+      }
+      
+      console.log(`Requesting illustration for message: ${messageId}`);
+      
+      // Create a prompt for the image based on the message content
+      const prompt = `<system>Please generate an illustration based on this text: ${messageContent}
+
+Important style requirements:
+- Use a soothing pencil style illustration
+- Incorporate the site's color palette: white, teal, light green, purple, violet, yellow, and orange
+- Keep the style clean, modern, and therapeutic
+- Ensure the image feels calming and supportive</system>`;
+      
+      // Send the request to KinOS
+      const response = await fetch('/api/kinos/image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: prompt,
+          firstName: user.firstName,
+          specialist: selectedSpecialist,
+          pseudonym: user.pseudonym
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to generate illustration: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Image generation response:', data);
+      
+      // Check if we have a valid image URL
+      if (data.result?.data?.[0]?.url) {
+        const imageUrl = data.result.data[0].url;
+        console.log(`Successfully received image URL: ${imageUrl}`);
+        
+        // Update the message with the generated image
+        setChatHistory(prev => 
+          prev.map(msg => 
+            msg.id === messageId 
+              ? { ...msg, image: imageUrl }
+              : msg
+          )
+        );
+        
+        console.log(`Added illustration to message: ${messageId}`);
+      } else {
+        console.error('No valid image URL in the response:', data);
+      }
+    } catch (error) {
+      console.error('Error generating illustration:', error);
+      alert('Failed to generate illustration. Please try again.');
+    }
+  };
+
   // Function to play audio for a specific message
   const playMessageAudio = async (msg: ChatMessage) => {
     if (msg.audio) {
@@ -2569,7 +2634,7 @@ Important style requirements:
                           )}
                         
                           {msg.role === 'assistant' && msg.id !== 'rate-session-prompt' && (
-                            <div className="mt-2 flex justify-end">
+                            <div className="mt-2 flex justify-end space-x-2">
                               {currentPlayingId === msg.id ? (
                                 <button 
                                   onClick={() => {
@@ -2597,6 +2662,19 @@ Important style requirements:
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                   </svg>
                                   Listen
+                                </button>
+                              )}
+                              
+                              {/* Add Illustrate button */}
+                              {!msg.image && (
+                                <button 
+                                  onClick={() => generateIllustrationForMessage(msg.content, msg.id || 'unknown')}
+                                  className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                  </svg>
+                                  Illustrate
                                 </button>
                               )}
                             </div>
