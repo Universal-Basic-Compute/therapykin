@@ -112,7 +112,7 @@ function generatePseudonymFromEmail(email) {
   const number = Math.abs(hash >> 24) % 100;
   
   return {
-    name: `${adjectives[adjectiveIndex]} ${animals[animalIndex]} ${number}`,
+    name: `${adjectives[adjectiveIndex]}${animals[animalIndex]}${number}`,
     color: nameColors[colorIndex]
   };
 }
