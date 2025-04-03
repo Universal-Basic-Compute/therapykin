@@ -507,7 +507,6 @@ function ChatSessionWithSearchParams() {
           // Get messages from KinOS
           const messages = await fetchMessagesFromKinOS(
             user.firstName,
-            user.lastName,
             undefined, // No since parameter
             selectedSpecialist, // Pass the selected specialist
             user.pseudonym // Pass the pseudonym
