@@ -5,14 +5,14 @@ import { createErrorResponse } from '@/app/utils/error-handling';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, firstName, lastName, password, specialist } = await request.json();
+    const { email, firstName, password, specialist } = await request.json();
     
     console.log('Registration attempt for email:', email);
     
     // Validate input
-    if (!email || !firstName || !lastName || !password) {
+    if (!email || !firstName || !password) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'Email, first name, and password are required' },
         { status: 400 }
       );
     }
@@ -29,7 +29,6 @@ export async function POST(request: NextRequest) {
     const user = await createUser({ 
       email, 
       firstName, 
-      lastName, 
       password,
       preferredSpecialist: specialist || 'generalist' // Default to generalist if not specified
     });
@@ -50,7 +49,6 @@ export async function POST(request: NextRequest) {
           id: user.id,
           email: user.email,
           firstName: user.firstName,
-          lastName: user.lastName,
         }
       },
       { status: 201 }
