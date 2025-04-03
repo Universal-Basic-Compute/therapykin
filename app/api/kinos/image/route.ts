@@ -18,44 +18,15 @@ export async function POST(request: NextRequest) {
     // Determine the base URL based on environment and specialist
     let baseUrl;
     
-    // Use different project path based on specialist type
-    if (specialist === 'crypto') {
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykincrypto/${projectId}/image`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykincrypto/${projectId}/image`
-          : `https://api.kinos-engine.ai/projects/therapykincrypto/${projectId}/image`;
-    } else if (specialist === 'athletes') {
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinathletes/${projectId}/image`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinathletes/${projectId}/image`
-          : `https://api.kinos-engine.ai/projects/therapykinathletes/${projectId}/image`;
-    } else if (specialist === 'executives') {
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinexecutives/${projectId}/image`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinexecutives/${projectId}/image`
-          : `https://api.kinos-engine.ai/projects/therapykinexecutives/${projectId}/image`;
-    } else if (specialist === 'herosjourney') {
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinherosjourney/${projectId}/image`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinherosjourney/${projectId}/image`
-          : `https://api.kinos-engine.ai/projects/therapykinherosjourney/${projectId}/image`;
-    } else if (specialist === 'sexologist') {
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinsexologist/${projectId}/image`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinsexologist/${projectId}/image`
-          : `https://api.kinos-engine.ai/projects/therapykinsexologist/${projectId}/image`;
-    } else {
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykin/${projectId}/image`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykin/${projectId}/image`
-          : `https://api.kinos-engine.ai/projects/therapykin/${projectId}/image`;
-    }
+    // Create the blueprint name based on specialist
+    const blueprintName = specialist === 'generalist' ? 'therapykin' : `therapykin${specialist}`;
+    
+    // Use the new v2 API path structure
+    baseUrl = process.env.KINOS_API_URL 
+      ? `${process.env.KINOS_API_URL}/v2/blueprints/${blueprintName}/kins/${projectId}/image`
+      : process.env.NODE_ENV === 'development'
+        ? `http://localhost:5000/v2/blueprints/${blueprintName}/kins/${projectId}/image`
+        : `https://api.kinos-engine.ai/v2/blueprints/${blueprintName}/kins/${projectId}/image`;
     
     console.log(`Using API endpoint for image generation: ${baseUrl}`);
     

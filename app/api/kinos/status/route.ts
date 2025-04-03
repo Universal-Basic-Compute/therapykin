@@ -20,50 +20,15 @@ export async function GET(request: NextRequest) {
     // Determine the base URL based on environment and specialist
     let baseUrl;
     
-    // Use different project path based on specialist type
-    if (specialist === 'crypto') {
-      // For crypto specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykincrypto/${projectId}/messages/${messageId}`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykincrypto/${projectId}/messages/${messageId}`
-          : `https://api.kinos-engine.ai/projects/therapykincrypto/${projectId}/messages/${messageId}`;
-    } else if (specialist === 'athletes') {
-      // For athletes specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinathletes/${projectId}/messages/${messageId}`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinathletes/${projectId}/messages/${messageId}`
-          : `https://api.kinos-engine.ai/projects/therapykinathletes/${projectId}/messages/${messageId}`;
-    } else if (specialist === 'executives') {
-      // For executives specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinexecutives/${projectId}/messages/${messageId}`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinexecutives/${projectId}/messages/${messageId}`
-          : `https://api.kinos-engine.ai/projects/therapykinexecutives/${projectId}/messages/${messageId}`;
-    } else if (specialist === 'welcome') {
-      // For welcome specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinwelcome/${projectId}/messages/${messageId}`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinwelcome/${projectId}/messages/${messageId}`
-          : `https://api.kinos-engine.ai/projects/therapykinwelcome/${projectId}/messages/${messageId}`;
-    } else if (specialist === 'sexologist') {
-      // For sexologist specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinsexologist/${projectId}/messages/${messageId}`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinsexologist/${projectId}/messages/${messageId}`
-          : `https://api.kinos-engine.ai/projects/therapykinsexologist/${projectId}/messages/${messageId}`;
-    } else {
-      // For generalist (default)
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykin/${projectId}/messages/${messageId}`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykin/${projectId}/messages/${messageId}`
-          : `https://api.kinos-engine.ai/projects/therapykin/${projectId}/messages/${messageId}`;
-    }
+    // Create the blueprint name based on specialist
+    const blueprintName = specialist === 'generalist' ? 'therapykin' : `therapykin${specialist}`;
+    
+    // Use the new v2 API path structure
+    baseUrl = process.env.KINOS_API_URL 
+      ? `${process.env.KINOS_API_URL}/v2/blueprints/${blueprintName}/kins/${projectId}/messages/${messageId}`
+      : process.env.NODE_ENV === 'development'
+        ? `http://localhost:5000/v2/blueprints/${blueprintName}/kins/${projectId}/messages/${messageId}`
+        : `https://api.kinos-engine.ai/v2/blueprints/${blueprintName}/kins/${projectId}/messages/${messageId}`;
     
     // Call the appropriate API to check the status of the message
     const response = await fetch(baseUrl, {

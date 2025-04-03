@@ -21,64 +21,15 @@ export async function GET(request: NextRequest) {
     // Determine the base URL based on environment and specialist
     let baseUrl;
     
-    // Use different project path based on specialist type
-    if (specialist === 'crypto') {
-      // For crypto specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykincrypto/${projectId}/messages`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykincrypto/${projectId}/messages`
-          : `https://api.kinos-engine.ai/projects/therapykincrypto/${projectId}/messages`;
-    } else if (specialist === 'athletes') {
-      // For athletes specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinathletes/${projectId}/messages`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinathletes/${projectId}/messages`
-          : `https://api.kinos-engine.ai/projects/therapykinathletes/${projectId}/messages`;
-    } else if (specialist === 'executives') {
-      // For executives specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinexecutives/${projectId}/messages`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinexecutives/${projectId}/messages`
-          : `https://api.kinos-engine.ai/projects/therapykinexecutives/${projectId}/messages`;
-    } else if (specialist === 'herosjourney') {
-      // For Hero's Journey specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinherosjourney/${projectId}/messages`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinherosjourney/${projectId}/messages`
-          : `https://api.kinos-engine.ai/projects/therapykinherosjourney/${projectId}/messages`;
-    } else if (specialist === 'sexologist') {
-      // For sexologist specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinsexologist/${projectId}/messages`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinsexologist/${projectId}/messages`
-          : `https://api.kinos-engine.ai/projects/therapykinsexologist/${projectId}/messages`;
-    } else if (specialist === 'sexologist') {
-      // For sexologist specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinsexologist/${projectId}/messages`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinsexologist/${projectId}/messages`
-          : `https://api.kinos-engine.ai/projects/therapykinsexologist/${projectId}/messages`;
-    } else if (specialist === 'welcome') {
-      // For Welcome specialist
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykinwelcome/${projectId}/messages`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykinwelcome/${projectId}/messages`
-          : `https://api.kinos-engine.ai/projects/therapykinwelcome/${projectId}/messages`;
-    } else {
-      // For generalist (default)
-      baseUrl = process.env.KINOS_API_URL 
-        ? `${process.env.KINOS_API_URL}/projects/therapykin/${projectId}/messages`
-        : process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/projects/therapykin/${projectId}/messages`
-          : `https://api.kinos-engine.ai/projects/therapykin/${projectId}/messages`;
-    }
+    // Create the blueprint name based on specialist
+    const blueprintName = specialist === 'generalist' ? 'therapykin' : `therapykin${specialist}`;
+    
+    // Use the new v2 API path structure
+    baseUrl = process.env.KINOS_API_URL 
+      ? `${process.env.KINOS_API_URL}/v2/blueprints/${blueprintName}/kins/${projectId}/messages`
+      : process.env.NODE_ENV === 'development'
+        ? `http://localhost:5000/v2/blueprints/${blueprintName}/kins/${projectId}/messages`
+        : `https://api.kinos-engine.ai/v2/blueprints/${blueprintName}/kins/${projectId}/messages`;
     
     console.log(`Using API endpoint for messages: ${baseUrl}`);
     
