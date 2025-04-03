@@ -112,9 +112,10 @@ export async function createUser(userData: {
   firstName: string;
   password: string;
   preferredSpecialist?: string;
+  pseudonym?: string;
 }) {
   try {
-    const { email, firstName, password, preferredSpecialist } = userData;
+    const { email, firstName, password, preferredSpecialist, pseudonym } = userData;
     
     // Check if user already exists
     const existingUser = await getUserByEmail(email);
@@ -135,6 +136,7 @@ export async function createUser(userData: {
           PasswordSalt: salt,
           CreatedAt: new Date().toISOString(),
           PreferredSpecialist: preferredSpecialist || 'generalist', // Set default specialist preference
+          Pseudonym: pseudonym || '', // Add pseudonym if provided
         },
       },
     ]);

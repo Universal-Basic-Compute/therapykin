@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log(`Requesting image generation for user: ${firstName}${specialist ? `, specialist: ${specialist}` : ''}`);
+    console.log(`Requesting image generation for user: ${firstName}${specialist ? `, specialist: ${specialist}` : ''}${pseudonym ? `, pseudonym: ${pseudonym}` : ''}`);
     
     // Create a consistent KinId
     const kinId = createKinId({ pseudonym, firstName });

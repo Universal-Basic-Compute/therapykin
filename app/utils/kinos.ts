@@ -69,7 +69,7 @@ export async function sendMessageToKinOS(
       }
     }
     
-    console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
+    console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}${pseudonym ? `, pseudonym: ${pseudonym}` : ''}`);
     
     // Log image information
     if (images && images.length > 0) {
@@ -88,13 +88,13 @@ export async function sendMessageToKinOS(
       console.log('No screenshot being sent to KinOS');
     }
     
-    // Create the request body with the mode parameter if provided
+    // Create the request body
     const requestBody: any = {
       content,
       firstName,
       attachments,
       images,
-      pseudonym, // Add pseudonym to request body
+      pseudonym, // Include pseudonym in request body
     };
     
     // Add screenshot if it exists

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSession } from '../../../utils/airtable';
-import { isValidSpecialist, createProjectId } from '@/app/utils/validation';
+import { isValidSpecialist, createKinId } from '@/app/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {

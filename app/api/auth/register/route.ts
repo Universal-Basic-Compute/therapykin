@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createUser, generateToken, setAuthCookie } from '@/app/utils/auth';
 import { isValidSpecialist } from '@/app/utils/validation';
 import { createErrorResponse } from '@/app/utils/error-handling';
+import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,12 +26,16 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Create user with specialist preference if provided
+    // Generate a pseudonym from email
+    const { name: pseudonym } = generatePseudonymFromEmail(email);
+    
+    // Create user with specialist preference and pseudonym
     const user = await createUser({ 
       email, 
       firstName, 
       password,
-      preferredSpecialist: specialist || 'generalist' // Default to generalist if not specified
+      preferredSpecialist: specialist || 'generalist', // Default to generalist if not specified
+      pseudonym // Add generated pseudonym
     });
     console.log('User created successfully:', user.id);
     
