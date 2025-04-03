@@ -120,11 +120,12 @@ export default function AskAnything() {
       const response = await sendMessageToKinOS(
         message,
         firstName,
-        lastName,
         [], // attachments
         [], // images
         null, // mode
-        'welcome' // specialist - changed from 'generalist' to 'welcome'
+        'welcome', // specialist - changed from 'generalist' to 'welcome'
+        null, // screenshot
+        projectId // Use projectId as pseudonym for demo users
       );
       
       // Update chat history with the response
