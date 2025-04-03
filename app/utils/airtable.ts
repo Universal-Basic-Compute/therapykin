@@ -75,7 +75,12 @@ export async function getActiveSpecialists() {
     }));
     
     // Update cache
-    specialistsCache = [...specialists];
+    specialistsCache = specialists.map(s => ({
+      id: String(s.id),
+      name: String(s.name || ''),
+      description: String(s.description || ''),
+      sortOrder: Number(s.sortOrder || 999)
+    }));
     specialistsCacheExpiry = now + SPECIALISTS_CACHE_DURATION;
     
     return specialists;

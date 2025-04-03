@@ -178,8 +178,8 @@ export async function getCurrentUser() {
     email: user.email,
     firstName: user.firstName,
     // Generate a pseudonym from email if one doesn't exist in the database
-    pseudonym: user.fields?.Pseudonym as string || generatePseudonymFromEmail(user.email).name,
-    Pseudonym: user.fields?.Pseudonym as string || generatePseudonymFromEmail(user.email).name, // Add capitalized version for compatibility
+    pseudonym: user.fields?.Pseudonym as string || generatePseudonymFromEmail(user.email || '').name,
+    Pseudonym: user.fields?.Pseudonym as string || generatePseudonymFromEmail(user.email || '').name, // Add capitalized version for compatibility
     isTherapist: user.fields?.IsTherapist === true || 
                 user.fields?.IsTherapist === "true" || 
                 user.fields?.IsTherapist === 1 || 

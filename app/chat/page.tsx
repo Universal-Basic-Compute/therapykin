@@ -436,11 +436,11 @@ function ChatSessionWithSearchParams() {
       // Send the "New session started" message to the API
       const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
       // Use the user's pseudonym or generate one if missing
-      let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
+      let userPseudonym = user?.pseudonym;
       if (!userPseudonym) {
-        console.log('Pseudonym missing for user:', user.email);
+        console.log('Pseudonym missing for user:', user?.email);
         // Generate a pseudonym from the email
-        const generatedPseudonym = generatePseudonymFromEmail(user.email);
+        const generatedPseudonym = generatePseudonymFromEmail(user?.email || '');
         userPseudonym = generatedPseudonym.name;
         console.log(`Generated pseudonym for user: ${userPseudonym}`);
         
@@ -653,7 +653,7 @@ function ChatSessionWithSearchParams() {
         if (!userPseudonym) {
           console.log('Pseudonym missing for user:', user.email);
           // Generate a pseudonym from the email
-          const generatedPseudonym = generatePseudonymFromEmail(user.email);
+          const generatedPseudonym = generatePseudonymFromEmail(user?.email || '');
           userPseudonym = generatedPseudonym.name;
           console.log(`Generated pseudonym for user: ${userPseudonym}`);
         }

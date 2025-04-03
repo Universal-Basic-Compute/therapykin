@@ -32,7 +32,7 @@ export async function fetchSpecialists(): Promise<Array<Specialist>> {
         return a.sortOrder - b.sortOrder;
       }
       // Otherwise, sort alphabetically by name
-      return a.name.localeCompare(b.name);
+      return (a.name || '').localeCompare(b.name || '');
     });
   } catch (error) {
     console.error('Error fetching specialists:', error);

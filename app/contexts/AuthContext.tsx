@@ -14,6 +14,9 @@ interface User {
     isAnnual: boolean;
     currentPeriodEnd: number;
   };
+  isTherapist?: boolean;
+  specialistsAccess?: any;
+  isAdmin?: boolean;
 }
 
 interface AuthContextType {

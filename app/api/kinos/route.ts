@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
     const { 
       content, 
       firstName, 
-      lastName, 
       email = null,
       attachments = [], 
       images = [], 
@@ -24,7 +23,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
+    console.log(`Sending message to KinOS for user: ${firstName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
     // Ensure pseudonym is provided
     if (!pseudonym) {
