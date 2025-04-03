@@ -18,15 +18,24 @@ export async function fetchMessagesFromKinOS(
       specialist = 'generalist';
     }
     
-    console.log(`Fetching messages for ${firstName}${since ? ` since ${since}` : ''} (specialist: ${specialist})`);
+    // Check if pseudonym is provided
+    if (!pseudonym) {
+      console.error('Pseudonym is required for fetchMessagesFromKinOS');
+      return []; // Return empty array if pseudonym is missing
+    }
     
-    // Build the URL with query parameters
-    let url = `/api/kinos/messages?firstName=${encodeURIComponent(firstName)}&specialist=${encodeURIComponent(specialist)}`;
+    console.log(`Fetching messages for pseudonym: ${pseudonym}${since ? ` since ${since}` : ''} (specialist: ${specialist})`);
+    
+    // Build the URL with query parameters - make pseudonym the primary parameter
+    let url = `/api/kinos/messages?pseudonym=${encodeURIComponent(pseudonym)}&specialist=${encodeURIComponent(specialist)}`;
+    
+    // Add firstName as a secondary parameter if provided
+    if (firstName) {
+      url += `&firstName=${encodeURIComponent(firstName)}`;
+    }
+    
     if (since) {
       url += `&since=${encodeURIComponent(since)}`;
-    }
-    if (pseudonym) {
-      url += `&pseudonym=${encodeURIComponent(pseudonym)}`;
     }
     
     // Call our API endpoint

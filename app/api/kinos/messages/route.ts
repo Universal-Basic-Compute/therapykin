@@ -9,9 +9,10 @@ export async function GET(request: NextRequest) {
     const specialist = searchParams.get('specialist') || 'generalist';
     const pseudonym = searchParams.get('pseudonym');
     
-    if (!firstName) {
+    // Make pseudonym the primary requirement
+    if (!pseudonym) {
       return NextResponse.json(
-        { error: 'Missing required parameter: firstName' },
+        { error: 'Missing required parameter: pseudonym' },
         { status: 400 }
       );
     }
@@ -24,12 +25,9 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Ensure pseudonym is provided
-    if (!pseudonym) {
-      return NextResponse.json(
-        { error: 'Pseudonym is required' },
-        { status: 400 }
-      );
+    // firstName is now optional but logged if provided
+    if (firstName) {
+      console.log(`Request for messages from user: ${firstName}`);
     }
     
     // Use pseudonym directly as kinId
