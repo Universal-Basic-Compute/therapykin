@@ -1,7 +1,6 @@
-
 require('dotenv').config();
 const Airtable = require('airtable');
-const { generatePseudonymFromEmail } = require('./app/utils/pseudonyms');
+const { generatePseudonymFromEmail } = require('./pseudonyms');
 
 // Initialize Airtable
 const base = new Airtable({
