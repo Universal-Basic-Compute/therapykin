@@ -51,12 +51,8 @@ export async function POST(request: NextRequest) {
     
     console.log(`Using API endpoint for image generation: ${baseUrl}`);
     
-    // Special handling for herosjourney specialist
+    // Use the provided specialist or default to generalist
     let effectiveSpecialist = specialist || 'generalist';
-    if (effectiveSpecialist === 'herosjourney') {
-      console.log('Using special handling for herosjourney specialist');
-      effectiveSpecialist = 'generalist'; // Use generalist blueprint for herosjourney
-    }
     
     // Create the request body
     const requestBody = {

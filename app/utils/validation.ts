@@ -165,9 +165,8 @@ export function createKinOsApiUrl(options: {
   const validatedSpecialist = specialist && isValidSpecialist(specialist) ? specialist : 'generalist';
   
   // Create the blueprint name based on specialist
-  // Special case for herosjourney - use the generalist blueprint
   let blueprintName;
-  if (validatedSpecialist === 'generalist' || validatedSpecialist === 'herosjourney') {
+  if (validatedSpecialist === 'generalist') {
     blueprintName = 'therapykin';
   } else {
     blueprintName = `therapykin${validatedSpecialist}`;
