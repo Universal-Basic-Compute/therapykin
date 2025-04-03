@@ -630,6 +630,21 @@ function ChatSessionWithSearchParams() {
       const halfwayPoint = SESSION_DURATION / 2; // 50% of session
       const closingPhaseStart = SESSION_DURATION - 2; // 2 minutes before the end
     
+      // FOR DEBUG: Generate an image every minute
+      // Check if the session duration is close to a whole minute
+      const isWholeMinute = Math.abs(Math.round(sessionDuration) - sessionDuration) < 0.1;
+      
+      // If we're at a whole minute and haven't requested an image in the last 45 seconds
+      if (isWholeMinute && !sessionImageRequested) {
+        console.log(`DEBUG: Requesting session image at ${sessionDuration.toFixed(1)} minutes`);
+        requestSessionSummaryImage();
+        
+        // Reset the flag after 45 seconds to allow another request
+        setTimeout(() => {
+          setSessionImageRequested(false);
+        }, 45000);
+      }
+      
       // Calculate the time point 3 minutes before the end
       const imageGenerationPoint = SESSION_DURATION - 3;
       
