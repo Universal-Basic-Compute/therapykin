@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sessionsTable } from '@/app/utils/airtable';
-import { getCurrentUser } from '@/app/utils/auth';
+import { getCurrentUser, isAuthorizedForSpecialist } from '@/app/utils/auth';
 import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
 
 export async function GET(request: NextRequest) {
@@ -15,21 +15,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let isAuthorized = false;
-
-    if ((currentUser as any).isAdmin || currentUser.email === 'nlr@universalbasiccompute.ai' || currentUser.email === 'theherosjourneyteam@gmail.com') {
-      isAuthorized = true;
-    } else if ((currentUser as any).isTherapist) {
-      try {
-        const therapistTypes = JSON.parse((currentUser as any).isTherapist);
-        // Check if the user is a herosjourney therapist
-        isAuthorized = Array.isArray(therapistTypes) && therapistTypes.includes('herosjourney');
-      } catch (error) {
-        console.error('Error parsing therapist types:', error);
-      }
-    }
-
-    if (!isAuthorized) {
+    if (!isAuthorizedForSpecialist(currentUser as any, 'herosjourney')) {
       return NextResponse.json(
         { error: 'Not authorized' },
         { status: 403 }

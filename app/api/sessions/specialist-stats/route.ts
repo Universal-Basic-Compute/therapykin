@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sessionsTable } from '@/app/utils/airtable';
-import { getCurrentUser } from '@/app/utils/auth';
+import { getCurrentUser, isAdmin } from '@/app/utils/auth';
 
 export async function GET(request: NextRequest) {
   try {
     // Get the current user
     const currentUser = await getCurrentUser();
     
-    if (!currentUser || currentUser.email !== 'nlr@universalbasiccompute.ai') {
+    if (!currentUser || !isAdmin(currentUser as any)) {
       return NextResponse.json(
         { error: 'Not authorized' },
         { status: 403 }

@@ -273,4 +273,63 @@ export async function updateSessionImage(
   }
 }
 
+/**
+ * Checks if a user is authorized for a specific specialist role
+ * @param user - The user object
+ * @param specialistType - The specialist type to check for
+ * @returns Boolean indicating if the user is authorized
+ */
+export function isAuthorizedForSpecialist(user: any, specialistType: string): boolean {
+  // Admin users are authorized for all specialist types
+  if (user.isAdmin === true || 
+      user.isAdmin === "true" || 
+      user.isAdmin === 1 || 
+      user.isAdmin === "1") {
+    return true;
+  }
+  
+  // Check specific admin emails
+  if (user.email === 'nlr@universalbasiccompute.ai' || 
+      user.email === 'theherosjourneyteam@gmail.com') {
+    return true;
+  }
+  
+  // Check if user is a therapist
+  if (user.isTherapist) {
+    try {
+      // Parse therapist types if it's a JSON string
+      const therapistTypes = typeof user.isTherapist === 'string' && 
+        user.isTherapist.startsWith('[') ? 
+        JSON.parse(user.isTherapist) : 
+        user.isTherapist;
+      
+      // Check if user is authorized for the requested specialist type
+      if (Array.isArray(therapistTypes)) {
+        return therapistTypes.includes(specialistType);
+      } else if (typeof therapistTypes === 'string') {
+        return therapistTypes === specialistType || therapistTypes.includes(specialistType);
+      } else if (therapistTypes === true) {
+        return true;
+      }
+    } catch (error) {
+      console.error('Error parsing therapist types:', error);
+    }
+  }
+  
+  return false;
+}
+
+/**
+ * Checks if a user is an admin
+ * @param user - The user object
+ * @returns Boolean indicating if the user is an admin
+ */
+export function isAdmin(user: any): boolean {
+  return user.isAdmin === true || 
+         user.isAdmin === "true" || 
+         user.isAdmin === 1 || 
+         user.isAdmin === "1" ||
+         user.email === 'nlr@universalbasiccompute.ai';
+}
+
 export { base, usersTable };
