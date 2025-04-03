@@ -221,7 +221,7 @@ function ChatSessionWithSearchParams() {
       
       try {
         console.log('Fetching user preferences...', user);
-        console.log('User pseudonym:', user.pseudonym || user.Pseudonym || user.fields?.Pseudonym || 'none');
+        console.log('User pseudonym:', user.pseudonym || 'none');
         const response = await fetch('/api/users/preferences');
         
         if (response.ok) {
@@ -544,7 +544,7 @@ function ChatSessionWithSearchParams() {
             console.log('Pseudonym missing for user:', user.email);
             console.log('User object structure:', JSON.stringify(user, null, 2));
             // Generate a pseudonym from the email
-            const generatedPseudonym = generatePseudonymFromEmail(user.email);
+            const generatedPseudonym = generatePseudonymFromEmail(user.email || '');
             userPseudonym = generatedPseudonym.name;
             console.log(`Generated pseudonym for user: ${userPseudonym}`);
             
@@ -1823,7 +1823,7 @@ function ChatSessionWithSearchParams() {
           if (!userPseudonym) {
             console.log('Pseudonym missing for user:', user?.email);
             // Generate a pseudonym from the email
-            const generatedPseudonym = generatePseudonymFromEmail(user?.email);
+            const generatedPseudonym = generatePseudonymFromEmail(user?.email || '');
             userPseudonym = generatedPseudonym.name;
             console.log(`Generated pseudonym for user: ${userPseudonym}`);
             
@@ -1934,7 +1934,6 @@ Important style requirements:
         body: JSON.stringify({
           message: prompt,
           firstName: user.firstName,
-          lastName: user.lastName,
           specialist: selectedSpecialist,
           pseudonym: user.pseudonym
         }),
@@ -2160,7 +2159,7 @@ Important style requirements:
       console.log(`Sending message to KinOS${screenshot ? ' with screenshot' : ''}`);
       
       // Use the user's pseudonym or generate one if missing
-      let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
+      let userPseudonym = user?.pseudonym;
       if (!userPseudonym) {
         console.log('Pseudonym missing for user:', user?.email);
         // Generate a pseudonym from the email
