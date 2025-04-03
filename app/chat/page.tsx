@@ -513,17 +513,14 @@ function ChatSessionWithSearchParams() {
         if (minutesActive > 0 && !isSendingMessage) {
           console.log('Fetching previous messages for existing session...');
           
-          // Check for pseudonym before fetching messages
+          // Use the user's pseudonym
           let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
-          if (!userPseudonym && user.email) {
-            // Generate a pseudonym from email if not found in user object
-            userPseudonym = generatePseudonymFromEmail(user.email).name;
-            console.log(`Generated pseudonym from email: ${userPseudonym}`);
-          } else if (!userPseudonym) {
-            console.error('Missing pseudonym for user and no email to generate one:', user);
+          if (!userPseudonym) {
+            console.error('Missing pseudonym for user:', user.email);
             console.log('User object structure:', JSON.stringify(user, null, 2));
-            return; // Exit early if pseudonym is missing and can't be generated
+            return; // Exit early if pseudonym is missing
           }
+          console.log(`Using pseudonym for fetching messages: ${userPseudonym}`);
           
           // Get messages from KinOS
           const messages = await fetchMessagesFromKinOS(
