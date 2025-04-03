@@ -434,12 +434,13 @@ function ChatSessionWithSearchParams() {
       
       // Send the "New session started" message to the API
       const welcomeMessage = `<system>New ${sessionLength} minute session started</system>`;
-      // Generate pseudonym from email if not available
+      // Use the user's pseudonym
       let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
-      if (!userPseudonym && user.email) {
-        userPseudonym = generatePseudonymFromEmail(user.email).name;
-        console.log(`Generated pseudonym from email for welcome message: ${userPseudonym}`);
+      if (!userPseudonym) {
+        console.error('Missing pseudonym for user:', user.email);
+        return;
       }
+      console.log(`Using pseudonym for welcome message: ${userPseudonym}`);
           
       const response = await sendMessageToKinOS(
         welcomeMessage,
@@ -601,12 +602,13 @@ function ChatSessionWithSearchParams() {
         console.log(`Sending halfway message at ${sessionDuration.toFixed(1)} minutes`);
           
         // Send the halfway message
-        // Generate pseudonym from email if not available
+        // Use the user's pseudonym
         let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
-        if (!userPseudonym && user.email) {
-          userPseudonym = generatePseudonymFromEmail(user.email).name;
-          console.log(`Generated pseudonym from email for halfway message: ${userPseudonym}`);
+        if (!userPseudonym) {
+          console.error('Missing pseudonym for user:', user.email);
+          return;
         }
+        console.log(`Using pseudonym for halfway message: ${userPseudonym}`);
         
         sendMessageToKinOS(
           "<system>Info: Session halfway</system>",
@@ -654,12 +656,13 @@ function ChatSessionWithSearchParams() {
         console.log(`Sending closing message at ${sessionDuration.toFixed(1)} minutes`);
           
         // Send the closing message
-        // Generate pseudonym from email if not available
+        // Use the user's pseudonym
         let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
-        if (!userPseudonym && user.email) {
-          userPseudonym = generatePseudonymFromEmail(user.email).name;
-          console.log(`Generated pseudonym from email for closing message: ${userPseudonym}`);
+        if (!userPseudonym) {
+          console.error('Missing pseudonym for user:', user.email);
+          return;
         }
+        console.log(`Using pseudonym for closing message: ${userPseudonym}`);
         
         sendMessageToKinOS(
           "<system>Info: Session is closing soon</system>",
@@ -809,12 +812,13 @@ function ChatSessionWithSearchParams() {
         }
         
         // Send the silence message
-        // Generate pseudonym from email if not available
+        // Use the user's pseudonym
         let userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
-        if (!userPseudonym && user.email) {
-          userPseudonym = generatePseudonymFromEmail(user.email).name;
-          console.log(`Generated pseudonym from email for silence notification: ${userPseudonym}`);
+        if (!userPseudonym) {
+          console.error('Missing pseudonym for user:', user.email);
+          return;
         }
+        console.log(`Using pseudonym for silence notification: ${userPseudonym}`);
         
         sendMessageToKinOS(
           "<system>Info: The user stayed silent, maybe try to drive the conversation elsewhere? (make sure you don't repeat yourself)</system>",
@@ -1316,12 +1320,13 @@ function ChatSessionWithSearchParams() {
         ]);
         
         try {
-          // Generate pseudonym from email if not available
+          // Use the user's pseudonym
           let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
-          if (!userPseudonym && user?.email) {
-            userPseudonym = generatePseudonymFromEmail(user.email).name;
-            console.log(`Generated pseudonym from email for voice message: ${userPseudonym}`);
+          if (!userPseudonym) {
+            console.error('Missing pseudonym for user:', user?.email);
+            return;
           }
+          console.log(`Using pseudonym for voice message: ${userPseudonym}`);
           
           // Send message to KinOS API
           const response = await sendMessageToKinOS(
@@ -1734,12 +1739,13 @@ function ChatSessionWithSearchParams() {
           
           // Send the correct system message format
           const welcomeMessage = `<system>New ${sessionLength} minute session starting with ${user?.firstName || 'Guest'}</system>`;
-          // Generate pseudonym from email if not available
+          // Use the user's pseudonym
           let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
-          if (!userPseudonym && user?.email) {
-            userPseudonym = generatePseudonymFromEmail(user.email).name;
-            console.log(`Generated pseudonym from email for specialist change: ${userPseudonym}`);
+          if (!userPseudonym) {
+            console.error('Missing pseudonym for user:', user?.email);
+            return;
           }
+          console.log(`Using pseudonym for specialist change: ${userPseudonym}`);
           
           const response = await sendMessageToKinOS(
             welcomeMessage,
@@ -2050,12 +2056,13 @@ Important style requirements:
     try {
       console.log(`Sending message to KinOS${screenshot ? ' with screenshot' : ''}`);
       
-      // Generate pseudonym from email if not available
+      // Use the user's pseudonym
       let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
-      if (!userPseudonym && user?.email) {
-        userPseudonym = generatePseudonymFromEmail(user.email).name;
-        console.log(`Generated pseudonym from email for message: ${userPseudonym}`);
+      if (!userPseudonym) {
+        console.error('Missing pseudonym for user:', user?.email);
+        return;
       }
+      console.log(`Using pseudonym for message: ${userPseudonym}`);
       
       // Send message to KinOS API
       const response = await sendMessageToKinOS(

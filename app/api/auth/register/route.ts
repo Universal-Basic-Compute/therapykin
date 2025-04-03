@@ -26,16 +26,13 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Generate a pseudonym from email
-    const { name: pseudonym } = generatePseudonymFromEmail(email);
-    
-    // Create user with specialist preference and pseudonym
+    // Create user with specialist preference
+    // Note: Pseudonym will be set by the admin or another process
     const user = await createUser({ 
       email, 
       firstName, 
       password,
-      preferredSpecialist: specialist || 'generalist', // Default to generalist if not specified
-      pseudonym // Add generated pseudonym
+      preferredSpecialist: specialist || 'generalist' // Default to generalist if not specified
     });
     console.log('User created successfully:', user.id);
     
