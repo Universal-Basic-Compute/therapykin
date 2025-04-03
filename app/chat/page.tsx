@@ -2050,6 +2050,13 @@ Important style requirements:
     try {
       console.log(`Sending message to KinOS${screenshot ? ' with screenshot' : ''}`);
       
+      // Generate pseudonym from email if not available
+      let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
+      if (!userPseudonym && user?.email) {
+        userPseudonym = generatePseudonymFromEmail(user.email).name;
+        console.log(`Generated pseudonym from email for message: ${userPseudonym}`);
+      }
+      
       // Send message to KinOS API
       const response = await sendMessageToKinOS(
         userMessage,
@@ -2059,7 +2066,7 @@ Important style requirements:
         sessionMode, // Add session mode
         selectedSpecialist, // Add selected specialist
         screenshot, // Add screenshot as a separate parameter
-        user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym // Add pseudonym parameter with fallbacks
+        userPseudonym // Use the generated or existing pseudonym
       );
       
       console.log(`Received response from KinOS after sending message${screenshot ? ' with screenshot' : ''}`);
