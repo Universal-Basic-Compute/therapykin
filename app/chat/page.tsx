@@ -504,12 +504,18 @@ function ChatSessionWithSearchParams() {
         if (minutesActive > 0 && !isSendingMessage) {
           console.log('Fetching previous messages for existing session...');
           
+          // Check for pseudonym before fetching messages
+          if (!user.pseudonym) {
+            console.error('Missing pseudonym for user:', user);
+            return; // Exit early if pseudonym is missing
+          }
+          
           // Get messages from KinOS
           const messages = await fetchMessagesFromKinOS(
             user.firstName,
             undefined, // No since parameter
             selectedSpecialist, // Pass the selected specialist
-            user.pseudonym // Pass the pseudonym
+            user.pseudonym // Ensure pseudonym is passed
           );
           
           if (messages.length > 0) {
