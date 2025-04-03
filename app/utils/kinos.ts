@@ -12,6 +12,12 @@ export async function fetchMessagesFromKinOS(
   specialist: string = 'generalist' // Add specialist parameter with default
 ): Promise<Array<{role: string, content: string, timestamp: string}>> {
   try {
+    // Validate specialist value
+    if (!['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+      console.error(`Invalid specialist value: ${specialist}, defaulting to generalist`);
+      specialist = 'generalist';
+    }
+    
     console.log(`Fetching messages for ${firstName} ${lastName}${since ? ` since ${since}` : ''} (specialist: ${specialist})`);
     
     // Build the URL with query parameters
@@ -50,6 +56,12 @@ export async function sendMessageToKinOS(
   screenshot: string | null = null // Add screenshot parameter
 ): Promise<string> {
   try {
+    // Validate specialist value if provided
+    if (specialist && !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+      console.warn(`Invalid specialist value: ${specialist}, defaulting to generalist`);
+      specialist = 'generalist';
+    }
+    
     console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
     // Log image information
@@ -162,7 +174,13 @@ async function pollForResponse(
   delayMs = 1000,
   specialist = 'generalist' // Add specialist parameter with default
 ): Promise<string> {
-  console.log(`Polling for response to message ID: ${messageId}`);
+  // Validate specialist value
+  if (!['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+    console.warn(`Invalid specialist value for polling: ${specialist}, defaulting to generalist`);
+    specialist = 'generalist';
+  }
+  
+  console.log(`Polling for response to message ID: ${messageId} (specialist: ${specialist})`);
   
   // Always use our API route - environment handling happens server-side
   const statusEndpoint = `/api/kinos/status`;

@@ -101,9 +101,10 @@ export async function createUser(userData: {
   firstName: string;
   lastName: string;
   password: string;
+  preferredSpecialist?: string;
 }) {
   try {
-    const { email, firstName, lastName, password } = userData;
+    const { email, firstName, lastName, password, preferredSpecialist } = userData;
     
     // Check if user already exists
     const existingUser = await getUserByEmail(email);
@@ -124,6 +125,7 @@ export async function createUser(userData: {
           PasswordHash: hashedPassword,
           PasswordSalt: salt,
           CreatedAt: new Date().toISOString(),
+          PreferredSpecialist: preferredSpecialist || 'generalist', // Set default specialist preference
         },
       },
     ]);

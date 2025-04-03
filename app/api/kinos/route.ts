@@ -13,6 +13,14 @@ export async function POST(request: NextRequest) {
       screenshot = null // Add screenshot parameter
     } = await request.json();
     
+    // Validate specialist value if provided
+    if (specialist && !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+      return NextResponse.json(
+        { error: 'Invalid specialist value' },
+        { status: 400 }
+      );
+    }
+    
     console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
     // Create the project ID by combining firstName and lastName

@@ -15,6 +15,14 @@ export async function GET(request: NextRequest) {
       );
     }
     
+    // Validate specialist value
+    if (!['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+      return NextResponse.json(
+        { error: 'Invalid specialist value' },
+        { status: 400 }
+      );
+    }
+    
     const projectId = `${firstName}${lastName}`;
     
     // Determine the base URL based on environment and specialist

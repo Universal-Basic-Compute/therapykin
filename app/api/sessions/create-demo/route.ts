@@ -12,7 +12,15 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log(`Creating demo session for kin ID ${kinId} with specialist ${specialist}`);
+    // Validate specialist if provided
+    if (specialist && !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist', 'welcome'].includes(specialist)) {
+      return NextResponse.json(
+        { error: 'Invalid specialist value' },
+        { status: 400 }
+      );
+    }
+    
+    console.log(`Creating demo session for kin ID ${kinId} with specialist ${specialist || 'welcome'}`);
     
     // Use kinId as the email for demo sessions, but don't pass kinId separately
     const session = await createSession(

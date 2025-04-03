@@ -91,6 +91,12 @@ export async function createSession(
       throw new Error('Email is required for creating a session');
     }
     
+    // Validate specialist value
+    if (!['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist', 'welcome'].includes(specialist)) {
+      console.warn(`Invalid specialist value: ${specialist}, defaulting to generalist`);
+      specialist = 'generalist';
+    }
+    
     const createdAt = new Date().toISOString();
     
     // Log the exact data being sent to Airtable

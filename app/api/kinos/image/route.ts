@@ -9,6 +9,14 @@ export async function POST(request: NextRequest) {
       specialist = null
     } = await request.json();
     
+    // Validate specialist value if provided
+    if (specialist && !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
+      return NextResponse.json(
+        { error: 'Invalid specialist value' },
+        { status: 400 }
+      );
+    }
+    
     console.log(`Requesting image generation for user: ${firstName} ${lastName}${specialist ? `, specialist: ${specialist}` : ''}`);
     console.log(`Using API key: ${process.env.KINOS_API_KEY ? 'Key is set (not showing for security)' : 'Key is NOT set!'}`);
     
