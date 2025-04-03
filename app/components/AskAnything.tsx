@@ -84,9 +84,8 @@ export default function AskAnything() {
     ]);
     
     try {
-      // Use first name and last name from project ID for demo purposes
+      // Use first name and project ID as pseudonym for demo purposes
       const firstName = 'Demo';
-      const lastName = projectId || 'User';
       
       // Create a session if this is the first message and no session has been created yet
       if (!sessionCreated) {

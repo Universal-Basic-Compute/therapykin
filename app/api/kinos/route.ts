@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isValidSpecialist, createProjectId, createKinOsApiUrl } from '@/app/utils/validation';
+import { isValidSpecialist, createKinId, createKinOsApiUrl } from '@/app/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {

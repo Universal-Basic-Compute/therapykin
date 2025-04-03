@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isValidSpecialist, createProjectId, createKinOsApiUrl } from '@/app/utils/validation';
+import { isValidSpecialist, createKinId, createKinOsApiUrl } from '@/app/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {
     const { 
       message, 
       firstName, 
-      lastName,
       specialist = null,
       pseudonym = null
     } = await request.json();
@@ -19,10 +18,10 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log(`Requesting image generation for user: ${firstName} ${lastName}${specialist ? `, specialist: ${specialist}` : ''}`);
+    console.log(`Requesting image generation for user: ${firstName}${specialist ? `, specialist: ${specialist}` : ''}`);
     
     // Create a consistent KinId
-    const kinId = createKinId({ pseudonym, firstName, lastName });
+    const kinId = createKinId({ pseudonym, firstName });
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({
