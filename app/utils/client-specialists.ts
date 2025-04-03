@@ -2,8 +2,9 @@
 
 /**
  * Fetches the list of available specialists from the API
+ * @returns Promise resolving to an array of specialist objects
  */
-export async function fetchSpecialists() {
+export async function fetchSpecialists(): Promise<Array<{id: string, name: string, description: string, sortOrder?: number}>> {
   try {
     const response = await fetch('/api/specialists');
     if (!response.ok) {

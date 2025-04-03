@@ -8,6 +8,7 @@ interface User {
   email: string;
   firstName: string;
   lastName: string;
+  pseudonym?: string; // Add pseudonym field
   subscription?: {
     plan: string;
     status: string;

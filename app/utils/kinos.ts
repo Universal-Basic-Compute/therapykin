@@ -9,7 +9,8 @@ export async function fetchMessagesFromKinOS(
   firstName: string,
   lastName: string,
   since?: string,
-  specialist: string = 'generalist' // Add specialist parameter with default
+  specialist: string = 'generalist', // Add specialist parameter with default
+  pseudonym?: string // Add pseudonym parameter
 ): Promise<Array<{role: string, content: string, timestamp: string}>> {
   try {
     // Validate specialist value
@@ -24,6 +25,9 @@ export async function fetchMessagesFromKinOS(
     let url = `/api/kinos/messages?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&specialist=${encodeURIComponent(specialist)}`;
     if (since) {
       url += `&since=${encodeURIComponent(since)}`;
+    }
+    if (pseudonym) {
+      url += `&pseudonym=${encodeURIComponent(pseudonym)}`;
     }
     
     // Call our API endpoint
@@ -53,7 +57,8 @@ export async function sendMessageToKinOS(
   images: string[] = [],
   mode: string | null = null,
   specialist: string | null = null, // Add this parameter
-  screenshot: string | null = null // Add screenshot parameter
+  screenshot: string | null = null, // Add screenshot parameter
+  pseudonym: string | null = null // Add pseudonym parameter
 ): Promise<string> {
   try {
     // Validate specialist value if provided
@@ -92,6 +97,7 @@ export async function sendMessageToKinOS(
       lastName,
       attachments,
       images,
+      pseudonym, // Add pseudonym to request body
     };
     
     // Add screenshot if it exists
@@ -145,7 +151,7 @@ export async function sendMessageToKinOS(
       return data;
     } else if (data.message_id) {
       // If we only have a message_id, try to fetch the response
-      return await pollForResponse(data.message_id, firstName, lastName, 10, 1000, specialist || 'generalist');
+      return await pollForResponse(data.message_id, firstName, lastName, 10, 1000, specialist || 'generalist', pseudonym);
     } else {
       // For development/testing, provide a mock response when the API doesn't return expected format
       console.log('KinOS API returned unexpected data format:', data);
@@ -176,7 +182,8 @@ async function pollForResponse(
   lastName: string,
   maxAttempts = 10,
   delayMs = 1000,
-  specialist = 'generalist' // Add specialist parameter with default
+  specialist = 'generalist', // Add specialist parameter with default
+  pseudonym: string | null = null // Add pseudonym parameter
 ): Promise<string> {
   // Validate specialist value
   try {
@@ -203,7 +210,7 @@ async function pollForResponse(
       await new Promise(resolve => setTimeout(resolve, delayMs));
       
       // Try to fetch the response using our API route
-      const response = await fetch(`${statusEndpoint}?messageId=${messageId}&firstName=${firstName}&lastName=${lastName}&specialist=${specialist}`);
+      const response = await fetch(`${statusEndpoint}?messageId=${messageId}&firstName=${firstName}&lastName=${lastName}&specialist=${specialist}${pseudonym ? `&pseudonym=${pseudonym}` : ''}`);
       
       if (!response.ok) {
         console.log(`Polling attempt ${attempt} failed with status ${response.status}`);

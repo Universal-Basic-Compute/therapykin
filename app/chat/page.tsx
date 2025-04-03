@@ -440,7 +440,9 @@ function ChatSessionWithSearchParams() {
         [], // attachments
         [], // images
         'session_opening', // Use session_opening mode
-        selectedSpecialist // Add selected specialist
+        selectedSpecialist, // Add selected specialist
+        null, // No screenshot
+        user.pseudonym // Add pseudonym
       );
       
       // Update chat history with the response
@@ -508,7 +510,8 @@ function ChatSessionWithSearchParams() {
             user.firstName,
             user.lastName,
             undefined, // No since parameter
-            selectedSpecialist // Pass the selected specialist
+            selectedSpecialist, // Pass the selected specialist
+            user.pseudonym // Pass the pseudonym
           );
           
           if (messages.length > 0) {
@@ -582,7 +585,9 @@ function ChatSessionWithSearchParams() {
           [], // attachments
           [], // images
           "journey", // Use journey mode
-          selectedSpecialist // Add selected specialist
+          selectedSpecialist, // Add selected specialist
+          null, // No screenshot
+          user.pseudonym // Add pseudonym
         ).then(async (response) => {
           console.log("Halfway message sent successfully");
           setHalfwayMessageSent(true);
@@ -627,7 +632,9 @@ function ChatSessionWithSearchParams() {
           [], // attachments
           [], // images
           "journey", // Use journey mode
-          selectedSpecialist // Add selected specialist
+          selectedSpecialist, // Add selected specialist
+          null, // No screenshot
+          user.pseudonym // Add pseudonym
         ).then(async (response) => {
           console.log("Closing message sent successfully");
           setClosingMessageSent(true);
@@ -775,7 +782,8 @@ function ChatSessionWithSearchParams() {
           [], // images
           "journey", // Use journey mode
           selectedSpecialist, // Add selected specialist
-          screenshot // Add screenshot if camera is enabled
+          screenshot, // Add screenshot if camera is enabled
+          user.pseudonym // Add pseudonym
         ).then(async (response) => {
           console.log("Silence notification sent successfully");
           setSilenceMessageSent(true);
@@ -1276,7 +1284,8 @@ function ChatSessionWithSearchParams() {
             [], // empty images array
             sessionMode, // Add session mode
             selectedSpecialist, // Add selected specialist
-            screenshot // Add screenshot as a separate parameter
+            screenshot, // Add screenshot as a separate parameter
+            user?.pseudonym // Add pseudonym parameter
           );
           
           // If voice mode is enabled, convert response to speech
@@ -1685,7 +1694,9 @@ function ChatSessionWithSearchParams() {
             [], // attachments
             [], // images
             'session_opening', // Use session_opening mode
-            specialist // Add selected specialist
+            specialist, // Add selected specialist
+            null, // No screenshot
+            user?.pseudonym // Add pseudonym
           );
           
           // Update chat history with the response
@@ -1762,7 +1773,8 @@ Important style requirements:
           message: prompt,
           firstName: user.firstName,
           lastName: user.lastName,
-          specialist: selectedSpecialist
+          specialist: selectedSpecialist,
+          pseudonym: user.pseudonym
         }),
       });
       
@@ -1983,7 +1995,8 @@ Important style requirements:
         [], // empty images array
         sessionMode, // Add session mode
         selectedSpecialist, // Add selected specialist
-        screenshot // Add screenshot as a separate parameter
+        screenshot, // Add screenshot as a separate parameter
+        user?.pseudonym // Add pseudonym parameter
       );
       
       console.log(`Received response from KinOS after sending message${screenshot ? ' with screenshot' : ''}`);

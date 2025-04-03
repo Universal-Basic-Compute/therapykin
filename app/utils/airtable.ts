@@ -311,4 +311,15 @@ export async function updateSessionImage(
 
 // These functions have been moved to auth.ts to avoid duplication
 
+/**
+ * Escapes single quotes in Airtable formula strings to prevent injection
+ * @param value - The string value to escape
+ * @returns The escaped string
+ */
+function escapeAirtableString(value: string): string {
+  if (!value) return '';
+  // Replace single quotes with escaped single quotes
+  return value.replace(/'/g, "\\'");
+}
+
 export { base, usersTable, escapeAirtableString };

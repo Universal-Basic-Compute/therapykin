@@ -179,6 +179,7 @@ export async function getCurrentUser() {
     email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,
+    pseudonym: user.fields?.Pseudonym as string || null,
     isTherapist: user.fields?.IsTherapist === true || 
                 user.fields?.IsTherapist === "true" || 
                 user.fields?.IsTherapist === 1 || 
