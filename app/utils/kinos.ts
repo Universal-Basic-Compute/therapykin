@@ -57,9 +57,13 @@ export async function sendMessageToKinOS(
 ): Promise<string> {
   try {
     // Validate specialist value if provided
-    if (specialist && !['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
-      console.warn(`Invalid specialist value: ${specialist}, defaulting to generalist`);
-      specialist = 'generalist';
+    if (specialist) {
+      // Import isValidSpecialist dynamically to avoid circular dependencies
+      const { isValidSpecialist } = await import('./validation');
+      if (!isValidSpecialist(specialist)) {
+        console.warn(`Invalid specialist value: ${specialist}, defaulting to generalist`);
+        specialist = 'generalist';
+      }
     }
     
     console.log(`Sending message to KinOS: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
@@ -175,8 +179,16 @@ async function pollForResponse(
   specialist = 'generalist' // Add specialist parameter with default
 ): Promise<string> {
   // Validate specialist value
-  if (!['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
-    console.warn(`Invalid specialist value for polling: ${specialist}, defaulting to generalist`);
+  try {
+    // Import isValidSpecialist dynamically to avoid circular dependencies
+    const { isValidSpecialist } = await import('./validation');
+    if (!isValidSpecialist(specialist)) {
+      console.warn(`Invalid specialist value for polling: ${specialist}, defaulting to generalist`);
+      specialist = 'generalist';
+    }
+  } catch (error) {
+    console.error('Error validating specialist:', error);
+    // Default to generalist if validation fails
     specialist = 'generalist';
   }
   

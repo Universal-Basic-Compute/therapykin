@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { sendMessageToKinOS, fetchMessagesFromKinOS } from '../utils/kinos';
 import { createSession, getOngoingSession } from '../utils/airtable';
+import { fetchSpecialists, isValidSpecialist } from '../utils/client-specialists';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -53,6 +54,9 @@ function ChatSessionWithSearchParams() {
   const [silenceMessageSent, setSilenceMessageSent] = useState(false);
   const [isTabActive, setIsTabActive] = useState(true);
   const [selectedSpecialist, setSelectedSpecialist] = useState<string>("generalist");
+  const [specialists, setSpecialists] = useState<Array<{id: string, name: string, description: string}>>([
+    { id: 'generalist', name: 'General Therapist', description: 'General therapeutic support for various concerns' }
+  ]);
   // Add state for session summary image
   const [sessionImageRequested, setSessionImageRequested] = useState(false);
   const [sessionImage, setSessionImage] = useState<string | null>(null);
@@ -94,6 +98,21 @@ function ChatSessionWithSearchParams() {
   
   // Add a state to track if preferences have been loaded
   const [preferencesLoaded, setPreferencesLoaded] = useState(false);
+  
+  // Fetch available specialists
+  useEffect(() => {
+    async function loadSpecialists() {
+      try {
+        const specialistsList = await fetchSpecialists();
+        setSpecialists(specialistsList);
+        console.log('Loaded specialists:', specialistsList);
+      } catch (error) {
+        console.error('Error loading specialists:', error);
+      }
+    }
+    
+    loadSpecialists();
+  }, []);
 
   // Check if user has sessions remaining and fetch preferred session length
   useEffect(() => {
@@ -220,8 +239,7 @@ function ChatSessionWithSearchParams() {
             
             // Check URL parameter first, then fall back to user preference
             const specialistParam = searchParams.get('specialist');
-            if (specialistParam && (specialistParam === 'generalist' || specialistParam === 'crypto' || 
-                specialistParam === 'athletes' || specialistParam === 'executives' || specialistParam === 'herosjourney')) {
+            if (specialistParam && isValidSpecialist(specialistParam)) {
               // Just set the selected specialist without calling updateSelectedSpecialist
               setSelectedSpecialist(specialistParam);
               console.log(`Using specialist from URL parameter: ${specialistParam}`);
@@ -2433,91 +2451,25 @@ Important style requirements:
               <div className="mb-6">
                 <h3 className="text-sm font-medium mb-2">Specialist Type</h3>
                 <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => updateSelectedSpecialist("generalist")}
-                    className={`p-2 rounded-lg border text-sm ${
-                      selectedSpecialist === "generalist" 
-                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
-                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                    }`}
-                  >
-                    Generalist
-                  </button>
-                  <button
-                    onClick={() => updateSelectedSpecialist("crypto")}
-                    className={`p-2 rounded-lg border text-sm ${
-                      selectedSpecialist === "crypto" 
-                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
-                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                    }`}
-                  >
-                    Crypto
-                  </button>
-                  <button
-                    onClick={() => updateSelectedSpecialist("athletes")}
-                    className={`p-2 rounded-lg border text-sm ${
-                      selectedSpecialist === "athletes" 
-                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
-                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                    }`}
-                  >
-                    Athletes
-                  </button>
-                  <button
-                    onClick={() => updateSelectedSpecialist("executives")}
-                    className={`p-2 rounded-lg border text-sm ${
-                      selectedSpecialist === "executives" 
-                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
-                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                    }`}
-                  >
-                    Executives
-                  </button>
-                  <button
-                    onClick={() => updateSelectedSpecialist("herosjourney")}
-                    className={`p-2 rounded-lg border text-sm ${
-                      selectedSpecialist === "herosjourney" 
-                        ? 'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]' 
-                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                    }`}
-                  >
-                    Hero's Journey
-                  </button>
-                  <button
-                    onClick={() => updateSelectedSpecialist("sexologist")}
-                    className={`p-2 rounded-lg border text-sm ${
-                      selectedSpecialist === "sexologist" 
-                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
-                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                    }`}
-                  >
-                    Sexual Health
-                  </button>
-                  <button
-                    onClick={() => updateSelectedSpecialist("sexologist")}
-                    className={`p-2 rounded-lg border text-sm ${
-                      selectedSpecialist === "sexologist" 
-                        ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]' 
-                        : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                    }`}
-                  >
-                    Sexual Health
-                  </button>
+                  {specialists.map(specialist => (
+                    <button
+                      key={specialist.id}
+                      onClick={() => updateSelectedSpecialist(specialist.id)}
+                      className={`p-2 rounded-lg border text-sm ${
+                        selectedSpecialist === specialist.id 
+                          ? (specialist.id === "herosjourney" 
+                              ? 'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]'
+                              : 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]')
+                          : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                      }`}
+                    >
+                      {specialist.name}
+                    </button>
+                  ))}
                 </div>
                 <p className="text-xs text-foreground/60 mt-2">
-                  {selectedSpecialist === "generalist" 
-                    ? "General therapeutic support for various concerns" 
-                    : selectedSpecialist === "crypto"
-                    ? "Specialized support for crypto traders and investors"
-                    : selectedSpecialist === "athletes"
-                    ? "Mental performance support for athletes and competitors"
-                    : selectedSpecialist === "executives"
-                    ? "Leadership and executive performance support"
-                    : selectedSpecialist === "herosjourney"
-                    ? "Transform challenges into strengths with the Hero's Journey"
-                    : selectedSpecialist === "sexologist"
-                    ? "Private support for sexual health and intimacy concerns"
-                    : "Transform challenges into strengths with the Hero's Journey"}
+                  {specialists.find(s => s.id === selectedSpecialist)?.description || 
+                   "General therapeutic support for various concerns"}
                 </p>
               </div>
               
