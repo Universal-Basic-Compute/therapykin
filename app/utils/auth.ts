@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { jwtVerify, SignJWT } from 'jose';
 import { cookies } from 'next/headers';
 import { usersTable } from './airtable';
+import { generatePseudonymFromEmail } from './pseudonyms';
 
 // Generate a salt and hash a password
 export async function hashPassword(password: string) {
@@ -176,8 +177,9 @@ export async function getCurrentUser() {
     id: user.id,
     email: user.email,
     firstName: user.firstName,
-    pseudonym: user.fields?.Pseudonym as string || null,
-    Pseudonym: user.fields?.Pseudonym as string || null, // Add capitalized version for compatibility
+    // Generate a pseudonym from email if one doesn't exist in the database
+    pseudonym: user.fields?.Pseudonym as string || generatePseudonymFromEmail(user.email).name,
+    Pseudonym: user.fields?.Pseudonym as string || generatePseudonymFromEmail(user.email).name, // Add capitalized version for compatibility
     isTherapist: user.fields?.IsTherapist === true || 
                 user.fields?.IsTherapist === "true" || 
                 user.fields?.IsTherapist === 1 || 
