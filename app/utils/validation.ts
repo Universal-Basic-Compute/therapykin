@@ -139,17 +139,21 @@ export function createKinOsApiUrl(options: {
       ? 'http://localhost:5000'
       : 'https://api.kinos-engine.ai');
   
-  // Construct the URL path
-  let url = `${baseApiUrl}/v2/blueprints/${blueprintName}/kins/${projectId}`;
+  // Construct the URL path with proper encoding for each component
+  const encodedBlueprintName = encodeURIComponent(blueprintName);
+  const encodedProjectId = encodeURIComponent(projectId);
+  let url = `${baseApiUrl}/v2/blueprints/${encodedBlueprintName}/kins/${encodedProjectId}`;
   
   // Add endpoint (e.g., /messages, /image)
   if (endpoint) {
-    url += `/${endpoint}`;
+    const encodedEndpoint = encodeURIComponent(endpoint);
+    url += `/${encodedEndpoint}`;
   }
   
   // Add message ID if provided
   if (messageId) {
-    url += `/${messageId}`;
+    const encodedMessageId = encodeURIComponent(messageId);
+    url += `/${encodedMessageId}`;
   }
   
   // Add query parameters if provided
