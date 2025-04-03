@@ -293,8 +293,8 @@ export default function TherapistDashboard() {
     
     try {
       // Use the user's name directly from the user object
-      const userName = user?.firstName && user?.lastName 
-        ? `${user.firstName}${user.lastName}` 
+      const userName = user?.firstName
+        ? `${user.firstName}` 
         : 'NicolasReynolds'; // Default to NicolasReynolds if user name not available
       
       const response = await fetch(`/projects/therapykinherosjourney/${userName}/analysis`, {

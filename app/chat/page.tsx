@@ -2163,7 +2163,7 @@ Important style requirements:
       if (!userPseudonym) {
         console.log('Pseudonym missing for user:', user?.email);
         // Generate a pseudonym from the email
-        const generatedPseudonym = generatePseudonymFromEmail(user?.email);
+        const generatedPseudonym = generatePseudonymFromEmail(user?.email || '');
         userPseudonym = generatedPseudonym.name;
         console.log(`Generated pseudonym for user: ${userPseudonym}`);
         
