@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
 
     // Get the plan from user record
     const plan = userRecord.fields.SubscriptionPlan || 'free';
-    const planLowerCase = plan.toLowerCase();
+    const planLowerCase = typeof plan === 'string' ? plan.toLowerCase() : 'free';
 
     // Determine total sessions allowed for the plan
     const totalSessionsAllowed = sessionsPerPlan[planLowerCase] || 0;
@@ -144,7 +144,7 @@ export async function GET(request: NextRequest) {
     // Return a default subscription in case of error
     // Try to count sessions even in error case
     try {
-      const email = currentUser?.email;
+      const email = user?.email;
       if (email) {
         const escapedEmail = escapeAirtableString(email);
         const sessionsRecords = await sessionsTable.select({

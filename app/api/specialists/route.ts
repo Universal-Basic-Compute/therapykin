@@ -10,7 +10,8 @@ export async function GET() {
       specialists.unshift({
         id: 'generalist',
         name: 'General Therapist',
-        description: 'A general-purpose therapist for all needs'
+        description: 'A general-purpose therapist for all needs',
+        sortOrder: 0
       });
     }
     
@@ -18,7 +19,7 @@ export async function GET() {
     specialists.sort((a, b) => {
       if (a.id === 'generalist') return -1;
       if (b.id === 'generalist') return 1;
-      return a.name.localeCompare(b.name);
+      return String(a.name || '').localeCompare(String(b.name || ''));
     });
     
     return NextResponse.json({ specialists });

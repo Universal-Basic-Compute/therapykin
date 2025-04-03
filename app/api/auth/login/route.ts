@@ -50,11 +50,11 @@ export async function POST(request: NextRequest) {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
-        lastName: user.lastName,
+        lastName: user.lastName || '',
       }
     });
   } catch (error) {
-    logError('Login', 'Authentication failed', error);
+    logError('Login: Authentication failed', error);
     return createErrorResponse(500, 'Login failed', error);
   }
 }

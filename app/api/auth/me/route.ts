@@ -17,7 +17,7 @@ export async function GET() {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
-        lastName: user.lastName,
+        lastName: user.lastName || '',
       }
     });
   } catch (error) {
