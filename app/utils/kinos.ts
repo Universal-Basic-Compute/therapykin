@@ -12,9 +12,16 @@ export async function fetchMessagesFromKinOS(
   pseudonym?: string // Add pseudonym parameter
 ): Promise<Array<{role: string, content: string, timestamp: string}>> {
   try {
-    // Validate specialist value
-    if (!['generalist', 'crypto', 'athletes', 'executives', 'herosjourney', 'sexologist'].includes(specialist)) {
-      console.error(`Invalid specialist value: ${specialist}, defaulting to generalist`);
+    // Import isValidSpecialist dynamically to avoid circular dependencies
+    try {
+      const { isValidSpecialist } = await import('./validation');
+      if (specialist && !isValidSpecialist(specialist)) {
+        console.warn(`Invalid specialist value: ${specialist}, defaulting to generalist`);
+        specialist = 'generalist';
+      }
+    } catch (error) {
+      console.error('Error validating specialist:', error);
+      // Default to generalist if validation fails
       specialist = 'generalist';
     }
     
