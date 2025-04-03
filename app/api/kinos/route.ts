@@ -26,8 +26,16 @@ export async function POST(request: NextRequest) {
     
     console.log(`Sending message to KinOS for user: ${firstName} ${lastName}${mode ? `, mode: ${mode}` : ''}${specialist ? `, specialist: ${specialist}` : ''}${screenshot ? ', with screenshot' : ''}`);
     
-    // Use pseudonym directly as kinId if available, otherwise create one
-    const kinId = pseudonym || createKinId({ email, firstName, lastName });
+    // Ensure pseudonym is provided
+    if (!pseudonym) {
+      return NextResponse.json(
+        { error: 'Pseudonym is required' },
+        { status: 400 }
+      );
+    }
+    
+    // Use pseudonym directly as kinId
+    const kinId = pseudonym;
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({

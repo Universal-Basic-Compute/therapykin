@@ -58,6 +58,11 @@ export async function sendMessageToKinOS(
   screenshot: string | null = null, // Add screenshot parameter
   pseudonym: string | null = null // Add pseudonym parameter
 ): Promise<string> {
+  // Ensure pseudonym is provided
+  if (!pseudonym) {
+    console.error('Pseudonym is required for sendMessageToKinOS');
+    throw new Error('Pseudonym is required for KinOS communication');
+  }
   try {
     // Validate specialist value if provided
     if (specialist) {

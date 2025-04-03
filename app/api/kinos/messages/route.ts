@@ -24,8 +24,16 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Use pseudonym directly as kinId if available, otherwise create one
-    const kinId = pseudonym || createKinId({ firstName });
+    // Ensure pseudonym is provided
+    if (!pseudonym) {
+      return NextResponse.json(
+        { error: 'Pseudonym is required' },
+        { status: 400 }
+      );
+    }
+    
+    // Use pseudonym directly as kinId
+    const kinId = pseudonym;
     
     // Create the KinOS API URL with query parameters
     const baseUrl = createKinOsApiUrl({
