@@ -1292,7 +1292,7 @@ function ChatSessionWithSearchParams() {
             sessionMode, // Add session mode
             selectedSpecialist, // Add selected specialist
             screenshot, // Add screenshot as a separate parameter
-            user?.pseudonym // Add pseudonym parameter
+            user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym // Add pseudonym parameter with fallbacks
           );
           
           // If voice mode is enabled, convert response to speech
