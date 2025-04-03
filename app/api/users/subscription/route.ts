@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { usersTable, escapeAirtableString } from '@/app/utils/airtable';
+import { usersTable, sessionsTable, escapeAirtableString } from '@/app/utils/airtable';
 import { getCurrentUser } from '@/app/utils/auth';
 
 export async function GET(request: NextRequest) {
@@ -26,41 +26,105 @@ export async function GET(request: NextRequest) {
     if (records.length === 0) {
       console.log('User not found in Airtable:', currentUser.email);
       // Return default subscription data for users not in Airtable yet
-      return NextResponse.json({
-        subscription: {
-          plan: 'free',
-          status: 'active',
-          isAnnual: false,
-          currentPeriodEnd: null,
-          sessionsRemaining: 0,  // Changed from 3 to 0
-          totalSessions: 0,
-          daysActive: 1
-        }
-      });
+      // For users not in Airtable yet, calculate free plan sessions
+      try {
+        // Check if there are any sessions for this email
+        const sessionsRecords = await sessionsTable.select({
+          filterByFormula: `{Email} = '${escapedEmail}'`,
+          fields: ['ID', 'MinutesActive']
+        }).all();
+        
+        // Only count sessions with MinutesActive > 5 as valid sessions
+        const validSessions = sessionsRecords.filter((record: any) => {
+          const minutesActive = record.fields.MinutesActive as number || 0;
+          return minutesActive > 5;
+        });
+        
+        const freeSessionsAllowed = 3;
+        const remainingSessions = Math.max(0, freeSessionsAllowed - validSessions.length);
+        
+        console.log(`New user has used ${validSessions.length} sessions, has ${remainingSessions} remaining`);
+        
+        return NextResponse.json({
+          subscription: {
+            plan: 'free',
+            status: 'active',
+            isAnnual: false,
+            currentPeriodEnd: null,
+            sessionsRemaining: remainingSessions,
+            totalSessions: validSessions.length,
+            daysActive: 1
+          }
+        });
+      } catch (error) {
+        console.error('Error counting sessions for new user:', error);
+        // Fall back to default values if there's an error
+        return NextResponse.json({
+          subscription: {
+            plan: 'free',
+            status: 'active',
+            isAnnual: false,
+            currentPeriodEnd: null,
+            sessionsRemaining: 3,  // Default for new users
+            totalSessions: 0,
+            daysActive: 1
+          }
+        });
+      }
     }
     
     const userRecord = records[0];
     console.log('Found user record in Airtable:', userRecord.id);
     
-    // Get the actual sessions remaining from the user record
-    // Log the raw value to help debug
-    console.log('Raw SessionsRemaining value from Airtable:', userRecord.fields.SessionsRemaining);
+    // Define sessions per plan
+    const sessionsPerPlan: Record<string, number> = {
+      'free': 3,
+      'basic': 8,
+      'standard': 30,
+      'premium': Infinity
+    };
 
-    // Check if the value exists and is a number
+    // Get the plan from user record
+    const plan = userRecord.fields.SubscriptionPlan || 'free';
+    const planLowerCase = plan.toLowerCase();
+
+    // Determine total sessions allowed for the plan
+    const totalSessionsAllowed = sessionsPerPlan[planLowerCase] || 0;
+
+    // For free plan, we need to count all sessions ever used
+    // For paid plans, it's a monthly allocation that resets
     let sessionsRemaining = 0;
-    if (userRecord.fields.SessionsRemaining !== undefined) {
-      if (typeof userRecord.fields.SessionsRemaining === 'number') {
-        sessionsRemaining = userRecord.fields.SessionsRemaining;
-      } else {
-        // Try to convert to number if it's a string
-        const parsedValue = Number(userRecord.fields.SessionsRemaining);
-        if (!isNaN(parsedValue)) {
-          sessionsRemaining = parsedValue;
-        }
+
+    if (planLowerCase === 'free') {
+      // For free plan, count all sessions ever used
+      // We'll need to query the sessions table to get this count
+      try {
+        const sessionsRecords = await sessionsTable.select({
+          filterByFormula: `{Email} = '${escapedEmail}'`,
+          fields: ['ID', 'MinutesActive']
+        }).all();
+        
+        // Only count sessions with MinutesActive > 5 as valid sessions
+        const validSessions = sessionsRecords.filter((record: any) => {
+          const minutesActive = record.fields.MinutesActive as number || 0;
+          return minutesActive > 5;
+        });
+        
+        console.log(`User has used ${validSessions.length} valid sessions out of ${totalSessionsAllowed} allowed`);
+        
+        // Calculate remaining sessions
+        sessionsRemaining = Math.max(0, totalSessionsAllowed - validSessions.length);
+      } catch (error) {
+        console.error('Error counting used sessions:', error);
+        // Default to 0 remaining if there's an error
+        sessionsRemaining = 0;
       }
+    } else {
+      // For paid plans, it's the full monthly allocation
+      sessionsRemaining = totalSessionsAllowed;
     }
 
-    console.log('Processed sessionsRemaining value:', sessionsRemaining);
+    console.log('Calculated sessionsRemaining value:', sessionsRemaining);
     
     // Extract subscription details with fallbacks for missing fields
     const subscriptionData = {
@@ -78,13 +142,49 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching user subscription:', error);
     // Return a default subscription in case of error
+    // Try to count sessions even in error case
+    try {
+      const email = currentUser?.email;
+      if (email) {
+        const escapedEmail = escapeAirtableString(email);
+        const sessionsRecords = await sessionsTable.select({
+          filterByFormula: `{Email} = '${escapedEmail}'`,
+          fields: ['ID', 'MinutesActive']
+        }).all();
+        
+        // Only count sessions with MinutesActive > 5 as valid sessions
+        const validSessions = sessionsRecords.filter((record: any) => {
+          const minutesActive = record.fields.MinutesActive as number || 0;
+          return minutesActive > 5;
+        });
+        
+        const freeSessionsAllowed = 3;
+        const remainingSessions = Math.max(0, freeSessionsAllowed - validSessions.length);
+        
+        return NextResponse.json({ 
+          subscription: {
+            plan: 'free',
+            status: 'active',
+            isAnnual: false,
+            currentPeriodEnd: null,
+            sessionsRemaining: remainingSessions,
+            totalSessions: validSessions.length,
+            daysActive: 1
+          }
+        });
+      }
+    } catch (secondError) {
+      console.error('Error in fallback session counting:', secondError);
+    }
+    
+    // Ultimate fallback if everything fails
     return NextResponse.json({ 
       subscription: {
         plan: 'free',
         status: 'active',
         isAnnual: false,
         currentPeriodEnd: null,
-        sessionsRemaining: 0,  // Changed from 3 to 0
+        sessionsRemaining: 3,  // Default for new users
         totalSessions: 0,
         daysActive: 1
       }
