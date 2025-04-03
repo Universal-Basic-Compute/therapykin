@@ -60,8 +60,8 @@ export async function POST(request: NextRequest) {
     // Determine the base URL based on environment
     const baseUrl = process.env.KINOS_STT_API_URL || (
       process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000/stt'  // Use local server in development
-        : 'https://api.kinos-engine.ai/stt'  // Use KinOS API in production
+        ? 'http://localhost:5000/v2/stt'  // Use local server in development with v2 path
+        : 'https://api.kinos-engine.ai/v2/stt'  // Use KinOS API in production with v2 path
     );
     
     console.log(`STT API URL: ${baseUrl}`);

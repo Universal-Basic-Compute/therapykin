@@ -3,20 +3,20 @@ import { createSession } from '../../../utils/airtable';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, sessionLength, specialist, projectId } = await request.json();
+    const { email, sessionLength, specialist, kinId } = await request.json();
     
-    if (!projectId) {
+    if (!kinId) {
       return NextResponse.json(
-        { error: 'ProjectId is required' },
+        { error: 'KinId is required' },
         { status: 400 }
       );
     }
     
-    console.log(`Creating demo session for project ID ${projectId} with specialist ${specialist}`);
+    console.log(`Creating demo session for kin ID ${kinId} with specialist ${specialist}`);
     
-    // Use projectId as the email for demo sessions, but don't pass projectId separately
+    // Use kinId as the email for demo sessions, but don't pass kinId separately
     const session = await createSession(
-      projectId, // Use projectId instead of email
+      kinId, // Use kinId instead of email
       sessionLength || 15, 
       specialist || 'welcome',
       true // Mark as demo session
