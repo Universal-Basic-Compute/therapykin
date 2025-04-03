@@ -177,6 +177,7 @@ export async function getCurrentUser() {
     email: user.email,
     firstName: user.firstName,
     pseudonym: user.fields?.Pseudonym as string || null,
+    Pseudonym: user.fields?.Pseudonym as string || null, // Add capitalized version for compatibility
     isTherapist: user.fields?.IsTherapist === true || 
                 user.fields?.IsTherapist === "true" || 
                 user.fields?.IsTherapist === 1 || 

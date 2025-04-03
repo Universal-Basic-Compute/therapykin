@@ -441,7 +441,7 @@ function ChatSessionWithSearchParams() {
         'session_opening', // Use session_opening mode
         selectedSpecialist, // Add selected specialist
         null, // No screenshot
-        user.pseudonym // Add pseudonym
+        user.pseudonym || user.Pseudonym || user.fields?.Pseudonym // Add pseudonym with fallbacks
       );
       
       // Update chat history with the response
@@ -505,8 +505,10 @@ function ChatSessionWithSearchParams() {
           console.log('Fetching previous messages for existing session...');
           
           // Check for pseudonym before fetching messages
-          if (!user.pseudonym) {
+          const userPseudonym = user.pseudonym || user.Pseudonym || user.fields?.Pseudonym;
+          if (!userPseudonym) {
             console.error('Missing pseudonym for user:', user);
+            console.log('User object structure:', JSON.stringify(user, null, 2));
             return; // Exit early if pseudonym is missing
           }
           
@@ -515,7 +517,7 @@ function ChatSessionWithSearchParams() {
             user.firstName,
             undefined, // No since parameter
             selectedSpecialist, // Pass the selected specialist
-            user.pseudonym // Ensure pseudonym is passed
+            userPseudonym // Ensure pseudonym is passed
           );
           
           if (messages.length > 0) {
@@ -595,7 +597,7 @@ function ChatSessionWithSearchParams() {
           "journey", // Use journey mode
           selectedSpecialist, // Add selected specialist
           null, // No screenshot
-          user.pseudonym // Add pseudonym
+          user.pseudonym || user.Pseudonym || user.fields?.Pseudonym // Add pseudonym with fallbacks
         ).then(async (response) => {
           console.log("Halfway message sent successfully");
           setHalfwayMessageSent(true);
@@ -641,7 +643,7 @@ function ChatSessionWithSearchParams() {
           "journey", // Use journey mode
           selectedSpecialist, // Add selected specialist
           null, // No screenshot
-          user.pseudonym // Add pseudonym
+          user.pseudonym || user.Pseudonym || user.fields?.Pseudonym // Add pseudonym with fallbacks
         ).then(async (response) => {
           console.log("Closing message sent successfully");
           setClosingMessageSent(true);
@@ -789,7 +791,7 @@ function ChatSessionWithSearchParams() {
           "journey", // Use journey mode
           selectedSpecialist, // Add selected specialist
           screenshot, // Add screenshot if camera is enabled
-          user.pseudonym // Add pseudonym
+          user.pseudonym || user.Pseudonym || user.fields?.Pseudonym // Add pseudonym with fallbacks
         ).then(async (response) => {
           console.log("Silence notification sent successfully");
           setSilenceMessageSent(true);
@@ -1700,7 +1702,7 @@ function ChatSessionWithSearchParams() {
             'session_opening', // Use session_opening mode
             specialist, // Add selected specialist
             null, // No screenshot
-            user?.pseudonym // Add pseudonym
+            user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym // Add pseudonym with fallbacks
           );
           
           // Update chat history with the response
@@ -2010,7 +2012,7 @@ Important style requirements:
         sessionMode, // Add session mode
         selectedSpecialist, // Add selected specialist
         screenshot, // Add screenshot as a separate parameter
-        user?.pseudonym // Add pseudonym parameter
+        user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym // Add pseudonym parameter with fallbacks
       );
       
       console.log(`Received response from KinOS after sending message${screenshot ? ' with screenshot' : ''}`);
