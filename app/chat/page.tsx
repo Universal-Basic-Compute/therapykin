@@ -1819,7 +1819,7 @@ function ChatSessionWithSearchParams() {
           // Send the correct system message format
           const welcomeMessage = `<system>New ${sessionLength} minute session starting with ${user?.firstName || 'Guest'}</system>`;
           // Use the user's pseudonym or generate one if missing
-          let userPseudonym = user?.pseudonym || user?.Pseudonym || user?.fields?.Pseudonym;
+          let userPseudonym = user?.pseudonym || '';
           if (!userPseudonym) {
             console.log('Pseudonym missing for user:', user?.email);
             // Generate a pseudonym from the email
