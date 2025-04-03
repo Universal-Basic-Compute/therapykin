@@ -148,7 +148,7 @@ export async function sendMessageToKinOS(
       return data;
     } else if (data.message_id) {
       // If we only have a message_id, try to fetch the response
-      return await pollForResponse(data.message_id, firstName, lastName, 10, 1000, specialist || 'generalist', pseudonym);
+      return await pollForResponse(data.message_id, firstName, 10, 1000, specialist || 'generalist', pseudonym);
     } else {
       // For development/testing, provide a mock response when the API doesn't return expected format
       console.log('KinOS API returned unexpected data format:', data);
