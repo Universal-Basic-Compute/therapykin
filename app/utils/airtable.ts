@@ -288,12 +288,6 @@ export function isAuthorizedForSpecialist(user: any, specialistType: string): bo
     return true;
   }
   
-  // Check specific admin emails
-  if (user.email === 'nlr@universalbasiccompute.ai' || 
-      user.email === 'theherosjourneyteam@gmail.com') {
-    return true;
-  }
-  
   // Check if user is a therapist
   if (user.isTherapist) {
     try {
@@ -328,8 +322,7 @@ export function isAdmin(user: any): boolean {
   return user.isAdmin === true || 
          user.isAdmin === "true" || 
          user.isAdmin === 1 || 
-         user.isAdmin === "1" ||
-         user.email === 'nlr@universalbasiccompute.ai';
+         user.isAdmin === "1";
 }
 
 export { base, usersTable };
