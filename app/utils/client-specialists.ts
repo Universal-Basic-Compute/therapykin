@@ -49,15 +49,7 @@ export function isValidSpecialist(specialist: string, includeWelcome = false): b
   if (specialist === 'generalist') return true;
   if (includeWelcome && specialist === 'welcome') return true;
   
-  // Check for common specialists using pattern matching instead of hardcoding
-  const specialistPattern = /^[a-z0-9-]+$/;
-  if (specialistPattern.test(specialist) && 
-      specialist.length >= 3 && 
-      specialist.length <= 30) {
-    return true;
-  }
-  
-  // For all other specialists, use a naming convention check
+  // Check using pattern matching
   const specialistPattern = /^[a-z0-9-]+$/;
   const excludedSpecialists = ['admin', 'test', 'debug'];
   
