@@ -2,6 +2,13 @@
  * Validation utilities for API routes
  */
 
+import { specialistExists } from '@/app/utils/airtable';
+
+// Cache for specialists to avoid frequent database calls
+let specialistsCache: Set<string> = new Set(['generalist', 'welcome']);
+let cacheExpiry = 0;
+const CACHE_DURATION = 3600000; // 1 hour in milliseconds
+
 /**
  * Validates if a specialist value is valid using a pattern-based approach
  * @param specialist - The specialist value to validate
@@ -28,6 +35,34 @@ export function isValidSpecialist(specialist: string, includeWelcome = false): b
     specialist.length >= 3 && 
     specialist.length <= 30
   );
+}
+
+/**
+ * Validates a specialist against the database
+ * Use this for more thorough validation when database access is available
+ */
+export async function isValidSpecialistAsync(specialist: string, includeWelcome = false): Promise<boolean> {
+  // Special cases
+  if (specialist === 'generalist') return true;
+  if (includeWelcome && specialist === 'welcome') return true;
+  
+  const now = Date.now();
+  
+  // Check cache first
+  if (cacheExpiry > now && specialistsCache.has(specialist)) {
+    return true;
+  }
+  
+  // If not in cache, check database
+  const exists = await specialistExists(specialist);
+  
+  // Update cache if it exists
+  if (exists) {
+    specialistsCache.add(specialist);
+    cacheExpiry = now + CACHE_DURATION;
+  }
+  
+  return exists;
 }
 
 /**

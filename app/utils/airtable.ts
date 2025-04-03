@@ -36,6 +36,46 @@ const usersTable = base('USERS');
 // Get the sessions table
 export const sessionsTable = base('SESSIONS');
 
+// Get the specialists table
+export const specialistsTable = base('SPECIALISTS');
+
+// Function to get all active specialists
+export async function getActiveSpecialists() {
+  try {
+    const records = await specialistsTable.select({
+      // If you have an IsActive field, use this filter:
+      // filterByFormula: '{IsActive} = TRUE()',
+      fields: ['Name', 'DisplayName', 'Description']
+    }).all();
+    
+    return records.map(record => ({
+      id: record.fields.Name, // Using "Name" field as the ID/slug
+      name: record.fields.DisplayName || record.fields.Name,
+      description: record.fields.Description || ''
+    }));
+  } catch (error) {
+    console.error('Error fetching specialists:', error);
+    // Return at least the generalist as a fallback
+    return [{ id: 'generalist', name: 'General Therapist', description: '' }];
+  }
+}
+
+// Function to check if a specialist exists in the database
+export async function specialistExists(specialistName: string): Promise<boolean> {
+  try {
+    const records = await specialistsTable.select({
+      filterByFormula: `{Name} = '${specialistName}'`,
+      maxRecords: 1
+    }).firstPage();
+    
+    return records.length > 0;
+  } catch (error) {
+    console.error(`Error checking if specialist '${specialistName}' exists:`, error);
+    // Default to true for 'generalist' and 'welcome' as fallback
+    return specialistName === 'generalist' || specialistName === 'welcome';
+  }
+}
+
 // Check for an ongoing session
 export async function getOngoingSession(email: string): Promise<{ 
   id: string, 
