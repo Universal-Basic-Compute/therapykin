@@ -59,9 +59,9 @@ function ChatSessionWithSearchParams() {
   const [silenceMessageSent, setSilenceMessageSent] = useState(false);
   const [isTabActive, setIsTabActive] = useState(true);
   const [selectedSpecialist, setSelectedSpecialist] = useState<string>("generalist");
-  const [specialists, setSpecialists] = useState<Array<{id: string, name: string, description: string}>>([
+  const [specialists, setSpecialists] = useState<Array<{id: string, name: string, description: string, hidden?: boolean}>>([
     { id: 'generalist', name: 'General Therapist', description: 'General therapeutic support for various concerns' },
-    { id: 'therapykindouble', name: 'Therapeutic Double (you)', description: 'A therapeutic reflection of yourself, helping you explore your thoughts from a new perspective' }
+    { id: 'therapykindouble', name: 'Therapeutic Double (you)', description: 'A therapeutic reflection of yourself, helping you explore your thoughts from a new perspective', hidden: true }
   ]);
   // Add state for session summary image
   const [sessionImageRequested, setSessionImageRequested] = useState(false);
@@ -2932,21 +2932,23 @@ Important style requirements:
               <div className="mb-6">
                 <h3 className="text-sm font-medium mb-2">Specialist Type</h3>
                 <div className="grid grid-cols-2 gap-2">
-                  {specialists.map(specialist => (
-                    <button
-                      key={specialist.id}
-                      onClick={() => updateSelectedSpecialist(specialist.id)}
-                      className={`p-2 rounded-lg border text-sm ${
-                        selectedSpecialist === specialist.id 
-                          ? (specialist.id === "herosjourney" 
-                              ? 'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]'
-                              : 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]')
-                          : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
-                      }`}
-                    >
-                      {specialist.name}
-                    </button>
-                  ))}
+                  {specialists
+                    .filter(specialist => !specialist.hidden)
+                    .map(specialist => (
+                      <button
+                        key={specialist.id}
+                        onClick={() => updateSelectedSpecialist(specialist.id)}
+                        className={`p-2 rounded-lg border text-sm ${
+                          selectedSpecialist === specialist.id 
+                            ? (specialist.id === "herosjourney" 
+                                ? 'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]'
+                                : 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]')
+                            : 'border-black/10 dark:border-white/10 hover:bg-[var(--background-alt)]'
+                        }`}
+                      >
+                        {specialist.name}
+                      </button>
+                    ))}
                 </div>
                 <p className="text-xs text-foreground/60 mt-2">
                   {specialists.find(s => s.id === selectedSpecialist)?.description || 
