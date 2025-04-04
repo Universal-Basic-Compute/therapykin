@@ -1968,6 +1968,17 @@ function ChatSessionWithSearchParams() {
       // Set this flag immediately to prevent multiple requests
       setSessionImageRequested(true);
       
+      // Get the user's pseudonym
+      let userPseudonym = user?.pseudonym || '';
+      if (!userPseudonym) {
+        console.log('Pseudonym missing for user:', user.email);
+        // Generate a pseudonym from the email
+        const generatedPseudonym = generatePseudonymFromEmail(user.email || '');
+        userPseudonym = generatedPseudonym.name;
+        console.log(`Generated pseudonym for user: ${userPseudonym}`);
+      }
+      console.log(`Using pseudonym for session image: ${userPseudonym}`);
+      
       // Create a prompt for the image based on the session with specific style requirements
       const prompt = `<system>Please generate an image that captures the essence of this therapy session. Create a visual representation that reflects the themes, emotions, and progress we've discussed. The image should be abstract enough to maintain privacy while still being meaningful to the client.
 
