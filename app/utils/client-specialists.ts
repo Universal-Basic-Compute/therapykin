@@ -61,19 +61,47 @@ export function isValidSpecialist(specialist: string, includeWelcome = false): b
   );
 }
 
+// Cache for specialist descriptions
+let specialistsCache: Array<Specialist> | null = null;
+
 /**
  * Get description for a specialist by ID
  */
-export function getSpecialistDescription(specialistId: string): string {
-  // Default descriptions for common specialists
-  const descriptions: Record<string, string> = {
-    'generalist': 'General therapeutic support for various concerns',
-    'crypto': 'Specialized support for crypto traders and investors',
-    'athletes': 'Mental performance support for athletes and competitors',
-    'executives': 'Leadership and executive performance support',
-    'herosjourney': 'Transform challenges into strengths with the Hero\'s Journey',
-    'sexologist': 'Private support for sexual health and intimacy concerns'
-  };
+export async function getSpecialistDescription(specialistId: string): Promise<string> {
+  // Try to use cached specialists if available
+  if (!specialistsCache) {
+    try {
+      specialistsCache = await fetchSpecialists();
+    } catch (error) {
+      console.error('Error fetching specialists for description:', error);
+      // Fallback descriptions if fetch fails
+      return specialistId === 'generalist' 
+        ? 'General therapeutic support for various concerns'
+        : 'Specialized therapeutic support';
+    }
+  }
   
-  return descriptions[specialistId] || 'Specialized therapeutic support';
+  // Find the specialist in the cache
+  const specialist = specialistsCache.find(s => s.id === specialistId);
+  
+  // Return the description if found, otherwise a generic description
+  return specialist?.description || 'Specialized therapeutic support';
+}
+
+/**
+ * Get description for a specialist by ID (synchronous version)
+ */
+export function getSpecialistDescriptionSync(specialistId: string): string {
+  // If we have cached specialists, use them
+  if (specialistsCache) {
+    const specialist = specialistsCache.find(s => s.id === specialistId);
+    if (specialist?.description) {
+      return specialist.description;
+    }
+  }
+  
+  // Fallback descriptions if cache not available
+  return specialistId === 'generalist' 
+    ? 'General therapeutic support for various concerns'
+    : 'Specialized therapeutic support';
 }
