@@ -660,23 +660,8 @@ function ChatSessionWithSearchParams() {
       const halfwayPoint = SESSION_DURATION / 2; // 50% of session
       const closingPhaseStart = SESSION_DURATION - 2; // 2 minutes before the end
     
-      // FOR DEBUG: Generate an image every minute
-      // Check if the session duration is close to a whole minute
-      const isWholeMinute = Math.abs(Math.round(sessionDuration) - sessionDuration) < 0.1;
-      
-      // If we're at a whole minute and haven't requested an image in the last 45 seconds
-      if (isWholeMinute && !sessionImageRequested) {
-        console.log(`DEBUG: Requesting session image at ${sessionDuration.toFixed(1)} minutes`);
-        requestSessionSummaryImage();
-        
-        // Reset the flag after 45 seconds to allow another request
-        setTimeout(() => {
-          setSessionImageRequested(false);
-        }, 45000);
-      }
-      
-      // Calculate the time point 3 minutes before the end
-      const imageGenerationPoint = SESSION_DURATION - 3;
+      // Calculate the time point 5 minutes before the end
+      const imageGenerationPoint = SESSION_DURATION - 5;
       
       // Check if we're at the halfway point (within a small margin to avoid missing it)
       const isAtHalfway = sessionDuration >= halfwayPoint - 0.5 && sessionDuration <= halfwayPoint + 0.5;
@@ -804,7 +789,7 @@ function ChatSessionWithSearchParams() {
       
       // Request session summary image if we're at the image generation point and haven't requested it yet
       if (isAtImageGenerationPoint && !sessionImageRequested && !sessionEnded) {
-        console.log(`Requesting session summary image at ${sessionDuration.toFixed(1)} minutes`);
+        console.log(`Requesting session summary image at ${sessionDuration.toFixed(1)} minutes (5 minutes before end)`);
         requestSessionSummaryImage();
       }
       
@@ -2041,28 +2026,16 @@ Important style requirements:
         const messageId = `session-image-${Date.now()}`;
         const message = "Here's a visual representation of our session today. I hope it captures some of the themes we've explored together.";
         
-        // Generate audio for the message if voice mode is on
-        let audioUrl = '';
-        if (voiceMode) {
-          audioUrl = await textToSpeech(message);
-        }
-        
-        // Add to chat history
+        // Add to chat history without audio
         setChatHistory(prev => [
           ...prev,
           { 
             role: 'assistant', 
             content: message,
             id: messageId,
-            audio: audioUrl,
             image: imageUrl
           }
         ]);
-        
-        // Play audio if voice mode is enabled
-        if (voiceMode && audioUrl) {
-          playAudio(audioUrl, messageId);
-        }
         
         console.log('Session summary image added to chat');
       } else {
