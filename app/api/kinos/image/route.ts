@@ -63,8 +63,8 @@ Important style requirements:
 - Incorporate the site's color palette: white, teal, light green, purple, violet, yellow, and orange
 - Keep the style clean, modern, and therapeutic
 - Ensure the image feels calming and supportive`,
-      aspect_ratio: "ASPECT_1_1", // Square aspect ratio
-      model: "V_2",
+      aspect_ratio: "ASPECT_3_1", // Wide landscape format
+      model: "V_2A_TURBO", // Change from V_2 to V_2A_TURBO
       magic_prompt_option: "AUTO"
     };
     
