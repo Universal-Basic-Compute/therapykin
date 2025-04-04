@@ -19,6 +19,7 @@ interface ChatMessage {
   image?: string; // Add this to store image URL
   generatingImage?: boolean; // Add this to track if an image is being generated
   imageLoaded?: boolean; // Add this to track when the image has loaded
+  skipAutoIllustrate?: boolean; // Add this to skip auto-illustration for certain messages
 }
 
 // Component that uses useSearchParams
