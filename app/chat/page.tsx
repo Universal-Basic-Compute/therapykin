@@ -1020,6 +1020,7 @@ function ChatSessionWithSearchParams() {
           body: JSON.stringify({
             sessionId,
             minutesActive: currentMinutes,
+            sessionLength: sessionLength // Pass the session length
           }),
         }).then(response => {
           if (!response.ok) {

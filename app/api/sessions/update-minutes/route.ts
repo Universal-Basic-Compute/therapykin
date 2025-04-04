@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Get request body
-    const { sessionId, minutesActive } = await request.json();
+    const { sessionId, minutesActive, sessionLength } = await request.json();
     
     // Validate input
     if (!sessionId) {
@@ -30,6 +30,16 @@ export async function POST(request: NextRequest) {
         { error: 'Valid minutesActive is required' },
         { status: 400 }
       );
+    }
+    
+    // Don't update minutes if they exceed the session length
+    if (sessionLength && minutesActive > sessionLength) {
+      console.log(`Not updating session ${sessionId} minutes: ${minutesActive} exceeds session length ${sessionLength}`);
+      return NextResponse.json({ 
+        success: true, 
+        minutesActive: sessionLength,
+        capped: true
+      });
     }
     
     console.log(`Updating session ${sessionId} minutes active to ${minutesActive}`);
