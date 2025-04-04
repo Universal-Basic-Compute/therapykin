@@ -17,6 +17,7 @@ interface ChatMessage {
   loading?: boolean;
   audio?: string; // Add this to store audio URL
   image?: string; // Add this to store image URL
+  generatingImage?: boolean; // Add this to track if an image is being generated
 }
 
 // Component that uses useSearchParams
@@ -2315,6 +2316,15 @@ Important style requirements:
         return;
       }
       
+      // Immediately update the UI to hide the button by adding a "generating" flag to the message
+      setChatHistory(prev => 
+        prev.map(msg => 
+          msg.id === messageId 
+            ? { ...msg, generatingImage: true }
+            : msg
+        )
+      );
+      
       // Check if pseudonym exists, if not try to get it or generate it
       let userPseudonym = user.pseudonym;
       if (!userPseudonym) {
@@ -2707,7 +2717,7 @@ Important style requirements:
                               )}
                               
                               {/* Add Illustrate button */}
-                              {!msg.image && (
+                              {!msg.image && !msg.generatingImage && (
                                 <button 
                                   onClick={() => generateIllustrationForMessage(msg.content, msg.id || 'unknown')}
                                   className="text-xs opacity-70 hover:opacity-100 flex items-center"
