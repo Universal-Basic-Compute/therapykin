@@ -112,8 +112,15 @@ function ChatSessionWithSearchParams() {
     async function loadSpecialists() {
       try {
         const specialistsList = await fetchSpecialists();
-        setSpecialists(specialistsList);
-        console.log('Loaded specialists:', specialistsList);
+        // Make sure to preserve the welcome specialist's hidden property
+        const updatedSpecialists = specialistsList.map(specialist => {
+          if (specialist.id === 'welcome') {
+            return { ...specialist, hidden: true };
+          }
+          return specialist;
+        });
+        setSpecialists(updatedSpecialists);
+        console.log('Loaded specialists:', updatedSpecialists);
       } catch (error) {
         console.error('Error loading specialists:', error);
       }
