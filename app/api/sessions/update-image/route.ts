@@ -16,14 +16,19 @@ export async function POST(request: NextRequest) {
     console.log(`Updating session ${sessionId} with image URL: ${imageUrl}`);
     
     // Update the session record in Airtable
-    await sessionsTable.update([{
-      id: sessionId,
-      fields: {
-        SessionImage: imageUrl
-      }
-    }]);
-    
-    console.log(`Successfully updated session ${sessionId} with image URL`);
+    try {
+      await sessionsTable.update([{
+        id: sessionId,
+        fields: {
+          SessionImage: imageUrl
+        }
+      }]);
+      
+      console.log(`Successfully updated session ${sessionId} with image URL: ${imageUrl.substring(0, 50)}...`);
+    } catch (updateError) {
+      console.error(`Error updating Airtable record for session ${sessionId}:`, updateError);
+      throw updateError; // Re-throw to be caught by the outer try/catch
+    }
     
     return NextResponse.json({ success: true });
   } catch (error) {
