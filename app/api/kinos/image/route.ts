@@ -56,7 +56,13 @@ export async function POST(request: NextRequest) {
     
     // Create the request body
     const requestBody = {
-      message,
+      message: `${message}
+
+Important style requirements:
+- Use a soothing pencil style illustration
+- Incorporate the site's color palette: white, teal, light green, purple, violet, yellow, and orange
+- Keep the style clean, modern, and therapeutic
+- Ensure the image feels calming and supportive`,
       aspect_ratio: "ASPECT_1_1", // Square aspect ratio
       model: "V_2",
       magic_prompt_option: "AUTO"
