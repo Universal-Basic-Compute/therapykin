@@ -2707,11 +2707,7 @@ Important style requirements:
                         }`}
                       >
                       {msg.loading ? (
-                        <div className="flex items-center space-x-1.5">
-                          <div className="w-1.5 h-1.5 bg-gray-300 dark:bg-gray-500 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationDelay: '0ms' }}></div>
-                          <div className="w-1.5 h-1.5 bg-gray-300 dark:bg-gray-500 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationDelay: '300ms' }}></div>
-                          <div className="w-1.5 h-1.5 bg-gray-300 dark:bg-gray-500 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationDelay: '600ms' }}></div>
-                        </div>
+                        <div className="text-xs text-gray-400">...</div>
                       ) : (
                         <div>
                           <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
