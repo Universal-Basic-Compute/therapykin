@@ -38,33 +38,6 @@ function ChatSessionWithSearchParams() {
   const audioChunksRef = useRef<Blob[]>([]);
   const recordingTimerRef = useRef<number | null>(null); // Change to number type for browser compatibility
   
-  // Add a style tag for the wave animation
-  useEffect(() => {
-    // Create a style element
-    const styleEl = document.createElement('style');
-    // Define the animation
-    styleEl.innerHTML = `
-      @keyframes waveY {
-        0%, 100% {
-          transform: scaleY(0.5);
-        }
-        50% {
-          transform: scaleY(1.2);
-        }
-      }
-      
-      .animate-waveY {
-        animation: waveY 1.2s ease-in-out infinite;
-      }
-    `;
-    // Append to head
-    document.head.appendChild(styleEl);
-    
-    // Clean up
-    return () => {
-      document.head.removeChild(styleEl);
-    };
-  }, []);
   
   // Session tracking
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -2809,19 +2782,6 @@ Important style requirements:
                             </div>
                           )}
                           
-                          {/* Show wavy loading animation when generating image */}
-                          {msg.generatingImage && (
-                            <div className="mt-3 p-4 bg-[var(--background-alt)]/50 rounded-lg">
-                              <div className="flex justify-center items-center space-x-1">
-                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '0ms' }}></div>
-                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '100ms' }}></div>
-                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '200ms' }}></div>
-                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '300ms' }}></div>
-                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '400ms' }}></div>
-                              </div>
-                              <p className="text-center text-xs mt-2 text-foreground/60">Creating illustration...</p>
-                            </div>
-                          )}
                     
                           {/* Add Rate Session button for the rate-session-prompt message */}
                           {msg.id === 'rate-session-prompt' && !ratingSubmitted && (
