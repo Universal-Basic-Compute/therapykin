@@ -1070,7 +1070,13 @@ function ChatSessionWithSearchParams() {
 
   // Auto-scroll to bottom when chat history changes
   useEffect(() => {
-    if (chatContainerRef.current) {
+    // Only auto-scroll when a new message is added, not when an existing message is updated
+    const shouldScroll = chatHistory.length > 0 && 
+      // Check if the last message is new (not just updated with generatingImage flag)
+      (chatHistory[chatHistory.length - 1].id !== 'initial-loading' && 
+       !chatHistory[chatHistory.length - 1].id?.includes('transcribing-'));
+    
+    if (shouldScroll && chatContainerRef.current) {
       const scrollOptions: ScrollIntoViewOptions = {
         behavior: 'smooth',
         block: 'end',
@@ -2345,6 +2351,10 @@ Important style requirements:
         return;
       }
       
+      // Store the current scroll position before updating the UI
+      const chatContainer = document.querySelector('.overflow-y-auto');
+      const scrollPosition = chatContainer?.scrollTop || 0;
+      
       // Immediately update the UI to show the loading animation
       setChatHistory(prev => 
         prev.map(msg => 
@@ -2353,6 +2363,13 @@ Important style requirements:
             : msg
         )
       );
+      
+      // Restore the scroll position after the UI update
+      setTimeout(() => {
+        if (chatContainer) {
+          chatContainer.scrollTop = scrollPosition;
+        }
+      }, 50);
       
       // Check if pseudonym exists, if not try to get it or generate it
       let userPseudonym = user.pseudonym;
@@ -2431,6 +2448,9 @@ Important style requirements:
         const imageUrl = data.result.data[0].url;
         console.log(`Successfully received image URL: ${imageUrl}`);
         
+        // Store the current scroll position again before updating
+        const currentScrollPosition = chatContainer?.scrollTop || 0;
+        
         // Update the message with the generated image but keep generatingImage true until it loads
         setChatHistory(prev => 
           prev.map(msg => 
@@ -2439,6 +2459,13 @@ Important style requirements:
               : msg
           )
         );
+        
+        // Restore the scroll position after the UI update
+        setTimeout(() => {
+          if (chatContainer) {
+            chatContainer.scrollTop = currentScrollPosition;
+          }
+        }, 50);
         
         console.log(`Added illustration to message: ${messageId}`);
       } else {
