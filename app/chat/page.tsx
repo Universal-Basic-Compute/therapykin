@@ -91,6 +91,7 @@ function ChatSessionWithSearchParams() {
   // Add state for session summary image
   const [sessionImageRequested, setSessionImageRequested] = useState(false);
   const [sessionImage, setSessionImage] = useState<string | null>(null);
+  const [autoIllustrate, setAutoIllustrate] = useState<boolean>(false);
   
   // Voice options
   const voiceOptions = [
@@ -311,6 +312,12 @@ function ChatSessionWithSearchParams() {
                   toggleCamera();
                 }, 1000);
               }
+            }
+            
+            // Set auto-illustrate preference if available
+            if (data.preferences.autoIllustrate !== undefined) {
+              setAutoIllustrate(data.preferences.autoIllustrate);
+              console.log(`Loaded user's auto-illustrate preference: ${data.preferences.autoIllustrate}`);
             }
           }
         } else {
@@ -1466,7 +1473,14 @@ function ChatSessionWithSearchParams() {
           setChatHistory(prev => 
             prev.map(msg => 
               msg.id === loadingId 
-                ? { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
+                ? { 
+                    role: 'assistant', 
+                    content: response, 
+                    id: loadingId, 
+                    loading: false, 
+                    audio: audioUrl,
+                    skipAutoIllustrate: true // Add flag to prevent duplicate illustration
+                  }
                 : msg
             )
           );
@@ -1798,6 +1812,32 @@ function ChatSessionWithSearchParams() {
     }
   };
   
+  // Update auto-illustrate preference
+  const updateAutoIllustratePreference = async (enabled: boolean) => {
+    try {
+      setAutoIllustrate(enabled);
+      
+      // Update the user's preference
+      const response = await fetch('/api/users/preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          autoIllustrate: enabled,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update auto-illustrate preference: ${response.status}`);
+      }
+      
+      console.log(`Auto-illustrate preference updated to: ${enabled}`);
+    } catch (error) {
+      console.error('Error updating auto-illustrate preference:', error);
+    }
+  };
+  
   // Update selected specialist
   const updateSelectedSpecialist = async (specialist: string) => {
     try {
@@ -2047,6 +2087,30 @@ Important style requirements:
     }
   };
 
+  // Add effect to auto-illustrate new assistant messages
+  useEffect(() => {
+    // Only run if auto-illustrate is enabled and we have chat history
+    if (!autoIllustrate || chatHistory.length === 0 || !user) return;
+    
+    // Get the last message in the chat
+    const lastMessage = chatHistory[chatHistory.length - 1];
+    
+    // Only illustrate assistant messages that don't already have an image or are being generated
+    if (
+      lastMessage.role === 'assistant' && 
+      !lastMessage.loading && 
+      !lastMessage.image && 
+      !lastMessage.generatingImage && 
+      !lastMessage.skipAutoIllustrate && // Skip if flagged
+      lastMessage.id !== 'rate-session-prompt' && 
+      lastMessage.id !== 'session-ended-message' &&
+      !lastMessage.id?.startsWith('initial-') // Skip the initial welcome message
+    ) {
+      console.log(`Auto-illustrating message: ${lastMessage.id}`);
+      generateIllustrationForMessage(lastMessage.content, lastMessage.id || 'unknown');
+    }
+  }, [chatHistory, autoIllustrate, user]);
+
   // Add cleanup for camera resources
   useEffect(() => {
     return () => {
@@ -2250,7 +2314,14 @@ Important style requirements:
       setChatHistory(prev => 
         prev.map(msg => 
           msg.id === loadingId 
-            ? { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
+            ? { 
+                role: 'assistant', 
+                content: response, 
+                id: loadingId, 
+                loading: false, 
+                audio: audioUrl,
+                skipAutoIllustrate: true // Add flag to prevent duplicate illustration
+              }
             : msg
         )
       );
@@ -2974,6 +3045,23 @@ Important style requirements:
                   </svg>
                   {cameraEnabled ? 'Camera Mode: On' : 'Camera Mode: Off'}
                 </button>
+              </div>
+              
+              {/* Auto-Illustrate Toggle */}
+              <div className="mb-6">
+                <h3 className="text-sm font-medium mb-2">Illustrate Messages</h3>
+                <button 
+                  className={`w-full btn-secondary text-sm flex items-center justify-center ${autoIllustrate ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30' : ''}`}
+                  onClick={() => updateAutoIllustratePreference(!autoIllustrate)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {autoIllustrate ? 'Auto-Illustrate: On' : 'Auto-Illustrate: Off'}
+                </button>
+                <p className="text-xs text-foreground/60 mt-2">
+                  When enabled, TherapyKin will automatically generate illustrations for messages.
+                </p>
               </div>
               
               {/* Voice Selection - Only show if voice mode is on */}
