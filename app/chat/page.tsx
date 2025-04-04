@@ -60,7 +60,8 @@ function ChatSessionWithSearchParams() {
   const [isTabActive, setIsTabActive] = useState(true);
   const [selectedSpecialist, setSelectedSpecialist] = useState<string>("generalist");
   const [specialists, setSpecialists] = useState<Array<{id: string, name: string, description: string}>>([
-    { id: 'generalist', name: 'General Therapist', description: 'General therapeutic support for various concerns' }
+    { id: 'generalist', name: 'General Therapist', description: 'General therapeutic support for various concerns' },
+    { id: 'therapykindouble', name: 'Therapeutic Double (you)', description: 'A therapeutic reflection of yourself, helping you explore your thoughts from a new perspective' }
   ]);
   // Add state for session summary image
   const [sessionImageRequested, setSessionImageRequested] = useState(false);
