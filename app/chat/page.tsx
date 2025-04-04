@@ -18,6 +18,7 @@ interface ChatMessage {
   audio?: string; // Add this to store audio URL
   image?: string; // Add this to store image URL
   generatingImage?: boolean; // Add this to track if an image is being generated
+  imageLoaded?: boolean; // Add this to track when the image has loaded
 }
 
 // Component that uses useSearchParams
@@ -36,6 +37,34 @@ function ChatSessionWithSearchParams() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const recordingTimerRef = useRef<number | null>(null); // Change to number type for browser compatibility
+  
+  // Add a style tag for the wave animation
+  useEffect(() => {
+    // Create a style element
+    const styleEl = document.createElement('style');
+    // Define the animation
+    styleEl.innerHTML = `
+      @keyframes waveY {
+        0%, 100% {
+          transform: scaleY(0.5);
+        }
+        50% {
+          transform: scaleY(1.2);
+        }
+      }
+      
+      .animate-waveY {
+        animation: waveY 1.2s ease-in-out infinite;
+      }
+    `;
+    // Append to head
+    document.head.appendChild(styleEl);
+    
+    // Clean up
+    return () => {
+      document.head.removeChild(styleEl);
+    };
+  }, []);
   
   // Session tracking
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -2316,11 +2345,11 @@ Important style requirements:
         return;
       }
       
-      // Immediately update the UI to hide the button by adding a "generating" flag to the message
+      // Immediately update the UI to show the loading animation
       setChatHistory(prev => 
         prev.map(msg => 
           msg.id === messageId 
-            ? { ...msg, generatingImage: true }
+            ? { ...msg, generatingImage: true, imageLoaded: false }
             : msg
         )
       );
@@ -2402,20 +2431,36 @@ Important style requirements:
         const imageUrl = data.result.data[0].url;
         console.log(`Successfully received image URL: ${imageUrl}`);
         
-        // Update the message with the generated image
+        // Update the message with the generated image but keep generatingImage true until it loads
         setChatHistory(prev => 
           prev.map(msg => 
             msg.id === messageId 
-              ? { ...msg, image: imageUrl }
+              ? { ...msg, image: imageUrl, generatingImage: false }
               : msg
           )
         );
         
         console.log(`Added illustration to message: ${messageId}`);
       } else {
+        // If there's an error, remove the loading state
+        setChatHistory(prev => 
+          prev.map(msg => 
+            msg.id === messageId 
+              ? { ...msg, generatingImage: false }
+              : msg
+          )
+        );
         console.error('No valid image URL in the response:', data);
       }
     } catch (error) {
+      // If there's an error, remove the loading state
+      setChatHistory(prev => 
+        prev.map(msg => 
+          msg.id === messageId 
+            ? { ...msg, generatingImage: false }
+            : msg
+        )
+      );
       console.error('Error generating illustration:', error);
       alert('Failed to generate illustration. Please try again.');
     }
@@ -2660,15 +2705,43 @@ Important style requirements:
                         <div>
                           <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
                       
-                          {/* Display image if available */}
+                          {/* Display image if available with slide-down animation */}
                           {msg.image && (
-                            <div className="mt-3">
+                            <div className={`mt-3 overflow-hidden transition-all duration-500 ease-in-out ${
+                              msg.imageLoaded ? 'max-h-[500px]' : 'max-h-0'
+                            }`}>
                               <img 
                                 src={msg.image} 
                                 alt="Session visualization" 
-                                className="w-full h-auto rounded-lg shadow-md"
+                                className="w-full h-auto rounded-lg shadow-md opacity-0 transition-opacity duration-500"
                                 loading="lazy"
+                                onLoad={(e) => {
+                                  // When image loads, set imageLoaded to true and fade it in
+                                  e.currentTarget.classList.remove('opacity-0');
+                                  e.currentTarget.classList.add('opacity-100');
+                                  setChatHistory(prev => 
+                                    prev.map(m => 
+                                      m.id === msg.id 
+                                        ? { ...m, imageLoaded: true }
+                                        : m
+                                    )
+                                  );
+                                }}
                               />
+                            </div>
+                          )}
+                          
+                          {/* Show wavy loading animation when generating image */}
+                          {msg.generatingImage && (
+                            <div className="mt-3 p-4 bg-[var(--background-alt)]/50 rounded-lg">
+                              <div className="flex justify-center items-center space-x-1">
+                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '0ms' }}></div>
+                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '100ms' }}></div>
+                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '200ms' }}></div>
+                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '300ms' }}></div>
+                                <div className="w-2 h-5 bg-[var(--primary)]/70 rounded-full animate-waveY" style={{ animationDelay: '400ms' }}></div>
+                              </div>
+                              <p className="text-center text-xs mt-2 text-foreground/60">Creating illustration...</p>
                             </div>
                           )}
                     
@@ -2727,6 +2800,14 @@ Important style requirements:
                                   </svg>
                                   Illustrate
                                 </button>
+                              )}
+                              {msg.generatingImage && (
+                                <span className="text-xs opacity-70 flex items-center">
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                  </svg>
+                                  Creating...
+                                </span>
                               )}
                             </div>
                           )}
