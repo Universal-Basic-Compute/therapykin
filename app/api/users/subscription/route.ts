@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
         // Check if there are any sessions for this email
         const sessionsRecords = await sessionsTable.select({
           filterByFormula: `{Email} = '${escapedEmail}'`,
-          fields: ['ID', 'MinutesActive']
+          fields: ['id', 'MinutesActive']
         }).all();
         
         // Only count sessions with MinutesActive > 5 as valid sessions
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
       try {
         const sessionsRecords = await sessionsTable.select({
           filterByFormula: `{Email} = '${escapedEmail}'`,
-          fields: ['ID', 'MinutesActive']
+          fields: ['id', 'MinutesActive']
         }).all();
         
         // Only count sessions with MinutesActive > 5 as valid sessions
@@ -150,7 +150,7 @@ export async function GET(request: NextRequest) {
         const escapedEmail = escapeAirtableString(email);
         const sessionsRecords = await sessionsTable.select({
           filterByFormula: `{Email} = '${escapedEmail}'`,
-          fields: ['ID', 'MinutesActive']
+          fields: ['id', 'MinutesActive']
         }).all();
         
         // Only count sessions with MinutesActive > 5 as valid sessions
