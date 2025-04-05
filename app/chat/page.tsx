@@ -1156,8 +1156,6 @@ function ChatSessionWithSearchParams() {
       return audioUrl;
     } catch (error) {
       console.error('Error converting text to speech:', error);
-      // Return empty string but show a notification to the user
-      alert(`Voice playback error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       return '';
     }
   };
