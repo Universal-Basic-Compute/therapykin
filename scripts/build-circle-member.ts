@@ -6,6 +6,22 @@ dotenv.config();
 const KINOS_API_URL = process.env.KINOS_API_URL || 'https://api.kinos.ai';
 const KINOS_API_KEY = process.env.KINOS_API_KEY;
 
+interface CreateKinResponse {
+  id: string;
+  name: string;
+  blueprint_id: string;
+  created_at: string;
+  status: string;
+}
+
+interface KinOSError {
+  response?: {
+    data?: any;
+    status?: number;
+  };
+  message?: string;
+}
+
 const initializationMessages = [
   // 1. Initial Build Phase
   `Continue building your identity: Generate Core Identity Elements:
@@ -110,11 +126,8 @@ async function buildCircleMember(kinId: string, buildIndex: number) {
     return response.data;
 
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error('API Error:', error.response?.data || error.message);
-    } else {
-      console.error('Error:', error);
-    }
+    const kinError = error as KinOSError;
+    console.error('API Error:', kinError.response?.data || kinError.message);
     throw error;
   }
 }
@@ -128,8 +141,7 @@ async function createCircleMember(
   try {
     console.log(`Creating circle member: ${memberName} (${role})`);
 
-    // Step 1: Create the Kin in the therapykinmember blueprint
-    const createKinResponse = await axios.post<CreateKinResponse>(
+    const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins`,
       {
         name: memberName
@@ -142,11 +154,13 @@ async function createCircleMember(
       }
     );
 
-    if (!createKinResponse.data.id) {
+    const createKinResponse = response.data as CreateKinResponse;
+
+    if (!createKinResponse.id) {
       throw new Error('Failed to get Kin ID from creation response');
     }
 
-    const kinId = createKinResponse.data.id;
+    const kinId = createKinResponse.id;
     console.log(`Successfully created Kin with ID: ${kinId}`);
 
     // Step 2: Build the Kin's identity through all initialization messages
@@ -161,11 +175,8 @@ async function createCircleMember(
     return kinId;
 
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error('API Error:', error.response?.data || error.message);
-    } else {
-      console.error('Error:', error);
-    }
+    const kinError = error as KinOSError;
+    console.error('API Error:', kinError.response?.data || kinError.message);
     throw error;
   }
 }
