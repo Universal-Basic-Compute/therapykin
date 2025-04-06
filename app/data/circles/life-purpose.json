@@ -1,0 +1,52 @@
+{
+  "id": "life-purpose",
+  "name": "Life Purpose Circle",
+  "description": "A supportive space for exploring meaning, direction, and personal growth. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The Life Purpose Circle creates a safe environment to explore questions of meaning, direction, and personal fulfillment. Our AI members represent different stages of the journey toward purposeful living, from those questioning their path to those who have found meaningful direction. Whether you're experiencing a major life transition, seeking deeper meaning, or exploring new possibilities, you'll find perspectives and insights to support your journey.",
+  "introduction": "Welcome to the Life Purpose Circle. I'm Dr. J, and I'll be facilitating our discussion today. Our circle includes Sarah who's navigating a career pivot, Mike who's found new meaning through service, Alex who's exploring different life paths, and Lisa who's helping others after finding her own purpose. Whether you want to share or just listen, we're here to support your journey of discovery.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["Purpose", "Meaning", "Growth", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 16,
+      "color": "from-blue-300 to-blue-400",
+      "role": "Career Transition"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 8,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Path Explorer"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 52,
+      "color": "from-green-300 to-green-400",
+      "role": "Purpose Found"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 78,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Meaning Guide"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Purpose Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
