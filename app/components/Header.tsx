@@ -114,12 +114,6 @@ export default function Header() {
             </Link>
             <div className="hidden md:ml-10 md:flex md:space-x-6">
               {/* Main navigation items */}
-              <Link href="/features" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium">
-                Features
-              </Link>
-              <Link href="/pricing" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium">
-                Pricing
-              </Link>
               
               {/* Our Specialists Dropdown */}
               <div className="relative" ref={specialistsDropdownRef}>
@@ -183,6 +177,11 @@ export default function Header() {
                 )}
               </div>
               
+              {/* Circles Link */}
+              <Link href="/circles" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium">
+                Circles
+              </Link>
+              
               {/* Resources Dropdown */}
               <div className="relative" ref={resourcesDropdownRef}>
                 <button 
@@ -204,6 +203,18 @@ export default function Header() {
                 {resourcesDropdownOpen && (
                   <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-[var(--background-alt)] ring-1 ring-black/5 dark:ring-white/10 z-50">
                     <div className="py-1">
+                      <Link 
+                        href="/features" 
+                        className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
+                      >
+                        Features
+                      </Link>
+                      <Link 
+                        href="/pricing" 
+                        className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
+                      >
+                        Pricing
+                      </Link>
                       <Link 
                         href="/about" 
                         className="block px-4 py-2 text-sm text-foreground/70 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
@@ -370,19 +381,13 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[var(--background)] shadow-lg max-h-[80vh] overflow-y-auto">
+            {/* Add Circles link */}
             <Link 
-              href="/features" 
+              href="/circles" 
               className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Features
-            </Link>
-            <Link 
-              href="/pricing" 
-              className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Pricing
+              Circles
             </Link>
             
             {/* Resources links - flat list instead of dropdown */}
@@ -432,6 +437,20 @@ export default function Header() {
               </Link>
               
               <p className="px-3 py-1 text-xs uppercase text-foreground/40 font-semibold mt-2">Resources</p>
+              <Link 
+                href="/features" 
+                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </Link>
+              <Link 
+                href="/pricing" 
+                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Pricing
+              </Link>
               <Link 
                 href="/about" 
                 className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
