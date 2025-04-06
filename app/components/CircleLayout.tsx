@@ -37,16 +37,27 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   // Add state for join modal
   const [showJoinModal, setShowJoinModal] = React.useState(false);
 
-  const members = isPeekMode ? 
-    circleMembers.map(member => 
-      member.id === 'empty' ? { ...member, onClick: () => setShowJoinModal(true) } : member
-    ) : [
-      { id: 'you', name: 'You', weeksAtStart: 3, color: 'from-yellow-300 to-yellow-400' },
-      ...circleMembers.filter(member => member.id !== 'empty')
-    ];
+  // Create the members array with proper typing
+  const members: Member[] = React.useMemo(() => {
+    if (isPeekMode) {
+      return circleMembers.map(member => 
+        member.id === 'empty' 
+          ? { ...member, onClick: () => setShowJoinModal(true) } 
+          : member
+      );
+    } else {
+      const youMember: Member = {
+        id: 'you',
+        name: 'You',
+        weeksAtStart: 3,
+        color: 'from-yellow-300 to-yellow-400'
+      };
+      return [youMember, ...circleMembers.filter(member => member.id !== 'empty')];
+    }
+  }, [isPeekMode, circleMembers]);
 
   // Calculate positions in a circle
-  const getPosition = (index: number, total: number) => {
+  const getPosition = (index: number, total: number): Position => {
     const angle = (index * 2 * Math.PI / total) - Math.PI/2; // Start from top
     const radius = 200; // Adjust this value to change circle size
     return {
@@ -54,6 +65,9 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       top: `calc(50% + ${Math.sin(angle) * radius}px)`
     };
   };
+
+  // Log the members array to debug
+  console.log('Members:', members);
 
   return (
     <div className="relative w-full h-full max-w-5xl mx-auto">
@@ -89,6 +103,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       {/* Circle members with animations */}
       {members.map((member, index) => {
         const position = getPosition(index, members.length);
+        console.log(`Rendering member ${member.name} at position:`, position);
+        
         return (
           <motion.div
             key={member.id}
