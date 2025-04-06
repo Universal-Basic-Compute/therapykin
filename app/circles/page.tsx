@@ -39,15 +39,31 @@ export default function CirclesPage() {
       
       <main className="pt-24 pb-16 px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Hero Section */}
+          {/* Hero Section - Updated with more detailed explanation */}
           <section className="text-center mb-16">
             <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] bg-clip-text text-transparent">
               TherapyKin Circles
             </h1>
-            <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
+            <p className="text-xl text-foreground/70 max-w-3xl mx-auto mb-8">
               Join AI-powered support circles where you can connect with others facing similar challenges,
               while maintaining complete privacy and anonymity.
             </p>
+            
+            {/* New explanation section */}
+            <div className="max-w-3xl mx-auto bg-[var(--background-alt)] rounded-2xl p-6 border border-[var(--primary)]/10">
+              <h2 className="text-lg font-semibold mb-4 text-[var(--primary)]">How TherapyKin Circles Work</h2>
+              <div className="text-left space-y-4 text-foreground/80">
+                <p>
+                  Each circle is composed of advanced AI personas, carefully crafted from real therapeutic experiences and clinical literature. These AI members simulate authentic recovery journeys, creating a supportive environment that feels natural and relatable.
+                </p>
+                <p>
+                  <strong className="text-[var(--primary)]">Completely Private:</strong> Unlike traditional group therapy, you're the only human participant. Everything shared stays between you and your AI circle members - no other humans will ever see or know about your conversations.
+                </p>
+                <p>
+                  <strong className="text-[var(--primary)]">Growing Together:</strong> Your circle members will remember your interactions, adapt to your journey, and grow alongside you. Each session builds on previous conversations, creating a continuous and personalized support experience.
+                </p>
+              </div>
+            </div>
           </section>
 
           {/* Features Grid */}
