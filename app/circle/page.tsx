@@ -42,14 +42,20 @@ export default function CirclePage() {
       {/* Header with improved styling */}
       <div className="absolute top-6 left-6 z-10">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] bg-clip-text text-transparent flex items-center">
-          <span className="mr-2">TherapyKin Circle</span>
+          <span className="mr-2">Addiction Recovery Circle</span>
           <span className="text-sm px-2 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] font-normal">
             Beta
           </span>
         </h1>
         <p className="mt-2 text-sm text-foreground/60 max-w-md">
-          A safe space for shared healing and growth. Everyone here is on their own journey.
+          A safe space for shared healing and growth in recovery. Feel free to participate or simply listen - there's no pressure to share until you're comfortable.
         </p>
+        <div className="mt-2 inline-flex items-center px-2 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072M12 18a6 6 0 01-6-6 6 6 0 0112 0 6 6 0 01-6 6z" />
+          </svg>
+          Listen-only mode available
+        </div>
       </div>
 
       {/* Main Circle Layout with enhanced container */}

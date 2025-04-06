@@ -24,11 +24,11 @@ const memberVariants: Variants = {
 export default function CircleLayout({ activeSpeaker, onSpeakerChange }: CircleLayoutProps) {
   const members = [
     { id: 'you', name: 'You', week: 3, color: 'from-yellow-300 to-yellow-400' },
-    { id: 'tina', name: 'Tina', week: 2, color: 'from-blue-300 to-blue-400' },
-    { id: 'alex', name: 'Alex', week: 6, color: 'from-rose-300 to-rose-400' },
-    { id: 'lee', name: 'Lee', week: 5, color: 'from-green-300 to-green-400' },
-    { id: 'sam', name: 'Sam', week: 8, color: 'from-purple-300 to-purple-400' },
-    { id: 'drj', name: 'Dr. J', role: 'Facilitator', color: 'from-blue-500 to-blue-600' }
+    { id: 'sarah', name: 'Sarah', week: 52, color: 'from-blue-300 to-blue-400', role: 'One Year Sober' },
+    { id: 'alex', name: 'Alex', week: 6, color: 'from-rose-300 to-rose-400', role: 'Early Recovery' },
+    { id: 'mike', name: 'Mike', week: 24, color: 'from-green-300 to-green-400', role: '6 Months Clean' },
+    { id: 'lisa', name: 'Lisa', week: 104, color: 'from-purple-300 to-purple-400', role: 'Two Years Sober' },
+    { id: 'drj', name: 'Dr. J', role: 'Recovery Specialist', color: 'from-blue-500 to-blue-600' }
   ];
 
   // Calculate positions in a circle
