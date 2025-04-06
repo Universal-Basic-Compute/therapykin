@@ -1,0 +1,52 @@
+{
+  "id": "ptsd",
+  "name": "PTSD Recovery Circle",
+  "description": "A supportive space for healing from trauma and PTSD. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The PTSD Recovery Circle provides a safe, AI-powered environment where you can explore trauma recovery at your own pace. Our circle members represent different stages of the healing journey, from those beginning to process their experiences to those who have developed strong coping mechanisms. The space is designed to be gentle, supportive, and completely private.",
+  "introduction": "Welcome to the PTSD Recovery Circle. I'm Dr. J, your trauma-informed specialist. Our circle includes Sarah who's been working with grounding techniques, Mike who's developing new coping strategies, Alex who's processing past experiences, and Lisa who's helping others after her own recovery journey. Whether you want to share or just observe, we're here to support your healing journey.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["PTSD", "Trauma", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 26,
+      "color": "from-blue-300 to-blue-400",
+      "role": "Learning Grounding"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 12,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Early Processing"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 38,
+      "color": "from-green-300 to-green-400",
+      "role": "Building Skills"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 104,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Recovery Guide"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Trauma Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
