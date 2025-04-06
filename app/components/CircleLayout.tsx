@@ -10,13 +10,21 @@ type Position = {
   top: string;
 };
 
-import { CircleMember } from '../utils/circles';
+interface Member {
+  id: string;
+  name: string;
+  weeksAtStart?: number;
+  role?: string;
+  color: string;
+  isDotted?: boolean;
+  onClick?: () => void;
+}
 
 interface CircleLayoutProps {
   activeSpeaker: string;
   onSpeakerChange: (speaker: string) => void;
   isPeekMode?: boolean;
-  circleMembers: CircleMember[];
+  circleMembers?: Member[];
 }
 
 const memberVariants: Variants = {
@@ -25,7 +33,7 @@ const memberVariants: Variants = {
   hover: { scale: 1.05, transition: { duration: 0.2 } }
 };
 
-export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode }: CircleLayoutProps) {
+export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [] }: CircleLayoutProps) {
   // Add state for join modal
   const [showJoinModal, setShowJoinModal] = React.useState(false);
 
