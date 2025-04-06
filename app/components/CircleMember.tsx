@@ -1,6 +1,6 @@
 interface CircleMemberProps {
   name: string;
-  week?: number;
+  weeksAtStart?: number;
   role?: string;
   color: string;
   size: 'small' | 'medium' | 'large';
@@ -9,7 +9,7 @@ interface CircleMemberProps {
   onClick?: () => void;
 }
 
-export default function CircleMember({ name, week, role, color, size, isActive, isDotted, onClick }: CircleMemberProps) {
+export default function CircleMember({ name, weeksAtStart, role, color, size, isActive, isDotted, onClick }: CircleMemberProps) {
   const sizeClasses = {
     small: 'w-12 h-12 text-sm',
     medium: 'w-16 h-16 text-base',
@@ -46,9 +46,9 @@ export default function CircleMember({ name, week, role, color, size, isActive, 
       </div>
       <div className="mt-3 text-center">
         <div className="font-medium text-foreground/90">{name}</div>
-        {week && (
+        {weeksAtStart && (
           <div className="text-xs text-foreground/60 mt-0.5">
-            Week {week}
+            Week {weeksAtStart}
           </div>
         )}
         {role && (

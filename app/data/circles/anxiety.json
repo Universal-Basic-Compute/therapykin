@@ -15,28 +15,28 @@
     {
       "id": "sarah",
       "name": "Sarah",
-      "week": 26,
+      "weeksAtStart": 26,
       "color": "from-blue-300 to-blue-400",
       "role": "Managing Anxiety"
     },
     {
       "id": "alex",
       "name": "Alex",
-      "week": 12,
+      "weeksAtStart": 12,
       "color": "from-rose-300 to-rose-400",
       "role": "Stress Management"
     },
     {
       "id": "mike",
       "name": "Mike",
-      "week": 38,
+      "weeksAtStart": 38,
       "color": "from-green-300 to-green-400",
       "role": "Anxiety Free"
     },
     {
       "id": "lisa",
       "name": "Lisa",
-      "week": 52,
+      "weeksAtStart": 52,
       "color": "from-purple-300 to-purple-400",
       "role": "One Year Journey"
     },

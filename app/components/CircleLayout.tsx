@@ -36,7 +36,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     circleMembers.map(member => 
       member.id === 'empty' ? { ...member, onClick: () => setShowJoinModal(true) } : member
     ) : [
-      { id: 'you', name: 'You', week: 3, color: 'from-yellow-300 to-yellow-400' },
+      { id: 'you', name: 'You', weeksAtStart: 3, color: 'from-yellow-300 to-yellow-400' },
       ...circleMembers.filter(member => member.id !== 'empty')
     ];
 
