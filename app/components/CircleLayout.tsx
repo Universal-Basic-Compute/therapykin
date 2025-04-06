@@ -56,4 +56,59 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange }: CircleL
         />
       </svg>
 
-     
+      {/* Center speaker with enhanced styling */}
+      <motion.div 
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", bounce: 0.4 }}
+      >
+        <CircleMember
+          name="Maria"
+          role="Speaking"
+          color="from-[var(--primary)] to-[var(--primary-dark)]"
+          size="large"
+          isActive={true}
+        />
+      </motion.div>
+
+      {/* Circle members with animations */}
+      {members.map((member, index) => {
+        const position = getPosition(index, members.length);
+        return (
+          <motion.div
+            key={member.id}
+            className="absolute transform -translate-x-1/2 -translate-y-1/2"
+            style={position}
+            variants={memberVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hover"
+            transition={{ delay: index * 0.1 }}
+          >
+            <CircleMember
+              name={member.name}
+              week={member.week}
+              role={member.role}
+              color={member.color}
+              size="medium"
+              isActive={false}
+            />
+          </motion.div>
+        );
+      })}
+
+      {/* Enhanced speech bubbles */}
+      <SpeakerBubble
+        speaker="Alex"
+        message="I had a similar experience last month..."
+        position="left"
+      />
+      <SpeakerBubble
+        speaker="Maria"
+        message="When I feel overwhelmed at work, I now try the breathing technique..."
+        position="right"
+      />
+    </div>
+  );
+}
