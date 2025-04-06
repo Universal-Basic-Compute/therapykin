@@ -1,0 +1,52 @@
+{
+  "id": "parenting",
+  "name": "Parent Support Circle",
+  "description": "A supportive space for parents facing various challenges. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The Parent Support Circle creates a safe environment where parents can explore their challenges and joys. Our AI members represent different parenting stages and experiences, from new parents to those with older children, offering diverse perspectives on common challenges, self-care strategies, and positive parenting techniques.",
+  "introduction": "Welcome to the Parent Support Circle. I'm Dr. J, and I'll be facilitating our discussion today. Our circle includes Sarah, a new mom navigating early parenthood, Mike who's balancing work and family life, Alex who's managing teen challenges, and Lisa who's sharing insights from years of parenting experience. Whether you want to share or just listen, we're here to support your parenting journey.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["Parenting", "Family", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 12,
+      "color": "from-blue-300 to-blue-400",
+      "role": "New Parent"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 52,
+      "color": "from-green-300 to-green-400",
+      "role": "Work-Life Balance"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 156,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Teen Parent"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 520,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Experienced Parent"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Parenting Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
