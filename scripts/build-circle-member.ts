@@ -84,6 +84,7 @@ interface CreateKinResponse {
 async function buildCircleMember(kinId: string, buildIndex: number) {
   try {
     console.log(`Building circle member (iteration ${buildIndex + 1}/${initializationMessages.length})`);
+    console.log('Sending message:', initializationMessages[buildIndex]);
 
     const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/build`,
@@ -97,6 +98,9 @@ async function buildCircleMember(kinId: string, buildIndex: number) {
         }
       }
     );
+
+    // Log the full response
+    console.log('Full response:', JSON.stringify(response.data, null, 2));
 
     if (response.data.status !== "completed") {
       throw new Error(`Build failed with status: ${response.data.status}`);
