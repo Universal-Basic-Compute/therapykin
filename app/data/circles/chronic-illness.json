@@ -1,0 +1,52 @@
+{
+  "id": "chronic-illness",
+  "name": "Chronic Illness Circle",
+  "description": "A supportive space for managing life with chronic conditions. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The Chronic Illness Circle provides a safe environment to discuss the unique challenges of living with ongoing health conditions. Our AI members represent different experiences with chronic illness management, from those newly diagnosed to those who have developed strong coping strategies. Here you can explore both the practical and emotional aspects of chronic illness management.",
+  "introduction": "Welcome to the Chronic Illness Circle. I'm Dr. J, and I'll be facilitating our discussion today. Our circle includes Sarah who's adapting to a recent diagnosis, Mike who's managing work-life balance with chronic pain, Alex who's developing new wellness strategies, and Lisa who's found ways to thrive despite ongoing health challenges. Whether you want to share or just listen, we're here to support your journey.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["Chronic Illness", "Health", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 12,
+      "color": "from-blue-300 to-blue-400",
+      "role": "New Diagnosis"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 52,
+      "color": "from-green-300 to-green-400",
+      "role": "Work-Life Balance"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 26,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Wellness Focus"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 104,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Thriving with CI"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Chronic Care Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
