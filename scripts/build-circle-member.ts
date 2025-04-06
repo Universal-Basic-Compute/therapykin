@@ -21,8 +21,7 @@ async function buildCircleMember(kinId: string, buildIndex: number) {
     const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/build`,
       {
-        message: "continue building your identity",
-        addSystem: "Focus on developing a consistent and authentic therapeutic presence"
+        message: "continue building your identity"
       },
       {
         headers: {
