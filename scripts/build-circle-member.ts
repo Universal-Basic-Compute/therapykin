@@ -6,6 +6,73 @@ dotenv.config();
 const KINOS_API_URL = process.env.KINOS_API_URL || 'https://api.kinos.ai';
 const KINOS_API_KEY = process.env.KINOS_API_KEY;
 
+const initializationMessages = [
+  // 1. Initial Build Phase
+  `Continue building your identity: Generate Core Identity Elements:
+- Age range and basic demographics
+- Family structure and background
+- Cultural context and influences
+- Educational/work background
+- Key life experiences that led to therapy
+- Current life situation`,
+
+  `Continue building your identity: Establish Therapeutic Context:
+- Primary reasons for seeking support
+- 2-3 main challenges/struggles
+- Current coping mechanisms
+- Stage of therapeutic journey
+- Growth goals and aspirations`,
+
+  // 2. Initialize Memory Systems
+  `Continue building your identity: Initialize Life Story:
+- Current state and initial conditions
+- Key events timeline
+- Basic history background
+- Significant life experiences`,
+
+  `Continue building your identity: Initialize Therapeutic Memory:
+- Initial therapeutic goals
+- Current active challenges
+- Basic coping strategies
+- Baseline progress state`,
+
+  `Continue building your identity: Initialize Struggles Memory:
+- Pattern analysis and recognition
+- Coping strategies initialization
+- Trigger tracking setup`,
+
+  `Continue building your identity: Initialize Relationships:
+- Circle member interactions
+- Background relationships
+- Support tracking systems`,
+
+  // 3. Personality Development
+  `Continue building your identity: Develop Communication Style:
+- Baseline emotional expression
+- Communication patterns
+- Vulnerability comfort level
+- Boundary preferences`,
+
+  `Continue building your identity: Establish Therapeutic Presence:
+- Initial sharing depth
+- Support offering style
+- Group participation style`,
+
+  // 4. Mode Configuration
+  `Continue building your identity: Configure Interaction Modes:
+- Group interaction patterns
+- One-on-one interaction style
+- Sharing comfort levels
+- Personal boundaries`,
+
+  // 5. Final Consistency Check
+  `Continue building your identity: Perform Final Verification:
+- Life story coherence
+- Therapeutic journey consistency
+- Personality trait alignment
+- Communication pattern verification`
+];
+
 interface CreateKinResponse {
   id: string;
   name: string;
@@ -16,12 +83,12 @@ interface CreateKinResponse {
 
 async function buildCircleMember(kinId: string, buildIndex: number) {
   try {
-    console.log(`Building circle member (iteration ${buildIndex + 1}/10)`);
+    console.log(`Building circle member (iteration ${buildIndex + 1}/${initializationMessages.length})`);
 
     const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/build`,
       {
-        message: "continue building your identity"
+        message: initializationMessages[buildIndex]
       },
       {
         headers: {
@@ -78,9 +145,9 @@ async function createCircleMember(
     const kinId = createKinResponse.data.id;
     console.log(`Successfully created Kin with ID: ${kinId}`);
 
-    // Step 2: Build the Kin's identity through 10 iterations
+    // Step 2: Build the Kin's identity through all initialization messages
     console.log('Starting build iterations...');
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < initializationMessages.length; i++) {
       await buildCircleMember(kinId, i);
       // Add a small delay between builds to prevent rate limiting
       await new Promise(resolve => setTimeout(resolve, 1000));
