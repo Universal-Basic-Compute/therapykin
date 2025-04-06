@@ -10,10 +10,13 @@ type Position = {
   top: string;
 };
 
+import { CircleMember } from '../utils/circles';
+
 interface CircleLayoutProps {
   activeSpeaker: string;
   onSpeakerChange: (speaker: string) => void;
   isPeekMode?: boolean;
+  circleMembers: CircleMember[];
 }
 
 const memberVariants: Variants = {
@@ -26,27 +29,16 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   // Add state for join modal
   const [showJoinModal, setShowJoinModal] = React.useState(false);
 
-  const members = isPeekMode ? [
-    { 
-      id: 'empty', 
-      name: '', 
-      color: 'from-transparent to-transparent',
-      isDotted: true,
-      onClick: () => setShowJoinModal(true)
-    },
-    { id: 'sarah', name: 'Sarah', week: 52, color: 'from-blue-300 to-blue-400', role: 'One Year Sober' },
-    { id: 'alex', name: 'Alex', week: 6, color: 'from-rose-300 to-rose-400', role: 'Early Recovery' },
-    { id: 'mike', name: 'Mike', week: 24, color: 'from-green-300 to-green-400', role: '6 Months Clean' },
-    { id: 'lisa', name: 'Lisa', week: 104, color: 'from-purple-300 to-purple-400', role: 'Two Years Sober' },
-    { id: 'drj', name: 'Dr. J', role: 'Recovery Specialist', color: 'from-blue-500 to-blue-600' }
-  ] : [
-    { id: 'you', name: 'You', week: 3, color: 'from-yellow-300 to-yellow-400' },
-    { id: 'sarah', name: 'Sarah', week: 52, color: 'from-blue-300 to-blue-400', role: 'One Year Sober' },
-    { id: 'alex', name: 'Alex', week: 6, color: 'from-rose-300 to-rose-400', role: 'Early Recovery' },
-    { id: 'mike', name: 'Mike', week: 24, color: 'from-green-300 to-green-400', role: '6 Months Clean' },
-    { id: 'lisa', name: 'Lisa', week: 104, color: 'from-purple-300 to-purple-400', role: 'Two Years Sober' },
-    { id: 'drj', name: 'Dr. J', role: 'Recovery Specialist', color: 'from-blue-500 to-blue-600' }
-  ];
+  // Get circle data from props
+  const { circleMembers } = props;
+  
+  const members = isPeekMode ? 
+    circleMembers.map(member => 
+      member.id === 'empty' ? { ...member, onClick: () => setShowJoinModal(true) } : member
+    ) : [
+      { id: 'you', name: 'You', week: 3, color: 'from-yellow-300 to-yellow-400' },
+      ...circleMembers.filter(member => member.id !== 'empty')
+    ];
 
   // Calculate positions in a circle
   const getPosition = (index: number, total: number) => {

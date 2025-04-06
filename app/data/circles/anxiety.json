@@ -1,0 +1,50 @@
+{
+  "id": "anxiety",
+  "name": "Anxiety Management Circle",
+  "description": "A supportive space for managing anxiety and stress. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "participants": 3,
+  "maxParticipants": 6,
+  "tags": ["Anxiety", "Stress", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "week": 26,
+      "color": "from-blue-300 to-blue-400",
+      "role": "Managing Anxiety"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "week": 12,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Stress Management"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "week": 38,
+      "color": "from-green-300 to-green-400",
+      "role": "Anxiety Free"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "week": 52,
+      "color": "from-purple-300 to-purple-400",
+      "role": "One Year Journey"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Anxiety Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}

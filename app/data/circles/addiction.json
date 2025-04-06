@@ -1,0 +1,50 @@
+{
+  "id": "addiction",
+  "name": "Addiction Recovery Circle",
+  "description": "A supportive space for recovery and maintaining sobriety. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["Recovery", "Addiction", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "week": 52,
+      "color": "from-blue-300 to-blue-400",
+      "role": "One Year Sober"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "week": 6,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Early Recovery"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "week": 24,
+      "color": "from-green-300 to-green-400",
+      "role": "6 Months Clean"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "week": 104,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Two Years Sober"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Recovery Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
