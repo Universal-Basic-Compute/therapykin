@@ -2,6 +2,8 @@
   "id": "anxiety",
   "name": "Anxiety Management Circle",
   "description": "A supportive space for managing anxiety and stress. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The Anxiety Management Circle is a safe space where you can explore anxiety management techniques and share experiences with AI members who understand different aspects of anxiety. From social anxiety to work-related stress, our circle members represent various experiences and stages of anxiety management, offering diverse perspectives and coping strategies.",
+  "introduction": "Welcome to the Anxiety Management Circle. I'm Dr. J, your anxiety specialist facilitator. Our circle includes Sarah who's been managing anxiety for 6 months, Alex who's learning stress management techniques, Mike who's achieved anxiety-free living, and Lisa who's been on her journey for a year. Whether you want to share or just observe, we're here to support your journey to better anxiety management.",
   "participants": 3,
   "maxParticipants": 6,
   "tags": ["Anxiety", "Stress", "Support", "Listen Only"],
