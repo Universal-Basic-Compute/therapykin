@@ -28,8 +28,16 @@ export default function CirclePage() {
 
   return (
     <div className="h-screen w-screen bg-gradient-radial from-[var(--background)] via-[var(--background-alt)] to-[var(--background)] overflow-hidden relative">
-      {/* Add subtle animated background pattern */}
+      {/* Animated background patterns */}
       <div className="absolute inset-0 bg-pattern-dots opacity-5"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-[var(--primary)]/5 to-transparent"></div>
+      
+      {/* Floating shapes in the background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[10%] left-[5%] w-64 h-64 rounded-full bg-gradient-to-br from-[var(--primary)]/10 to-transparent blur-3xl animate-float"></div>
+        <div className="absolute bottom-[20%] right-[10%] w-96 h-96 rounded-full bg-gradient-to-bl from-[var(--primary-dark)]/10 to-transparent blur-3xl animate-float-delayed"></div>
+        <div className="absolute top-[40%] right-[15%] w-48 h-48 rounded-full bg-gradient-to-tr from-[var(--accent)]/10 to-transparent blur-3xl animate-float-slow"></div>
+      </div>
       
       {/* Header with improved styling */}
       <div className="absolute top-6 left-6 z-10">
@@ -39,14 +47,22 @@ export default function CirclePage() {
             Beta
           </span>
         </h1>
+        <p className="mt-2 text-sm text-foreground/60 max-w-md">
+          A safe space for shared healing and growth. Everyone here is on their own journey.
+        </p>
       </div>
 
       {/* Main Circle Layout with enhanced container */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <CircleLayout 
-          activeSpeaker={activeSpeaker}
-          onSpeakerChange={setActiveSpeaker}
-        />
+        <div className="relative w-full h-full max-w-6xl mx-auto">
+          {/* Add a subtle glow behind the circle */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-radial from-[var(--primary)]/5 to-transparent rounded-full blur-2xl"></div>
+          
+          <CircleLayout 
+            activeSpeaker={activeSpeaker}
+            onSpeakerChange={setActiveSpeaker}
+          />
+        </div>
       </div>
 
       {/* Enhanced chat input */}
@@ -58,13 +74,16 @@ export default function CirclePage() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Share your thoughts or ask a question..."
-              className="flex-grow px-6 py-4 rounded-full border border-[var(--primary)]/20 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] shadow-lg"
+              className="flex-grow px-6 py-4 rounded-full border border-[var(--primary)]/20 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] shadow-lg hover:shadow-xl transition-all duration-200"
             />
             <button
               type="submit"
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              className="px-8 py-4 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2"
             >
-              Send
+              <span>Send</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
             </button>
           </div>
         </form>
