@@ -110,6 +110,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
               color={member.color}
               size="medium"
               isActive={false}
+              isDotted={member.isDotted}
+              onClick={member.onClick}
             />
           </motion.div>
         );
