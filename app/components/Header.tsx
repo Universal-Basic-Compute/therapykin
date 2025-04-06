@@ -386,15 +386,6 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[var(--background)] shadow-lg max-h-[80vh] overflow-y-auto">
-            {/* Add Circles link */}
-            <Link 
-              href="/circles" 
-              className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Circles
-            </Link>
-            
             {/* Resources links - flat list instead of dropdown */}
             <div className="border-t border-foreground/10 pt-2 mt-2">
               <p className="px-3 py-1 text-xs uppercase text-foreground/40 font-semibold">Our Specialists</p>
