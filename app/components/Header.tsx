@@ -115,6 +115,11 @@ export default function Header() {
             <div className="hidden md:ml-10 md:flex md:space-x-6">
               {/* Main navigation items */}
               
+              {/* Circles Link */}
+              <Link href="/circles" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium">
+                Circles
+              </Link>
+              
               {/* Our Specialists Dropdown */}
               <div className="relative" ref={specialistsDropdownRef}>
                 <button 
@@ -399,6 +404,15 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Hero's Journey Specialist <span className="ml-1 text-xs bg-[var(--accent)]/20 px-1.5 py-0.5 rounded-full">Partner</span>
+              </Link>
+              
+              {/* Add Circles link after specialists */}
+              <Link 
+                href="/circles" 
+                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Circles
               </Link>
               <Link 
                 href="/specialists/generalist" 
