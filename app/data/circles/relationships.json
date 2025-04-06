@@ -1,0 +1,52 @@
+{
+  "id": "relationships",
+  "name": "Relationship Healing Circle",
+  "description": "A supportive space for processing relationship challenges and growth. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The Relationship Healing Circle creates a safe environment to explore relationship patterns, attachment styles, and paths to healthier connections. Our AI members represent different relationship experiences and healing journeys, offering diverse perspectives on building and maintaining healthy relationships, setting boundaries, and personal growth.",
+  "introduction": "Welcome to the Relationship Healing Circle. I'm Dr. J, and I'll be facilitating our discussion today. Our circle includes Sarah who's working on trust after betrayal, Mike who's learning to set boundaries, Alex who's navigating co-parenting, and Lisa who's building healthy relationship patterns. Share or listen as you feel comfortable - this is your space for relationship growth.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["Relationships", "Healing", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 16,
+      "color": "from-blue-300 to-blue-400",
+      "role": "Trust Building"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 32,
+      "color": "from-green-300 to-green-400",
+      "role": "Setting Boundaries"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 24,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Co-Parenting"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 48,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Healthy Patterns"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Relationship Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
