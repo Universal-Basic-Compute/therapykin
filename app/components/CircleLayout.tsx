@@ -1,19 +1,25 @@
+'use client';
+
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import CircleMember from './CircleMember';
 import SpeakerBubble from './SpeakerBubble';
 
-// Add animation variants
-const memberVariants = {
-  initial: { scale: 0, opacity: 0 },
-  animate: { scale: 1, opacity: 1 },
-  hover: { scale: 1.05, transition: { duration: 0.2 } }
+type Position = {
+  left: string;
+  top: string;
 };
 
 interface CircleLayoutProps {
   activeSpeaker: string;
   onSpeakerChange: (speaker: string) => void;
 }
+
+const memberVariants: Variants = {
+  initial: { scale: 0, opacity: 0 },
+  animate: { scale: 1, opacity: 1 },
+  hover: { scale: 1.05, transition: { duration: 0.2 } }
+};
 
 export default function CircleLayout({ activeSpeaker, onSpeakerChange }: CircleLayoutProps) {
   const members = [
