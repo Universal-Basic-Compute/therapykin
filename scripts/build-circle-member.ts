@@ -14,6 +14,41 @@ interface CreateKinResponse {
   status: string;
 }
 
+async function buildCircleMember(kinId: string, buildIndex: number) {
+  try {
+    console.log(`Building circle member (iteration ${buildIndex + 1}/10)`);
+
+    const response = await axios.post(
+      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/build`,
+      {
+        message: "continue building your identity",
+        addSystem: "Focus on developing a consistent and authentic therapeutic presence"
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': KINOS_API_KEY
+        }
+      }
+    );
+
+    if (response.data.status !== "completed") {
+      throw new Error(`Build failed with status: ${response.data.status}`);
+    }
+
+    console.log(`Build iteration ${buildIndex + 1} completed successfully`);
+    return response.data;
+
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('API Error:', error.response?.data || error.message);
+    } else {
+      console.error('Error:', error);
+    }
+    throw error;
+  }
+}
+
 async function createCircleMember(
   memberName: string,
   role: string,
@@ -43,6 +78,15 @@ async function createCircleMember(
 
     const kinId = createKinResponse.data.id;
     console.log(`Successfully created Kin with ID: ${kinId}`);
+
+    // Step 2: Build the Kin's identity through 10 iterations
+    console.log('Starting build iterations...');
+    for (let i = 0; i < 10; i++) {
+      await buildCircleMember(kinId, i);
+      // Add a small delay between builds to prevent rate limiting
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    console.log('Completed all build iterations successfully');
 
     return kinId;
 
