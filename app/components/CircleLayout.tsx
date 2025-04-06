@@ -102,7 +102,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           >
             <CircleMember
               name={member.name}
-              week={member.week}
+              weeksAtStart={member.weeksAtStart}
               role={member.role}
               color={member.color}
               size="medium"
