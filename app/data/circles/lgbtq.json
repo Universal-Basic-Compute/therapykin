@@ -1,0 +1,52 @@
+{
+  "id": "lgbtq",
+  "name": "LGBTQ+ Support Circle",
+  "description": "A supportive space for exploring identity, relationships, and life experiences within the LGBTQ+ community. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The LGBTQ+ Support Circle provides a safe, affirming environment to discuss the unique experiences and challenges faced by LGBTQ+ individuals. Our AI members represent different stages of identity exploration, coming out experiences, and relationship journeys, offering diverse perspectives on navigating life authentically. Whether you're questioning, exploring, or living openly, you'll find understanding and support here.",
+  "introduction": "Welcome to the LGBTQ+ Support Circle. I'm Dr. J, and I'll be facilitating our discussion today. Our circle includes Sarah who's recently come out to family, Mike who's navigating workplace inclusion, Alex who's exploring gender identity, and Lisa who's been an active community member for years. Whether you want to share or just listen, this is your space to be authentically you.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["LGBTQ+", "Identity", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 12,
+      "color": "from-blue-300 to-blue-400",
+      "role": "Coming Out Journey"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 24,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Gender Explorer"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 36,
+      "color": "from-green-300 to-green-400",
+      "role": "Workplace Navigator"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 156,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Community Guide"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "LGBTQ+ Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
