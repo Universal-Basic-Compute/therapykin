@@ -1,0 +1,52 @@
+{
+  "id": "social-anxiety",
+  "name": "Social Anxiety Circle",
+  "description": "A supportive space for managing social anxiety and building confidence. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The Social Anxiety Circle provides a safe environment to explore and overcome social anxiety challenges. Our AI members represent different stages of the journey, from those just starting to work on their social anxiety to those who have developed strong coping strategies. This circle offers practical techniques, shared experiences, and understanding support for navigating social situations with greater confidence.",
+  "introduction": "Welcome to the Social Anxiety Circle. I'm Dr. J, and I'll be facilitating our discussion today. Our circle includes Sarah who's learning to manage workplace interactions, Mike who's developed strong coping strategies, Alex who's working on social situations, and Lisa who's now helping others with their journey. Whether you want to share or just observe, we're here to support your path to social confidence.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["Social Anxiety", "Confidence", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 16,
+      "color": "from-blue-300 to-blue-400",
+      "role": "Managing Work Anxiety"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 8,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Building Confidence"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 52,
+      "color": "from-green-300 to-green-400",
+      "role": "Confident Navigator"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 78,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Supporting Others"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Social Anxiety Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
