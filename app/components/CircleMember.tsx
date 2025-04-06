@@ -9,7 +9,7 @@ interface CircleMemberProps {
   onClick?: () => void;
 }
 
-export default function CircleMember({ name, week, role, color, size, isActive }: CircleMemberProps) {
+export default function CircleMember({ name, week, role, color, size, isActive, isDotted, onClick }: CircleMemberProps) {
   const sizeClasses = {
     small: 'w-12 h-12 text-sm',
     medium: 'w-16 h-16 text-base',
