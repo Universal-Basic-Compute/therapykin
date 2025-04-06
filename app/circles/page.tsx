@@ -16,6 +16,14 @@ interface Circle {
 export default function CirclesPage() {
   const [activeCircles] = useState<Circle[]>([
     {
+      id: 'anxiety',
+      name: 'Anxiety Management Circle', 
+      description: 'A supportive space for managing anxiety and stress. You can actively participate or simply listen - there\'s no pressure to share until you\'re ready.',
+      participants: 3,
+      maxParticipants: 6,
+      tags: ['Anxiety', 'Stress', 'Support', 'Listen Only']
+    },
+    {
       id: 'addiction',
       name: 'Addiction Recovery Circle',
       description: 'A supportive space for recovery and maintaining sobriety. You can actively participate or simply listen - there\'s no pressure to share until you\'re ready.',
