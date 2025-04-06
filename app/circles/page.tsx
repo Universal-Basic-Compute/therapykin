@@ -18,7 +18,7 @@ export default function CirclesPage() {
     {
       id: 'addiction',
       name: 'Addiction Recovery Circle',
-      description: 'A supportive space for recovery and maintaining sobriety. You can actively participate or simply listen - there's no pressure to share until you're ready.',
+      description: 'A supportive space for recovery and maintaining sobriety. You can actively participate or simply listen - there\'s no pressure to share until you\'re ready.',
       participants: 4,
       maxParticipants: 6,
       tags: ['Recovery', 'Addiction', 'Support', 'Listen Only']
