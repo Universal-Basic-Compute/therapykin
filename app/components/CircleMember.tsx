@@ -5,6 +5,8 @@ interface CircleMemberProps {
   color: string;
   size: 'small' | 'medium' | 'large';
   isActive: boolean;
+  isDotted?: boolean;
+  onClick?: () => void;
 }
 
 export default function CircleMember({ name, week, role, color, size, isActive }: CircleMemberProps) {
@@ -17,9 +19,10 @@ export default function CircleMember({ name, week, role, color, size, isActive }
   return (
     <div className="flex flex-col items-center">
       <div 
+        onClick={onClick}
         className={`
           ${sizeClasses[size]} 
-          bg-gradient-to-br ${color}
+          ${isDotted ? 'border-2 border-dashed border-[var(--primary)]/50' : `bg-gradient-to-br ${color}`}
           rounded-full 
           flex 
           items-center 
@@ -32,9 +35,14 @@ export default function CircleMember({ name, week, role, color, size, isActive }
           duration-300
           hover:shadow-xl
           backdrop-blur-sm
+          ${onClick ? 'cursor-pointer hover:border-[var(--primary)]' : ''}
         `}
       >
-        {name[0]}
+        {isDotted ? (
+          <span className="text-xs text-[var(--primary)]/70 hover:text-[var(--primary)]">join?</span>
+        ) : (
+          name[0]
+        )}
       </div>
       <div className="mt-3 text-center">
         <div className="font-medium text-foreground/90">{name}</div>

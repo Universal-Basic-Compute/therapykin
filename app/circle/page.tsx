@@ -8,10 +8,15 @@ export default function CirclePage() {
   const { user } = useAuth();
   const [message, setMessage] = useState('');
   const [activeSpeaker, setActiveSpeaker] = useState('Maria');
+  const [isPeekMode, setIsPeekMode] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false);
 
-  // Prevent scrolling on this page
+  // Prevent scrolling on this page and check for peek mode
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    const searchParams = new URLSearchParams(window.location.search);
+    const mode = searchParams.get('mode');
+    setIsPeekMode(mode === 'peek');
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -28,6 +33,32 @@ export default function CirclePage() {
 
   return (
     <div className="h-screen w-screen bg-gradient-radial from-[var(--background)] via-[var(--background-alt)] to-[var(--background)] overflow-hidden relative">
+      {showJoinModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-[var(--background)] rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-[var(--primary)]">Coming Soon!</h2>
+              <button 
+                onClick={() => setShowJoinModal(false)}
+                className="text-foreground/60 hover:text-foreground"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <p className="text-foreground/70 mb-6">
+              The ability to create your own circle is coming soon! Stay tuned for updates.
+            </p>
+            <button
+              onClick={() => setShowJoinModal(false)}
+              className="w-full px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary-dark)] transition-colors"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
       {/* Animated background patterns */}
       <div className="absolute inset-0 bg-pattern-dots opacity-5"></div>
       <div className="absolute inset-0 bg-gradient-to-b from-[var(--primary)]/5 to-transparent"></div>
@@ -67,6 +98,7 @@ export default function CirclePage() {
           <CircleLayout 
             activeSpeaker={activeSpeaker}
             onSpeakerChange={setActiveSpeaker}
+            isPeekMode={isPeekMode}
           />
         </div>
       </div>
