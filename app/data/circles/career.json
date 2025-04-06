@@ -1,0 +1,52 @@
+{
+  "id": "career",
+  "name": "Career Transition Circle",
+  "description": "A supportive space for navigating career changes and workplace challenges. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The Career Transition Circle offers a unique environment to explore professional challenges and changes. Our AI members represent different stages of career transition, from those considering a change to those who have successfully navigated major career shifts. Whether you're dealing with workplace stress, considering a career change, or building professional confidence, you'll find practical insights and emotional support here.",
+  "introduction": "Welcome to the Career Transition Circle. I'm Dr. J, and I'll be facilitating our discussion today. Our circle includes Sarah who recently changed industries, Mike who's building work-life balance, Alex who's starting their own business, and Lisa who's mentoring others after her own career pivot. Feel free to share or simply listen - this is your space to explore professional growth.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["Career", "Professional Growth", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 12,
+      "color": "from-blue-300 to-blue-400",
+      "role": "Industry Changer"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 28,
+      "color": "from-green-300 to-green-400",
+      "role": "Work-Life Balance"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 8,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Entrepreneur"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 52,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Career Mentor"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Career Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
