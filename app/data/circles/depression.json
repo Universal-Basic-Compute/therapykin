@@ -1,0 +1,52 @@
+{
+  "id": "depression",
+  "name": "Depression Support Circle",
+  "description": "A supportive space for managing depression and finding hope. You can actively participate or simply listen - there's no pressure to share until you're ready.",
+  "longDescription": "The Depression Support Circle provides a safe environment where you can explore your journey with depression at your own pace. Each AI member represents different stages of managing depression, from those in acute phases to those who have developed strong coping mechanisms. Whether you're experiencing your first depressive episode or managing recurring depression, you'll find understanding and practical insights here.",
+  "introduction": "Welcome to the Depression Support Circle. I'm Dr. J, and I'll be facilitating our discussion today. Our circle includes Sarah who's been managing depression for 2 years, Mike who's recently started treatment, Alex who's developing new coping strategies, and Lisa who's maintaining long-term wellness. Feel free to share or simply listen - this is your space to explore at your own comfort level.",
+  "participants": 4,
+  "maxParticipants": 6,
+  "tags": ["Depression", "Mental Health", "Support", "Listen Only"],
+  "members": [
+    {
+      "id": "empty",
+      "name": "",
+      "color": "from-transparent to-transparent",
+      "isDotted": true
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah",
+      "weeksAtStart": 104,
+      "color": "from-blue-300 to-blue-400",
+      "role": "Managing Well"
+    },
+    {
+      "id": "mike",
+      "name": "Mike",
+      "weeksAtStart": 6,
+      "color": "from-green-300 to-green-400",
+      "role": "Starting Treatment"
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "weeksAtStart": 26,
+      "color": "from-rose-300 to-rose-400",
+      "role": "Building Strategies"
+    },
+    {
+      "id": "lisa",
+      "name": "Lisa",
+      "weeksAtStart": 156,
+      "color": "from-purple-300 to-purple-400",
+      "role": "Long-term Wellness"
+    },
+    {
+      "id": "drj",
+      "name": "Dr. J",
+      "role": "Depression Specialist",
+      "color": "from-blue-500 to-blue-600"
+    }
+  ]
+}
