@@ -3206,15 +3206,17 @@ Important style requirements:
                   handleSubmit(e as any);
                 }
               }}
-              placeholder={sessionEnded 
-                ? "This session has ended. Please return for your next session." 
-                : "Type your message here... (Enter to send, Shift+Enter for new line)"}
+              placeholder={isPeekMode 
+                ? "This is a preview. Join to participate in the conversation." 
+                : sessionEnded 
+                  ? "This session has ended. Please return for your next session." 
+                  : "Type your message here... (Enter to send, Shift+Enter for new line)"}
               className={`flex-grow p-3 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] bg-[var(--card-bg)] resize-none min-h-[50px] max-h-[150px] overflow-y-auto ${
-                sessionEnded ? 'opacity-50 cursor-not-allowed' : ''
+                sessionEnded || isPeekMode ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               style={{ height: 'auto' }}
               rows={1}
-              disabled={isRecording || sessionEnded}
+              disabled={isRecording || sessionEnded || isPeekMode}
             />
             
             {/* Warning for unsupported browsers */}
