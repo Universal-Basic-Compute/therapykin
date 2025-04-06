@@ -37,9 +37,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   // Add state for join modal
   const [showJoinModal, setShowJoinModal] = React.useState(false);
 
-  // Get circle data from props
-  const { circleMembers } = props;
-  
   const members = isPeekMode ? 
     circleMembers.map(member => 
       member.id === 'empty' ? { ...member, onClick: () => setShowJoinModal(true) } : member
