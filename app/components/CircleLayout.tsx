@@ -22,7 +22,10 @@ const memberVariants: Variants = {
   hover: { scale: 1.05, transition: { duration: 0.2 } }
 };
 
-export default function CircleLayout({ activeSpeaker, onSpeakerChange }: CircleLayoutProps) {
+export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode }: CircleLayoutProps) {
+  // Add state for join modal
+  const [showJoinModal, setShowJoinModal] = React.useState(false);
+
   const members = isPeekMode ? [
     { 
       id: 'empty', 
