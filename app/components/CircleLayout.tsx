@@ -184,6 +184,22 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 1000; // 1 second
 
+  // First define checkForMentionsAndQuestions
+  const checkForMentionsAndQuestions = useCallback((message: string) => {
+    // Check if the message directly mentions "you" or asks a question
+    const containsYouMention = /\byou\b/i.test(message);
+    const containsQuestion = /\?/.test(message);
+
+    // If either condition is met, schedule the next message with a shorter delay
+    if (containsYouMention || containsQuestion) {
+      console.log('Message contains direct mention or question, reducing delay');
+      setTimeout(() => {
+        processNextTalker();
+      }, 1000); // Reduced delay for interactive messages
+    }
+  }, [processNextTalker]);
+
+  // Then define processNextTalker
   const processNextTalker = useCallback(async () => {
     if (isProcessingTalk) {
       console.log('Already processing talk, skipping');
@@ -585,20 +601,6 @@ ${relevantHistory}`;
   }, [isInitialized, circleId]); // Remove other dependencies
 
 
-  // Function to check for mentions and questions
-  const checkForMentionsAndQuestions = useCallback((message: string) => {
-    // Check if the message directly mentions "you" or asks a question
-    const containsYouMention = /\byou\b/i.test(message);
-    const containsQuestion = /\?/.test(message);
-
-    // If either condition is met, schedule the next message with a shorter delay
-    if (containsYouMention || containsQuestion) {
-      console.log('Message contains direct mention or question, reducing delay');
-      setTimeout(() => {
-        processNextTalker();
-      }, 1000); // Reduced delay for interactive messages
-    }
-  }, [processNextTalker]);
 
 
 
