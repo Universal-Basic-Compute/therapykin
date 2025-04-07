@@ -2580,6 +2580,20 @@ Important style requirements:
     }
   };
 
+  if (loading || isCheckingSubscription) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p>Loading your session...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   // Function to play audio for a specific message
   const playMessageAudio = async (msg: ChatMessage) => {
     if (msg.audio) {
