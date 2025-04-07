@@ -195,20 +195,17 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     }
   }, [isPeekMode, circleMembers, circleData?.therapist]);
 
-  // Now we can use members in useEffect
   useEffect(() => {
     const sendInitialMessage = async () => {
       try {
         setIsLoading(true);
         
-        // Create the system message listing all present members
         const presentMembers = members
           .filter(m => !m.isDotted)
           .map(m => `${m.name}${m.role ? ` (${m.role})` : ''}`);
         
         const systemMessage = `<system>New group therapy session started. Present members: ${presentMembers.join(', ')}</system>`;
         
-        // Send the message to the kinos API endpoint
         const response = await fetch('/api/kinos', {
           method: 'POST',
           headers: {
@@ -218,7 +215,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
             content: systemMessage,
             firstName: 'Circle',
             specialist: circleData?.specialist || 'generalist',
-            pseudonym: `circle-${circleId}` // Use a unique pseudonym for each circle
+            pseudonym: `circle-${circleId}`
           }),
         });
 
@@ -227,12 +224,9 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         }
 
         const data = await response.json();
-        
-        // Generate audio for the response
         const audioUrl = await textToSpeech(data.response);
         const messageId = `msg-${Date.now()}`;
 
-        // Add the therapist's response to the chat
         setMessages([{
           role: 'assistant',
           content: data.response,
@@ -242,15 +236,14 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           audio: audioUrl
         }]);
 
-        // Play the audio
         if (audioUrl) {
           playAudio(audioUrl, messageId);
         }
 
-        // Add a delay before starting the conversation
+        // Add delay before starting conversation
         setTimeout(() => {
           processNextTalker();
-        }, 2000); // Wait 2 seconds before first response
+        }, 2000);
 
       } catch (error) {
         console.error('Error sending initial message:', error);
@@ -260,7 +253,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     };
 
     sendInitialMessage();
-  }, [members, circleId, circleData, processNextTalker]);
+  }, [members, circleId, circleData, processNextTalker, textToSpeech, playAudio]);
 
   // Initialize talker stack
   useEffect(() => {
@@ -447,6 +440,136 @@ Respond to the ongoing conversation.</system>`;
       setIsLoadingResponse(false);
     }
   }, [talkerStack, isProcessingTalk, circleData, messages, circleId, setMessages, setTalkerStack, setIsProcessingTalk, setIsLoadingResponse, checkForMentionsAndQuestions, textToSpeech, playAudio]);
+
+  // Define processNextTalker with useCallback at the top of the component
+  const processNextTalker = useCallback(async () => {
+    if (isProcessingTalk) return;
+
+    try {
+      setIsProcessingTalk(true);
+      setIsLoadingResponse(true);
+
+      // Add loading message to chat
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '...',
+        id: 'loading-' + Date.now(),
+        loading: true
+      }]);
+
+      // Get next talker (either from stack or therapist)
+      let nextTalker = talkerStack.length > 0 
+        ? talkerStack[0] 
+        : null;
+
+      // If no next talker in stack, try to use therapist
+      if (!nextTalker && circleData?.therapist) {
+        nextTalker = {
+          id: 'therapist',
+          name: circleData.therapist.name,
+          role: circleData.therapist.role || 'Circle Facilitator'
+        };
+      }
+
+      // If still no talker, log error and return
+      if (!nextTalker) {
+        console.error('No next talker available and no therapist found in circleData');
+        setIsProcessingTalk(false);
+        return;
+      }
+
+      // Remove talker from stack if it's not the therapist
+      if (talkerStack.length > 0) {
+        setTalkerStack(prev => prev.slice(1));
+      }
+
+      // Get conversation history
+      const relevantHistory = messages
+        .slice()
+        .reverse()
+        .slice(0, messages.findIndex(msg => msg.sender === nextTalker.name))
+        .reverse()
+        .map(msg => `${msg.sender}: ${msg.content}`)
+        .join('\n');
+
+      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
+Here is the recent conversation since you last spoke:
+
+${relevantHistory}
+
+Respond to the ongoing conversation.</system>`;
+
+      // Send message to get response
+      const response = await fetch('/api/kinos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: systemMessage,
+          firstName: 'Circle',
+          specialist: circleData?.specialist || 'generalist',
+          pseudonym: `circle-${circleId}-${nextTalker.id}`
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to get talker response');
+
+      const data = await response.json();
+      
+      // Generate audio
+      const audioUrl = await textToSpeech(data.response);
+      const messageId = `msg-${Date.now()}`;
+
+      // Update messages
+      setMessages(prev => [
+        ...prev.filter(msg => !msg.loading),
+        {
+          role: 'assistant',
+          content: data.response,
+          id: messageId,
+          sender: nextTalker.name,
+          memberId: nextTalker.id,
+          audio: audioUrl
+        }
+      ]);
+
+      // Check for mentions and questions
+      checkForMentionsAndQuestions(data.response);
+
+      // Calculate reading time
+      const readingTimeMs = (data.response.length / CHARS_PER_SECOND) * 1000;
+
+      // Play audio if available
+      if (audioUrl) {
+        playAudio(audioUrl, messageId);
+      }
+
+      // Wait before processing next talker
+      setTimeout(() => {
+        setIsProcessingTalk(false);
+        if (talkerStack.length > 0) {
+          processNextTalker();
+        }
+      }, readingTimeMs + 1000);
+
+    } catch (error) {
+      console.error('Error processing next talker:', error);
+      setMessages(prev => prev.filter(msg => !msg.loading));
+      setIsProcessingTalk(false);
+      setIsLoadingResponse(false);
+    }
+  }, [
+    isProcessingTalk,
+    talkerStack,
+    circleData,
+    messages,
+    circleId,
+    textToSpeech,
+    playAudio,
+    checkForMentionsAndQuestions,
+    CHARS_PER_SECOND
+  ]);
 
   // Add check for empty members
   if (!circleMembers.length && !isPeekMode) {
