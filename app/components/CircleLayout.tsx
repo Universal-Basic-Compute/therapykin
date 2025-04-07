@@ -43,6 +43,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Define members first
+
   useEffect(() => {
     const sendInitialMessage = async () => {
       try {
