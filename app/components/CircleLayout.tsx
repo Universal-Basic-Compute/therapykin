@@ -77,8 +77,10 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   }, []);
 
   // Function to convert text to speech
-  const textToSpeech = async (text: string): Promise<string> => {
+  const textToSpeech = async (text: string, retries = 3): Promise<string> => {
     try {
+      console.log(`Requesting TTS for text (attempt ${4-retries}/3): "${text.substring(0, 30)}..."`);
+      
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: {
@@ -96,11 +98,27 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       }
       
       const blob = await response.blob();
+      console.log(`Received blob of size: ${blob.size} bytes, type: ${blob.type}`);
+      
+      if (blob.size === 0) {
+        throw new Error('Received empty audio response');
+      }
+      
       const audioUrl = URL.createObjectURL(blob);
+      console.log(`Created audio URL: ${audioUrl}`);
+      
       return audioUrl;
     } catch (error) {
       console.error('Error converting text to speech:', error);
-      return '';
+      
+      // Retry logic
+      if (retries > 0) {
+        console.log(`Retrying TTS request. ${retries-1} attempts remaining`);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
+        return textToSpeech(text, retries - 1);
+      }
+      
+      return ''; // Return empty string if all retries fail
     }
   };
 
@@ -141,7 +159,21 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const members: Member[] = React.useMemo(() => {
     // Get the therapist from the circle data
     const therapist = circleData?.therapist;
+    console.log('CircleData:', circleData);
     console.log('Found therapist from circle data:', therapist);
+
+    // Transform therapist data to match Member interface if it exists
+    const therapistMember = therapist ? {
+      id: 'therapist',
+      name: therapist.name,
+      role: therapist.role || 'Circle Facilitator',
+      color: therapist.color || 'from-teal-300 to-teal-400',
+      weeksAtStart: therapist.weeksAtStart || 520
+    } : null;
+
+    if (!therapistMember) {
+      console.warn('No therapist found in circle data');
+    }
 
     if (isPeekMode) {
       // For peek mode, put therapist first, then other members
@@ -293,7 +325,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       // Get next talker (either from stack or therapist)
       let nextTalker = talkerStack.length > 0 
         ? talkerStack[0] 
-        : circleData?.therapist;
+        : null;
 
       // Add debug logging
       console.log('Next talker selection:', {
@@ -302,10 +334,14 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         therapist: circleData?.therapist
       });
 
-      // If no next talker, use therapist from circleData
+      // If no next talker in stack, try to use therapist
       if (!nextTalker && circleData?.therapist) {
-        console.log('No talker in stack, defaulting to therapist');
-        nextTalker = circleData.therapist;
+        nextTalker = {
+          id: 'therapist',
+          name: circleData.therapist.name,
+          role: circleData.therapist.role || 'Circle Facilitator'
+        };
+        console.log('Using therapist as next talker:', nextTalker);
       }
 
       // If still no talker, log error and return
