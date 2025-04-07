@@ -74,6 +74,7 @@ Use gentle, flowing pencil lines and subtle shading. Keep the composition minima
 
 async function generateImage(prompt: string, memberId: string): Promise<void> {
   try {
+    // Generate 4 variants
     const response = await axios.post(
       'https://api.ideogram.ai/generate',
       {
@@ -81,7 +82,8 @@ async function generateImage(prompt: string, memberId: string): Promise<void> {
           prompt,
           aspect_ratio: "ASPECT_1_1",
           model: "V_2A",
-          magic_prompt_option: "AUTO"
+          magic_prompt_option: "AUTO",
+          num_images: 4 // Request 4 images instead of 1
         }
       },
       {
@@ -98,13 +100,19 @@ async function generateImage(prompt: string, memberId: string): Promise<void> {
       fs.mkdirSync(dirPath, { recursive: true });
     }
 
-    // Download and save the image
-    if (response.data.data?.[0]?.url) {
-      const imageUrl = response.data.data[0].url;
-      const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-      const imagePath = path.join(dirPath, `${memberId}.jpg`);
-      fs.writeFileSync(imagePath, imageResponse.data);
-      console.log(`Image saved for ${memberId}`);
+    // Download and save all variants
+    if (response.data.data && response.data.data.length > 0) {
+      for (let i = 0; i < response.data.data.length; i++) {
+        const imageUrl = response.data.data[i].url;
+        const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+        
+        // For first image, use original filename, for others add _1, _2, _3
+        const suffix = i === 0 ? '' : `_${i}`;
+        const imagePath = path.join(dirPath, `${memberId}${suffix}.jpg`);
+        
+        fs.writeFileSync(imagePath, imageResponse.data);
+        console.log(`Image variant ${i} saved for ${memberId}${suffix}`);
+      }
     }
   } catch (error) {
     console.error(`Error generating image for ${memberId}:`, error);
