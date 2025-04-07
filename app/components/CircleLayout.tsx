@@ -183,32 +183,19 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
 
   // Then define processNextTalker
   const processNextTalker = useCallback(async () => {
-    if (isProcessingTalk) return;
+    if (isProcessingTalk) {
+      console.log('Already processing talk, skipping');
+      return;
+    }
 
     try {
       setIsProcessingTalk(true);
       setIsLoadingResponse(true);
 
-      // Add loading message to chat
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: '...',
-        id: 'loading-' + Date.now(),
-        loading: true
-      }]);
-
       // Get next talker (either from stack or therapist)
       let nextTalker = talkerStack.length > 0 
         ? talkerStack[0] 
         : null;
-
-      // Add debug logging
-      console.log('Next talker selection:', {
-        stackLength: talkerStack.length,
-        nextTalker,
-        therapist: circleData?.therapist,
-        currentStack: talkerStack
-      });
 
       // If no next talker in stack, try to use therapist
       if (!nextTalker && circleData?.therapist) {
@@ -217,13 +204,13 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           name: circleData.therapist.name,
           role: circleData.therapist.role || 'Circle Facilitator'
         };
-        console.log('Using therapist as next talker:', nextTalker);
       }
 
-      // If still no talker, log error and return
+      // If still no talker, return early
       if (!nextTalker) {
-        console.error('No next talker available and no therapist found in circleData');
+        console.log('No next talker available');
         setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
         return;
       }
 
@@ -234,24 +221,28 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         setTalkerStack(prev => prev.slice(1));
       }
 
-      // Get conversation history since last message from this talker
+      // Add loading message
+      const loadingId = `loading-${Date.now()}`;
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '...',
+        id: loadingId,
+        loading: true
+      }]);
+
+      // Get conversation history
       const relevantHistory = messages
-        .slice()
-        .reverse()
-        .slice(0, messages.findIndex(msg => msg.sender === nextTalker.name))
-        .reverse()
+        .slice(-5) // Only use last 5 messages for context
         .map(msg => `${msg.sender}: ${msg.content}`)
         .join('\n');
 
-      // Create the system message with context
       const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
-Here is the recent conversation since you last spoke:
+Respond to the conversation naturally and briefly.</system>
 
-${relevantHistory}
+Recent conversation:
+${relevantHistory}`;
 
-Respond to the ongoing conversation.</system>`;
-
-      // Send message to get response from the talker
+      // Send message
       const response = await fetch('/api/kinos', {
         method: 'POST',
         headers: {
@@ -265,15 +256,17 @@ Respond to the ongoing conversation.</system>`;
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to get talker response');
+      if (!response.ok) throw new Error('Failed to get response');
 
       const data = await response.json();
       
+      // Generate audio only once
       const audioUrl = await textToSpeech(data.response);
       const messageId = `msg-${Date.now()}`;
 
+      // Update messages, removing loading message
       setMessages(prev => [
-        ...prev.filter(msg => !msg.loading),
+        ...prev.filter(msg => msg.id !== loadingId),
         {
           role: 'assistant',
           content: data.response,
@@ -284,26 +277,29 @@ Respond to the ongoing conversation.</system>`;
         }
       ]);
 
-      // Check for new mentions and questions in the response
+      // Check for mentions and questions
       checkForMentionsAndQuestions(data.response);
-
-      // Calculate reading time based on character count
-      const charCount = data.response.length;
-      const readingTimeMs = (charCount / CHARS_PER_SECOND) * 1000;
-      console.log(`Message length: ${charCount} chars, estimated reading time: ${readingTimeMs}ms`);
 
       // Play audio if available
       if (audioUrl) {
         playAudio(audioUrl, messageId);
       }
 
-      // Wait for estimated reading time, then process next talker
+      // Calculate delay before next message
+      const readingTimeMs = (data.response.length / CHARS_PER_SECOND) * 1000;
+      
+      // Reset processing flag after delay
       setTimeout(() => {
         setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
+        
+        // Process next talker if available and not the initial message
         if (talkerStack.length > 0) {
-          processNextTalker();
+          setTimeout(() => {
+            processNextTalker();
+          }, 1000); // Add 1 second buffer between messages
         }
-      }, readingTimeMs + 1000);
+      }, readingTimeMs);
 
     } catch (error) {
       console.error('Error processing next talker:', error);
@@ -370,6 +366,11 @@ Respond to the ongoing conversation.</system>`;
 
   useEffect(() => {
     const sendInitialMessage = async () => {
+      if (messages.length > 0) {
+        console.log('Messages already exist, skipping initial message');
+        return;
+      }
+
       try {
         setIsLoading(true);
         
@@ -398,7 +399,7 @@ Respond to the ongoing conversation.</system>`;
 
         const data = await response.json();
         const audioUrl = await textToSpeech(data.response);
-        const messageId = `msg-${Date.now()}`;
+        const messageId = `initial-${Date.now()}`;
 
         setMessages([{
           role: 'assistant',
