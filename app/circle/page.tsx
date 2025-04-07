@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react';
 import CircleLayout from '../components/CircleLayout';
 import { useAuth } from '../contexts/AuthContext';
+import { useSearchParams } from 'next/navigation';
 
 export default function CirclePage() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const circleName = searchParams.get('name') || '';
   const [message, setMessage] = useState('');
   const [activeSpeaker, setActiveSpeaker] = useState('Maria');
   const [isPeekMode, setIsPeekMode] = useState(false);
