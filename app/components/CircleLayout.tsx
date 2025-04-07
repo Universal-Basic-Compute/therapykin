@@ -74,9 +74,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     console.log('Creating members array with:', {
       therapist,
       circleMembers,
-      circleData,
-      isPeekMode,
-      circleId
+      isPeekMode
     });
 
     // Filter out empty slots but keep regular members
@@ -89,7 +87,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     console.log('Regular members:', regularMembers);
 
     if (isPeekMode) {
-      return [
+      const allMembers = [
         ...(therapist ? [therapist] : []),
         ...regularMembers,
         // Add empty slots last
@@ -98,6 +96,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           onClick: () => setShowJoinModal(true)
         }))
       ];
+      console.log('Final members array (peek mode):', allMembers);
+      return allMembers;
     } else {
       const youMember: Member = {
         id: 'you',
@@ -106,11 +106,13 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         color: 'from-yellow-300 to-yellow-400'
       };
       
-      return [
+      const allMembers = [
         ...(therapist ? [therapist] : []),
         youMember,
         ...regularMembers
       ];
+      console.log('Final members array (regular mode):', allMembers);
+      return allMembers;
     }
   }, [isPeekMode, circleMembers, circleData?.therapist]);
 
@@ -180,12 +182,20 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       setIsLoadingResponse(true);
 
       // Get available members (excluding 'you' and empty slots)
-      const availableMembers = members.filter(member => 
-        member.id !== 'you' && // Not the user
-        member.id !== 'empty' && // Not empty slots
-        member.name && // Has a name
-        !member.isDotted // Not a dotted placeholder
-      );
+      const availableMembers = members.filter(member => {
+        // Log each member being filtered
+        console.log('Filtering member:', member);
+    
+        return (
+          member.id !== 'you' && // Not the user
+          member.id !== 'empty' && // Not empty slots
+          member.name && // Has a name
+          !member.isDotted // Not a dotted placeholder
+        );
+      });
+
+      console.log('Members before filtering:', members);
+      console.log('Available members after filtering:', availableMembers);
 
       console.log('Available members for talking:', availableMembers.map(m => ({
         id: m.id,
