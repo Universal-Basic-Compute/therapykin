@@ -268,6 +268,14 @@ async function buildCircleTherapist(circleName: string, specialist: string) {
   }
 }
 
+// Add interface for circle member
+interface CircleMember {
+  id: string;
+  name: string;
+  role?: string;
+  weeksAtStart?: number;
+}
+
 async function createCircleMember(
   memberId: string,
   role: string,
@@ -299,7 +307,7 @@ async function createCircleMember(
     // Step 2: Build the Kin's identity through all initialization messages
     console.log('Starting build iterations...');
     for (let i = 0; i < initializationMessages.length; i++) {
-      await buildCircleMember(kinId, i, false, memberName, role);
+      await buildCircleMember(kinId, i, false, memberId, role);
       // Add a small delay between builds to prevent rate limiting
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
@@ -330,7 +338,7 @@ async function buildAllCircleMembers(circleName: string) {
     await buildCircleTherapist(circleName, circleData.specialist || 'generalist');
 
     // Get all non-empty members
-    const membersToProcess = circleData.members.filter(member => member.id !== 'empty');
+    const membersToProcess = circleData.members.filter((member: CircleMember) => member.id !== 'empty');
 
     // Process members in batches of 3
     for (let i = 0; i < membersToProcess.length; i += 3) {
@@ -338,7 +346,7 @@ async function buildAllCircleMembers(circleName: string) {
       console.log(`Processing batch ${Math.floor(i/3) + 1} of ${Math.ceil(membersToProcess.length/3)}`);
 
       // Process each member in the current batch concurrently
-      await Promise.all(batch.map(member => 
+      await Promise.all(batch.map((member: CircleMember) => 
         createCircleMember(
           member.id,
           member.role || '',
@@ -367,7 +375,7 @@ async function buildAllCircles() {
     // Get all JSON files from the circles directory
     const circlesDirectory = path.join(process.cwd(), 'app/data/circles');
     const circleFiles = fs.readdirSync(circlesDirectory)
-      .filter(file => file.endsWith('.json'));
+      .filter((file: string) => file.endsWith('.json'));
 
     console.log(`Found ${circleFiles.length} circles to build`);
 
