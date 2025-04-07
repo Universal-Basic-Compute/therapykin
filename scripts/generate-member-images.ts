@@ -21,7 +21,7 @@ async function getPhysicalDescription(kinId: string): Promise<string> {
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`,
       {
         message: "Decide a physical appearance for your persona. Include age, facial features, body type, style of dress, and overall demeanor. Focus on creating a realistic, relatable appearance that matches your therapeutic journey and background. Be specific but natural in your description.",
-        model: "claude-3-5-haiku-latest"
+        model: "claude-3-7-sonnet-latest"
       },
       {
         headers: {
