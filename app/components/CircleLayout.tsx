@@ -515,50 +515,50 @@ ${relevantHistory}`;
                           </div>
                         
                           {/* Message content in a chat bubble */}
-                      <div className="flex-grow max-w-[80%]">
-                        <div className="font-medium text-sm text-[var(--primary)] mb-1">
-                          {message.sender}
-                        </div>
-                        <div className="assistant-message-bubble p-4 rounded-lg rounded-tl-none">
-                          <div className="text-bubble whitespace-pre-wrap">
-                            {message.content}
-                          </div>
-                          {message.audio && (
-                            <div className="mt-2 flex justify-end space-x-2">
-                              {currentPlayingId === message.id ? (
-                                <button 
-                                  onClick={() => {
-                                    if (audioRef.current) {
-                                      audioRef.current.pause();
-                                      setIsPlaying(false);
-                                      setCurrentPlayingId(null);
-                                    }
-                                  }}
-                                  className="text-xs opacity-70 hover:opacity-100 flex items-center"
-                                >
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-                                  </svg>
-                                  Stop
-                                </button>
-                              ) : (
-                                <button 
-                                  onClick={() => playAudio(message.audio!, message.id)}
-                                  className="text-xs opacity-70 hover:opacity-100 flex items-center"
-                                >
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                  </svg>
-                                  Listen
-                                </button>
+                          <div className="flex-grow max-w-[80%]">
+                            <div className="font-medium text-sm text-[var(--primary)] mb-1">
+                              {message.sender}
+                            </div>
+                            <div className="assistant-message-bubble p-4 rounded-lg rounded-tl-none">
+                              <div className="text-bubble whitespace-pre-wrap">
+                                {message.content}
+                              </div>
+                              {message.audio && (
+                                <div className="mt-2 flex justify-end space-x-2">
+                                  {currentPlayingId === message.id ? (
+                                    <button 
+                                      onClick={() => {
+                                        if (audioRef.current) {
+                                          audioRef.current.pause();
+                                          setIsPlaying(false);
+                                          setCurrentPlayingId(null);
+                                        }
+                                      }}
+                                      className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                      </svg>
+                                      Stop
+                                    </button>
+                                  ) : (
+                                    <button 
+                                      onClick={() => playAudio(message.audio!, message.id)}
+                                      className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                      </svg>
+                                      Listen
+                                    </button>
+                                  )}
+                                </div>
                               )}
                             </div>
-                          )}
-                        </div>
-                      </div>
-                      </>
+                          </div>
+                        </>
                       )}
                     </div>
                   ))}
