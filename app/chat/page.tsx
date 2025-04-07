@@ -77,7 +77,14 @@ function ChatSessionWithSearchParams() {
     { id: 'OYTbf65OHHFELVut7v2H', name: 'Hope - Natural' },
     { id: 'L0Dsvb3SLTyegXwtm47J', name: 'Archer - Calm British' },
     { id: 'kENkNtk0xyzG09WW40xE', name: 'Marcel - French' },
-    { id: 'IKne3meq5aSn9XLyUdCD', name: 'Sara - Spanish' }
+    { id: 'IKne3meq5aSn9XLyUdCD', name: 'Sara - Spanish' },
+    { id: 'pBZVCk298iJlHAcHQwLr', name: 'Leoni - Warm & Soothing' },
+    { id: 'wgHvco1wiREKN0BdyVx5', name: 'Drew - Meditative' },
+    { id: 'zQzvQBubVkDWYuqJYMFn', name: 'Oxley - Intimate Baritone' },
+    { id: 'A9evEp8yGjv4c3WsIKuY', name: 'Ralf - Clear & Wise' },
+    { id: 'BL7YSL1bAkmW8U0JnU8o', name: 'Jen - Calm & Reflective' },
+    { id: 'TTtB1x9U8PF0Vgf20IAP', name: 'Adrien - Deep & Comforting (French)' },
+    { id: 'oeFgBesnArgN0SVGZu8Z', name: 'Daphné - Warm & Engaging (French)' }
   ];
   
   // Add a ref for the chat container
