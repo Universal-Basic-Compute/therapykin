@@ -11,11 +11,11 @@
   "therapist": {
     "id": "therapist",
     "name": "Hero's Journey Specialist",
-    "specialist": "herosjourney",
+    "specialist": "herosjourney", 
     "role": "Circle Facilitator",
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
-    "bio": "Experienced life purpose specialist with a focus on the Hero's Journey approach"
+    "bio": "Life purpose specialist with a focus on the Hero's Journey approach"
   },
   "members": [
     {
