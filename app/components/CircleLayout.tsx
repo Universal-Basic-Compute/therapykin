@@ -74,7 +74,9 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     console.log('Creating members array with:', {
       therapist,
       circleMembers,
-      isPeekMode
+      circleData,
+      isPeekMode,
+      circleId
     });
 
     // Filter out empty slots but keep regular members
@@ -368,11 +370,12 @@ ${relevantHistory}`;
     isPeekMode,
     circleMembers,
     circleId,
-    memberCount: circleMembers.length
+    circleData,
+    memberCount: circleMembers?.length || 0
   });
 
   // Log each member's details
-  circleMembers.forEach(member => {
+  circleMembers?.forEach(member => {
     console.log('Member details:', {
       id: member.id,
       name: member.name,
@@ -380,6 +383,15 @@ ${relevantHistory}`;
       isTherapist: member.id === 'therapist'
     });
   });
+
+  // Log members array after processing
+  console.log('Processed members array:', members.map(m => ({
+    id: m.id,
+    name: m.name,
+    role: m.role,
+    isDotted: m.isDotted,
+    color: m.color
+  })));
 
 
   useEffect(() => {
