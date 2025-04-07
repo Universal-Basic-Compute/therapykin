@@ -439,6 +439,15 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const playAudio = async (audioUrl: string, messageId: string) => {
     if (audioRef.current) {
       try {
+        // If something is already playing, wait for it to finish
+        if (isPlaying) {
+          await new Promise((resolve) => {
+            audioRef.current!.addEventListener('ended', resolve, { once: true });
+            audioRef.current!.addEventListener('error', resolve, { once: true });
+          });
+        }
+
+        // Pause any current playback
         audioRef.current.pause();
         
         // Normalize the audio before playing
@@ -450,15 +459,17 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         // Set up event handlers
         audioRef.current.onplay = () => {
           setIsPlaying(true);
-          // Start preparing the next message when this one starts playing
-          processNextTalkerRef.current?.();
         };
 
         audioRef.current.onended = () => {
           setIsPlaying(false);
           setCurrentPlayingId(null);
-          // Clean up the normalized audio URL
           URL.revokeObjectURL(normalizedUrl);
+          
+          // Add delay before processing next talker
+          setTimeout(() => {
+            processNextTalkerRef.current?.();
+          }, AUDIO_BUFFER_TIME);
         };
 
         audioRef.current.onerror = () => {
