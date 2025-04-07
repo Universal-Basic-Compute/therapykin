@@ -110,20 +110,22 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         
         // Create the system message listing all present members
         const presentMembers = members
-          .filter(m => !m.isDotted) // Filter out empty slots
+          .filter(m => !m.isDotted)
           .map(m => `${m.name}${m.role ? ` (${m.role})` : ''}`);
         
         const systemMessage = `<system>New group therapy session started. Present members: ${presentMembers.join(', ')}</system>`;
         
-        // Send the message to the API
-        const response = await fetch('/api/message', {
+        // Send the message to the kinos API endpoint
+        const response = await fetch('/api/kinos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            message: systemMessage,
-            circleId: circleId
+            content: systemMessage,
+            firstName: 'Circle',
+            specialist: circleData?.specialist || 'generalist',
+            pseudonym: `circle-${circleId}` // Use a unique pseudonym for each circle
           }),
         });
 
