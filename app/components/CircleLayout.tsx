@@ -581,7 +581,7 @@ ${relevantHistory}`;
         }
 
         const data = await response.json();
-        const audioUrl = await textToSpeech(data.response, nextTalker.id);
+        const audioUrl = await textToSpeech(data.response, 'therapist');
         const messageId = `initial-${Date.now()}`;
 
         setMessages([{
