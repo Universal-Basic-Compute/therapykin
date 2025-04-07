@@ -135,6 +135,253 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     membersRef.current = members;
   }, [members]);
 
+  // Create refs to hold the function implementations
+  const processNextTalkerRef = useRef<() => Promise<void>>();
+  const checkForMentionsAndQuestionsRef = useRef<(message: string) => void>();
+
+  // Define checkForMentionsAndQuestions implementation
+  checkForMentionsAndQuestionsRef.current = (message: string) => {
+    const containsYouMention = /\byou\b/i.test(message);
+    const containsQuestion = /\?/.test(message);
+
+    if (containsYouMention || containsQuestion) {
+      console.log('Message contains direct mention or question, using interactive timing');
+      
+      const readingTimeMs = Math.max(
+        MIN_MESSAGE_DELAY,
+        (message.length / CHARS_PER_SECOND) * 1000
+      );
+      
+      const interactiveDelay = Math.max(readingTimeMs, 3000);
+      
+      if (!isPlaying && processNextTalkerRef.current) {
+        setTimeout(() => {
+          processNextTalkerRef.current?.();
+        }, interactiveDelay);
+      }
+    }
+  };
+
+  // Define processNextTalker implementation
+  processNextTalkerRef.current = async () => {
+    if (isProcessingTalk) {
+      console.log('Already processing talk, skipping');
+      return;
+    }
+
+    let retryCount = 0;
+
+    try {
+      setIsProcessingTalk(true);
+      setIsLoadingResponse(true);
+
+      // Get available members (excluding empty slots and 'you')
+      const availableMembers = members.filter(member => {
+        console.log('Filtering member:', member);
+        
+        return (
+          member.id !== 'you' && 
+          member.id !== 'empty' &&
+          member.name && 
+          !member.isDotted &&
+          member.id !== 'therapist' // Exclude therapist from regular rotation
+        );
+      });
+
+      console.log('Available members for talking:', availableMembers);
+
+      // If no regular members available, use therapist
+      if (availableMembers.length === 0) {
+        const therapist = members.find(m => m.id === 'therapist');
+        if (therapist) {
+          console.log('No regular members available, using therapist:', therapist);
+          availableMembers.push(therapist);
+        }
+      }
+
+      if (availableMembers.length === 0) {
+        console.error('No members available to talk. Current members:', members);
+        setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
+        return;
+      }
+
+      // Get next speaker using currentSpeakerIndex with modulo to stay in bounds
+      const nextTalker = availableMembers[currentSpeakerIndex % availableMembers.length];
+      console.log(`Processing next talker: ${nextTalker.name}`);
+
+      // Add loading message
+      const loadingId = `loading-${Date.now()}`;
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '...',
+        id: loadingId,
+        loading: true
+      }]);
+
+      // Get conversation history
+      const relevantHistory = messages
+        .slice(-5) // Only use last 5 messages for context
+        .map(msg => `${msg.sender}: ${msg.content}`)
+        .join('\n');
+
+      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
+Respond to the conversation naturally and briefly.</system>
+
+Recent conversation:
+${relevantHistory}`;
+
+      // Send message with retries
+      let response;
+      while (retryCount < MAX_RETRIES) {
+        try {
+          console.log(`[Circle] Attempting to send message (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+          response = await fetch('/api/kinos', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              content: systemMessage,
+              firstName: 'Circle',
+              specialist: circleData?.specialist || 'generalist',
+              pseudonym: `circle-${circleId}-${nextTalker.id}`
+            }),
+          });
+
+          if (response.ok) break;
+
+          retryCount++;
+          if (retryCount < MAX_RETRIES) {
+            console.log(`[Circle] Retry ${retryCount}/${MAX_RETRIES} - waiting ${RETRY_DELAY}ms`);
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+          }
+        } catch (error) {
+          console.error('[Circle] Error during API call:', error);
+          retryCount++;
+          if (retryCount < MAX_RETRIES) {
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+          }
+        }
+      }
+
+      if (!response || !response.ok) {
+        throw new Error(`Failed to get response after ${MAX_RETRIES} attempts`);
+      }
+
+      const data = await response.json();
+      
+      // Generate audio for TTS
+      const audioUrl = await textToSpeech(data.response);
+      const messageId = `msg-${Date.now()}`;
+
+      // Update messages, removing loading message
+      setMessages(prev => [
+        ...prev.filter(msg => msg.id !== loadingId),
+        {
+          role: 'assistant',
+          content: data.response,
+          id: messageId,
+          sender: nextTalker.name,
+          memberId: nextTalker.id,
+          audio: audioUrl
+        }
+      ]);
+
+      // Check for mentions and questions
+      if (checkForMentionsAndQuestionsRef.current) {
+        checkForMentionsAndQuestionsRef.current(data.response);
+      }
+
+      // Play audio if available and calculate next message timing
+      if (audioUrl) {
+        playAudio(audioUrl, messageId);
+        
+        // Get audio duration
+        const audio = new Audio(audioUrl);
+        const audioDuration = await new Promise<number>(resolve => {
+          audio.addEventListener('loadedmetadata', () => {
+            resolve(audio.duration * 1000); // Convert to milliseconds
+          });
+        });
+
+        // Calculate delay based on both reading time and audio duration
+        const readingTimeMs = Math.max(
+          MIN_MESSAGE_DELAY,
+          (data.response.length / CHARS_PER_SECOND) * 1000
+        );
+        const totalDelay = Math.max(audioDuration, readingTimeMs) + AUDIO_BUFFER_TIME;
+
+        console.log(`Scheduling next message after ${totalDelay}ms (audio: ${audioDuration}ms, reading: ${readingTimeMs}ms)`);
+
+        // Update speaker index for next turn
+        setCurrentSpeakerIndex((prevIndex) => 
+          (prevIndex + 1) % availableMembers.length
+        );
+
+        // Reset processing flags
+        setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
+
+        // Schedule next message
+        setTimeout(() => {
+          processNextTalkerRef.current?.();
+        }, totalDelay);
+      } else {
+        // If no audio, just use reading time
+        const readingTimeMs = Math.max(
+          MIN_MESSAGE_DELAY,
+          (data.response.length / CHARS_PER_SECOND) * 1000
+        );
+
+        console.log(`Scheduling next message after ${readingTimeMs}ms (reading only)`);
+
+        // Update speaker index for next turn
+        setCurrentSpeakerIndex((prevIndex) => 
+          (prevIndex + 1) % availableMembers.length
+        );
+
+        // Reset processing flags
+        setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
+
+        // Schedule next message
+        setTimeout(() => {
+          processNextTalkerRef.current?.();
+        }, readingTimeMs);
+      }
+
+    } catch (error) {
+      console.error('[Circle] Error processing next talker:', error);
+      // Remove loading message and add error message
+      setMessages(prev => [
+        ...prev.filter(msg => !msg.loading),
+        {
+          role: 'assistant',
+          content: 'I apologize, but I encountered a technical issue. Let me try again in a moment.',
+          id: `error-${Date.now()}`,
+          sender: 'System',
+          memberId: 'system'
+        }
+      ]);
+      setIsProcessingTalk(false);
+      setIsLoadingResponse(false);
+
+      // Try again after a delay if not already retrying
+      if (retryCount === 0) {
+        console.log('[Circle] Scheduling retry after error');
+        setTimeout(() => {
+          processNextTalkerRef.current?.();
+        }, RETRY_DELAY * 2);
+      }
+    }
+  };
+
+  // Create a wrapper function to call processNextTalker
+  const processNextTalker = useCallback(() => {
+    return processNextTalkerRef.current?.();
+  }, []);
+
   // Function to convert text to speech
   const textToSpeech = async (text: string): Promise<string> => {
     try {
@@ -183,36 +430,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   // Maximum retries for API calls
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 1000; // 1 second
-
-  const checkForMentionsAndQuestions = useCallback((message: string) => {
-    // Check if the message directly mentions "you" or asks a question
-    const containsYouMention = /\byou\b/i.test(message);
-    const containsQuestion = /\?/.test(message);
-
-    // If either condition is met, schedule the next message with a shorter delay, but still reasonable
-    if (containsYouMention || containsQuestion) {
-      console.log('Message contains direct mention or question, using interactive timing');
-      
-      // Calculate minimum delay based on message length
-      const readingTimeMs = Math.max(
-        MIN_MESSAGE_DELAY,
-        (message.length / CHARS_PER_SECOND) * 1000
-      );
-      
-      // Use the longer of either reading time or minimum delay
-      const interactiveDelay = Math.max(readingTimeMs, 3000); // At least 3 seconds
-      
-      // Only schedule next message if we're not currently playing audio
-      if (!isPlaying) {
-        setTimeout(() => {
-          processNextTalker();
-        }, interactiveDelay);
-      }
-    }
-  }, [processNextTalker, isPlaying]);
-
-  // Now implement processNextTalker with its full implementation
-  const processNextTalker = useCallback(async () => {
     if (isProcessingTalk) {
       console.log('Already processing talk, skipping');
       return;
@@ -595,7 +812,7 @@ ${relevantHistory}`;
 
         // Add delay before starting conversation
         setTimeout(() => {
-          processNextTalker();
+          processNextTalkerRef.current?.();
         }, 2000);
 
       } catch (error) {
