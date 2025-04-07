@@ -16,7 +16,7 @@
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
     "bio": "Relationship counseling specialist focused on healthy connections",
-    "voiceId": "L0Dsvb3SLTyegXwtm47J"  // Archer - Calm British, good for therapist
+    "voiceId": "L0Dsvb3SLTyegXwtm47J"
   },
   "members": [
     {
@@ -31,7 +31,7 @@
       "weeksAtStart": 16,
       "color": "from-blue-300 to-blue-400",
       "role": "Trust Building",
-      "voiceId": "OYTbf65OHHFELVut7v2H"  // Hope - Natural, good for someone rebuilding trust
+      "voiceId": "OYTbf65OHHFELVut7v2H"
     },
     {
       "id": "mike",
@@ -39,7 +39,7 @@
       "weeksAtStart": 32,
       "color": "from-green-300 to-green-400",
       "role": "Setting Boundaries",
-      "voiceId": "wgHvco1wiREKN0BdyVx5"  // Drew - Meditative, good for boundary work
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "alex",
@@ -47,7 +47,7 @@
       "weeksAtStart": 24,
       "color": "from-rose-300 to-rose-400",
       "role": "Co-Parenting",
-      "voiceId": "zQzvQBubVkDWYuqJYMFn"  // Oxley - Intimate baritone, good for parenting topics
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"
     },
     {
       "id": "lisa",
@@ -55,7 +55,7 @@
       "weeksAtStart": 48,
       "color": "from-purple-300 to-purple-400",
       "role": "Healthy Patterns",
-      "voiceId": "BL7YSL1bAkmW8U0JnU8o"  // Jen - Calm & Reflective, perfect for sharing wisdom
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"
     }
   ]
 }
