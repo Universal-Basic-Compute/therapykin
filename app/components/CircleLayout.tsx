@@ -703,13 +703,13 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                       ) : (
                         <>
                           {/* Profile picture */}
-                          <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                          <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                             <Image
                               src={`/members/${circleId}-${message.memberId}.jpg`}
                               alt={message.sender || ''}
                               fill
                               className="object-cover"
-                              sizes="32px"
+                              sizes="40px"
                             />
                           </div>
                         
@@ -791,7 +791,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
               transition={{ delay: index * 0.1 }}
             >
               <div className="flex items-center space-x-4">
-                <div className="relative w-12 h-12 flex-shrink-0">
+                <div className="relative w-16 h-16 flex-shrink-0">
                   {member.isDotted ? (
                     <div className={`w-full h-full rounded-full border-2 border-dashed border-[var(--primary)]/50 flex items-center justify-center`}>
                       <span className="text-xs text-[var(--primary)]/70">Join?</span>
@@ -803,7 +803,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                         alt={member.name}
                         fill
                         className="object-cover rounded-full"
-                        sizes="48px"
+                        sizes="64px"
                         onError={(e) => {
                           console.error('Error loading image:', {
                             memberId: member.id,
@@ -818,7 +818,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                           });
                         }}
                       />
-                      <div className={`absolute inset-0 bg-gradient-to-br ${member.color} opacity-30`}></div>
                     </div>
                   )}
                 </div>
