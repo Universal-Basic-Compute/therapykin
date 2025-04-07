@@ -162,113 +162,38 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     }
   };
 
-  // Define checkForMentionsAndQuestions
-  const checkForMentionsAndQuestions = useCallback((message: string) => {
-    const currentMembers = membersRef.current;
-    const potentialTalkers = currentMembers.filter(member => 
-      member.id !== 'you' && !member.isDotted
-    );
-
-    // Split message into paragraphs
-    const paragraphs = message.split('\n');
-
-    paragraphs.forEach(paragraph => {
-      // Check each member
-      potentialTalkers.forEach(member => {
-        // If paragraph contains member's name and a question mark
-        if (paragraph.includes(member.name) && paragraph.includes('?')) {
-          // 50% chance to add to stack
-          if (Math.random() < 0.5) {
-            console.log(`Adding ${member.name} to talker stack due to mention in question`);
-            setTalkerStack(prev => [{
-              id: member.id,
-              name: member.name,
-              role: member.role
-            }, ...prev]); // Add to top of stack (FILO)
-          }
-        }
-      });
-    });
-  }, [setTalkerStack]);
 
   // Maximum retries for API calls
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 1000; // 1 second
 
-  // Then define processNextTalker with retries
   const processNextTalker = useCallback(async () => {
     if (isProcessingTalk) {
-      console.log('[Circle] Already processing talk, skipping');
+      console.log('Already processing talk, skipping');
       return;
     }
-
-    let retryCount = 0;
 
     try {
       setIsProcessingTalk(true);
       setIsLoadingResponse(true);
 
-      // Debug log current state
-      logMembersAndStack(members, talkerStack);
+      // Get available members (excluding 'you' and empty slots)
+      const availableMembers = members.filter(member => 
+        member.id !== 'you' && 
+        !member.isDotted &&
+        member.name
+      );
 
-      // Get next talker (either from stack or therapist)
-      let nextTalker = talkerStack.length > 0 
-        ? talkerStack[0] 
-        : null;
-
-      // If no next talker in stack, replenish with all available members
-      if (!nextTalker) {
-        console.log('No talker in stack, attempting to replenish');
-        
-        const availableMembers = members.filter(member => 
-          member.id !== 'you' && 
-          member.id !== 'therapist' && 
-          !member.isDotted &&
-          member.name // ensure member has a name
-        );
-
-        console.log('Available members for stack:', availableMembers);
-
-        if (availableMembers.length > 0) {
-          // Shuffle available members
-          const shuffledMembers = [...availableMembers]
-            .sort(() => Math.random() - 0.5)
-            .map(member => ({
-              id: member.id,
-              name: member.name,
-              role: member.role
-            }));
-
-          console.log('Replenishing stack with:', shuffledMembers);
-          setTalkerStack(shuffledMembers);
-          nextTalker = shuffledMembers[0];
-        }
-      }
-
-      // If still no talker, try to use therapist
-      if (!nextTalker && circleData?.therapist) {
-        console.log('Using therapist as fallback');
-        nextTalker = {
-          id: 'therapist',
-          name: circleData.therapist.name,
-          role: circleData.therapist.role || 'Circle Facilitator'
-        };
-      }
-
-      // Final check for talker availability
-      if (!nextTalker) {
-        console.error('No talkers available after all attempts');
+      if (availableMembers.length === 0) {
+        console.error('No members available to talk');
         setIsProcessingTalk(false);
         setIsLoadingResponse(false);
         return;
       }
 
+      // Get next speaker using currentSpeakerIndex
+      const nextTalker = availableMembers[currentSpeakerIndex];
       console.log(`Processing next talker: ${nextTalker.name}`);
-
-      // Remove talker from stack if it's not the therapist
-      if (talkerStack.length > 0) {
-        setTalkerStack(prev => prev.slice(1));
-      }
 
       // Add loading message
       const loadingId = `loading-${Date.now()}`;
@@ -359,14 +284,17 @@ ${relevantHistory}`;
       // Calculate reading time and set up next message
       const readingTimeMs = Math.max(2000, (data.response.length / CHARS_PER_SECOND) * 1000);
       
+      // Update speaker index for next turn
+      setCurrentSpeakerIndex((prevIndex) => 
+        (prevIndex + 1) % availableMembers.length
+      );
+
       // Reset processing flags
       setIsProcessingTalk(false);
       setIsLoadingResponse(false);
 
-      // Always schedule next talker after a delay
-      console.log(`Scheduling next talker in ${readingTimeMs + 1000}ms`);
+      // Schedule next message
       setTimeout(() => {
-        console.log('Triggering next talker');
         processNextTalker();
       }, readingTimeMs + 1000);
 
@@ -531,37 +459,6 @@ ${relevantHistory}`;
     }
   }, [circleId]); // Reduce dependencies to just circleId
 
-  // Initialize talker stack when members are available
-  useEffect(() => {
-    if (members.length > 0) {
-      console.log('Initializing talker stack with members:', members);
-      
-      const availableMembers = members.filter(member => 
-        member.id !== 'you' && 
-        member.id !== 'therapist' && 
-        !member.isDotted &&
-        member.name // ensure member has a name
-      );
-
-      console.log('Filtered available members:', availableMembers);
-
-      if (availableMembers.length > 0) {
-        const initialTalkers = availableMembers.map(member => ({
-          id: member.id,
-          name: member.name,
-          role: member.role
-        }));
-
-        // Shuffle the initial talkers
-        const shuffledTalkers = [...initialTalkers].sort(() => Math.random() - 0.5);
-        console.log('Setting initial talker stack:', shuffledTalkers);
-        
-        setTalkerStack(shuffledTalkers);
-      } else {
-        console.log('No available members for initial talker stack');
-      }
-    }
-  }, [members]); // Only depend on members
 
   // Average reading speed constant
   const CHARS_PER_SECOND = 25; // About 300 words per minute
