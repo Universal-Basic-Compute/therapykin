@@ -115,8 +115,21 @@ async function processCircle(circleName: string) {
       member.id !== 'empty' && member.id !== 'therapist'
     );
 
+    // Create the public/members directory if it doesn't exist
+    const dirPath = path.join(process.cwd(), 'public', 'members');
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+
     for (const member of members) {
       console.log(`Processing member: ${member.name} (${member.id})`);
+      
+      // Check if image already exists
+      const imagePath = path.join(dirPath, `${circleName}-${member.id}.jpg`);
+      if (fs.existsSync(imagePath)) {
+        console.log(`Image already exists for ${member.id}, skipping...`);
+        continue;
+      }
       
       // Get physical description
       const description = await getPhysicalDescription(`${circleName}-${member.id}`);
