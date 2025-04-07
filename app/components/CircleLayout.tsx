@@ -275,14 +275,20 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
 
   // Initialize talker stack
   useEffect(() => {
-    // Initialize stack with all members except 'you' and empty slots
+    // Initialize stack with all members except 'you', 'therapist', and empty slots
     const initialTalkers = members
-      .filter(member => member.id !== 'you' && !member.isDotted)
+      .filter(member => 
+        member.id !== 'you' && 
+        member.id !== 'therapist' && 
+        !member.isDotted
+      )
       .map(member => ({
         id: member.id,
         name: member.name,
         role: member.role
       }));
+
+    console.log('Initializing talker stack with:', initialTalkers);
     setTalkerStack(initialTalkers);
   }, [members]);
 
@@ -334,7 +340,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       console.log('Next talker selection:', {
         stackLength: talkerStack.length,
         nextTalker,
-        therapist: circleData?.therapist
+        therapist: circleData?.therapist,
+        currentStack: talkerStack // Add this to see full stack
       });
 
       // If no next talker in stack, try to use therapist
