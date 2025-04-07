@@ -118,6 +118,7 @@ interface ChatMessage {
   sender?: string;
   memberId?: string;
   audio?: string;
+  loading?: boolean;
 }
 
 interface Member {
@@ -256,8 +257,8 @@ export default function CircleLayout({
   }, [members]);
 
   // Create refs to hold the function implementations
-  const processNextTalkerRef = useRef<() => Promise<void>>();
-  const checkForMentionsAndQuestionsRef = useRef<(message: string) => void>();
+  const processNextTalkerRef = useRef<() => Promise<void>>(() => Promise.resolve());
+  const checkForMentionsAndQuestionsRef = useRef<(message: string) => void>(() => {});
 
   // Define checkForMentionsAndQuestions implementation
   checkForMentionsAndQuestionsRef.current = (message: string) => {

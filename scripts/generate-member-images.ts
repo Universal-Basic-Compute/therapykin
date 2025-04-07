@@ -209,7 +209,7 @@ async function processCircle(circleName: string) {
   }
 }
 
-async function main() {
+async function generateMemberImages() {
   const args = process.argv.slice(2);
   
   // Find the index of --circle flag
@@ -227,7 +227,7 @@ async function main() {
 }
 
 if (require.main === module) {
-  main();
+  generateMemberImages();
 }
 
-module.exports = { processCircle, main };
+module.exports = { processCircle, generateMemberImages };

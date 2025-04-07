@@ -438,7 +438,7 @@ async function buildAllCircles() {
 }
 
 // Modify main to handle both single member and full circle builds
-async function main() {
+async function buildCircleMembers() {
   const args = process.argv.slice(2);
   
   if (args[0] === '--all') {
@@ -452,7 +452,7 @@ async function main() {
   } else if (args[0] === '--circle') {
     // Build all members of a circle
     if (args.length < 2) {
-      console.log('Usage: ts-node build-circle-member.ts --circle <circleName>');
+      console.log('Usage: ts-node build-circle-members.ts --circle <circleName>');
       process.exit(1);
     }
     const circleName = args[1];
@@ -465,9 +465,9 @@ async function main() {
   } else {
     // Build single member
     if (args.length < 4) {
-      console.log('Usage: ts-node build-circle-member.ts <memberName> <role> <weeksAtStart> <specialization>\n' +
-                 '   or: ts-node build-circle-member.ts --circle <circleName>\n' +
-                 '   or: ts-node build-circle-member.ts --all');
+      console.log('Usage: ts-node build-circle-members.ts <memberName> <role> <weeksAtStart> <specialization>\n' +
+                 '   or: ts-node build-circle-members.ts --circle <circleName>\n' +
+                 '   or: ts-node build-circle-members.ts --all');
       process.exit(1);
     }
     const [memberName, role, weeksAtStart, specialization] = args;
@@ -486,7 +486,7 @@ async function main() {
 }
 
 if (require.main === module) {
-  main();
+  buildCircleMembers();
 }
 
-module.exports = { createCircleMember, buildAllCircleMembers };
+module.exports = { createCircleMember, buildAllCircleMembers, buildCircleMembers };
