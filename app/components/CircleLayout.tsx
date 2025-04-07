@@ -43,56 +43,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Define members first
-
-  useEffect(() => {
-    const sendInitialMessage = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Create the system message listing all present members
-        const presentMembers = members
-          .filter(m => !m.isDotted) // Filter out empty slots
-          .map(m => `${m.name}${m.role ? ` (${m.role})` : ''}`);
-        
-        const systemMessage = `<system>New group therapy session started. Present members: ${presentMembers.join(', ')}</system>`;
-        
-        // Send the message to the API
-        const response = await fetch('/api/message', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: systemMessage,
-            circleId: circleId
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to send message');
-        }
-
-        const data = await response.json();
-        
-        // Add the therapist's response to the chat
-        setMessages([{
-          role: 'assistant',
-          content: data.response,
-          id: `msg-${Date.now()}`,
-          sender: circleData?.therapist?.name || 'Therapist',
-          memberId: 'therapist'
-        }]);
-      } catch (error) {
-        console.error('Error sending initial message:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    sendInitialMessage();
-  }, [members, circleId, circleData]);
-
   // Add more detailed logging
   console.log('CircleLayout props:', {
     activeSpeaker,
