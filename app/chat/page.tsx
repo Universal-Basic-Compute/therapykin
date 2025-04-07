@@ -3284,26 +3284,29 @@ Important style requirements:
   );
 }
 
-// Import ErrorBoundary
+// Import ErrorBoundary and AuthProvider
 import ErrorBoundary from '../components/ErrorBoundary';
+import { AuthProvider } from '../contexts/AuthContext';
 
-// Main component with Suspense boundary and ErrorBoundary
+// Main component with AuthProvider, Suspense boundary and ErrorBoundary
 export default function ChatPage() {
   return (
-    <ErrorBoundary>
-      <Suspense fallback={
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p>Loading your session...</p>
-            </div>
-          </main>
-        </div>
-      }>
-        <ChatSessionWithSearchParams />
-      </Suspense>
-    </ErrorBoundary>
+    <AuthProvider>
+      <ErrorBoundary>
+        <Suspense fallback={
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p>Loading your session...</p>
+              </div>
+            </main>
+          </div>
+        }>
+          <ChatSessionWithSearchParams />
+        </Suspense>
+      </ErrorBoundary>
+    </AuthProvider>
   );
 }
