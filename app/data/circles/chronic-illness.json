@@ -15,7 +15,8 @@
     "role": "Circle Facilitator",
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
-    "bio": "Specialized in supporting those managing chronic conditions"
+    "bio": "Specialized in supporting those managing chronic conditions",
+    "voiceId": "L0Dsvb3SLTyegXwtm47J"
   },
   "members": [
     {
@@ -29,28 +30,32 @@
       "name": "Sarah",
       "weeksAtStart": 12,
       "color": "from-blue-300 to-blue-400",
-      "role": "New Diagnosis"
+      "role": "New Diagnosis",
+      "voiceId": "OYTbf65OHHFELVut7v2H"
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 52,
       "color": "from-green-300 to-green-400",
-      "role": "Work-Life Balance"
+      "role": "Work-Life Balance",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 26,
       "color": "from-rose-300 to-rose-400",
-      "role": "Wellness Focus"
+      "role": "Wellness Focus",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 104,
       "color": "from-purple-300 to-purple-400",
-      "role": "Thriving with CI"
+      "role": "Thriving with CI",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"
     }
   ]
 }
