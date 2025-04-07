@@ -1173,55 +1173,17 @@ function ChatSessionWithSearchParams() {
   };
 
   // Function to play audio
-  const playAudio = async (audioUrl: string, messageId: string) => {
+  const playAudio = (audioUrl: string, messageId: string) => {
     if (audioRef.current) {
-      try {
-        // If something is already playing, wait for it to finish
-        if (isPlaying) {
-          await new Promise((resolve) => {
-            audioRef.current!.addEventListener('ended', resolve, { once: true });
-            audioRef.current!.addEventListener('error', resolve, { once: true });
-          });
-        }
-
-        // Pause any current playback
-        audioRef.current.pause();
-        
-        // Normalize the audio before playing
-        const normalizedUrl = await normalizeAudio(audioUrl);
-        
-        audioRef.current.src = normalizedUrl;
-        setCurrentPlayingId(messageId);
-        
-        // Set up event handlers
-        audioRef.current.onplay = () => {
-          setIsPlaying(true);
-        };
-
-        audioRef.current.onended = () => {
-          setIsPlaying(false);
-          setCurrentPlayingId(null);
-          URL.revokeObjectURL(normalizedUrl);
-          
-          // Add delay before processing next talker
-          setTimeout(() => {
-            processNextTalkerRef.current?.();
-          }, AUDIO_BUFFER_TIME);
-        };
-
-        audioRef.current.onerror = () => {
-          setIsPlaying(false);
-          setCurrentPlayingId(null);
-          console.error('Error playing audio');
-          URL.revokeObjectURL(normalizedUrl);
-        };
-
-        await audioRef.current.play();
-      } catch (err) {
+      // Stop any currently playing audio
+      audioRef.current.pause();
+      audioRef.current.src = audioUrl;
+      setCurrentPlayingId(messageId);
+      audioRef.current.play().catch(err => {
         console.error('Error playing audio:', err);
         setIsPlaying(false);
         setCurrentPlayingId(null);
-      }
+      });
     }
   };
 
@@ -2429,7 +2391,6 @@ Important style requirements:
   };
 
   // Function to generate an illustration for a message
-  // Function to generate an illustration for a message
   const generateIllustrationForMessage = async (messageContent: string, messageId: string) => {
     try {
       // Make sure we have the user object
@@ -2579,20 +2540,6 @@ Important style requirements:
       alert('Failed to generate illustration. Please try again.');
     }
   };
-
-  if (loading || isCheckingSubscription) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p>Loading your session...</p>
-          </div>
-        </main>
-      </div>
-    );
-  }
 
   // Function to play audio for a specific message
   const playMessageAudio = async (msg: ChatMessage) => {
@@ -2805,22 +2752,16 @@ Important style requirements:
           
           <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
             {/* Main Chat Area - Takes most of the width */}
-            <div className="flex-grow">
-              <div className="card h-full bg-white dark:bg-gray-800 shadow-lg p-6">
-                <div className="h-full flex flex-col">
-                  {/* Chat messages area with padding at bottom for input */}
-                  <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 overflow-y-auto mb-4">
-                    {isLoading ? (
-                      <div className="flex justify-start">
-                        <div className="assistant-message-bubble rounded-lg p-4 max-w-[80%] relative">
-                          <span className="animate-pulse">...</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {chatHistory
-                          .filter(msg => !msg.content.includes('<system>')) // Filter out system messages
-                          .map((msg) => (
+            <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'md:w-3/4' : 'md:w-2/3'}`}>
+            
+            {/* Chat history */}
+            <div className="flex-grow card overflow-hidden">
+              
+              <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
+                <div className="space-y-4">
+                {chatHistory
+                  .filter(msg => !msg.content.includes('<system>')) // Filter out system messages
+                  .map((msg) => (
                     <div key={msg.id || Math.random()} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       <div 
                         className={`max-w-[80%] p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
@@ -2936,35 +2877,12 @@ Important style requirements:
                   {/* Add an invisible element at the bottom to scroll to */}
                   <div ref={chatContainerRef} />
                 </div>
-                
-                {/* Chat input fixed at bottom of chat area */}
-                <div className="flex-shrink-0">
-                  <form onSubmit={handleSubmit} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Share your thoughts or ask a question..."
-                      className="flex-grow px-4 py-2 rounded-lg border border-[var(--primary)]/20 bg-white/80 dark:bg-gray-800/80 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                    />
-                    <button
-                      type="submit"
-                      className="px-4 py-2 rounded-lg bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                      </svg>
-                    </button>
-                  </form>
-                </div>
               </div>
             </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right Column - Always visible, contains session phase and settings toggle */}
-            <div className="md:w-1/4 md:max-w-xs flex flex-col gap-4">
+          </div>
+          
+          {/* Right Column - Always visible, contains session phase and settings toggle */}
+          <div className="md:w-1/4 md:max-w-xs flex flex-col gap-4">
             {/* Session Phase Indicator - Always visible */}
             {sessionStartTime && (
               <div className="card p-4 bg-white dark:bg-[var(--background-alt)]/90 border border-[var(--primary)]/10">
@@ -3257,7 +3175,7 @@ Important style requirements:
                 </button>
               </div>
             )}
-            </div>
+          </div>
           </div>
         </div>
         
@@ -3376,29 +3294,26 @@ Important style requirements:
   );
 }
 
-// Import ErrorBoundary and AuthProvider
+// Import ErrorBoundary
 import ErrorBoundary from '../components/ErrorBoundary';
-import { AuthProvider } from '../contexts/AuthContext';
 
-// Main component with AuthProvider, Suspense boundary and ErrorBoundary
+// Main component with Suspense boundary and ErrorBoundary
 export default function ChatPage() {
   return (
-    <AuthProvider>
-      <ErrorBoundary>
-        <Suspense fallback={
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p>Loading your session...</p>
-              </div>
-            </main>
-          </div>
-        }>
-          <ChatSessionWithSearchParams />
-        </Suspense>
-      </ErrorBoundary>
-    </AuthProvider>
+    <ErrorBoundary>
+      <Suspense fallback={
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-grow pt-24 pb-16 px-4 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p>Loading your session...</p>
+            </div>
+          </main>
+        </div>
+      }>
+        <ChatSessionWithSearchParams />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
