@@ -193,10 +193,11 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       setIsProcessingTalk(true);
       setIsLoadingResponse(true);
 
-      // Get next talker (either from stack or therapist)
+      // Get next talker (either from stack or therapist) with logging
       let nextTalker = talkerStack.length > 0 
         ? talkerStack[0] 
         : null;
+      console.log('[Circle] Current talker stack:', talkerStack.map(t => t.name));
 
       // If no next talker in stack, try to use therapist
       if (!nextTalker && circleData?.therapist) {
@@ -283,21 +284,43 @@ Respond to the conversation naturally and briefly.</system>
 Recent conversation:
 ${relevantHistory}`;
 
-      // Send message
-      const response = await fetch('/api/kinos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: systemMessage,
-          firstName: 'Circle',
-          specialist: circleData?.specialist || 'generalist',
-          pseudonym: `circle-${circleId}-${nextTalker.id}`
-        }),
-      });
+      // Send message with retries
+      let response;
+      while (retryCount < MAX_RETRIES) {
+        try {
+          console.log(`[Circle] Attempting to send message (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+          response = await fetch('/api/kinos', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              content: systemMessage,
+              firstName: 'Circle',
+              specialist: circleData?.specialist || 'generalist',
+              pseudonym: `circle-${circleId}-${nextTalker.id}`
+            }),
+          });
 
-      if (!response.ok) throw new Error('Failed to get response');
+          if (response.ok) break;
+
+          retryCount++;
+          if (retryCount < MAX_RETRIES) {
+            console.log(`[Circle] Retry ${retryCount}/${MAX_RETRIES} - waiting ${RETRY_DELAY}ms`);
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+          }
+        } catch (error) {
+          console.error('[Circle] Error during API call:', error);
+          retryCount++;
+          if (retryCount < MAX_RETRIES) {
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+          }
+        }
+      }
+
+      if (!response || !response.ok) {
+        throw new Error(`Failed to get response after ${MAX_RETRIES} attempts`);
+      }
 
       const data = await response.json();
       
@@ -341,10 +364,28 @@ ${relevantHistory}`;
       }, readingTimeMs + 1000);
 
     } catch (error) {
-      console.error('Error processing next talker:', error);
-      setMessages(prev => prev.filter(msg => !msg.loading));
+      console.error('[Circle] Error processing next talker:', error);
+      // Remove loading message and add error message
+      setMessages(prev => [
+        ...prev.filter(msg => !msg.loading),
+        {
+          role: 'assistant',
+          content: 'I apologize, but I encountered a technical issue. Let me try again in a moment.',
+          id: `error-${Date.now()}`,
+          sender: 'System',
+          memberId: 'system'
+        }
+      ]);
       setIsProcessingTalk(false);
       setIsLoadingResponse(false);
+
+      // Try again after a delay if not already retrying
+      if (retryCount === 0) {
+        console.log('[Circle] Scheduling retry after error');
+        setTimeout(() => {
+          processNextTalker();
+        }, RETRY_DELAY * 2);
+      }
     }
   }, [
     isProcessingTalk,
@@ -483,23 +524,45 @@ ${relevantHistory}`;
     }
   }, [circleId]); // Reduce dependencies to just circleId
 
-  // Initialize talker stack
+  // Initialize and manage talker stack
   useEffect(() => {
-    // Initialize stack with all members except 'you', 'therapist', and empty slots
-    const initialTalkers = members
-      .filter(member => 
-        member.id !== 'you' && 
-        member.id !== 'therapist' && 
-        !member.isDotted
-      )
-      .map(member => ({
-        id: member.id,
-        name: member.name,
-        role: member.role
-      }));
+    const initializeTalkerStack = () => {
+      // Initialize stack with all members except 'you', 'therapist', and empty slots
+      const initialTalkers = members
+        .filter(member => 
+          member.id !== 'you' && 
+          member.id !== 'therapist' && 
+          !member.isDotted
+        )
+        .map(member => ({
+          id: member.id,
+          name: member.name,
+          role: member.role
+        }));
 
-    console.log('Initializing talker stack with:', initialTalkers);
-    setTalkerStack(initialTalkers);
+      // Shuffle the initial stack
+      const shuffledTalkers = [...initialTalkers]
+        .sort(() => Math.random() - 0.5);
+
+      console.log('[Circle] Initializing talker stack with:', 
+        shuffledTalkers.map(t => t.name).join(', ')
+      );
+      
+      setTalkerStack(shuffledTalkers);
+    };
+
+    // Initialize stack
+    initializeTalkerStack();
+
+    // Set up periodic check for empty stack
+    const checkInterval = setInterval(() => {
+      if (talkerStack.length === 0) {
+        console.log('[Circle] Talker stack empty, reinitializing');
+        initializeTalkerStack();
+      }
+    }, 5000); // Check every 5 seconds
+
+    return () => clearInterval(checkInterval);
   }, [members]);
 
   // Average reading speed constant
