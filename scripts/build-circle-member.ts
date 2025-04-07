@@ -139,12 +139,14 @@ async function createCircleMember(
   specialization: string
 ) {
   try {
-    console.log(`Creating circle member: ${memberName} (${role})`);
+    // Create prefixed name to avoid duplicates
+    const prefixedName = `${specialization}-${memberName}`;
+    console.log(`Creating circle member: ${prefixedName} (${role})`);
 
     const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins`,
       {
-        name: memberName
+        name: prefixedName
       },
       {
         headers: {
