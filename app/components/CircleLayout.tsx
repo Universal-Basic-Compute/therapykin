@@ -59,7 +59,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   // Calculate positions in a circle
   const getPosition = (index: number, total: number): Position => {
     const angle = (index * 2 * Math.PI / total) - Math.PI/2; // Start from top
-    const radius = 180; // Reduced from 200 since we removed center member
+    const radius = 220; // Increase radius to make circle larger
     return {
       left: `calc(50% + ${Math.cos(angle) * radius}px)`,
       top: `calc(50% + ${Math.sin(angle) * radius}px)`
@@ -70,13 +70,13 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   console.log('Members:', members);
 
   return (
-    <div className="relative w-full h-full max-w-5xl mx-auto">
+    <div className="relative w-full h-[600px]">
       {/* Add subtle connecting lines */}
       <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
         <circle 
           cx="50%" 
           cy="50%" 
-          r="180" 
+          r="220" 
           fill="none" 
           stroke="currentColor" 
           strokeWidth="1" 
@@ -115,17 +115,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         );
       })}
 
-      {/* Enhanced speech bubbles */}
-      <SpeakerBubble
-        speaker="Alex"
-        message="I had a similar experience last month..."
-        position="left"
-      />
-      <SpeakerBubble
-        speaker="Maria"
-        message="When I feel overwhelmed at work, I now try the breathing technique..."
-        position="right"
-      />
     </div>
   );
 }
