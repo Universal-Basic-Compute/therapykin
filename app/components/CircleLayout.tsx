@@ -5,6 +5,12 @@ import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import CircleMember from './CircleMember';
 
+interface Talker {
+  id: string;
+  name: string;
+  role?: string;
+}
+
 interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
@@ -46,6 +52,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlayingId, setCurrentPlayingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [talkerStack, setTalkerStack] = useState<Talker[]>([]);
+  const [isProcessingTalk, setIsProcessingTalk] = useState(false);
 
   // Initialize audio element
   useEffect(() => {
@@ -220,6 +228,9 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         if (audioUrl) {
           playAudio(audioUrl, messageId);
         }
+
+        // Start the talker system after initial message
+        processNextTalker();
       } catch (error) {
         console.error('Error sending initial message:', error);
       } finally {
@@ -229,6 +240,130 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
 
     sendInitialMessage();
   }, [members, circleId, circleData]);
+
+  // Initialize talker stack
+  useEffect(() => {
+    // Initialize stack with all members except 'you' and empty slots
+    const initialTalkers = members
+      .filter(member => member.id !== 'you' && !member.isDotted)
+      .map(member => ({
+        id: member.id,
+        name: member.name,
+        role: member.role
+      }));
+    setTalkerStack(initialTalkers);
+  }, [members]);
+
+  // Function to check for mentions and questions
+  const checkForMentionsAndQuestions = (message: string) => {
+    // Get all members except 'you' and empty slots
+    const potentialTalkers = members.filter(member => 
+      member.id !== 'you' && !member.isDotted
+    );
+
+    // Split message into paragraphs
+    const paragraphs = message.split('\n');
+
+    paragraphs.forEach(paragraph => {
+      // Check each member
+      potentialTalkers.forEach(member => {
+        // If paragraph contains member's name and a question mark
+        if (paragraph.includes(member.name) && paragraph.includes('?')) {
+          // 50% chance to add to stack
+          if (Math.random() < 0.5) {
+            console.log(`Adding ${member.name} to talker stack due to mention in question`);
+            setTalkerStack(prev => [{
+              id: member.id,
+              name: member.name,
+              role: member.role
+            }, ...prev]); // Add to top of stack (FILO)
+          }
+        }
+      });
+    });
+  };
+
+  // Function to process the next talker
+  const processNextTalker = async () => {
+    if (isProcessingTalk) return;
+
+    try {
+      setIsProcessingTalk(true);
+
+      // Get next talker (either from stack or therapist)
+      const nextTalker = talkerStack.length > 0 
+        ? talkerStack[0] 
+        : circleData?.therapist;
+
+      if (!nextTalker) {
+        console.error('No next talker available');
+        return;
+      }
+
+      console.log(`Processing next talker: ${nextTalker.name}`);
+
+      // Remove talker from stack if it's not the therapist
+      if (talkerStack.length > 0) {
+        setTalkerStack(prev => prev.slice(1));
+      }
+
+      // Send message to get response from the talker
+      const response = await fetch('/api/kinos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. Respond to the ongoing conversation.</system>`,
+          firstName: 'Circle',
+          specialist: circleData?.specialist || 'generalist',
+          pseudonym: `circle-${circleId}-${nextTalker.id}`
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to get talker response');
+
+      const data = await response.json();
+      
+      // Generate audio for the response
+      const audioUrl = await textToSpeech(data.response);
+      const messageId = `msg-${Date.now()}`;
+
+      // Add message to chat
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: data.response,
+        id: messageId,
+        sender: nextTalker.name,
+        memberId: nextTalker.id,
+        audio: audioUrl
+      }]);
+
+      // Check for new mentions and questions in the response
+      checkForMentionsAndQuestions(data.response);
+
+      // Play the audio
+      if (audioUrl) {
+        await new Promise((resolve) => {
+          const audio = new Audio(audioUrl);
+          audio.onended = resolve;
+          audio.play();
+        });
+      }
+
+      // Process next talker after a short delay
+      setTimeout(() => {
+        setIsProcessingTalk(false);
+        if (talkerStack.length > 0) {
+          processNextTalker();
+        }
+      }, 1000);
+
+    } catch (error) {
+      console.error('Error processing next talker:', error);
+      setIsProcessingTalk(false);
+    }
+  };
 
   // Add check for empty members
   if (!circleMembers.length && !isPeekMode) {
