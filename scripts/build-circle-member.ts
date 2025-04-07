@@ -169,8 +169,13 @@ async function buildCircleMember(kinId: string, buildIndex: number, isTherapist:
     console.log(`Building ${isTherapist ? 'therapist' : 'circle member'} (iteration ${buildIndex + 1}/${messages.length})`);
     console.log('Sending message:', messages[buildIndex]);
 
+    // Determine the correct blueprint path
+    const blueprintPath = isTherapist && kinId.includes('-therapist') 
+      ? 'therapykinherosjourney'  // For therapists in circles using herosjourney
+      : 'therapykinmember';       // For regular members and generalist therapists
+
     const response = await axios.post(
-      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/build`,
+      `${KINOS_API_URL}/v2/blueprints/${blueprintPath}/kins/${kinId}/build`,
       {
         message: messages[buildIndex],
         addSystem: memberName && memberRole ? `You are ${memberName}, ${memberRole}` : undefined
