@@ -1,5 +1,7 @@
 const axios = require('axios');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
 
 dotenv.config();
 
@@ -154,6 +156,44 @@ async function getKinCommitHistory(kinId: string) {
   }
 }
 
+async function buildCircleTherapist(circleName: string, specialist: string) {
+  try {
+    const therapistId = `${circleName}-Therapist`;
+    console.log(`Creating therapist: ${therapistId} with specialist ${specialist}`);
+
+    // Create the Kin in the therapist blueprint
+    const response = await axios.post(
+      `${KINOS_API_URL}/v2/blueprints/therapikin${specialist}/kins`,
+      {
+        name: therapistId
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': KINOS_API_KEY
+        }
+      }
+    );
+
+    console.log(`Successfully created Therapist with ID: ${therapistId}`);
+
+    // Build the therapist's identity
+    for (let i = 0; i < initializationMessages.length; i++) {
+      await buildCircleMember(therapistId, i);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    // Get commit history
+    await getKinCommitHistory(therapistId);
+
+    return therapistId;
+  } catch (error) {
+    const kinError = error as KinOSError;
+    console.error('API Error:', kinError.response?.data || kinError.message);
+    throw error;
+  }
+}
+
 async function createCircleMember(
   memberName: string,
   role: string,
@@ -204,26 +244,75 @@ async function createCircleMember(
   }
 }
 
-// Example usage
+async function buildAllCircleMembers(circleName: string) {
+  try {
+    // Read the circle data
+    const circleDataPath = path.join(process.cwd(), 'app', 'data', 'circles', `${circleName}.json`);
+    const circleData = JSON.parse(fs.readFileSync(circleDataPath, 'utf8'));
+
+    console.log(`Building all members for circle: ${circleName}`);
+
+    // First build the therapist
+    await buildCircleTherapist(circleName, circleData.specialist || 'generalist');
+
+    // Then build each member
+    for (const member of circleData.members) {
+      // Skip empty member (used for dotted circle)
+      if (member.id === 'empty') continue;
+
+      await createCircleMember(
+        member.name,
+        member.role || '',
+        member.weeksAtStart || 0,
+        circleName
+      );
+
+      // Add a delay between members
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    console.log(`Completed building all members for ${circleName} circle`);
+  } catch (error) {
+    console.error('Failed to build circle members:', error);
+    throw error;
+  }
+}
+
+// Modify main to handle both single member and full circle builds
 async function main() {
   const args = process.argv.slice(2);
-  if (args.length < 4) {
-    console.log('Usage: ts-node build-circle-member.ts <memberName> <role> <weeksAtStart> <specialization>');
-    process.exit(1);
-  }
-
-  const [memberName, role, weeksAtStart, specialization] = args;
-
-  try {
-    await createCircleMember(
-      memberName,
-      role,
-      parseInt(weeksAtStart),
-      specialization
-    );
-  } catch (error) {
-    console.error('Failed to create circle member:', error);
-    process.exit(1);
+  
+  if (args[0] === '--circle') {
+    // Build all members of a circle
+    if (args.length < 2) {
+      console.log('Usage: ts-node build-circle-member.ts --circle <circleName>');
+      process.exit(1);
+    }
+    const circleName = args[1];
+    try {
+      await buildAllCircleMembers(circleName);
+    } catch (error) {
+      console.error('Failed to build circle:', error);
+      process.exit(1);
+    }
+  } else {
+    // Build single member
+    if (args.length < 4) {
+      console.log('Usage: ts-node build-circle-member.ts <memberName> <role> <weeksAtStart> <specialization>');
+      process.exit(1);
+    }
+    const [memberName, role, weeksAtStart, specialization] = args;
+    try {
+      await createCircleMember(
+        memberName,
+        role,
+        parseInt(weeksAtStart),
+        specialization
+      );
+    } catch (error) {
+      console.error('Failed to create circle member:', error);
+      process.exit(1);
+    }
   }
 }
 
@@ -231,4 +320,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { createCircleMember };
+module.exports = { createCircleMember, buildAllCircleMembers };
