@@ -360,11 +360,53 @@ async function buildAllCircleMembers(circleName: string) {
   }
 }
 
+// Function to build all circles
+async function buildAllCircles() {
+  try {
+    // Get all JSON files from the circles directory
+    const circlesDirectory = path.join(process.cwd(), 'app/data/circles');
+    const circleFiles = fs.readdirSync(circlesDirectory)
+      .filter(file => file.endsWith('.json'));
+
+    console.log(`Found ${circleFiles.length} circles to build`);
+
+    // Process each circle
+    for (const circleFile of circleFiles) {
+      const circleName = circleFile.replace('.json', '');
+      console.log(`\nProcessing circle: ${circleName}`);
+      
+      try {
+        await buildAllCircleMembers(circleName);
+        console.log(`Successfully built all members for ${circleName}`);
+      } catch (error) {
+        console.error(`Error building circle ${circleName}:`, error);
+        // Continue with next circle even if one fails
+      }
+
+      // Add a delay between circles
+      await new Promise(resolve => setTimeout(resolve, 10000)); // 10 second delay between circles
+    }
+
+    console.log('\nCompleted building all circles');
+  } catch (error) {
+    console.error('Failed to build all circles:', error);
+    throw error;
+  }
+}
+
 // Modify main to handle both single member and full circle builds
 async function main() {
   const args = process.argv.slice(2);
   
-  if (args[0] === '--circle') {
+  if (args[0] === '--all') {
+    // Build all circles
+    try {
+      await buildAllCircles();
+    } catch (error) {
+      console.error('Failed to build all circles:', error);
+      process.exit(1);
+    }
+  } else if (args[0] === '--circle') {
     // Build all members of a circle
     if (args.length < 2) {
       console.log('Usage: ts-node build-circle-member.ts --circle <circleName>');
@@ -380,7 +422,9 @@ async function main() {
   } else {
     // Build single member
     if (args.length < 4) {
-      console.log('Usage: ts-node build-circle-member.ts <memberName> <role> <weeksAtStart> <specialization>');
+      console.log('Usage: ts-node build-circle-member.ts <memberName> <role> <weeksAtStart> <specialization>\n' +
+                 '   or: ts-node build-circle-member.ts --circle <circleName>\n' +
+                 '   or: ts-node build-circle-member.ts --all');
       process.exit(1);
     }
     const [memberName, role, weeksAtStart, specialization] = args;
