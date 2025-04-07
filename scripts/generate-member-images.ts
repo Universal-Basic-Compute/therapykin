@@ -38,14 +38,14 @@ async function getPhysicalDescription(kinId: string, blueprint: string = 'therap
   }
 }
 
-async function generateImagePrompt(description: string, kinId: string): Promise<string> {
+async function generateImagePrompt(description: string, kinId: string, blueprint: string = 'therapykinmember'): Promise<string> {
   try {
     console.log('\n=== Physical Description ===\n');
     console.log(description);
     console.log('\n=== Generating Image Prompt ===\n');
 
     const response = await axios.post(
-      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`,
+      `${KINOS_API_URL}/v2/blueprints/${blueprint}/kins/${kinId}/analysis`,
       {
         message: `Create an Ideogram prompt for a pencil illustration profile picture based on this description: ${description}. 
 The illustration should be in a clean, modern therapeutic style using (#00c5bc teal, #8ced7d light green, #a571ff purple, #c278f5 violet, #ffde45 yellow, #ff9d76 orange) on a white background.
@@ -139,7 +139,7 @@ async function processTherapist(circleName: string, specialist: string = 'genera
     console.log(`Got description for therapist ${therapistId}`);
 
     // Generate image prompt
-    const prompt = await generateImagePrompt(description, therapistId);
+    const prompt = await generateImagePrompt(description, therapistId, blueprintPath);
     console.log(`Generated prompt for therapist ${therapistId}`);
 
     // Generate and save image
