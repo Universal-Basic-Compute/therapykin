@@ -11,11 +11,12 @@
   "therapist": {
     "id": "therapist",
     "name": "TherapyKin",
-    "specialist": "generalist",
+    "specialist": "generalist", 
     "role": "Circle Facilitator",
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
-    "bio": "Grief counseling specialist focused on healing and growth"
+    "bio": "Grief counseling specialist focused on healing and growth",
+    "voiceId": "L0Dsvb3SLTyegXwtm47J"  // Archer - Calm British
   },
   "members": [
     {
@@ -26,31 +27,35 @@
     },
     {
       "id": "sarah",
-      "name": "Sarah",
+      "name": "Sarah", 
       "weeksAtStart": 12,
       "color": "from-blue-300 to-blue-400",
-      "role": "Recent Loss"
+      "role": "Recent Loss",
+      "voiceId": "OYTbf65OHHFELVut7v2H"  // Hope - Natural, gentle voice for someone in early grief
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 26,
       "color": "from-green-300 to-green-400",
-      "role": "Processing Change"
+      "role": "Processing Change",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"  // Drew - Meditative, good for processing emotions
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 8,
       "color": "from-rose-300 to-rose-400",
-      "role": "Career Transition"
+      "role": "Career Transition",
+      "voiceId": "UgBBYS2sOqTuMpoF3BR0"  // Mark - Natural, relatable voice for career change
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 52,
       "color": "from-purple-300 to-purple-400",
-      "role": "Supporting Others"
+      "role": "Supporting Others",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"  // Jen - Calm & Reflective, perfect for supporting role
     }
   ]
 }
