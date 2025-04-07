@@ -68,7 +68,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       <div className="flex-grow">
         <div className="card h-full bg-white dark:bg-gray-800 shadow-lg p-6">
           <div className="h-full flex flex-col">
-            <h2 className="text-xl font-semibold mb-4">Circle Chat</h2>
             <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
               {/* Chat messages will go here */}
               <p className="text-center text-gray-500 dark:text-gray-400">
