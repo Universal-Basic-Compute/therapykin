@@ -32,8 +32,24 @@ const memberVariants: Variants = {
 export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [], circleId }: CircleLayoutProps) {
   const [showJoinModal, setShowJoinModal] = React.useState(false);
 
-  // Add logging for props received
-  console.log('CircleLayout props:', { activeSpeaker, isPeekMode, circleMembers, circleId });
+  // Add more detailed logging
+  console.log('CircleLayout props:', {
+    activeSpeaker,
+    isPeekMode,
+    circleMembers,
+    circleId,
+    memberCount: circleMembers.length
+  });
+
+  // Log each member's details
+  circleMembers.forEach(member => {
+    console.log('Member details:', {
+      id: member.id,
+      name: member.name,
+      role: member.role,
+      isTherapist: member.id === 'therapist'
+    });
+  });
 
   const members: Member[] = React.useMemo(() => {
     // First, find the therapist member
