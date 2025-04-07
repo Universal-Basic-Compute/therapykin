@@ -640,17 +640,7 @@ ${relevantHistory}`;
         }, RETRY_DELAY * 2);
       }
     }
-  }, [
-    isProcessingTalk,
-    members,
-    circleData,
-    messages,
-    circleId,
-    currentSpeakerIndex,
-    textToSpeech,
-    playAudio,
-    checkForMentionsAndQuestions
-  ]);
+  };
 
   // Initialize audio element
   useEffect(() => {
