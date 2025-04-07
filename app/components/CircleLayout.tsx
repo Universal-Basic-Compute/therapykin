@@ -64,7 +64,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlayingId, setCurrentPlayingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [talkerStack, setTalkerStack] = useState<Talker[]>([]);
+  const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>(0);
   const [isProcessingTalk, setIsProcessingTalk] = useState(false);
   const initialMessageSentRef = useRef(false);
 
@@ -324,16 +324,11 @@ ${relevantHistory}`;
     }
   }, [
     isProcessingTalk,
-    talkerStack,
+    members,
     circleData,
     messages,
     circleId,
-    members,
-    setMessages,
-    setTalkerStack,
-    setIsProcessingTalk,
-    setIsLoadingResponse,
-    checkForMentionsAndQuestions,
+    currentSpeakerIndex,
     textToSpeech,
     playAudio
   ]);
