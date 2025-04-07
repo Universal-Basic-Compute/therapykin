@@ -71,25 +71,26 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   // Define members at the top of component
   const members: Member[] = React.useMemo(() => {
     const therapist = circleData?.therapist;
-    console.log('CircleData:', circleData);
-    console.log('Found therapist from circle data:', therapist);
+    console.log('Creating members array with:', {
+      therapist,
+      circleMembers,
+      isPeekMode
+    });
 
-    const therapistMember = therapist ? {
-      id: 'therapist',
-      name: therapist.name,
-      role: therapist.role || 'Circle Facilitator',
-      color: therapist.color || 'from-teal-300 to-teal-400',
-      weeksAtStart: therapist.weeksAtStart || 520
-    } : null;
-
-    if (!therapistMember) {
-      console.warn('No therapist found in circle data');
-    }
+    // Filter out empty slots but keep regular members
+    const regularMembers = circleMembers.filter(member => 
+      member.id !== 'empty' && 
+      member.name && // Ensure member has a name
+      !member.isDotted // Ensure not a placeholder
+    );
+    
+    console.log('Regular members:', regularMembers);
 
     if (isPeekMode) {
       return [
         ...(therapist ? [therapist] : []),
-        ...circleMembers.filter(member => member.id !== 'empty'),
+        ...regularMembers,
+        // Add empty slots last
         ...circleMembers.filter(member => member.id === 'empty').map(member => ({
           ...member,
           onClick: () => setShowJoinModal(true)
@@ -106,10 +107,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       return [
         ...(therapist ? [therapist] : []),
         youMember,
-        ...circleMembers.filter(member => 
-          member.id !== 'empty' &&
-          member.id !== 'you'
-        )
+        ...regularMembers
       ];
     }
   }, [isPeekMode, circleMembers, circleData?.therapist]);
