@@ -261,7 +261,7 @@ ${relevantHistory}`;
 
       const data = await response.json();
       
-      // Generate audio only once
+      // Generate audio for TTS
       const audioUrl = await textToSpeech(data.response);
       const messageId = `msg-${Date.now()}`;
 
@@ -277,6 +277,11 @@ ${relevantHistory}`;
           audio: audioUrl
         }
       ]);
+
+      // Play audio automatically
+      if (audioUrl) {
+        playAudio(audioUrl, messageId);
+      }
 
       // Check for mentions and questions
       checkForMentionsAndQuestions(data.response);
