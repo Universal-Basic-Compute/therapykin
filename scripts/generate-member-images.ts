@@ -114,14 +114,12 @@ async function generateImage(prompt: string, memberId: string): Promise<void> {
 
 async function processTherapist(circleName: string, specialist: string = 'generalist') {
   try {
-    // Determine the correct blueprint based on the specialist type
+    // Determine the correct blueprint based on the circle name
     let blueprintPath = 'therapykin'; // default for generalist therapists
-    if (specialist === 'herosjourney' && (
-      circleName.startsWith('addiction-') || 
-      circleName.startsWith('depression-') || 
-      circleName.startsWith('ptsd-') ||
-      circleName.startsWith('life-purpose-')
-    )) {
+    if (circleName.startsWith('addiction') || 
+        circleName.startsWith('depression') || 
+        circleName.startsWith('ptsd') ||
+        circleName.startsWith('life-purpose')) {
       blueprintPath = 'therapykinherosjourney';
     }
 
@@ -136,7 +134,7 @@ async function processTherapist(circleName: string, specialist: string = 'genera
       return;
     }
 
-    // Get physical description
+    // Get physical description using the correct blueprint
     const description = await getPhysicalDescription(therapistId, blueprintPath);
     console.log(`Got description for therapist ${therapistId}`);
 
