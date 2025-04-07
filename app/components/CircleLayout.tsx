@@ -31,8 +31,8 @@ interface Member {
 }
 
 // Constants for message timing
-const CHARS_PER_SECOND = 15; // Slow down for more natural reading pace
-const MIN_MESSAGE_DELAY = 4000; // Minimum 4 seconds between messages
+const CHARS_PER_SECOND = 16.5; // Slightly faster reading pace
+const MIN_MESSAGE_DELAY = 3600; // Minimum 3.6 seconds between messages
 const AUDIO_BUFFER_TIME = 500; // Extra buffer time after audio finishes
 
 interface CircleLayoutProps {
