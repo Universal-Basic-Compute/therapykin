@@ -38,10 +38,11 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const members: Member[] = React.useMemo(() => {
     // First, find the therapist member
     const therapist = circleMembers.find(member => member.id === 'therapist');
-    
+    console.log('Found therapist:', therapist); // Add logging to debug
+
     if (isPeekMode) {
       // For peek mode, put therapist first, then other members
-      return [
+      const peekMembers = [
         ...(therapist ? [therapist] : []),
         ...circleMembers.filter(member => member.id !== 'therapist' && member.id !== 'empty'),
         ...circleMembers.filter(member => member.id === 'empty').map(member => ({
@@ -49,6 +50,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           onClick: () => setShowJoinModal(true)
         }))
       ];
+      console.log('Peek mode members:', peekMembers); // Add logging
+      return peekMembers;
     } else {
       // For regular mode, put therapist first, then you, then other members
       const youMember: Member = {
@@ -58,14 +61,17 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         color: 'from-yellow-300 to-yellow-400'
       };
       
-      return [
+      const regularMembers = [
         ...(therapist ? [therapist] : []),
         youMember,
         ...circleMembers.filter(member => 
           member.id !== 'therapist' && 
-          member.id !== 'empty'
+          member.id !== 'empty' &&
+          member.id !== 'you' // Add this to prevent duplicate "you" members
         )
       ];
+      console.log('Regular mode members:', regularMembers); // Add logging
+      return regularMembers;
     }
   }, [isPeekMode, circleMembers]);
 
