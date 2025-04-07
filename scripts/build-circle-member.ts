@@ -89,14 +89,6 @@ const initializationMessages = [
 - Communication pattern verification`
 ];
 
-interface CreateKinResponse {
-  id: string;
-  name: string;
-  blueprint_id: string;
-  created_at: string;
-  status: string;
-}
-
 async function buildCircleMember(kinId: string, buildIndex: number) {
   try {
     console.log(`Building circle member (iteration ${buildIndex + 1}/${initializationMessages.length})`);
@@ -129,6 +121,36 @@ async function buildCircleMember(kinId: string, buildIndex: number) {
     const kinError = error as KinOSError;
     console.error('API Error:', kinError.response?.data || kinError.message);
     throw error;
+  }
+}
+
+async function getKinCommitHistory(kinId: string) {
+  try {
+    console.log(`Fetching commit history for kin: ${kinId}`);
+    
+    const response = await axios.get(
+      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/commit-history`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': KINOS_API_KEY
+        }
+      }
+    );
+
+    console.log('\nCommit History:');
+    if (response.data.commits && response.data.commits.length > 0) {
+      response.data.commits.forEach((commit: { message: string }, index: number) => {
+        console.log(`${index + 1}. ${commit.message}`);
+      });
+      console.log(`Total commits: ${response.data.total}`);
+    } else {
+      console.log('No commits found');
+    }
+
+  } catch (error) {
+    const kinError = error as KinOSError;
+    console.error('Error fetching commit history:', kinError.response?.data || kinError.message);
   }
 }
 
@@ -168,6 +190,10 @@ async function createCircleMember(
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
     console.log('Completed all build iterations successfully');
+
+    // After all builds are complete, get the commit history
+    console.log('\nFetching commit history...');
+    await getKinCommitHistory(kinId);
 
     return kinId;
 
