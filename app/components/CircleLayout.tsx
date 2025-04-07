@@ -59,7 +59,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   // Calculate positions in a circle
   const getPosition = (index: number, total: number): Position => {
     const angle = (index * 2 * Math.PI / total) - Math.PI/2; // Start from top
-    const radius = 200; // Adjust this value to change circle size
+    const radius = 180; // Reduced from 200 since we removed center member
     return {
       left: `calc(50% + ${Math.cos(angle) * radius}px)`,
       top: `calc(50% + ${Math.sin(angle) * radius}px)`
@@ -76,7 +76,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         <circle 
           cx="50%" 
           cy="50%" 
-          r="200" 
+          r="180" 
           fill="none" 
           stroke="currentColor" 
           strokeWidth="1" 
@@ -84,21 +84,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         />
       </svg>
 
-      {/* Center speaker with enhanced styling */}
-      <motion.div 
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", bounce: 0.4 }}
-      >
-        <CircleMember
-          name="Maria"
-          role="Speaking"
-          color="from-[var(--primary)] to-[var(--primary-dark)]"
-          size="large"
-          isActive={true}
-        />
-      </motion.div>
 
       {/* Circle members with animations */}
       {members.map((member, index) => {
@@ -108,7 +93,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         return (
           <motion.div
             key={member.id}
-            className="absolute transform -translate-x-1/2 -translate-y-1/2"
+            className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20"
             style={position}
             variants={memberVariants}
             initial="initial"
