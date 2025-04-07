@@ -1,9 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import CircleMember from './CircleMember';
+
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  id: string;
+  sender?: string;
+  memberId?: string;
+}
 
 interface Member {
   id: string;
@@ -32,6 +40,56 @@ const memberVariants: Variants = {
 
 export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [], circleId, circleData }: CircleLayoutProps) {
   const [showJoinModal, setShowJoinModal] = React.useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const sendInitialMessage = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Create the system message listing all present members
+        const presentMembers = members
+          .filter(m => !m.isDotted) // Filter out empty slots
+          .map(m => `${m.name}${m.role ? ` (${m.role})` : ''}`);
+        
+        const systemMessage = `<system>New group therapy session started. Present members: ${presentMembers.join(', ')}</system>`;
+        
+        // Send the message to the API
+        const response = await fetch('/api/message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: systemMessage,
+            circleId: circleId
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to send message');
+        }
+
+        const data = await response.json();
+        
+        // Add the therapist's response to the chat
+        setMessages([{
+          role: 'assistant',
+          content: data.response,
+          id: `msg-${Date.now()}`,
+          sender: circleData?.therapist?.name || 'Therapist',
+          memberId: 'therapist'
+        }]);
+      } catch (error) {
+        console.error('Error sending initial message:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    sendInitialMessage();
+  }, [members, circleId, circleData]);
 
   // Add more detailed logging
   console.log('CircleLayout props:', {
@@ -106,11 +164,39 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       <div className="flex-grow">
         <div className="card h-full bg-white dark:bg-gray-800 shadow-lg p-6">
           <div className="h-full flex flex-col">
-            <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-              {/* Chat messages will go here */}
-              <p className="text-center text-gray-500 dark:text-gray-400">
-                Chat messages will appear here
-              </p>
+            <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 overflow-y-auto">
+              {isLoading ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {messages.map((message) => (
+                    <div key={message.id} className="flex items-start space-x-3">
+                      {/* Profile picture */}
+                      <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                        <Image
+                          src={`/members/${circleId}-${message.memberId}.jpg`}
+                          alt={message.sender || ''}
+                          fill
+                          className="object-cover"
+                          sizes="32px"
+                        />
+                      </div>
+                      
+                      {/* Message content */}
+                      <div className="flex-grow">
+                        <div className="font-medium text-sm text-[var(--primary)]">
+                          {message.sender}
+                        </div>
+                        <div className="mt-1 text-foreground/80">
+                          {message.content}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
