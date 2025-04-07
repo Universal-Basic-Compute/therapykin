@@ -24,7 +24,6 @@ export default function CirclePage() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const circleName = searchParams.get('name') || '';
-  const [message, setMessage] = useState('');
   const [activeSpeaker, setActiveSpeaker] = useState('Maria');
   const [isPeekMode, setIsPeekMode] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
