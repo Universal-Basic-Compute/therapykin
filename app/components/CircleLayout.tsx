@@ -216,10 +216,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       const nextTalker = availableMembers[currentSpeakerIndex % availableMembers.length];
       console.log(`Processing next talker: ${nextTalker.name}`);
 
-      // Get next speaker using currentSpeakerIndex
-      const nextTalker = availableMembers[currentSpeakerIndex];
-      console.log(`Processing next talker: ${nextTalker.name}`);
-
       // Add loading message
       const loadingId = `loading-${Date.now()}`;
       setMessages(prev => [...prev, {
