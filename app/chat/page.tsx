@@ -2959,7 +2959,6 @@ Important style requirements:
                 </div>
               </div>
             </div>
-                  </div>
                 </div>
               </div>
             </div>
