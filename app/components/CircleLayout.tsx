@@ -263,7 +263,7 @@ ${relevantHistory}`;
       const data = await response.json();
       
       // Generate audio for TTS
-      const audioUrl = await textToSpeech(data.response);
+      const audioUrl = await textToSpeech(data.response, nextTalker.id);
       const messageId = `msg-${Date.now()}`;
 
       // Update messages, removing loading message
@@ -394,7 +394,7 @@ ${relevantHistory}`;
       }
 
       console.log(`Requesting TTS for text: "${text.substring(0, 30)}..." with voice: ${voiceId}`);
-      
+    
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: {
@@ -402,7 +402,7 @@ ${relevantHistory}`;
         },
         body: JSON.stringify({
           text,
-          voiceId,
+          voiceId: voiceId, // Explicitly use the correct voiceId
           model: 'eleven_flash_v2_5'
         })
       });
