@@ -15,7 +15,8 @@
     "role": "Circle Facilitator",
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
-    "bio": "Social anxiety specialist focused on building confidence"
+    "bio": "Social anxiety specialist focused on building confidence",
+    "voiceId": "L0Dsvb3SLTyegXwtm47J"  // Archer - Calm British, good for therapist
   },
   "members": [
     {
@@ -29,28 +30,32 @@
       "name": "Sarah",
       "weeksAtStart": 16,
       "color": "from-blue-300 to-blue-400",
-      "role": "Managing Work Anxiety"
+      "role": "Managing Work Anxiety",
+      "voiceId": "OYTbf65OHHFELVut7v2H"  // Hope - Natural voice for someone building confidence
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 8,
       "color": "from-rose-300 to-rose-400",
-      "role": "Building Confidence"
+      "role": "Building Confidence",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"  // Drew - Meditative, good for early journey
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 52,
       "color": "from-green-300 to-green-400",
-      "role": "Confident Navigator"
+      "role": "Confident Navigator",
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"  // Oxley - Intimate baritone for confident guide
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 78,
       "color": "from-purple-300 to-purple-400",
-      "role": "Supporting Others"
+      "role": "Supporting Others",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"  // Jen - Calm & Reflective for supporter
     }
   ]
 }
