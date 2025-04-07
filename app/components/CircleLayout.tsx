@@ -45,6 +45,17 @@ const memberVariants: Variants = {
   hover: { scale: 1.02, transition: { duration: 0.2 } }
 };
 
+// Debug logging helper
+const logMembersAndStack = (members: Member[], stack: Talker[]) => {
+  console.log('Current members:', members.map(m => ({
+    id: m.id,
+    name: m.name,
+    role: m.role,
+    isDotted: m.isDotted
+  })));
+  console.log('Current talker stack:', stack);
+};
+
 export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [], circleId, circleData }: CircleLayoutProps) {
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -198,39 +209,30 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     try {
       setIsProcessingTalk(true);
       setIsLoadingResponse(true);
-      console.log('[Circle] Starting to process next talker');
 
-      // Get next talker (either from stack or therapist) with logging
+      // Debug log current state
+      logMembersAndStack(members, talkerStack);
+
+      // Get next talker (either from stack or therapist)
       let nextTalker = talkerStack.length > 0 
         ? talkerStack[0] 
         : null;
-      console.log('[Circle] Current talker stack:', talkerStack.map(t => t.name));
 
-      // If no next talker in stack, try to use therapist
-      if (!nextTalker && circleData?.therapist) {
-        nextTalker = {
-          id: 'therapist',
-          name: circleData.therapist.name,
-          role: circleData.therapist.role || 'Circle Facilitator'
-        };
-        console.log('Using therapist as next talker:', nextTalker);
-      }
-
-      // If still no talker, replenish the stack with all members except 'you' and therapist
+      // If no next talker in stack, replenish with all available members
       if (!nextTalker) {
-        console.log('No talker available, attempting to replenish stack');
-        console.log('Current members:', members);
-
+        console.log('No talker in stack, attempting to replenish');
+        
         const availableMembers = members.filter(member => 
           member.id !== 'you' && 
           member.id !== 'therapist' && 
-          !member.isDotted
+          !member.isDotted &&
+          member.name // ensure member has a name
         );
 
         console.log('Available members for stack:', availableMembers);
 
         if (availableMembers.length > 0) {
-          // Shuffle the available members
+          // Shuffle available members
           const shuffledMembers = [...availableMembers]
             .sort(() => Math.random() - 0.5)
             .map(member => ({
@@ -239,25 +241,25 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
               role: member.role
             }));
 
-          console.log('Replenishing stack with shuffled members:', shuffledMembers);
+          console.log('Replenishing stack with:', shuffledMembers);
           setTalkerStack(shuffledMembers);
           nextTalker = shuffledMembers[0];
         }
       }
 
-      // If still no talker, use therapist as fallback
+      // If still no talker, try to use therapist
       if (!nextTalker && circleData?.therapist) {
+        console.log('Using therapist as fallback');
         nextTalker = {
           id: 'therapist',
           name: circleData.therapist.name,
           role: circleData.therapist.role || 'Circle Facilitator'
         };
-        console.log('Using therapist as fallback talker:', nextTalker);
       }
 
-      // If still no talker, return early
+      // Final check for talker availability
       if (!nextTalker) {
-        console.error('No talkers available at all');
+        console.error('No talkers available after all attempts');
         setIsProcessingTalk(false);
         setIsLoadingResponse(false);
         return;
@@ -531,46 +533,37 @@ ${relevantHistory}`;
     }
   }, [circleId]); // Reduce dependencies to just circleId
 
-  // Initialize and manage talker stack
+  // Initialize talker stack when members are available
   useEffect(() => {
-    const initializeTalkerStack = () => {
-      // Initialize stack with all members except 'you', 'therapist', and empty slots
-      const initialTalkers = members
-        .filter(member => 
-          member.id !== 'you' && 
-          member.id !== 'therapist' && 
-          !member.isDotted
-        )
-        .map(member => ({
+    if (members.length > 0) {
+      console.log('Initializing talker stack with members:', members);
+      
+      const availableMembers = members.filter(member => 
+        member.id !== 'you' && 
+        member.id !== 'therapist' && 
+        !member.isDotted &&
+        member.name // ensure member has a name
+      );
+
+      console.log('Filtered available members:', availableMembers);
+
+      if (availableMembers.length > 0) {
+        const initialTalkers = availableMembers.map(member => ({
           id: member.id,
           name: member.name,
           role: member.role
         }));
 
-      // Shuffle the initial stack
-      const shuffledTalkers = [...initialTalkers]
-        .sort(() => Math.random() - 0.5);
-
-      console.log('[Circle] Initializing talker stack with:', 
-        shuffledTalkers.map(t => t.name).join(', ')
-      );
-      
-      setTalkerStack(shuffledTalkers);
-    };
-
-    // Initialize stack
-    initializeTalkerStack();
-
-    // Set up periodic check for empty stack
-    const checkInterval = setInterval(() => {
-      if (talkerStack.length === 0) {
-        console.log('[Circle] Talker stack empty, reinitializing');
-        initializeTalkerStack();
+        // Shuffle the initial talkers
+        const shuffledTalkers = [...initialTalkers].sort(() => Math.random() - 0.5);
+        console.log('Setting initial talker stack:', shuffledTalkers);
+        
+        setTalkerStack(shuffledTalkers);
+      } else {
+        console.log('No available members for initial talker stack');
       }
-    }, 5000); // Check every 5 seconds
-
-    return () => clearInterval(checkInterval);
-  }, [members]);
+    }
+  }, [members]); // Only depend on members
 
   // Average reading speed constant
   const CHARS_PER_SECOND = 25; // About 300 words per minute
