@@ -17,8 +17,9 @@ interface CircleMember {
 
 async function getPhysicalDescription(kinId: string): Promise<string> {
   try {
+    // kinId is already in the format "circle-memberid"
     const response = await axios.post(
-      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`,
+      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`, 
       {
         message: "Describe your physical appearance in detail, including age, facial features, style of dress, and overall demeanor.",
         model: "claude-3-5-haiku-latest"
@@ -38,10 +39,10 @@ async function getPhysicalDescription(kinId: string): Promise<string> {
   }
 }
 
-async function generateImagePrompt(description: string): Promise<string> {
+async function generateImagePrompt(description: string, kinId: string): Promise<string> {
   try {
     const response = await axios.post(
-      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/analysis`,
+      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`,
       {
         message: `Create an Ideogram prompt for a pencil illustration profile picture based on this description: ${description}. 
 The illustration should be in a clean, modern therapeutic style using (#00c5bc teal, #8ced7d light green, #a571ff purple, #c278f5 violet, #ffde45 yellow, #ff9d76 orange) on a white background.
@@ -136,7 +137,7 @@ async function processCircle(circleName: string) {
       console.log(`Got description for ${member.id}`);
 
       // Generate image prompt
-      const prompt = await generateImagePrompt(description);
+      const prompt = await generateImagePrompt(description, `${circleName}-${member.id}`);
       console.log(`Generated prompt for ${member.id}`);
 
       // Generate and save image
