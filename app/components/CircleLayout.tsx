@@ -3,12 +3,6 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import CircleMember from './CircleMember';
-import SpeakerBubble from './SpeakerBubble';
-
-type Position = {
-  left: string;
-  top: string;
-};
 
 interface Member {
   id: string;
@@ -28,16 +22,14 @@ interface CircleLayoutProps {
 }
 
 const memberVariants: Variants = {
-  initial: { scale: 0, opacity: 0 },
-  animate: { scale: 1, opacity: 1 },
-  hover: { scale: 1.05, transition: { duration: 0.2 } }
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  hover: { scale: 1.02, transition: { duration: 0.2 } }
 };
 
 export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [] }: CircleLayoutProps) {
-  // Add state for join modal
   const [showJoinModal, setShowJoinModal] = React.useState(false);
 
-  // Create the members array with proper typing
   const members: Member[] = React.useMemo(() => {
     if (isPeekMode) {
       return circleMembers.map(member => 
@@ -56,65 +48,50 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     }
   }, [isPeekMode, circleMembers]);
 
-  // Calculate positions in a circle
-  const getPosition = (index: number, total: number): Position => {
-    const angle = (index * 2 * Math.PI / total) - Math.PI/2; // Start from top
-    const radius = 220; // Increase radius to make circle larger
-    return {
-      left: `calc(50% + ${Math.cos(angle) * radius}px)`,
-      top: `calc(50% + ${Math.sin(angle) * radius}px)`
-    };
-  };
-
-  // Log the members array to debug
-  console.log('Members:', members);
-
   return (
-    <div className="relative w-full h-[600px]">
-      {/* Add subtle connecting lines */}
-      <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
-        <circle 
-          cx="50%" 
-          cy="50%" 
-          r="220" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="1" 
-          className="opacity-10" 
-        />
-      </svg>
-
-
-      {/* Circle members with animations */}
-      {members.map((member, index) => {
-        const position = getPosition(index, members.length);
-        console.log(`Rendering member ${member.name} at position:`, position);
-        
-        return (
+    <div className="w-full max-w-4xl mx-auto p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {members.map((member, index) => (
           <motion.div
             key={member.id}
-            className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20"
-            style={position}
+            className="card p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm hover:shadow-lg transition-all duration-200"
             variants={memberVariants}
             initial="initial"
             animate="animate"
             whileHover="hover"
             transition={{ delay: index * 0.1 }}
           >
-            <CircleMember
-              name={member.name}
-              weeksAtStart={member.weeksAtStart}
-              role={member.role}
-              color={member.color}
-              size="medium"
-              isActive={false}
-              isDotted={member.isDotted}
-              onClick={member.onClick}
-            />
+            <div className="flex flex-col items-center text-center">
+              <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${member.color} mb-4 flex items-center justify-center text-white text-2xl font-semibold`}>
+                {member.isDotted ? (
+                  <span className="text-sm">Join?</span>
+                ) : (
+                  member.name[0]
+                )}
+              </div>
+              <h3 className="text-lg font-semibold mb-2">{member.name}</h3>
+              {member.role && (
+                <span className="px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-sm mb-2">
+                  {member.role}
+                </span>
+              )}
+              {member.weeksAtStart && (
+                <p className="text-sm text-foreground/60">
+                  {member.weeksAtStart} weeks in circle
+                </p>
+              )}
+              {member.onClick && (
+                <button
+                  onClick={member.onClick}
+                  className="mt-4 px-4 py-2 bg-[var(--primary)] text-white rounded-full text-sm hover:bg-[var(--primary-dark)] transition-colors"
+                >
+                  Join Circle
+                </button>
+              )}
+            </div>
           </motion.div>
-        );
-      })}
-
+        ))}
+      </div>
     </div>
   );
 }
