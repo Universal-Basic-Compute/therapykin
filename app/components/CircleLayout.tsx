@@ -194,14 +194,27 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     const containsYouMention = /\byou\b/i.test(message);
     const containsQuestion = /\?/.test(message);
 
-    // If either condition is met, schedule the next message with a shorter delay
+    // If either condition is met, schedule the next message with a shorter delay, but still reasonable
     if (containsYouMention || containsQuestion) {
-      console.log('Message contains direct mention or question, reducing delay');
-      setTimeout(() => {
-        processNextTalker();
-      }, 1000); // Reduced delay for interactive messages
+      console.log('Message contains direct mention or question, using interactive timing');
+      
+      // Calculate minimum delay based on message length
+      const readingTimeMs = Math.max(
+        MIN_MESSAGE_DELAY,
+        (message.length / CHARS_PER_SECOND) * 1000
+      );
+      
+      // Use the longer of either reading time or minimum delay
+      const interactiveDelay = Math.max(readingTimeMs, 3000); // At least 3 seconds
+      
+      // Only schedule next message if we're not currently playing audio
+      if (!isPlaying) {
+        setTimeout(() => {
+          processNextTalker();
+        }, interactiveDelay);
+      }
     }
-  }, [processNextTalker]);
+  }, [processNextTalker, isPlaying]);
 
   // Now implement processNextTalker with its full implementation
   const processNextTalker = useCallback(async () => {
