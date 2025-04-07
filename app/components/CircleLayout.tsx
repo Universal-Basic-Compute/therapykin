@@ -361,6 +361,23 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         setTalkerStack(prev => prev.slice(1));
       }
 
+      // Get conversation history since last message from this talker
+      const relevantHistory = messages
+        .slice()
+        .reverse() // Start from most recent
+        .slice(0, messages.findIndex(msg => msg.sender === nextTalker.name)) // Stop at last message from this talker
+        .reverse() // Put back in chronological order
+        .map(msg => `${msg.sender}: ${msg.content}`) // Format messages
+        .join('\n'); // Join with newlines
+
+      // Create the system message with context
+      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
+Here is the recent conversation since you last spoke:
+
+${relevantHistory}
+
+Respond to the ongoing conversation.</system>`;
+
       // Send message to get response from the talker
       const response = await fetch('/api/kinos', {
         method: 'POST',
@@ -368,7 +385,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          content: `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. Respond to the ongoing conversation.</system>`,
+          content: systemMessage,
           firstName: 'Circle',
           specialist: circleData?.specialist || 'generalist',
           pseudonym: `circle-${circleId}-${nextTalker.id}`
