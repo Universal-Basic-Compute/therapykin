@@ -15,7 +15,8 @@
     "role": "Circle Facilitator",
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
-    "bio": "Family therapy specialist focused on positive parenting strategies"
+    "bio": "Family therapy specialist focused on positive parenting strategies",
+    "voiceId": "L0Dsvb3SLTyegXwtm47J"  // Archer - Calm British, good for therapist
   },
   "members": [
     {
@@ -29,28 +30,32 @@
       "name": "Sarah",
       "weeksAtStart": 12,
       "color": "from-blue-300 to-blue-400",
-      "role": "New Parent"
+      "role": "New Parent",
+      "voiceId": "OYTbf65OHHFELVut7v2H"  // Hope - Natural voice for new parent
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 52,
       "color": "from-green-300 to-green-400",
-      "role": "Work-Life Balance"
+      "role": "Work-Life Balance",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"  // Drew - Meditative, good for balance
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 156,
       "color": "from-rose-300 to-rose-400",
-      "role": "Teen Parent"
+      "role": "Teen Parent",
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"  // Oxley - Intimate baritone for experienced parent
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 520,
       "color": "from-purple-300 to-purple-400",
-      "role": "Experienced Parent"
+      "role": "Experienced Parent",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"  // Jen - Calm & Reflective for experienced guide
     }
   ]
 }
