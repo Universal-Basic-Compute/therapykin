@@ -2959,10 +2959,13 @@ Important style requirements:
                 </div>
               </div>
             </div>
-          </div>
-          
-          {/* Right Column - Always visible, contains session phase and settings toggle */}
-          <div className="md:w-1/4 md:max-w-xs flex flex-col gap-4">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right Column - Always visible, contains session phase and settings toggle */}
+            <div className="md:w-1/4 md:max-w-xs flex flex-col gap-4">
             {/* Session Phase Indicator - Always visible */}
             {sessionStartTime && (
               <div className="card p-4 bg-white dark:bg-[var(--background-alt)]/90 border border-[var(--primary)]/10">
@@ -3255,7 +3258,7 @@ Important style requirements:
                 </button>
               </div>
             )}
-          </div>
+            </div>
           </div>
         </div>
         
