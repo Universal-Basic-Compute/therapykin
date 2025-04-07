@@ -224,8 +224,22 @@ async function getKinCommitHistory(kinId: string) {
   try {
     console.log(`Fetching commit history for kin: ${kinId}`);
     
+    // Determine the correct blueprint path based on the kinId
+    let blueprintPath = 'therapykinmember';
+    if (kinId.endsWith('-therapist')) {
+      // Check if it's a herosjourney specialist circle
+      if (kinId.startsWith('addiction-') || 
+          kinId.startsWith('depression-') || 
+          kinId.startsWith('ptsd-') ||
+          kinId.startsWith('life-purpose-')) {
+        blueprintPath = 'therapykinherosjourney';
+      } else {
+        blueprintPath = 'therapykin';
+      }
+    }
+    
     const response = await axios.get(
-      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/commit-history`,
+      `${KINOS_API_URL}/v2/blueprints/${blueprintPath}/kins/${kinId}/commit-history`,
       {
         headers: {
           'Content-Type': 'application/json',
