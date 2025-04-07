@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import CircleMember from './CircleMember';
 
@@ -62,11 +63,22 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
             transition={{ delay: index * 0.1 }}
           >
             <div className="flex flex-col items-center text-center">
-              <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${member.color} mb-4 flex items-center justify-center text-white text-2xl font-semibold shadow-md`}>
+              <div className="relative w-20 h-20 mb-4">
                 {member.isDotted ? (
-                  <span className="text-sm">Join?</span>
+                  <div className={`w-full h-full rounded-full border-2 border-dashed border-[var(--primary)]/50 flex items-center justify-center`}>
+                    <span className="text-sm text-[var(--primary)]/70">Join?</span>
+                  </div>
                 ) : (
-                  member.name[0]
+                  <div className="relative w-full h-full rounded-full overflow-hidden">
+                    <Image
+                      src={member.id === 'you' ? '/members/default.jpg' : `/members/${member.id}.jpg`}
+                      alt={member.name}
+                      fill
+                      className="object-cover rounded-full"
+                      sizes="80px"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${member.color} opacity-30`}></div>
+                  </div>
                 )}
               </div>
               <h3 className="text-lg font-semibold mb-2 text-foreground">{member.name}</h3>
