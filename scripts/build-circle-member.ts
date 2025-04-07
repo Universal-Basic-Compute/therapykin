@@ -24,6 +24,78 @@ interface KinOSError {
   message?: string;
 }
 
+const therapistInitializationMessages = [
+  // 1. Choose Therapeutic Identity
+  `Continue building your identity: Define Core Therapeutic Identity:
+- Select and detail your core specialty
+- Define your theoretical orientation
+- Establish your years of experience and background
+- Create formative experiences that led to specialization`,
+
+  // 2. Build Personal History
+  `Continue building your identity: Develop Personal History:
+- Detail your own struggles related to your specialty
+- Create your recovery/growth journey
+- Add family/relationship background
+- Include cultural/socioeconomic influences`,
+
+  // 3. Add Professional Challenges
+  `Continue building your identity: Define Professional Challenges:
+- Past clinical mistakes and learning experiences
+- Difficult cases that shaped your approach
+- Professional burnout experiences
+- Ethical dilemmas faced and resolved`,
+
+  // 4. Create Communication Style
+  `Continue building your identity: Establish Communication Style:
+- Develop unique verbal patterns
+- Add specialty-specific metaphors
+- Include natural speech imperfections
+- Build emotional expression style`,
+
+  // 5. Define Therapeutic Weaknesses
+  `Continue building your identity: Acknowledge Therapeutic Weaknesses:
+- Add blind spots in specialty area
+- Create specific triggers/sensitivities
+- Include biases to work through
+- Add areas of continued growth`,
+
+  // 6. Establish Relationship Style
+  `Continue building your identity: Define Relationship Style:
+- Define attachment patterns
+- Create boundary setting style
+- Add group dynamic preferences
+- Build conflict management approach`,
+
+  // 7. Add Life Complications
+  `Continue building your identity: Include Life Complications:
+- Current personal challenges
+- Ongoing growth areas
+- Work-life balance struggles
+- Personal relationship dynamics`,
+
+  // 8. Create Support Network
+  `Continue building your identity: Build Support Network:
+- Build mentor relationships
+- Add peer supervision group
+- Create professional connections
+- Include personal support system`,
+
+  // 9. Define Growth Journey
+  `Continue building your identity: Establish Growth Journey:
+- Add current learning goals
+- Create professional development path
+- Include supervision experiences
+- Build self-care practices`,
+
+  // 10. Establish Circle Role
+  `Continue building your identity: Define Circle Role:
+- Define group facilitation style
+- Create peer support approach
+- Add specialty contributions
+- Build member interaction patterns`
+];
+
 const initializationMessages = [
   // 1. Initial Build Phase
   `Continue building your identity: Generate Core Identity Elements:
@@ -91,15 +163,16 @@ const initializationMessages = [
 - Communication pattern verification`
 ];
 
-async function buildCircleMember(kinId: string, buildIndex: number) {
+async function buildCircleMember(kinId: string, buildIndex: number, isTherapist: boolean = false) {
   try {
-    console.log(`Building circle member (iteration ${buildIndex + 1}/${initializationMessages.length})`);
-    console.log('Sending message:', initializationMessages[buildIndex]);
+    const messages = isTherapist ? therapistInitializationMessages : initializationMessages;
+    console.log(`Building ${isTherapist ? 'therapist' : 'circle member'} (iteration ${buildIndex + 1}/${messages.length})`);
+    console.log('Sending message:', messages[buildIndex]);
 
     const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/build`,
       {
-        message: initializationMessages[buildIndex]
+        message: messages[buildIndex]
       },
       {
         headers: {
@@ -177,9 +250,9 @@ async function buildCircleTherapist(circleName: string, specialist: string) {
 
     console.log(`Successfully created Therapist with ID: ${therapistId}`);
 
-    // Build the therapist's identity
-    for (let i = 0; i < initializationMessages.length; i++) {
-      await buildCircleMember(therapistId, i);
+    // Build the therapist's identity using therapist-specific messages
+    for (let i = 0; i < therapistInitializationMessages.length; i++) {
+      await buildCircleMember(therapistId, i, true); // Add isTherapist flag
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
