@@ -56,7 +56,36 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const [talkerStack, setTalkerStack] = useState<Talker[]>([]);
   const [isProcessingTalk, setIsProcessingTalk] = useState(false);
 
-  // Define processNextTalker before any useEffects that use it
+  // Define checkForMentionsAndQuestions first
+  const checkForMentionsAndQuestions = useCallback((message: string) => {
+    // Get all members except 'you' and empty slots
+    const potentialTalkers = members.filter(member => 
+      member.id !== 'you' && !member.isDotted
+    );
+
+    // Split message into paragraphs
+    const paragraphs = message.split('\n');
+
+    paragraphs.forEach(paragraph => {
+      // Check each member
+      potentialTalkers.forEach(member => {
+        // If paragraph contains member's name and a question mark
+        if (paragraph.includes(member.name) && paragraph.includes('?')) {
+          // 50% chance to add to stack
+          if (Math.random() < 0.5) {
+            console.log(`Adding ${member.name} to talker stack due to mention in question`);
+            setTalkerStack(prev => [{
+              id: member.id,
+              name: member.name,
+              role: member.role
+            }, ...prev]); // Add to top of stack (FILO)
+          }
+        }
+      });
+    });
+  }, [members, setTalkerStack]);
+
+  // Then define processNextTalker
   const processNextTalker = useCallback(async () => {
     if (isProcessingTalk) return;
 
@@ -417,35 +446,6 @@ Respond to the ongoing conversation.</system>`;
     console.log('Initializing talker stack with:', initialTalkers);
     setTalkerStack(initialTalkers);
   }, [members]);
-
-  // Function to check for mentions and questions
-  const checkForMentionsAndQuestions = (message: string) => {
-    // Get all members except 'you' and empty slots
-    const potentialTalkers = members.filter(member => 
-      member.id !== 'you' && !member.isDotted
-    );
-
-    // Split message into paragraphs
-    const paragraphs = message.split('\n');
-
-    paragraphs.forEach(paragraph => {
-      // Check each member
-      potentialTalkers.forEach(member => {
-        // If paragraph contains member's name and a question mark
-        if (paragraph.includes(member.name) && paragraph.includes('?')) {
-          // 50% chance to add to stack
-          if (Math.random() < 0.5) {
-            console.log(`Adding ${member.name} to talker stack due to mention in question`);
-            setTalkerStack(prev => [{
-              id: member.id,
-              name: member.name,
-              role: member.role
-            }, ...prev]); // Add to top of stack (FILO)
-          }
-        }
-      });
-    });
-  };
 
   // Average reading speed constant
   const CHARS_PER_SECOND = 25; // About 300 words per minute
