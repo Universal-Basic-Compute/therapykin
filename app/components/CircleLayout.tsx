@@ -260,9 +260,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         if (audioUrl) {
           playAudio(audioUrl, messageId);
         }
-
-        // Start the talker system after initial message
-        processNextTalker();
       } catch (error) {
         console.error('Error sending initial message:', error);
       } finally {
