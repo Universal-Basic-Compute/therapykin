@@ -44,9 +44,9 @@ async function generateImagePrompt(description: string): Promise<string> {
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/analysis`,
       {
         message: `Create an Ideogram prompt for a pencil illustration profile picture based on this description: ${description}. 
-                 The illustration should be in a clean, modern therapeutic style using soft colors.
-                 Focus on capturing the essence and personality while maintaining privacy and abstraction.
-                 Include specific style requirements for Ideogram.`,
+The illustration should be in a clean, modern therapeutic style using (#00c5bc teal, #8ced7d light green, #a571ff purple, #c278f5 violet, #ffde45 yellow, #ff9d76 orange) on a white background.
+Focus on capturing the essence and personality while maintaining privacy and abstraction.
+Use gentle, flowing pencil lines and subtle shading. Keep the composition minimalist with smooth, curved forms that evoke support and emotional safety. Style should be contemporary but organic, avoiding harsh edges.`,
         model: "claude-3-7-sonnet-latest"
       },
       {
