@@ -2946,12 +2946,10 @@ Important style requirements:
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Share your thoughts or ask a question..."
                       className="flex-grow px-4 py-2 rounded-lg border border-[var(--primary)]/20 bg-white/80 dark:bg-gray-800/80 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                      disabled={isPeekMode}
                     />
                     <button
                       type="submit"
                       className="px-4 py-2 rounded-lg bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={isPeekMode}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
