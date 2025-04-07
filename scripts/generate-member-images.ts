@@ -17,11 +17,10 @@ interface CircleMember {
 
 async function getPhysicalDescription(kinId: string): Promise<string> {
   try {
-    // kinId is already in the format "circle-memberid"
     const response = await axios.post(
-      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`, 
+      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`,
       {
-        message: "Describe your physical appearance in detail, including age, facial features, style of dress, and overall demeanor.",
+        message: "Decide a physical appearance for your persona. Include age, facial features, body type, style of dress, and overall demeanor. Focus on creating a realistic, relatable appearance that matches your therapeutic journey and background. Be specific but natural in your description.",
         model: "claude-3-5-haiku-latest"
       },
       {
