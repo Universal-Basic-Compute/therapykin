@@ -170,8 +170,10 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           <div className="h-full flex flex-col">
             <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 overflow-y-auto">
               {isLoading ? (
-                <div className="flex items-center justify-center h-full">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
+                <div className="flex justify-start">
+                  <div className="assistant-message-bubble rounded-lg p-4 max-w-[80%] relative">
+                    <span className="animate-pulse">...</span>
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -188,13 +190,15 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                         />
                       </div>
                       
-                      {/* Message content */}
-                      <div className="flex-grow">
-                        <div className="font-medium text-sm text-[var(--primary)]">
+                      {/* Message content in a chat bubble */}
+                      <div className="flex-grow max-w-[80%]">
+                        <div className="font-medium text-sm text-[var(--primary)] mb-1">
                           {message.sender}
                         </div>
-                        <div className="mt-1 text-foreground/80">
-                          {message.content}
+                        <div className="assistant-message-bubble p-4 rounded-lg rounded-tl-none">
+                          <div className="text-bubble whitespace-pre-wrap">
+                            {message.content}
+                          </div>
                         </div>
                       </div>
                     </div>
