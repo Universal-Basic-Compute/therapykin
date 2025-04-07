@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import axios from 'axios';
-import dotenv from 'dotenv';
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
