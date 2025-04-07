@@ -179,13 +179,20 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
 
       // Get available members (excluding 'you' and empty slots)
       const availableMembers = members.filter(member => 
-        member.id !== 'you' && 
-        !member.isDotted &&
-        member.name
+        member.id !== 'you' && // Not the user
+        member.id !== 'empty' && // Not empty slots
+        member.name && // Has a name
+        !member.isDotted // Not a dotted placeholder
       );
 
+      console.log('Available members for talking:', availableMembers.map(m => ({
+        id: m.id,
+        name: m.name,
+        role: m.role
+      })));
+
       if (availableMembers.length === 0) {
-        console.error('No members available to talk');
+        console.error('No members available to talk. Current members:', members);
         setIsProcessingTalk(false);
         setIsLoadingResponse(false);
         return;
