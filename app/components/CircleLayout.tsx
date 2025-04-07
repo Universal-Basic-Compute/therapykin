@@ -77,9 +77,9 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   }, []);
 
   // Function to convert text to speech
-  const textToSpeech = async (text: string, retries = 3): Promise<string> => {
+  const textToSpeech = async (text: string): Promise<string> => {
     try {
-      console.log(`Requesting TTS for text (attempt ${4-retries}/3): "${text.substring(0, 30)}..."`);
+      console.log(`Requesting TTS for text: "${text.substring(0, 30)}..."`);
       
       const response = await fetch('/api/tts', {
         method: 'POST',
@@ -92,33 +92,17 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           model: 'eleven_flash_v2_5'
         })
       });
-      
+
       if (!response.ok) {
         throw new Error(`TTS request failed with status ${response.status}`);
       }
-      
+
       const blob = await response.blob();
-      console.log(`Received blob of size: ${blob.size} bytes, type: ${blob.type}`);
-      
-      if (blob.size === 0) {
-        throw new Error('Received empty audio response');
-      }
-      
       const audioUrl = URL.createObjectURL(blob);
-      console.log(`Created audio URL: ${audioUrl}`);
-      
       return audioUrl;
     } catch (error) {
       console.error('Error converting text to speech:', error);
-      
-      // Retry logic
-      if (retries > 0) {
-        console.log(`Retrying TTS request. ${retries-1} attempts remaining`);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
-        return textToSpeech(text, retries - 1);
-      }
-      
-      return ''; // Return empty string if all retries fail
+      return '';
     }
   };
 
