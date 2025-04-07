@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import CircleMember from './CircleMember';
@@ -11,6 +11,7 @@ interface ChatMessage {
   id: string;
   sender?: string;
   memberId?: string;
+  audio?: string;
 }
 
 interface Member {
@@ -42,6 +43,72 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentPlayingId, setCurrentPlayingId] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize audio element
+  useEffect(() => {
+    audioRef.current = new Audio();
+    audioRef.current.onplay = () => setIsPlaying(true);
+    audioRef.current.onended = () => {
+      setIsPlaying(false);
+      setCurrentPlayingId(null);
+    };
+    audioRef.current.onerror = () => {
+      setIsPlaying(false);
+      setCurrentPlayingId(null);
+    };
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Function to convert text to speech
+  const textToSpeech = async (text: string): Promise<string> => {
+    try {
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text,
+          voiceId: 'L0Dsvb3SLTyegXwtm47J', // Archer - Calm British
+          model: 'eleven_flash_v2_5'
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`TTS request failed with status ${response.status}`);
+      }
+      
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      return audioUrl;
+    } catch (error) {
+      console.error('Error converting text to speech:', error);
+      return '';
+    }
+  };
+
+  // Function to play audio
+  const playAudio = (audioUrl: string, messageId: string) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = audioUrl;
+      setCurrentPlayingId(messageId);
+      audioRef.current.play().catch(err => {
+        console.error('Error playing audio:', err);
+        setIsPlaying(false);
+        setCurrentPlayingId(null);
+      });
+    }
+  };
 
   // Add more detailed logging
   console.log('CircleLayout props:', {
@@ -135,14 +202,24 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
 
         const data = await response.json();
         
+        // Generate audio for the response
+        const audioUrl = await textToSpeech(data.response);
+        const messageId = `msg-${Date.now()}`;
+
         // Add the therapist's response to the chat
         setMessages([{
           role: 'assistant',
           content: data.response,
-          id: `msg-${Date.now()}`,
+          id: messageId,
           sender: circleData?.therapist?.name || 'Therapist',
-          memberId: 'therapist'
+          memberId: 'therapist',
+          audio: audioUrl
         }]);
+
+        // Play the audio
+        if (audioUrl) {
+          playAudio(audioUrl, messageId);
+        }
       } catch (error) {
         console.error('Error sending initial message:', error);
       } finally {
@@ -199,6 +276,39 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                           <div className="text-bubble whitespace-pre-wrap">
                             {message.content}
                           </div>
+                          {message.audio && (
+                            <div className="mt-2 flex justify-end space-x-2">
+                              {currentPlayingId === message.id ? (
+                                <button 
+                                  onClick={() => {
+                                    if (audioRef.current) {
+                                      audioRef.current.pause();
+                                      setIsPlaying(false);
+                                      setCurrentPlayingId(null);
+                                    }
+                                  }}
+                                  className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                  </svg>
+                                  Stop
+                                </button>
+                              ) : (
+                                <button 
+                                  onClick={() => playAudio(message.audio!, message.id)}
+                                  className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  Listen
+                                </button>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
