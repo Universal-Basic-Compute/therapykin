@@ -328,20 +328,29 @@ async function buildAllCircleMembers(circleName: string) {
     // First build the therapist
     await buildCircleTherapist(circleName, circleData.specialist || 'generalist');
 
-    // Then build each member
-    for (const member of circleData.members) {
-      // Skip empty member (used for dotted circle)
-      if (member.id === 'empty') continue;
+    // Get all non-empty members
+    const membersToProcess = circleData.members.filter(member => member.id !== 'empty');
 
-      await createCircleMember(
-        member.name,
-        member.role || '',
-        member.weeksAtStart || 0,
-        circleName
-      );
+    // Process members in batches of 3
+    for (let i = 0; i < membersToProcess.length; i += 3) {
+      const batch = membersToProcess.slice(i, i + 3);
+      console.log(`Processing batch ${Math.floor(i/3) + 1} of ${Math.ceil(membersToProcess.length/3)}`);
 
-      // Add a delay between members
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Process each member in the current batch concurrently
+      await Promise.all(batch.map(member => 
+        createCircleMember(
+          member.name,
+          member.role || '',
+          member.weeksAtStart || 0,
+          circleName
+        )
+      ));
+
+      // Add a delay between batches
+      if (i + 3 < membersToProcess.length) {
+        console.log('Waiting between batches...');
+        await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay between batches
+      }
     }
 
     console.log(`Completed building all members for ${circleName} circle`);
