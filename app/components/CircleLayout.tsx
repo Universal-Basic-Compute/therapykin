@@ -388,6 +388,14 @@ ${relevantHistory}`;
         
         const systemMessage = `<system>New group therapy session started. Present members: ${presentMembers.join(', ')}</system>`;
         
+        // Determine if this is a hero's journey circle
+        const isHerosJourneyCircle = ['addiction', 'depression', 'ptsd', 'life-purpose'].includes(circleId);
+        
+        // Use the correct pseudonym format for the therapist
+        const therapistPseudonym = `${circleId}-therapist`;
+        
+        console.log(`Sending initial message for ${isHerosJourneyCircle ? 'Hero\'s Journey' : 'regular'} circle: ${circleId}`);
+        
         const response = await fetch('/api/kinos', {
           method: 'POST',
           headers: {
@@ -396,8 +404,8 @@ ${relevantHistory}`;
           body: JSON.stringify({
             content: systemMessage,
             firstName: 'Circle',
-            specialist: circleData?.specialist || 'generalist',
-            pseudonym: `circle-${circleId}`
+            specialist: isHerosJourneyCircle ? 'herosjourney' : 'generalist',
+            pseudonym: therapistPseudonym // Use the correct therapist pseudonym
           }),
         });
 
