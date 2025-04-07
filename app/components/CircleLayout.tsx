@@ -5,6 +5,106 @@ import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import CircleMember from './CircleMember';
 
+// Helper function to write strings to DataView
+const writeString = (view: DataView, offset: number, string: string) => {
+  for (let i = 0; i < string.length; i++) {
+    view.setUint8(offset + i, string.charCodeAt(i));
+  }
+};
+
+// Audio normalization function
+const normalizeAudio = async (audioUrl: string): Promise<string> => {
+  try {
+    // Create audio context
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    
+    // Fetch the audio data
+    const response = await fetch(audioUrl);
+    const arrayBuffer = await response.arrayBuffer();
+    
+    // Decode the audio data
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    
+    // Create an offline context for processing
+    const offlineContext = new OfflineAudioContext(
+      audioBuffer.numberOfChannels,
+      audioBuffer.length,
+      audioBuffer.sampleRate
+    );
+    
+    // Create buffer source
+    const source = offlineContext.createBufferSource();
+    source.buffer = audioBuffer;
+    
+    // Create gain node for volume adjustment
+    const gainNode = offlineContext.createGain();
+    
+    // Calculate the root mean square (RMS) value
+    let sum = 0;
+    for (let i = 0; i < audioBuffer.length; i++) {
+      sum += Math.pow(audioBuffer.getChannelData(0)[i], 2);
+    }
+    const rms = Math.sqrt(sum / audioBuffer.length);
+    
+    // Target RMS value (adjust this to change the overall volume)
+    const targetRms = 0.2;
+    
+    // Calculate the required gain
+    const gain = targetRms / rms;
+    gainNode.gain.value = gain;
+    
+    // Connect nodes
+    source.connect(gainNode);
+    gainNode.connect(offlineContext.destination);
+    
+    // Start the source
+    source.start(0);
+    
+    // Render the audio
+    const normalizedBuffer = await offlineContext.startRendering();
+    
+    // Convert back to WAV/MP3
+    const normalizedBlob = await new Promise<Blob>((resolve) => {
+      const channels = normalizedBuffer.numberOfChannels;
+      const length = normalizedBuffer.length * channels * 2;
+      const buffer = new ArrayBuffer(44 + length);
+      const view = new DataView(buffer);
+      
+      // Write WAV header
+      writeString(view, 0, 'RIFF');
+      view.setUint32(4, 36 + length, true);
+      writeString(view, 8, 'WAVE');
+      writeString(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, channels, true);
+      view.setUint32(24, normalizedBuffer.sampleRate, true);
+      view.setUint32(28, normalizedBuffer.sampleRate * channels * 2, true);
+      view.setUint16(32, channels * 2, true);
+      view.setUint16(34, 16, true);
+      writeString(view, 36, 'data');
+      view.setUint32(40, length, true);
+      
+      // Write audio data
+      const offset = 44;
+      for (let i = 0; i < normalizedBuffer.length; i++) {
+        for (let channel = 0; channel < channels; channel++) {
+          const sample = normalizedBuffer.getChannelData(channel)[i];
+          const int16 = Math.max(-1, Math.min(1, sample)) * 0x7FFF;
+          view.setInt16(offset + (i * channels + channel) * 2, int16, true);
+        }
+      }
+      
+      resolve(new Blob([buffer], { type: 'audio/wav' }));
+    });
+    
+    return URL.createObjectURL(normalizedBlob);
+  } catch (error) {
+    console.error('Error normalizing audio:', error);
+    return audioUrl; // Return original URL if normalization fails
+  }
+};
+
 interface Talker {
   id: string;
   name: string;
@@ -333,35 +433,44 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     }
   };
 
-  const playAudio = (audioUrl: string, messageId: string) => {
+  const playAudio = async (audioUrl: string, messageId: string) => {
     if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = audioUrl;
-      setCurrentPlayingId(messageId);
-      
-      // Set up event handlers
-      audioRef.current.onplay = () => {
-        setIsPlaying(true);
-        // Start preparing the next message when this one starts playing
-        processNextTalkerRef.current?.();
-      };
+      try {
+        audioRef.current.pause();
+        
+        // Normalize the audio before playing
+        const normalizedUrl = await normalizeAudio(audioUrl);
+        
+        audioRef.current.src = normalizedUrl;
+        setCurrentPlayingId(messageId);
+        
+        // Set up event handlers
+        audioRef.current.onplay = () => {
+          setIsPlaying(true);
+          // Start preparing the next message when this one starts playing
+          processNextTalkerRef.current?.();
+        };
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setCurrentPlayingId(null);
-      };
+        audioRef.current.onended = () => {
+          setIsPlaying(false);
+          setCurrentPlayingId(null);
+          // Clean up the normalized audio URL
+          URL.revokeObjectURL(normalizedUrl);
+        };
 
-      audioRef.current.onerror = () => {
-        setIsPlaying(false);
-        setCurrentPlayingId(null);
-        console.error('Error playing audio');
-      };
+        audioRef.current.onerror = () => {
+          setIsPlaying(false);
+          setCurrentPlayingId(null);
+          console.error('Error playing audio');
+          URL.revokeObjectURL(normalizedUrl);
+        };
 
-      audioRef.current.play().catch(err => {
+        await audioRef.current.play();
+      } catch (err) {
         console.error('Error playing audio:', err);
         setIsPlaying(false);
         setCurrentPlayingId(null);
-      });
+      }
     }
   };
 
