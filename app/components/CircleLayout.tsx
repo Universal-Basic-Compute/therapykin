@@ -162,7 +162,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     }
   };
 
-  // Define processNextTalker implementation
   processNextTalkerRef.current = async () => {
     if (isProcessingTalk) {
       console.log('Already processing talk, skipping');
@@ -178,7 +177,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       // Get available members (excluding empty slots and 'you')
       const availableMembers = members.filter(member => {
         console.log('Filtering member:', member);
-      
+        
         return (
           member.id !== 'you' && 
           member.id !== 'empty' &&
@@ -187,9 +186,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         );
       });
 
-      console.log('Available members for talking:', availableMembers);
-
-      // If no members available at all, log error and return
       if (availableMembers.length === 0) {
         console.error('No members available to talk. Current members:', members);
         setIsProcessingTalk(false);
@@ -201,63 +197,22 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       const nextTalker = availableMembers[currentSpeakerIndex % availableMembers.length];
       console.log(`Processing next talker: ${nextTalker.name}`);
 
-      // Add loading message
-      const loadingId = `loading-${Date.now()}`;
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: '...',
-        id: loadingId,
-        loading: true
-      }]);
+      // Make API request and get response
+      const response = await fetch('/api/kinos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: systemMessage,
+          firstName: 'Circle',
+          specialist: circleData?.specialist || 'generalist',
+          pseudonym: `circle-${circleId}-${nextTalker.id}`
+        }),
+      });
 
-      // Get conversation history
-      const relevantHistory = messages
-        .slice(-5) // Only use last 5 messages for context
-        .map(msg => `${msg.sender}: ${msg.content}`)
-        .join('\n');
-
-      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
-Respond to the conversation naturally and briefly.</system>
-
-Recent conversation:
-${relevantHistory}`;
-
-      // Send message with retries
-      let response;
-      while (retryCount < MAX_RETRIES) {
-        try {
-          console.log(`[Circle] Attempting to send message (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-          response = await fetch('/api/kinos', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              content: systemMessage,
-              firstName: 'Circle',
-              specialist: circleData?.specialist || 'generalist',
-              pseudonym: `circle-${circleId}-${nextTalker.id}`
-            }),
-          });
-
-          if (response.ok) break;
-
-          retryCount++;
-          if (retryCount < MAX_RETRIES) {
-            console.log(`[Circle] Retry ${retryCount}/${MAX_RETRIES} - waiting ${RETRY_DELAY}ms`);
-            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-          }
-        } catch (error) {
-          console.error('[Circle] Error during API call:', error);
-          retryCount++;
-          if (retryCount < MAX_RETRIES) {
-            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-          }
-        }
-      }
-
-      if (!response || !response.ok) {
-        throw new Error(`Failed to get response after ${MAX_RETRIES} attempts`);
+      if (!response.ok) {
+        throw new Error('Failed to get response');
       }
 
       const data = await response.json();
@@ -266,9 +221,16 @@ ${relevantHistory}`;
       const audioUrl = await textToSpeech(data.response, nextTalker.id);
       const messageId = `msg-${Date.now()}`;
 
-      // Update messages, removing loading message
+      // If current audio is playing, wait for it to finish
+      if (isPlaying && audioRef.current) {
+        await new Promise(resolve => {
+          audioRef.current!.addEventListener('ended', resolve, { once: true });
+        });
+      }
+
+      // Now that previous audio is done, update messages and play new audio
       setMessages(prev => [
-        ...prev.filter(msg => msg.id !== loadingId),
+        ...prev,
         {
           role: 'assistant',
           content: data.response,
@@ -279,72 +241,24 @@ ${relevantHistory}`;
         }
       ]);
 
-      // Check for mentions and questions
-      if (checkForMentionsAndQuestionsRef.current) {
-        checkForMentionsAndQuestionsRef.current(data.response);
-      }
+      // Update speaker index for next turn
+      setCurrentSpeakerIndex((prevIndex) => 
+        (prevIndex + 1) % availableMembers.length
+      );
 
-      // Play audio if available and calculate next message timing
+      // Reset processing flags
+      setIsProcessingTalk(false);
+      setIsLoadingResponse(false);
+
+      // Play the audio, and when it starts, trigger the next message preparation
       if (audioUrl) {
         playAudio(audioUrl, messageId);
-        
-        // Get audio duration
-        const audio = new Audio(audioUrl);
-        const audioDuration = await new Promise<number>(resolve => {
-          audio.addEventListener('loadedmetadata', () => {
-            resolve(audio.duration * 1000); // Convert to milliseconds
-          });
-        });
-
-        // Calculate delay based on both reading time and audio duration
-        const readingTimeMs = Math.max(
-          MIN_MESSAGE_DELAY,
-          (data.response.length / CHARS_PER_SECOND) * 1000
-        );
-        const totalDelay = Math.max(audioDuration, readingTimeMs) + AUDIO_BUFFER_TIME;
-
-        console.log(`Scheduling next message after ${totalDelay}ms (audio: ${audioDuration}ms, reading: ${readingTimeMs}ms)`);
-
-        // Update speaker index for next turn
-        setCurrentSpeakerIndex((prevIndex) => 
-          (prevIndex + 1) % availableMembers.length
-        );
-
-        // Reset processing flags
-        setIsProcessingTalk(false);
-        setIsLoadingResponse(false);
-
-        // Schedule next message
-        setTimeout(() => {
-          processNextTalkerRef.current?.();
-        }, totalDelay);
-      } else {
-        // If no audio, just use reading time
-        const readingTimeMs = Math.max(
-          MIN_MESSAGE_DELAY,
-          (data.response.length / CHARS_PER_SECOND) * 1000
-        );
-
-        console.log(`Scheduling next message after ${readingTimeMs}ms (reading only)`);
-
-        // Update speaker index for next turn
-        setCurrentSpeakerIndex((prevIndex) => 
-          (prevIndex + 1) % availableMembers.length
-        );
-
-        // Reset processing flags
-        setIsProcessingTalk(false);
-        setIsLoadingResponse(false);
-
-        // Schedule next message
-        setTimeout(() => {
-          processNextTalkerRef.current?.();
-        }, readingTimeMs);
+        // Start preparing the next message as soon as this one starts playing
+        processNextTalkerRef.current?.();
       }
 
     } catch (error) {
       console.error('[Circle] Error processing next talker:', error);
-      // Remove loading message and add error message
       setMessages(prev => [
         ...prev.filter(msg => !msg.loading),
         {
@@ -358,7 +272,6 @@ ${relevantHistory}`;
       setIsProcessingTalk(false);
       setIsLoadingResponse(false);
 
-      // Try again after a delay if not already retrying
       if (retryCount === 0) {
         console.log('[Circle] Scheduling retry after error');
         setTimeout(() => {
@@ -420,12 +333,30 @@ ${relevantHistory}`;
     }
   };
 
-  // Function to play audio
   const playAudio = (audioUrl: string, messageId: string) => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = audioUrl;
       setCurrentPlayingId(messageId);
+      
+      // Set up event handlers
+      audioRef.current.onplay = () => {
+        setIsPlaying(true);
+        // Start preparing the next message when this one starts playing
+        processNextTalkerRef.current?.();
+      };
+
+      audioRef.current.onended = () => {
+        setIsPlaying(false);
+        setCurrentPlayingId(null);
+      };
+
+      audioRef.current.onerror = () => {
+        setIsPlaying(false);
+        setCurrentPlayingId(null);
+        console.error('Error playing audio');
+      };
+
       audioRef.current.play().catch(err => {
         console.error('Error playing audio:', err);
         setIsPlaying(false);
