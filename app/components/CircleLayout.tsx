@@ -36,20 +36,36 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   console.log('CircleLayout props:', { activeSpeaker, isPeekMode, circleMembers, circleId });
 
   const members: Member[] = React.useMemo(() => {
+    // First, find the therapist member
+    const therapist = circleMembers.find(member => member.id === 'therapist');
+    
     if (isPeekMode) {
-      return circleMembers.map(member => 
-        member.id === 'empty' 
-          ? { ...member, onClick: () => setShowJoinModal(true) } 
-          : member
-      );
+      // For peek mode, put therapist first, then other members
+      return [
+        ...(therapist ? [therapist] : []),
+        ...circleMembers.filter(member => member.id !== 'therapist' && member.id !== 'empty'),
+        ...circleMembers.filter(member => member.id === 'empty').map(member => ({
+          ...member,
+          onClick: () => setShowJoinModal(true)
+        }))
+      ];
     } else {
+      // For regular mode, put therapist first, then you, then other members
       const youMember: Member = {
         id: 'you',
         name: 'You',
         weeksAtStart: 3,
         color: 'from-yellow-300 to-yellow-400'
       };
-      return [youMember, ...circleMembers.filter(member => member.id !== 'empty')];
+      
+      return [
+        ...(therapist ? [therapist] : []),
+        youMember,
+        ...circleMembers.filter(member => 
+          member.id !== 'therapist' && 
+          member.id !== 'empty'
+        )
+      ];
     }
   }, [isPeekMode, circleMembers]);
 
