@@ -2793,9 +2793,10 @@ Important style requirements:
             <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'md:w-3/4' : 'md:w-2/3'}`}>
             
             {/* Chat history */}
-            <div className="flex-grow card overflow-hidden">
-              
-              <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
+            <div className="card h-full bg-white dark:bg-gray-800 shadow-lg p-6">
+              <div className="h-full flex flex-col">
+                {/* Chat messages area with padding at bottom for input */}
+                <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 overflow-y-auto mb-4">
                 <div className="space-y-4">
                 {chatHistory
                   .filter(msg => !msg.content.includes('<system>')) // Filter out system messages

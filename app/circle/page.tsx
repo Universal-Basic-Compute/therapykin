@@ -66,14 +66,6 @@ export default function CirclePage() {
     };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim()) return;
-    
-    // Handle message submission here
-    console.log('Message submitted:', message);
-    setMessage('');
-  };
 
   return (
     <div className="h-screen w-screen bg-gradient-radial from-[var(--background)] via-[var(--background-alt)] to-[var(--background)] overflow-hidden relative">
@@ -141,29 +133,6 @@ export default function CirclePage() {
         </div>
       </div>
 
-      {/* Enhanced chat input */}
-      <div className="absolute bottom-6 left-6 right-6">
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-          <div className="flex gap-3">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Share your thoughts or ask a question..."
-              className="flex-grow px-6 py-4 rounded-full border border-[var(--primary)]/20 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] shadow-lg hover:shadow-xl transition-all duration-200"
-            />
-            <button
-              type="submit"
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2"
-            >
-              <span>Send</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
   );
 }

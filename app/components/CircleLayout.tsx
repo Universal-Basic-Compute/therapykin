@@ -136,6 +136,8 @@ const MIN_MESSAGE_DELAY = 3600; // Minimum 3.6 seconds between messages
 const AUDIO_BUFFER_TIME = 500; // Extra buffer time after audio finishes
 
 interface CircleLayoutProps {
+  message?: string;
+  onMessageChange?: (message: string) => void;
   activeSpeaker: string;
   onSpeakerChange: (speaker: string) => void;
   isPeekMode?: boolean;
@@ -161,9 +163,27 @@ const logMembersAndStack = (members: Member[], stack: Talker[]) => {
   console.log('Current talker stack:', stack);
 };
 
-export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [], circleId, circleData }: CircleLayoutProps) {
+export default function CircleLayout({ 
+  activeSpeaker, 
+  onSpeakerChange, 
+  isPeekMode, 
+  circleMembers = [], 
+  circleId, 
+  circleData,
+  message = '',
+  onMessageChange = () => {}
+}: CircleLayoutProps) {
   const [isCircleDataLoaded, setIsCircleDataLoaded] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim() || isPeekMode) return;
+    
+    // Handle message submission here
+    console.log('Message submitted:', message);
+    onMessageChange('');
+  };
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -708,6 +728,29 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                           <div className="flex-grow max-w-[80%]">
                             <div className="assistant-message-bubble p-4 rounded-lg rounded-tl-none">
                               <span className="animate-pulse">...</span>
+                            </div>
+                
+                            {/* Chat input fixed at bottom of chat area */}
+                            <div className="flex-shrink-0">
+                              <form onSubmit={handleSubmit} className="flex gap-2">
+                                <input
+                                  type="text"
+                                  value={message}
+                                  onChange={(e) => setMessage(e.target.value)}
+                                  placeholder="Share your thoughts or ask a question..."
+                                  className="flex-grow px-4 py-2 rounded-lg border border-[var(--primary)]/20 bg-white/80 dark:bg-gray-800/80 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                                  disabled={isPeekMode}
+                                />
+                                <button
+                                  type="submit"
+                                  className="px-4 py-2 rounded-lg bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                  disabled={isPeekMode}
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                  </svg>
+                                </button>
+                              </form>
                             </div>
                           </div>
                         </div>
