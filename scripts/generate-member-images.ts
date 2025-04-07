@@ -41,6 +41,10 @@ async function getPhysicalDescription(kinId: string): Promise<string> {
 
 async function generateImagePrompt(description: string, kinId: string): Promise<string> {
   try {
+    console.log('\n=== Physical Description ===\n');
+    console.log(description);
+    console.log('\n=== Generating Image Prompt ===\n');
+
     const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`,
       {
@@ -57,6 +61,10 @@ Use gentle, flowing pencil lines and subtle shading. Keep the composition minima
         }
       }
     );
+
+    console.log('\n=== Generated Prompt ===\n');
+    console.log(response.data.response);
+    console.log('\n===========================\n');
 
     return response.data.response;
   } catch (error) {
