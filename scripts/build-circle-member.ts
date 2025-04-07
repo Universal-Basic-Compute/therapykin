@@ -269,20 +269,20 @@ async function buildCircleTherapist(circleName: string, specialist: string) {
 }
 
 async function createCircleMember(
-  memberName: string,
+  memberId: string,
   role: string,
   weeksAtStart: number,
   specialization: string
 ) {
   try {
-    // Create prefixed name to avoid duplicates
-    const prefixedName = `${specialization}-${memberName}`;
-    console.log(`Creating circle member: ${prefixedName} (${role})`);
+    // Create prefixed name using id
+    const prefixedId = `${specialization}-${memberId}`;
+    console.log(`Creating circle member: ${prefixedId} (${role})`);
 
     const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins`,
       {
-        name: prefixedName
+        name: prefixedId
       },
       {
         headers: {
@@ -292,8 +292,8 @@ async function createCircleMember(
       }
     );
 
-    // The Kin ID is the same as the prefixed name we sent
-    const kinId = prefixedName;
+    // The Kin ID is the same as the prefixed id we sent
+    const kinId = prefixedId;
     console.log(`Successfully created Kin with ID: ${kinId}`);
 
     // Step 2: Build the Kin's identity through all initialization messages
@@ -340,7 +340,7 @@ async function buildAllCircleMembers(circleName: string) {
       // Process each member in the current batch concurrently
       await Promise.all(batch.map(member => 
         createCircleMember(
-          member.name,
+          member.id,
           member.role || '',
           member.weeksAtStart || 0,
           circleName
