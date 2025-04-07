@@ -56,10 +56,62 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const [talkerStack, setTalkerStack] = useState<Talker[]>([]);
   const [isProcessingTalk, setIsProcessingTalk] = useState(false);
 
+  // Define members at the top of component
+  const members: Member[] = React.useMemo(() => {
+    const therapist = circleData?.therapist;
+    console.log('CircleData:', circleData);
+    console.log('Found therapist from circle data:', therapist);
+
+    const therapistMember = therapist ? {
+      id: 'therapist',
+      name: therapist.name,
+      role: therapist.role || 'Circle Facilitator',
+      color: therapist.color || 'from-teal-300 to-teal-400',
+      weeksAtStart: therapist.weeksAtStart || 520
+    } : null;
+
+    if (!therapistMember) {
+      console.warn('No therapist found in circle data');
+    }
+
+    if (isPeekMode) {
+      return [
+        ...(therapist ? [therapist] : []),
+        ...circleMembers.filter(member => member.id !== 'empty'),
+        ...circleMembers.filter(member => member.id === 'empty').map(member => ({
+          ...member,
+          onClick: () => setShowJoinModal(true)
+        }))
+      ];
+    } else {
+      const youMember: Member = {
+        id: 'you',
+        name: 'You',
+        weeksAtStart: 3,
+        color: 'from-yellow-300 to-yellow-400'
+      };
+      
+      return [
+        ...(therapist ? [therapist] : []),
+        youMember,
+        ...circleMembers.filter(member => 
+          member.id !== 'empty' &&
+          member.id !== 'you'
+        )
+      ];
+    }
+  }, [isPeekMode, circleMembers, circleData?.therapist]);
+
+  // Store members in a ref to access in callbacks
+  const membersRef = useRef(members);
+  useEffect(() => {
+    membersRef.current = members;
+  }, [members]);
+
   // Define checkForMentionsAndQuestions first
   const checkForMentionsAndQuestions = useCallback((message: string) => {
-    // Get all members except 'you' and empty slots
-    const potentialTalkers = members.filter(member => 
+    const currentMembers = membersRef.current;
+    const potentialTalkers = currentMembers.filter(member => 
       member.id !== 'you' && !member.isDotted
     );
 
@@ -83,7 +135,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         }
       });
     });
-  }, [members, setTalkerStack]);
+  }, [setTalkerStack]);
 
   // Then define processNextTalker
   const processNextTalker = useCallback(async () => {
@@ -314,59 +366,6 @@ Respond to the ongoing conversation.</system>`;
     });
   });
 
-  // Define members FIRST before using in useEffect
-  const members: Member[] = React.useMemo(() => {
-    // Get the therapist from the circle data
-    const therapist = circleData?.therapist;
-    console.log('CircleData:', circleData);
-    console.log('Found therapist from circle data:', therapist);
-
-    // Transform therapist data to match Member interface if it exists
-    const therapistMember = therapist ? {
-      id: 'therapist',
-      name: therapist.name,
-      role: therapist.role || 'Circle Facilitator',
-      color: therapist.color || 'from-teal-300 to-teal-400',
-      weeksAtStart: therapist.weeksAtStart || 520
-    } : null;
-
-    if (!therapistMember) {
-      console.warn('No therapist found in circle data');
-    }
-
-    if (isPeekMode) {
-      // For peek mode, put therapist first, then other members
-      const peekMembers = [
-        ...(therapist ? [therapist] : []),
-        ...circleMembers.filter(member => member.id !== 'empty'),
-        ...circleMembers.filter(member => member.id === 'empty').map(member => ({
-          ...member,
-          onClick: () => setShowJoinModal(true)
-        }))
-      ];
-      console.log('Peek mode members:', peekMembers);
-      return peekMembers;
-    } else {
-      // For regular mode, put therapist first, then you, then other members
-      const youMember: Member = {
-        id: 'you',
-        name: 'You',
-        weeksAtStart: 3,
-        color: 'from-yellow-300 to-yellow-400'
-      };
-      
-      const regularMembers = [
-        ...(therapist ? [therapist] : []),
-        youMember,
-        ...circleMembers.filter(member => 
-          member.id !== 'empty' &&
-          member.id !== 'you'
-        )
-      ];
-      console.log('Regular mode members:', regularMembers);
-      return regularMembers;
-    }
-  }, [isPeekMode, circleMembers, circleData?.therapist]);
 
   useEffect(() => {
     const sendInitialMessage = async () => {
