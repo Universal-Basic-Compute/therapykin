@@ -232,7 +232,7 @@ async function getKinCommitHistory(kinId: string) {
 
 async function buildCircleTherapist(circleName: string, specialist: string) {
   try {
-    const therapistId = `${circleName}-Therapist`;
+    const therapistId = `${circleName}-therapist`;
     console.log(`Creating therapist: ${therapistId} with specialist ${specialist}`);
 
     // Create the Kin in the therapist blueprint
