@@ -35,13 +35,16 @@ export default function CircleMember({ name, weeksAtStart, role, color, size, is
           duration-300
           hover:shadow-xl
           backdrop-blur-sm
-          ${onClick ? 'cursor-pointer hover:border-[var(--primary)]' : ''}
+          ${onClick ? 'cursor-pointer hover:scale-105' : ''}
+          border
+          border-white/10
+          hover:border-white/20
         `}
       >
         {isDotted ? (
           <span className="text-xs text-[var(--primary)]/70 hover:text-[var(--primary)]">join?</span>
         ) : (
-          name[0]
+          <span className="text-xl">{name[0]}</span>
         )}
       </div>
       <div className="mt-3 text-center">
@@ -52,7 +55,7 @@ export default function CircleMember({ name, weeksAtStart, role, color, size, is
           </div>
         )}
         {role && (
-          <div className="text-xs px-2 py-0.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] mt-1">
+          <div className="text-xs px-2 py-0.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] mt-1 whitespace-nowrap">
             {role}
           </div>
         )}
