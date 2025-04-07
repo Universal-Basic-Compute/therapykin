@@ -245,6 +245,12 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         if (audioUrl) {
           playAudio(audioUrl, messageId);
         }
+
+        // Add a delay before starting the conversation
+        setTimeout(() => {
+          processNextTalker();
+        }, 2000); // Wait 2 seconds before first response
+
       } catch (error) {
         console.error('Error sending initial message:', error);
       } finally {
@@ -253,7 +259,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     };
 
     sendInitialMessage();
-  }, [members, circleId, circleData]);
+  }, [members, circleId, circleData, processNextTalker]);
 
   // Initialize talker stack
   useEffect(() => {
