@@ -108,7 +108,51 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     membersRef.current = members;
   }, [members]);
 
-  // Define checkForMentionsAndQuestions first
+  // Function to convert text to speech
+  const textToSpeech = async (text: string): Promise<string> => {
+    try {
+      console.log(`Requesting TTS for text: "${text.substring(0, 30)}..."`);
+      
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text,
+          voiceId: 'L0Dsvb3SLTyegXwtm47J', // Archer - Calm British
+          model: 'eleven_flash_v2_5'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`TTS request failed with status ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      return audioUrl;
+    } catch (error) {
+      console.error('Error converting text to speech:', error);
+      return '';
+    }
+  };
+
+  // Function to play audio
+  const playAudio = (audioUrl: string, messageId: string) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = audioUrl;
+      setCurrentPlayingId(messageId);
+      audioRef.current.play().catch(err => {
+        console.error('Error playing audio:', err);
+        setIsPlaying(false);
+        setCurrentPlayingId(null);
+      });
+    }
+  };
+
+  // Define checkForMentionsAndQuestions
   const checkForMentionsAndQuestions = useCallback((message: string) => {
     const currentMembers = membersRef.current;
     const potentialTalkers = currentMembers.filter(member => 
@@ -303,49 +347,6 @@ Respond to the ongoing conversation.</system>`;
     };
   }, []);
 
-  // Function to convert text to speech
-  const textToSpeech = async (text: string): Promise<string> => {
-    try {
-      console.log(`Requesting TTS for text: "${text.substring(0, 30)}..."`);
-      
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text,
-          voiceId: 'L0Dsvb3SLTyegXwtm47J', // Archer - Calm British
-          model: 'eleven_flash_v2_5'
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`TTS request failed with status ${response.status}`);
-      }
-
-      const blob = await response.blob();
-      const audioUrl = URL.createObjectURL(blob);
-      return audioUrl;
-    } catch (error) {
-      console.error('Error converting text to speech:', error);
-      return '';
-    }
-  };
-
-  // Function to play audio
-  const playAudio = (audioUrl: string, messageId: string) => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = audioUrl;
-      setCurrentPlayingId(messageId);
-      audioRef.current.play().catch(err => {
-        console.error('Error playing audio:', err);
-        setIsPlaying(false);
-        setCurrentPlayingId(null);
-      });
-    }
-  };
 
   // Add more detailed logging
   console.log('CircleLayout props:', {
