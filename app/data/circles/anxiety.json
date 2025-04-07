@@ -16,7 +16,7 @@
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
     "bio": "Experienced anxiety specialist focused on practical coping strategies",
-    "voiceId": "L0Dsvb3SLTyegXwtm47J"  // Archer - Calm British, good for therapist
+    "voiceId": "L0Dsvb3SLTyegXwtm47J"
   },
   "members": [
     {
@@ -31,7 +31,7 @@
       "weeksAtStart": 26,
       "color": "from-blue-300 to-blue-400",
       "role": "Managing Anxiety",
-      "voiceId": "OYTbf65OHHFELVut7v2H"  // Hope - Natural voice for someone managing anxiety
+      "voiceId": "OYTbf65OHHFELVut7v2H"
     },
     {
       "id": "alex",
@@ -39,7 +39,7 @@
       "weeksAtStart": 12,
       "color": "from-rose-300 to-rose-400",
       "role": "Stress Management",
-      "voiceId": "wgHvco1wiREKN0BdyVx5"  // Drew - Meditative, good for stress management
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "mike",
@@ -47,7 +47,7 @@
       "weeksAtStart": 38,
       "color": "from-green-300 to-green-400",
       "role": "Anxiety Free",
-      "voiceId": "zQzvQBubVkDWYuqJYMFn"  // Oxley - Intimate baritone for confident guide
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"
     },
     {
       "id": "lisa",
@@ -55,7 +55,7 @@
       "weeksAtStart": 52,
       "color": "from-purple-300 to-purple-400",
       "role": "One Year Journey",
-      "voiceId": "BL7YSL1bAkmW8U0JnU8o"  // Jen - Calm & Reflective for experienced member
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"
     }
   ]
 }
