@@ -154,12 +154,17 @@ async function processCircle(circleName: string) {
 async function main() {
   const args = process.argv.slice(2);
   
-  if (args.length === 0) {
-    console.log('Usage: ts-node generate-member-images.ts <circleName>');
+  // Find the index of --circle flag
+  const circleIndex = args.indexOf('--circle');
+  
+  if (circleIndex === -1 || circleIndex === args.length - 1) {
+    console.log('Usage: ts-node generate-member-images.ts --circle <circleName>');
     process.exit(1);
   }
 
-  const circleName = args[0];
+  // Get the circle name that follows the --circle flag
+  const circleName = args[circleIndex + 1];
+  console.log(`Processing circle: ${circleName}`);
   await processCircle(circleName);
 }
 
