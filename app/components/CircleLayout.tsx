@@ -185,6 +185,9 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       return;
     }
 
+    // Add retry counter
+    let retryCount = 0;
+
     try {
       setIsProcessingTalk(true);
       setIsLoadingResponse(true);
