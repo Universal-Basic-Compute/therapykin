@@ -374,9 +374,26 @@ ${relevantHistory}`;
   }, []);
 
   // Function to convert text to speech
-  const textToSpeech = async (text: string): Promise<string> => {
+  const textToSpeech = async (text: string, memberId?: string): Promise<string> => {
     try {
-      console.log(`Requesting TTS for text: "${text.substring(0, 30)}..."`);
+      // Get the member's voiceId from circleData
+      let voiceId = 'L0Dsvb3SLTyegXwtm47J'; // Default to Archer
+
+      if (memberId) {
+        if (memberId === 'therapist' && circleData?.therapist?.voiceId) {
+          voiceId = circleData.therapist.voiceId;
+          console.log(`Using therapist voice ID: ${voiceId}`);
+        } else {
+          // Find the member in the circle data
+          const member = circleData?.members?.find((m: any) => m.id === memberId);
+          if (member?.voiceId) {
+            voiceId = member.voiceId;
+            console.log(`Using member voice ID: ${voiceId} for ${member.name}`);
+          }
+        }
+      }
+
+      console.log(`Requesting TTS for text: "${text.substring(0, 30)}..." with voice: ${voiceId}`);
       
       const response = await fetch('/api/tts', {
         method: 'POST',
@@ -385,7 +402,7 @@ ${relevantHistory}`;
         },
         body: JSON.stringify({
           text,
-          voiceId: 'L0Dsvb3SLTyegXwtm47J', // Archer - Calm British
+          voiceId,
           model: 'eleven_flash_v2_5'
         })
       });
@@ -564,7 +581,7 @@ ${relevantHistory}`;
         }
 
         const data = await response.json();
-        const audioUrl = await textToSpeech(data.response);
+        const audioUrl = await textToSpeech(data.response, nextTalker.id);
         const messageId = `initial-${Date.now()}`;
 
         setMessages([{
