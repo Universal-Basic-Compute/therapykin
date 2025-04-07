@@ -114,7 +114,7 @@ export default function CirclePage() {
         <div className="absolute top-[40%] right-[15%] w-48 h-48 rounded-full bg-gradient-to-tr from-[var(--accent)]/10 to-transparent blur-3xl animate-float-slow"></div>
       </div>
       
-      {/* Header with improved styling */}
+      {/* Header with minimal styling */}
       <div className="absolute top-6 left-6 z-10">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] bg-clip-text text-transparent flex items-center">
           <span className="mr-2">{circleData?.name || 'Circle Chat'}</span>
@@ -122,15 +122,6 @@ export default function CirclePage() {
             Beta
           </span>
         </h1>
-        <p className="mt-2 text-sm text-foreground/60 max-w-md">
-          {circleData?.description || 'A safe space for shared healing and growth.'}
-        </p>
-        <div className="mt-2 inline-flex items-center px-2 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072M12 18a6 6 0 01-6-6 6 6 0 0112 0 6 6 0 01-6 6z" />
-          </svg>
-          Listen-only mode available
-        </div>
       </div>
 
       {/* Main Circle Layout with enhanced container */}
