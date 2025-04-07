@@ -2429,6 +2429,7 @@ Important style requirements:
   };
 
   // Function to generate an illustration for a message
+  // Function to generate an illustration for a message
   const generateIllustrationForMessage = async (messageContent: string, messageId: string) => {
     try {
       // Make sure we have the user object
