@@ -182,16 +182,23 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     });
   }, [setTalkerStack]);
 
-  // Then define processNextTalker
+  // Maximum retries for API calls
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 1000; // 1 second
+
+  // Then define processNextTalker with retries
   const processNextTalker = useCallback(async () => {
     if (isProcessingTalk) {
-      console.log('Already processing talk, skipping');
+      console.log('[Circle] Already processing talk, skipping');
       return;
     }
+
+    let retryCount = 0;
 
     try {
       setIsProcessingTalk(true);
       setIsLoadingResponse(true);
+      console.log('[Circle] Starting to process next talker');
 
       // Get next talker (either from stack or therapist) with logging
       let nextTalker = talkerStack.length > 0 
