@@ -49,6 +49,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingResponse, setIsLoadingResponse] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlayingId, setCurrentPlayingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -311,6 +312,15 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
 
     try {
       setIsProcessingTalk(true);
+      setIsLoadingResponse(true);
+
+      // Add loading message to chat
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '...',
+        id: 'loading-' + Date.now(),
+        loading: true
+      }]);
 
       // Get next talker (either from stack or therapist)
       let nextTalker = talkerStack.length > 0 
@@ -388,15 +398,18 @@ Respond to the ongoing conversation.</system>`;
       const audioUrl = await textToSpeech(data.response);
       const messageId = `msg-${Date.now()}`;
 
-      // Add message to chat
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: data.response,
-        id: messageId,
-        sender: nextTalker.name,
-        memberId: nextTalker.id,
-        audio: audioUrl
-      }]);
+      // Remove loading message and add real message
+      setMessages(prev => [
+        ...prev.filter(msg => !msg.loading), // Remove loading message
+        {
+          role: 'assistant',
+          content: data.response,
+          id: messageId,
+          sender: nextTalker.name,
+          memberId: nextTalker.id,
+          audio: audioUrl
+        }
+      ]);
 
       // Check for new mentions and questions in the response
       checkForMentionsAndQuestions(data.response);
@@ -421,7 +434,10 @@ Respond to the ongoing conversation.</system>`;
 
     } catch (error) {
       console.error('Error processing next talker:', error);
+      // Remove loading message on error
+      setMessages(prev => prev.filter(msg => !msg.loading));
       setIsProcessingTalk(false);
+      setIsLoadingResponse(false);
     }
   };
 
@@ -451,18 +467,30 @@ Respond to the ongoing conversation.</system>`;
                 <div className="space-y-4">
                   {messages.map((message) => (
                     <div key={message.id} className="flex items-start space-x-3">
-                      {/* Profile picture */}
-                      <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                        <Image
-                          src={`/members/${circleId}-${message.memberId}.jpg`}
-                          alt={message.sender || ''}
-                          fill
-                          className="object-cover"
-                          sizes="32px"
-                        />
-                      </div>
-                      
-                      {/* Message content in a chat bubble */}
+                      {message.loading ? (
+                        // Loading message display
+                        <div className="flex items-start space-x-3 w-full">
+                          <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 animate-pulse"/>
+                          <div className="flex-grow max-w-[80%]">
+                            <div className="assistant-message-bubble p-4 rounded-lg rounded-tl-none">
+                              <span className="animate-pulse">...</span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {/* Profile picture */}
+                          <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                            <Image
+                              src={`/members/${circleId}-${message.memberId}.jpg`}
+                              alt={message.sender || ''}
+                              fill
+                              className="object-cover"
+                              sizes="32px"
+                            />
+                          </div>
+                        
+                          {/* Message content in a chat bubble */}
                       <div className="flex-grow max-w-[80%]">
                         <div className="font-medium text-sm text-[var(--primary)] mb-1">
                           {message.sender}
@@ -506,6 +534,8 @@ Respond to the ongoing conversation.</system>`;
                           )}
                         </div>
                       </div>
+                      </>
+                      )}
                     </div>
                   ))}
                 </div>
