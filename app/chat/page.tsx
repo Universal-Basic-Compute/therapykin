@@ -2790,17 +2790,22 @@ Important style requirements:
           
           <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
             {/* Main Chat Area - Takes most of the width */}
-            <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'md:w-3/4' : 'md:w-2/3'}`}>
-            
-            {/* Chat history */}
-            <div className="card h-full bg-white dark:bg-gray-800 shadow-lg p-6">
-              <div className="h-full flex flex-col">
-                {/* Chat messages area with padding at bottom for input */}
-                <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 overflow-y-auto mb-4">
-                <div className="space-y-4">
-                {chatHistory
-                  .filter(msg => !msg.content.includes('<system>')) // Filter out system messages
-                  .map((msg) => (
+            <div className="flex-grow">
+              <div className="card h-full bg-white dark:bg-gray-800 shadow-lg p-6">
+                <div className="h-full flex flex-col">
+                  {/* Chat messages area with padding at bottom for input */}
+                  <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 overflow-y-auto mb-4">
+                    {isLoading ? (
+                      <div className="flex justify-start">
+                        <div className="assistant-message-bubble rounded-lg p-4 max-w-[80%] relative">
+                          <span className="animate-pulse">...</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {chatHistory
+                          .filter(msg => !msg.content.includes('<system>')) // Filter out system messages
+                          .map((msg) => (
                     <div key={msg.id || Math.random()} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       <div 
                         className={`max-w-[80%] p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
