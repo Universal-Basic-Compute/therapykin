@@ -315,6 +315,9 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     });
   };
 
+  // Average reading speed constant
+  const CHARS_PER_SECOND = 25; // About 300 words per minute
+
   // Function to process the next talker
   const processNextTalker = async () => {
     if (isProcessingTalk) return;
@@ -376,7 +379,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
 
       const data = await response.json();
       
-      // Generate audio for the response
+      // Generate audio for the response (keep this for playback, but don't wait for it)
       const audioUrl = await textToSpeech(data.response);
       const messageId = `msg-${Date.now()}`;
 
@@ -393,22 +396,23 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       // Check for new mentions and questions in the response
       checkForMentionsAndQuestions(data.response);
 
-      // Play the audio
+      // Calculate reading time based on character count
+      const charCount = data.response.length;
+      const readingTimeMs = (charCount / CHARS_PER_SECOND) * 1000;
+      console.log(`Message length: ${charCount} chars, estimated reading time: ${readingTimeMs}ms`);
+
+      // Play audio if available (but don't wait for it)
       if (audioUrl) {
-        await new Promise((resolve) => {
-          const audio = new Audio(audioUrl);
-          audio.onended = resolve;
-          audio.play();
-        });
+        playAudio(audioUrl, messageId);
       }
 
-      // Process next talker after a short delay
+      // Wait for estimated reading time, then process next talker
       setTimeout(() => {
         setIsProcessingTalk(false);
         if (talkerStack.length > 0) {
           processNextTalker();
         }
-      }, 1000);
+      }, readingTimeMs + 1000); // Add 1 second buffer between messages
 
     } catch (error) {
       console.error('Error processing next talker:', error);
