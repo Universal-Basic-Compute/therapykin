@@ -21,6 +21,7 @@ interface CircleLayoutProps {
   isPeekMode?: boolean;
   circleMembers?: Member[];
   circleId: string;
+  circleData?: any;
 }
 
 const memberVariants: Variants = {
@@ -52,15 +53,15 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   });
 
   const members: Member[] = React.useMemo(() => {
-    // Get the therapist from the therapist field
-    const therapist = circleMembers[0]?.id === 'therapist' ? circleMembers[0] : null;
-    console.log('Found therapist:', therapist);
+    // Get the therapist from the circle data
+    const therapist = circleData?.therapist;
+    console.log('Found therapist from circle data:', therapist);
 
     if (isPeekMode) {
       // For peek mode, put therapist first, then other members
       const peekMembers = [
         ...(therapist ? [therapist] : []),
-        ...circleMembers.filter(member => member.id !== 'therapist' && member.id !== 'empty'),
+        ...circleMembers.filter(member => member.id !== 'empty'),
         ...circleMembers.filter(member => member.id === 'empty').map(member => ({
           ...member,
           onClick: () => setShowJoinModal(true)
@@ -81,7 +82,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         ...(therapist ? [therapist] : []),
         youMember,
         ...circleMembers.filter(member => 
-          member.id !== 'therapist' && 
           member.id !== 'empty' &&
           member.id !== 'you'
         )
@@ -89,7 +89,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       console.log('Regular mode members:', regularMembers);
       return regularMembers;
     }
-  }, [isPeekMode, circleMembers]);
+  }, [isPeekMode, circleMembers, circleData?.therapist]);
 
   // Add check for empty members
   if (!circleMembers.length && !isPeekMode) {

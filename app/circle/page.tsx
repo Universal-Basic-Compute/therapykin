@@ -136,6 +136,7 @@ export default function CirclePage() {
             isPeekMode={isPeekMode}
             circleId={circleName}
             circleMembers={circleData?.members || []}
+            circleData={circleData}
           />
         </div>
       </div>
