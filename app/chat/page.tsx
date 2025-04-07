@@ -1173,17 +1173,55 @@ function ChatSessionWithSearchParams() {
   };
 
   // Function to play audio
-  const playAudio = (audioUrl: string, messageId: string) => {
+  const playAudio = async (audioUrl: string, messageId: string) => {
     if (audioRef.current) {
-      // Stop any currently playing audio
-      audioRef.current.pause();
-      audioRef.current.src = audioUrl;
-      setCurrentPlayingId(messageId);
-      audioRef.current.play().catch(err => {
+      try {
+        // If something is already playing, wait for it to finish
+        if (isPlaying) {
+          await new Promise((resolve) => {
+            audioRef.current!.addEventListener('ended', resolve, { once: true });
+            audioRef.current!.addEventListener('error', resolve, { once: true });
+          });
+        }
+
+        // Pause any current playback
+        audioRef.current.pause();
+        
+        // Normalize the audio before playing
+        const normalizedUrl = await normalizeAudio(audioUrl);
+        
+        audioRef.current.src = normalizedUrl;
+        setCurrentPlayingId(messageId);
+        
+        // Set up event handlers
+        audioRef.current.onplay = () => {
+          setIsPlaying(true);
+        };
+
+        audioRef.current.onended = () => {
+          setIsPlaying(false);
+          setCurrentPlayingId(null);
+          URL.revokeObjectURL(normalizedUrl);
+          
+          // Add delay before processing next talker
+          setTimeout(() => {
+            processNextTalkerRef.current?.();
+          }, AUDIO_BUFFER_TIME);
+        };
+
+        audioRef.current.onerror = () => {
+          setIsPlaying(false);
+          setCurrentPlayingId(null);
+          console.error('Error playing audio');
+          URL.revokeObjectURL(normalizedUrl);
+        };
+
+        await audioRef.current.play();
+      } catch (err) {
         console.error('Error playing audio:', err);
         setIsPlaying(false);
         setCurrentPlayingId(null);
-      });
+      }
     }
   };
 

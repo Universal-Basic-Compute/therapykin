@@ -263,8 +263,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   };
 
   processNextTalkerRef.current = async () => {
-    if (isProcessingTalk) {
-      console.log('Already processing talk, skipping');
+    if (isProcessingTalk || isPlaying) {
+      console.log('Already processing talk or audio playing, skipping');
       return;
     }
 
