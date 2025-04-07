@@ -178,27 +178,18 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       // Get available members (excluding empty slots and 'you')
       const availableMembers = members.filter(member => {
         console.log('Filtering member:', member);
-        
+      
         return (
           member.id !== 'you' && 
           member.id !== 'empty' &&
           member.name && 
-          !member.isDotted &&
-          member.id !== 'therapist' // Exclude therapist from regular rotation
+          !member.isDotted
         );
       });
 
       console.log('Available members for talking:', availableMembers);
 
-      // If no regular members available, use therapist
-      if (availableMembers.length === 0) {
-        const therapist = members.find(m => m.id === 'therapist');
-        if (therapist) {
-          console.log('No regular members available, using therapist:', therapist);
-          availableMembers.push(therapist);
-        }
-      }
-
+      // If no members available at all, log error and return
       if (availableMembers.length === 0) {
         console.error('No members available to talk. Current members:', members);
         setIsProcessingTalk(false);
