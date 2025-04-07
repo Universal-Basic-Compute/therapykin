@@ -16,7 +16,7 @@
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
     "bio": "Experienced depression specialist with a focus on the Hero's Journey approach",
-    "voiceId": "A9evEp8yGjv4c3WsIKuY"  // Ralf - Clear, deep & wise voice
+    "voiceId": "A9evEp8yGjv4c3WsIKuY"
   },
   "members": [
     {
@@ -31,7 +31,7 @@
       "weeksAtStart": 104,
       "color": "from-blue-300 to-blue-400",
       "role": "Managing Well",
-      "voiceId": "BL7YSL1bAkmW8U0JnU8o"  // Jen - Calm & thoughtful for someone who's managing well
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"
     },
     {
       "id": "mike",
@@ -39,7 +39,7 @@
       "weeksAtStart": 6,
       "color": "from-green-300 to-green-400",
       "role": "Starting Treatment",
-      "voiceId": "wgHvco1wiREKN0BdyVx5"  // Drew - Meditative, good for early journey
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "alex",
@@ -47,7 +47,7 @@
       "weeksAtStart": 26,
       "color": "from-rose-300 to-rose-400",
       "role": "Building Strategies",
-      "voiceId": "OYTbf65OHHFELVut7v2H"  // Hope - Natural voice for someone building strategies
+      "voiceId": "OYTbf65OHHFELVut7v2H"
     },
     {
       "id": "lisa",
@@ -55,7 +55,7 @@
       "weeksAtStart": 156,
       "color": "from-purple-300 to-purple-400",
       "role": "Long-term Wellness",
-      "voiceId": "pBZVCk298iJlHAcHQwLr"  // Leoni - Warm & soothing for long-term wellness guide
+      "voiceId": "pBZVCk298iJlHAcHQwLr"
     }
   ]
 }
