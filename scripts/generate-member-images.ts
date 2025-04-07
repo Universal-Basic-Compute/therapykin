@@ -15,10 +15,10 @@ interface CircleMember {
   role?: string;
 }
 
-async function getPhysicalDescription(kinId: string): Promise<string> {
+async function getPhysicalDescription(kinId: string, blueprint: string = 'therapykinmember'): Promise<string> {
   try {
     const response = await axios.post(
-      `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/analysis`,
+      `${KINOS_API_URL}/v2/blueprints/${blueprint}/kins/${kinId}/analysis`,
       {
         message: "Decide a physical appearance for your persona. Include age, facial features, body type, style of dress, and overall demeanor. Focus on creating a realistic, relatable appearance that matches your therapeutic journey and background. Be specific but natural in your description.",
         model: "claude-3-7-sonnet-latest"
@@ -112,13 +112,57 @@ async function generateImage(prompt: string, memberId: string): Promise<void> {
   }
 }
 
+async function processTherapist(circleName: string, specialist: string = 'generalist') {
+  try {
+    // Determine the correct blueprint based on the specialist type
+    let blueprintPath = 'therapykin'; // default for generalist therapists
+    if (specialist === 'herosjourney' && (
+      circleName.startsWith('addiction-') || 
+      circleName.startsWith('depression-') || 
+      circleName.startsWith('ptsd-') ||
+      circleName.startsWith('life-purpose-')
+    )) {
+      blueprintPath = 'therapykinherosjourney';
+    }
+
+    const therapistId = `${circleName}-therapist`;
+    console.log(`Processing therapist: ${therapistId} with blueprint: ${blueprintPath}`);
+
+    // Check if image already exists
+    const dirPath = path.join(process.cwd(), 'public', 'members');
+    const imagePath = path.join(dirPath, `${circleName}-therapist.jpg`);
+    if (fs.existsSync(imagePath)) {
+      console.log(`Image already exists for therapist ${therapistId}, skipping...`);
+      return;
+    }
+
+    // Get physical description
+    const description = await getPhysicalDescription(therapistId, blueprintPath);
+    console.log(`Got description for therapist ${therapistId}`);
+
+    // Generate image prompt
+    const prompt = await generateImagePrompt(description, therapistId);
+    console.log(`Generated prompt for therapist ${therapistId}`);
+
+    // Generate and save image
+    await generateImage(prompt, `${circleName}-therapist`);
+    console.log(`Generated image for therapist ${therapistId}`);
+
+  } catch (error) {
+    console.error(`Error processing therapist for circle ${circleName}:`, error);
+  }
+}
+
 async function processCircle(circleName: string) {
   try {
     // Read circle data
     const circleDataPath = path.join(process.cwd(), 'app', 'data', 'circles', `${circleName}.json`);
     const circleData = JSON.parse(fs.readFileSync(circleDataPath, 'utf8'));
 
-    // Process each member except empty slots
+    // First process the therapist
+    await processTherapist(circleName, circleData.specialist || 'generalist');
+
+    // Then process regular members
     const members = circleData.members.filter((member: CircleMember) => 
       member.id !== 'empty' && member.id !== 'therapist'
     );
