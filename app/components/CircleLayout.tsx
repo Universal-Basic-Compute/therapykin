@@ -54,7 +54,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         {members.map((member, index) => (
           <motion.div
             key={member.id}
-            className="card p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm hover:shadow-lg transition-all duration-200"
+            className="card p-6 bg-white dark:bg-gray-800 shadow-lg"
             variants={memberVariants}
             initial="initial"
             animate="animate"
@@ -62,14 +62,14 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
             transition={{ delay: index * 0.1 }}
           >
             <div className="flex flex-col items-center text-center">
-              <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${member.color} mb-4 flex items-center justify-center text-white text-2xl font-semibold`}>
+              <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${member.color} mb-4 flex items-center justify-center text-white text-2xl font-semibold shadow-md`}>
                 {member.isDotted ? (
                   <span className="text-sm">Join?</span>
                 ) : (
                   member.name[0]
                 )}
               </div>
-              <h3 className="text-lg font-semibold mb-2">{member.name}</h3>
+              <h3 className="text-lg font-semibold mb-2 text-foreground">{member.name}</h3>
               {member.role && (
                 <span className="px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-sm mb-2">
                   {member.role}
