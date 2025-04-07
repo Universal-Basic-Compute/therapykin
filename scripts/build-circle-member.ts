@@ -237,7 +237,7 @@ async function buildCircleTherapist(circleName: string, specialist: string) {
 
     // Create the Kin in the therapist blueprint
     const response = await axios.post(
-      `${KINOS_API_URL}/v2/blueprints/therapikin${specialist}/kins`,
+      `${KINOS_API_URL}/v2/blueprints/therapykin${specialist}/kins`,
       {
         name: therapistId
       },
