@@ -15,7 +15,8 @@
     "role": "Circle Facilitator",
     "color": "from-teal-300 to-teal-400",
     "weeksAtStart": 520,
-    "bio": "Life purpose specialist with a focus on the Hero's Journey approach"
+    "bio": "Life purpose specialist with a focus on the Hero's Journey approach",
+    "voiceId": "A9evEp8yGjv4c3WsIKuY"  // Ralf - Clear, deep & wise voice
   },
   "members": [
     {
@@ -29,28 +30,32 @@
       "name": "Sarah",
       "weeksAtStart": 16,
       "color": "from-blue-300 to-blue-400",
-      "role": "Career Transition"
+      "role": "Career Transition",
+      "voiceId": "OYTbf65OHHFELVut7v2H"  // Hope - Natural voice for someone in transition
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 8,
       "color": "from-rose-300 to-rose-400",
-      "role": "Path Explorer"
+      "role": "Path Explorer",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"  // Drew - Meditative, good for exploration
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 52,
       "color": "from-green-300 to-green-400",
-      "role": "Purpose Found"
+      "role": "Purpose Found",
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"  // Oxley - Intimate baritone for wisdom
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 78,
       "color": "from-purple-300 to-purple-400",
-      "role": "Meaning Guide"
+      "role": "Meaning Guide",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"  // Jen - Calm & Reflective for guide
     }
   ]
 }
