@@ -58,6 +58,7 @@ const logMembersAndStack = (members: Member[], stack: Talker[]) => {
 
 export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [], circleId, circleData }: CircleLayoutProps) {
   const [isCircleDataLoaded, setIsCircleDataLoaded] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -416,25 +417,31 @@ ${relevantHistory}`;
   // Add effect to wait for circle data
   useEffect(() => {
     if (circleData && circleMembers.length > 0) {
-      console.log('Circle data loaded:', {
+      console.log('Circle data and members loaded:', {
         circleData,
-        circleMembers: circleMembers.length
+        memberCount: circleMembers.length
       });
       setIsCircleDataLoaded(true);
+      setIsInitialized(true);
+    } else {
+      console.log('Waiting for circle data and members:', {
+        hasCircleData: !!circleData,
+        memberCount: circleMembers.length
+      });
     }
   }, [circleData, circleMembers]);
 
   useEffect(() => {
     const sendInitialMessage = async () => {
-      // Check if initial message was already sent
-      if (initialMessageSentRef.current || messages.length > 0) {
-        console.log('Initial message already sent, skipping');
+      // Add initialization check
+      if (!isInitialized) {
+        console.log('Waiting for initialization before sending initial message');
         return;
       }
 
-      // Wait for circle data to be loaded
-      if (!isCircleDataLoaded) {
-        console.log('Waiting for circle data to load...');
+      // Check if initial message was already sent
+      if (initialMessageSentRef.current || messages.length > 0) {
+        console.log('Initial message already sent, skipping');
         return;
       }
 
@@ -526,11 +533,11 @@ ${relevantHistory}`;
       }
     };
 
-    // Only send initial message if we have members and circleId
-    if (members.length > 0 && circleId) {
+    // Only proceed if we're initialized
+    if (isInitialized) {
       sendInitialMessage();
     }
-  }, [circleId, members]); // Add members as a dependency
+  }, [isInitialized, circleId]); // Remove other dependencies
 
 
   // Average reading speed constant
