@@ -8,6 +8,14 @@
   "participants": 4,
   "maxParticipants": 6,
   "tags": ["Perfectionism", "Self-Compassion", "Support", "Listen Only"],
+  "therapist": {
+    "id": "therapist",
+    "name": "Dr. K",
+    "role": "Circle Facilitator",
+    "color": "from-teal-300 to-teal-400",
+    "weeksAtStart": 520,
+    "bio": "Specialized in perfectionism and self-compassion development"
+  },
   "members": [
     {
       "id": "empty",

@@ -8,6 +8,14 @@
   "participants": 3,
   "maxParticipants": 6,
   "tags": ["Anxiety", "Stress", "Support", "Listen Only"],
+  "therapist": {
+    "id": "therapist",
+    "name": "Dr. A",
+    "role": "Circle Facilitator", 
+    "color": "from-teal-300 to-teal-400",
+    "weeksAtStart": 520,
+    "bio": "Experienced anxiety specialist focused on practical coping strategies"
+  },
   "members": [
     {
       "id": "empty",

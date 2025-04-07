@@ -8,6 +8,14 @@
   "participants": 4,
   "maxParticipants": 6,
   "tags": ["LGBTQ+", "Identity", "Support", "Listen Only"],
+  "therapist": {
+    "id": "therapist",
+    "name": "Dr. G",
+    "role": "Circle Facilitator",
+    "color": "from-teal-300 to-teal-400",
+    "weeksAtStart": 520,
+    "bio": "LGBTQ+ affirming therapist specializing in identity and relationships"
+  },
   "members": [
     {
       "id": "empty",
