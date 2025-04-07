@@ -414,14 +414,36 @@ ${relevantHistory}`;
         return;
       }
 
+      // Check if we have members
+      if (!members || members.length === 0) {
+        console.log('No members available yet, waiting...');
+        return;
+      }
+
       try {
         setIsLoading(true);
-        initialMessageSentRef.current = true; // Mark as sent immediately
+        initialMessageSentRef.current = true;
+        
+        // Log the members we're working with
+        console.log('Sending initial message with members:', members);
         
         const presentMembers = members
-          .filter(m => !m.isDotted)
-          .map(m => `${m.name}${m.role ? ` (${m.role})` : ''}`);
+          .filter(m => {
+            console.log('Filtering member:', m);
+            return !m.isDotted && m.name; // Only include members with names and not dotted
+          })
+          .map(m => {
+            console.log('Mapping member:', m);
+            return `${m.name}${m.role ? ` (${m.role})` : ''}`;
+          });
+
+        console.log('Present members for initial message:', presentMembers);
         
+        if (presentMembers.length === 0) {
+          console.error('No valid members found for initial message');
+          return;
+        }
+
         const systemMessage = `<system>New group therapy session started. Present members: ${presentMembers.join(', ')}</system>`;
         
         // Determine if this is a hero's journey circle
@@ -431,6 +453,7 @@ ${relevantHistory}`;
         const therapistPseudonym = `${circleId}-therapist`;
         
         console.log(`Sending initial message for ${isHerosJourneyCircle ? 'Hero\'s Journey' : 'regular'} circle: ${circleId}`);
+        console.log('Using system message:', systemMessage);
         
         const response = await fetch('/api/kinos', {
           method: 'POST',
@@ -483,7 +506,7 @@ ${relevantHistory}`;
     if (members.length > 0 && circleId) {
       sendInitialMessage();
     }
-  }, [circleId]); // Reduce dependencies to just circleId
+  }, [circleId, members]); // Add members as a dependency
 
 
   // Average reading speed constant
