@@ -99,6 +99,7 @@ export default function CirclePage() {
             activeSpeaker={activeSpeaker}
             onSpeakerChange={setActiveSpeaker}
             isPeekMode={isPeekMode}
+            circleId={circleName}
           />
         </div>
       </div>

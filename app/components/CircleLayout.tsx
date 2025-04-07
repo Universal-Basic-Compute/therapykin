@@ -20,6 +20,7 @@ interface CircleLayoutProps {
   onSpeakerChange: (speaker: string) => void;
   isPeekMode?: boolean;
   circleMembers?: Member[];
+  circleId: string;
 }
 
 const memberVariants: Variants = {
@@ -28,7 +29,7 @@ const memberVariants: Variants = {
   hover: { scale: 1.02, transition: { duration: 0.2 } }
 };
 
-export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [] }: CircleLayoutProps) {
+export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [], circleId }: CircleLayoutProps) {
   const [showJoinModal, setShowJoinModal] = React.useState(false);
 
   const members: Member[] = React.useMemo(() => {
@@ -71,7 +72,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                 ) : (
                   <div className="relative w-full h-full rounded-full overflow-hidden">
                     <Image
-                      src={member.id === 'you' ? '/members/default.jpg' : `/members/${member.id}.jpg`}
+                      src={member.id === 'you' ? '/members/default.jpg' : `/members/${circleId}-${member.id}.jpg`}
                       alt={member.name}
                       fill
                       className="object-cover rounded-full"
