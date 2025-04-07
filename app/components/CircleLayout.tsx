@@ -30,6 +30,11 @@ interface Member {
   onClick?: () => void;
 }
 
+// Constants for message timing
+const CHARS_PER_SECOND = 15; // Slow down for more natural reading pace
+const MIN_MESSAGE_DELAY = 4000; // Minimum 4 seconds between messages
+const AUDIO_BUFFER_TIME = 500; // Extra buffer time after audio finishes
+
 interface CircleLayoutProps {
   activeSpeaker: string;
   onSpeakerChange: (speaker: string) => void;
@@ -308,27 +313,63 @@ ${relevantHistory}`;
       // Check for mentions and questions
       checkForMentionsAndQuestions(data.response);
 
-      // Play audio if available
+      // Play audio if available and calculate next message timing
       if (audioUrl) {
         playAudio(audioUrl, messageId);
+        
+        // Get audio duration
+        const audio = new Audio(audioUrl);
+        const audioDuration = await new Promise<number>(resolve => {
+          audio.addEventListener('loadedmetadata', () => {
+            resolve(audio.duration * 1000); // Convert to milliseconds
+          });
+        });
+
+        // Calculate delay based on both reading time and audio duration
+        const readingTimeMs = Math.max(
+          MIN_MESSAGE_DELAY,
+          (data.response.length / CHARS_PER_SECOND) * 1000
+        );
+        const totalDelay = Math.max(audioDuration, readingTimeMs) + AUDIO_BUFFER_TIME;
+
+        console.log(`Scheduling next message after ${totalDelay}ms (audio: ${audioDuration}ms, reading: ${readingTimeMs}ms)`);
+
+        // Update speaker index for next turn
+        setCurrentSpeakerIndex((prevIndex) => 
+          (prevIndex + 1) % availableMembers.length
+        );
+
+        // Reset processing flags
+        setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
+
+        // Schedule next message
+        setTimeout(() => {
+          processNextTalker();
+        }, totalDelay);
+      } else {
+        // If no audio, just use reading time
+        const readingTimeMs = Math.max(
+          MIN_MESSAGE_DELAY,
+          (data.response.length / CHARS_PER_SECOND) * 1000
+        );
+
+        console.log(`Scheduling next message after ${readingTimeMs}ms (reading only)`);
+
+        // Update speaker index for next turn
+        setCurrentSpeakerIndex((prevIndex) => 
+          (prevIndex + 1) % availableMembers.length
+        );
+
+        // Reset processing flags
+        setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
+
+        // Schedule next message
+        setTimeout(() => {
+          processNextTalker();
+        }, readingTimeMs);
       }
-
-      // Calculate reading time and set up next message
-      const readingTimeMs = Math.max(2000, (data.response.length / CHARS_PER_SECOND) * 1000);
-      
-      // Update speaker index for next turn
-      setCurrentSpeakerIndex((prevIndex) => 
-        (prevIndex + 1) % availableMembers.length
-      );
-
-      // Reset processing flags
-      setIsProcessingTalk(false);
-      setIsLoadingResponse(false);
-
-      // Schedule next message
-      setTimeout(() => {
-        processNextTalker();
-      }, readingTimeMs + 1000);
 
     } catch (error) {
       console.error('[Circle] Error processing next talker:', error);
@@ -559,8 +600,6 @@ ${relevantHistory}`;
     }
   }, [processNextTalker]);
 
-  // Average reading speed constant
-  const CHARS_PER_SECOND = 25; // About 300 words per minute
 
 
 
