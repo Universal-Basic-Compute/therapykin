@@ -334,6 +334,7 @@ ${relevantHistory}`;
     circleData,
     messages,
     circleId,
+    members,
     setMessages,
     setTalkerStack,
     setIsProcessingTalk,
