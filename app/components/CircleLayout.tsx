@@ -53,6 +53,15 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     }
   }, [isPeekMode, circleMembers]);
 
+  // Add check for empty members
+  if (!circleMembers.length && !isPeekMode) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-foreground/60">Loading circle members...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full gap-6">
       {/* Main Chat Area - Takes most of the width */}

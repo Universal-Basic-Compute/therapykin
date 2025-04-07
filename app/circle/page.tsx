@@ -5,6 +5,21 @@ import CircleLayout from '../components/CircleLayout';
 import { useAuth } from '../contexts/AuthContext';
 import { useSearchParams } from 'next/navigation';
 
+// Import circle data
+import addictionCircle from '../data/circles/addiction.json';
+import anxietyCircle from '../data/circles/anxiety.json';
+import bodyImageCircle from '../data/circles/body-image.json';
+import careerCircle from '../data/circles/career.json';
+import chronicIllnessCircle from '../data/circles/chronic-illness.json';
+import depressionCircle from '../data/circles/depression.json';
+import griefCircle from '../data/circles/grief.json';
+import lgbtqCircle from '../data/circles/lgbtq.json';
+import lifePurposeCircle from '../data/circles/life-purpose.json';
+import parentingCircle from '../data/circles/parenting.json';
+import perfectionismCircle from '../data/circles/perfectionism.json';
+import relationshipsCircle from '../data/circles/relationships.json';
+import socialAnxietyCircle from '../data/circles/social-anxiety.json';
+
 export default function CirclePage() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
@@ -13,6 +28,32 @@ export default function CirclePage() {
   const [activeSpeaker, setActiveSpeaker] = useState('Maria');
   const [isPeekMode, setIsPeekMode] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [circleData, setCircleData] = useState<any>(null);
+
+  // Add useEffect to load circle data
+  useEffect(() => {
+    const circleName = searchParams.get('name');
+    if (circleName) {
+      // Map circle name to data
+      const circleDataMap: { [key: string]: any } = {
+        'addiction': addictionCircle,
+        'anxiety': anxietyCircle,
+        'body-image': bodyImageCircle,
+        'career': careerCircle,
+        'chronic-illness': chronicIllnessCircle,
+        'depression': depressionCircle,
+        'grief': griefCircle,
+        'lgbtq': lgbtqCircle,
+        'life-purpose': lifePurposeCircle,
+        'parenting': parentingCircle,
+        'perfectionism': perfectionismCircle,
+        'relationships': relationshipsCircle,
+        'social-anxiety': socialAnxietyCircle
+      };
+      
+      setCircleData(circleDataMap[circleName]);
+    }
+  }, [searchParams]);
 
   // Prevent scrolling on this page and check for peek mode
   useEffect(() => {
@@ -76,13 +117,13 @@ export default function CirclePage() {
       {/* Header with improved styling */}
       <div className="absolute top-6 left-6 z-10">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] bg-clip-text text-transparent flex items-center">
-          <span className="mr-2">Addiction Recovery Circle</span>
+          <span className="mr-2">{circleData?.name || 'Circle Chat'}</span>
           <span className="text-sm px-2 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] font-normal">
             Beta
           </span>
         </h1>
         <p className="mt-2 text-sm text-foreground/60 max-w-md">
-          A safe space for shared healing and growth in recovery. Feel free to participate or simply listen - there's no pressure to share until you're comfortable.
+          {circleData?.description || 'A safe space for shared healing and growth.'}
         </p>
         <div className="mt-2 inline-flex items-center px-2 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -103,6 +144,7 @@ export default function CirclePage() {
             onSpeakerChange={setActiveSpeaker}
             isPeekMode={isPeekMode}
             circleId={circleName}
+            circleMembers={circleData?.members || []}
           />
         </div>
       </div>
