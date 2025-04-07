@@ -362,7 +362,8 @@ ${relevantHistory}`;
     circleId,
     currentSpeakerIndex,
     textToSpeech,
-    playAudio
+    playAudio,
+    checkForMentionsAndQuestions
   ]);
 
   // Initialize audio element
