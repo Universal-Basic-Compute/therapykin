@@ -278,11 +278,6 @@ ${relevantHistory}`;
         }
       ]);
 
-      // Play audio automatically
-      if (audioUrl) {
-        playAudio(audioUrl, messageId);
-      }
-
       // Check for mentions and questions
       checkForMentionsAndQuestions(data.response);
 
@@ -291,21 +286,23 @@ ${relevantHistory}`;
         playAudio(audioUrl, messageId);
       }
 
-      // Calculate delay before next message
-      const readingTimeMs = (data.response.length / CHARS_PER_SECOND) * 1000;
+      // Calculate reading time and set up next message
+      const readingTimeMs = Math.max(2000, (data.response.length / CHARS_PER_SECOND) * 1000);
       
-      // Reset processing flag after delay
-      setTimeout(() => {
-        setIsProcessingTalk(false);
-        setIsLoadingResponse(false);
-        
-        // Process next talker if available and not the initial message
-        if (talkerStack.length > 0) {
-          setTimeout(() => {
-            processNextTalker();
-          }, 1000); // Add 1 second buffer between messages
-        }
-      }, readingTimeMs);
+      // Reset processing flags after the message is complete
+      setIsProcessingTalk(false);
+      setIsLoadingResponse(false);
+
+      // Schedule the next message if there are more talkers
+      if (talkerStack.length > 0) {
+        console.log(`Scheduling next talker in ${readingTimeMs + 1000}ms`);
+        setTimeout(() => {
+          console.log('Triggering next talker');
+          processNextTalker();
+        }, readingTimeMs + 1000);
+      } else {
+        console.log('No more talkers in stack');
+      }
 
     } catch (error) {
       console.error('Error processing next talker:', error);
