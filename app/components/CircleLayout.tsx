@@ -32,6 +32,9 @@ const memberVariants: Variants = {
 export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [], circleId }: CircleLayoutProps) {
   const [showJoinModal, setShowJoinModal] = React.useState(false);
 
+  // Add logging for props received
+  console.log('CircleLayout props:', { activeSpeaker, isPeekMode, circleMembers, circleId });
+
   const members: Member[] = React.useMemo(() => {
     if (isPeekMode) {
       return circleMembers.map(member => 
@@ -54,15 +57,25 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
     <div className="w-full max-w-4xl mx-auto p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {members.map((member, index) => (
-          <motion.div
-            key={member.id}
-            className="card p-6 bg-white dark:bg-gray-800 shadow-lg"
-            variants={memberVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
-            transition={{ delay: index * 0.1 }}
-          >
+          {(() => {
+            const imagePath = member.id === 'you' ? '/members/default.jpg' : `/members/${circleId}-${member.id}.jpg`;
+            console.log('Loading image for member:', {
+              memberId: member.id,
+              memberName: member.name,
+              imagePath,
+              circleId
+            });
+
+            return (
+              <motion.div
+                key={member.id}
+                className="card p-6 bg-white dark:bg-gray-800 shadow-lg"
+                variants={memberVariants}
+                initial="initial"
+                animate="animate"
+                whileHover="hover"
+                transition={{ delay: index * 0.1 }}
+              >
             <div className="flex flex-col items-center text-center">
               <div className="relative w-20 h-20 mb-4">
                 {member.isDotted ? (
@@ -72,11 +85,24 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                 ) : (
                   <div className="relative w-full h-full rounded-full overflow-hidden">
                     <Image
-                      src={member.id === 'you' ? '/members/default.jpg' : `/members/${circleId}-${member.id}.jpg`}
+                      src={imagePath}
                       alt={member.name}
                       fill
                       className="object-cover rounded-full"
                       sizes="80px"
+                      onError={(e) => {
+                        console.error('Error loading image:', {
+                          memberId: member.id,
+                          imagePath,
+                          error: e
+                        });
+                      }}
+                      onLoad={() => {
+                        console.log('Successfully loaded image:', {
+                          memberId: member.id,
+                          imagePath
+                        });
+                      }}
                     />
                     <div className={`absolute inset-0 bg-gradient-to-br ${member.color} opacity-30`}></div>
                   </div>
@@ -102,7 +128,8 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                 </button>
               )}
             </div>
-          </motion.div>
+            );
+          })()}
         ))}
       </div>
     </div>
