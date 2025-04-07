@@ -54,8 +54,25 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   }, [isPeekMode, circleMembers]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="flex h-full gap-6">
+      {/* Main Chat Area - Takes most of the width */}
+      <div className="flex-grow">
+        <div className="card h-full bg-white dark:bg-gray-800 shadow-lg p-6">
+          <div className="h-full flex flex-col">
+            <h2 className="text-xl font-semibold mb-4">Circle Chat</h2>
+            <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
+              {/* Chat messages will go here */}
+              <p className="text-center text-gray-500 dark:text-gray-400">
+                Chat messages will appear here
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Members Sidebar - Fixed width */}
+      <div className="w-80 space-y-4">
+        <h2 className="text-xl font-semibold mb-4">Circle Members</h2>
         {members.map((member, index) => {
           const imagePath = member.id === 'you' ? '/members/default.jpg' : `/members/${circleId}-${member.id}.jpg`;
           console.log('Loading image for member:', {
@@ -68,18 +85,18 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
           return (
             <motion.div
               key={member.id}
-              className="card p-6 bg-white dark:bg-gray-800 shadow-lg"
+              className="card p-4 bg-white dark:bg-gray-800 shadow-lg"
               variants={memberVariants}
               initial="initial"
               animate="animate"
               whileHover="hover"
               transition={{ delay: index * 0.1 }}
             >
-              <div className="flex flex-col items-center text-center">
-                <div className="relative w-20 h-20 mb-4">
+              <div className="flex items-center space-x-4">
+                <div className="relative w-12 h-12 flex-shrink-0">
                   {member.isDotted ? (
                     <div className={`w-full h-full rounded-full border-2 border-dashed border-[var(--primary)]/50 flex items-center justify-center`}>
-                      <span className="text-sm text-[var(--primary)]/70">Join?</span>
+                      <span className="text-xs text-[var(--primary)]/70">Join?</span>
                     </div>
                   ) : (
                     <div className="relative w-full h-full rounded-full overflow-hidden">
@@ -88,7 +105,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                         alt={member.name}
                         fill
                         className="object-cover rounded-full"
-                        sizes="80px"
+                        sizes="48px"
                         onError={(e) => {
                           console.error('Error loading image:', {
                             memberId: member.id,
@@ -107,26 +124,23 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
                     </div>
                   )}
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-foreground">{member.name}</h3>
-                {member.role && (
-                  <span className="px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-sm mb-2">
-                    {member.role}
-                  </span>
-                )}
-                {member.weeksAtStart && (
-                  <p className="text-sm text-foreground/60">
-                    {member.weeksAtStart} weeks in circle
-                  </p>
-                )}
-                {member.onClick && (
-                  <button
-                    onClick={member.onClick}
-                    className="mt-4 px-4 py-2 bg-[var(--primary)] text-white rounded-full text-sm hover:bg-[var(--primary-dark)] transition-colors"
-                  >
-                    Join Circle
-                  </button>
-                )}
+                <div className="flex-grow min-w-0">
+                  <h3 className="font-medium text-sm truncate">{member.name}</h3>
+                  {member.role && (
+                    <span className="inline-block px-2 py-0.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-xs">
+                      {member.role}
+                    </span>
+                  )}
+                </div>
               </div>
+              {member.onClick && (
+                <button
+                  onClick={member.onClick}
+                  className="mt-2 w-full px-3 py-1 bg-[var(--primary)] text-white rounded-full text-sm hover:bg-[var(--primary-dark)] transition-colors"
+                >
+                  Join Circle
+                </button>
+              )}
             </motion.div>
           );
         })}
