@@ -297,6 +297,9 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       const nextTalker = availableMembers[currentSpeakerIndex % availableMembers.length];
       console.log(`Processing next talker: ${nextTalker.name}`);
 
+      // Construct the system message
+      const systemMessage = `<system>Continuing group therapy conversation. Current speaker: ${nextTalker.name}${nextTalker.role ? ` (${nextTalker.role})` : ''}</system>`;
+
       // Make API request and get response
       const response = await fetch('/api/kinos', {
         method: 'POST',
@@ -305,7 +308,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         },
         body: JSON.stringify({
           content: systemMessage,
-          firstName: 'Circle',
+          firstName: 'Circle', 
           specialist: circleData?.specialist || 'generalist',
           pseudonym: `circle-${circleId}-${nextTalker.id}`
         }),
