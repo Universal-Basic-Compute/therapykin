@@ -291,12 +291,27 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       setIsProcessingTalk(true);
 
       // Get next talker (either from stack or therapist)
-      const nextTalker = talkerStack.length > 0 
+      let nextTalker = talkerStack.length > 0 
         ? talkerStack[0] 
         : circleData?.therapist;
 
+      // Add debug logging
+      console.log('Next talker selection:', {
+        stackLength: talkerStack.length,
+        nextTalker,
+        therapist: circleData?.therapist
+      });
+
+      // If no next talker, use therapist from circleData
+      if (!nextTalker && circleData?.therapist) {
+        console.log('No talker in stack, defaulting to therapist');
+        nextTalker = circleData.therapist;
+      }
+
+      // If still no talker, log error and return
       if (!nextTalker) {
-        console.error('No next talker available');
+        console.error('No next talker available and no therapist found in circleData');
+        setIsProcessingTalk(false);
         return;
       }
 
