@@ -39,9 +39,6 @@ interface CircleLayoutProps {
   circleData?: any;
 }
 
-// Add loading state for circle data
-const [isCircleDataLoaded, setIsCircleDataLoaded] = useState(false);
-
 const memberVariants: Variants = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -60,6 +57,7 @@ const logMembersAndStack = (members: Member[], stack: Talker[]) => {
 };
 
 export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMode, circleMembers = [], circleId, circleData }: CircleLayoutProps) {
+  const [isCircleDataLoaded, setIsCircleDataLoaded] = useState(false);
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
