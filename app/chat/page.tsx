@@ -86,6 +86,11 @@ function ChatSessionWithSearchParams() {
     { id: 'TTtB1x9U8PF0Vgf20IAP', name: 'Adrien - Deep & Comforting (French)' },
     { id: 'oeFgBesnArgN0SVGZu8Z', name: 'Daphné - Warm & Engaging (French)' }
   ];
+
+  // Additional voices for reference:
+  // Clara (Casual Conversational) - EIsgvJT3rwoPvRFG6c4n
+  // Cassidy (Confident Female Podcaster) - 56AoDkrOh6qfVPDXZ7Pt  
+  // Kevin (Career & Life Coach) - 1fz2mW1imKTf5Ryjk5su
   
   // Add a ref for the chat container
   const chatContainerRef = useRef<HTMLDivElement>(null);
