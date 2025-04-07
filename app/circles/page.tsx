@@ -4,6 +4,21 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Header from '../components/Header';
 
+// Import all circle JSON files
+import anxietyCircle from '../data/circles/anxiety.json';
+import addictionCircle from '../data/circles/addiction.json';
+import bodyImageCircle from '../data/circles/body-image.json';
+import careerCircle from '../data/circles/career.json';
+import chronicIllnessCircle from '../data/circles/chronic-illness.json';
+import depressionCircle from '../data/circles/depression.json';
+import griefCircle from '../data/circles/grief.json';
+import lgbtqCircle from '../data/circles/lgbtq.json';
+import lifePurposeCircle from '../data/circles/life-purpose.json';
+import parentingCircle from '../data/circles/parenting.json';
+import perfectionismCircle from '../data/circles/perfectionism.json';
+import relationshipsCircle from '../data/circles/relationships.json';
+import socialAnxietyCircle from '../data/circles/social-anxiety.json';
+
 interface Circle {
   id: string;
   name: string;
@@ -11,26 +26,24 @@ interface Circle {
   participants: number;
   maxParticipants: number;
   tags: string[];
+  specialist?: string;
 }
 
 export default function CirclesPage() {
   const [activeCircles] = useState<Circle[]>([
-    {
-      id: 'anxiety',
-      name: 'Anxiety Management Circle', 
-      description: 'A supportive space for managing anxiety and stress. You can actively participate or simply listen - there\'s no pressure to share until you\'re ready.',
-      participants: 3,
-      maxParticipants: 6,
-      tags: ['Anxiety', 'Stress', 'Support', 'Listen Only']
-    },
-    {
-      id: 'addiction',
-      name: 'Addiction Recovery Circle',
-      description: 'A supportive space for recovery and maintaining sobriety. You can actively participate or simply listen - there\'s no pressure to share until you\'re ready.',
-      participants: 4,
-      maxParticipants: 6,
-      tags: ['Recovery', 'Addiction', 'Support', 'Listen Only']
-    }
+    anxietyCircle,
+    addictionCircle,
+    bodyImageCircle,
+    careerCircle,
+    chronicIllnessCircle,
+    depressionCircle,
+    griefCircle,
+    lgbtqCircle,
+    lifePurposeCircle,
+    parentingCircle,
+    perfectionismCircle,
+    relationshipsCircle,
+    socialAnxietyCircle
   ]);
 
   return (
@@ -137,6 +150,11 @@ export default function CirclesPage() {
                         {tag}
                       </span>
                     ))}
+                    {circle.specialist === 'herosjourney' && (
+                      <span className="px-2 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs">
+                        Hero's Journey
+                      </span>
+                    )}
                   </div>
                   
                   <div className="flex gap-3">
