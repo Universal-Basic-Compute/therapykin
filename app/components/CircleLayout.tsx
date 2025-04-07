@@ -198,7 +198,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         ? talkerStack[0] 
         : null;
 
-      // If no next talker in stack, use therapist
+      // If no next talker in stack, try to use therapist
       if (!nextTalker && circleData?.therapist) {
         nextTalker = {
           id: 'therapist',
@@ -208,30 +208,48 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         console.log('Using therapist as next talker:', nextTalker);
       }
 
-      // If still no talker, add all non-therapist members back to the stack
+      // If still no talker, replenish the stack with all members except 'you' and therapist
       if (!nextTalker) {
-        const newTalkers = members
-          .filter(member => 
-            member.id !== 'you' && 
-            member.id !== 'therapist' && 
-            !member.isDotted
-          )
-          .map(member => ({
-            id: member.id,
-            name: member.name,
-            role: member.role
-          }));
-        
-        if (newTalkers.length > 0) {
-          console.log('Replenishing talker stack with:', newTalkers);
-          setTalkerStack(newTalkers);
-          nextTalker = newTalkers[0];
+        console.log('No talker available, attempting to replenish stack');
+        console.log('Current members:', members);
+
+        const availableMembers = members.filter(member => 
+          member.id !== 'you' && 
+          member.id !== 'therapist' && 
+          !member.isDotted
+        );
+
+        console.log('Available members for stack:', availableMembers);
+
+        if (availableMembers.length > 0) {
+          // Shuffle the available members
+          const shuffledMembers = [...availableMembers]
+            .sort(() => Math.random() - 0.5)
+            .map(member => ({
+              id: member.id,
+              name: member.name,
+              role: member.role
+            }));
+
+          console.log('Replenishing stack with shuffled members:', shuffledMembers);
+          setTalkerStack(shuffledMembers);
+          nextTalker = shuffledMembers[0];
         }
+      }
+
+      // If still no talker, use therapist as fallback
+      if (!nextTalker && circleData?.therapist) {
+        nextTalker = {
+          id: 'therapist',
+          name: circleData.therapist.name,
+          role: circleData.therapist.role || 'Circle Facilitator'
+        };
+        console.log('Using therapist as fallback talker:', nextTalker);
       }
 
       // If still no talker, return early
       if (!nextTalker) {
-        console.log('No next talker available and could not replenish stack');
+        console.error('No talkers available at all');
         setIsProcessingTalk(false);
         setIsLoadingResponse(false);
         return;
