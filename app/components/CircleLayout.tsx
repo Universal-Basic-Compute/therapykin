@@ -39,6 +39,9 @@ interface CircleLayoutProps {
   circleData?: any;
 }
 
+// Add loading state for circle data
+const [isCircleDataLoaded, setIsCircleDataLoaded] = useState(false);
+
 const memberVariants: Variants = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -70,6 +73,12 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
 
   // Define members at the top of component
   const members: Member[] = React.useMemo(() => {
+    // Only create members array when we have circle data
+    if (!circleData || circleMembers.length === 0) {
+      console.log('Waiting for circle data before creating members array');
+      return [];
+    }
+
     const therapist = circleData?.therapist;
     console.log('Creating members array with:', {
       therapist,
@@ -406,11 +415,28 @@ ${relevantHistory}`;
   })));
 
 
+  // Add effect to wait for circle data
+  useEffect(() => {
+    if (circleData && circleMembers.length > 0) {
+      console.log('Circle data loaded:', {
+        circleData,
+        circleMembers: circleMembers.length
+      });
+      setIsCircleDataLoaded(true);
+    }
+  }, [circleData, circleMembers]);
+
   useEffect(() => {
     const sendInitialMessage = async () => {
       // Check if initial message was already sent
       if (initialMessageSentRef.current || messages.length > 0) {
         console.log('Initial message already sent, skipping');
+        return;
+      }
+
+      // Wait for circle data to be loaded
+      if (!isCircleDataLoaded) {
+        console.log('Waiting for circle data to load...');
         return;
       }
 
@@ -430,7 +456,7 @@ ${relevantHistory}`;
         const presentMembers = members
           .filter(m => {
             console.log('Filtering member:', m);
-            return !m.isDotted && m.name; // Only include members with names and not dotted
+            return !m.isDotted && m.name && m.id !== 'empty'; // Only include valid members
           })
           .map(m => {
             console.log('Mapping member:', m);
