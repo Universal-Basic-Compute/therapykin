@@ -163,7 +163,7 @@ const initializationMessages = [
 - Communication pattern verification`
 ];
 
-async function buildCircleMember(kinId: string, buildIndex: number, isTherapist: boolean = false) {
+async function buildCircleMember(kinId: string, buildIndex: number, isTherapist: boolean = false, memberName?: string, memberRole?: string) {
   try {
     const messages = isTherapist ? therapistInitializationMessages : initializationMessages;
     console.log(`Building ${isTherapist ? 'therapist' : 'circle member'} (iteration ${buildIndex + 1}/${messages.length})`);
@@ -172,7 +172,8 @@ async function buildCircleMember(kinId: string, buildIndex: number, isTherapist:
     const response = await axios.post(
       `${KINOS_API_URL}/v2/blueprints/therapykinmember/kins/${kinId}/build`,
       {
-        message: messages[buildIndex]
+        message: messages[buildIndex],
+        addSystem: memberName && memberRole ? `You are ${memberName}, ${memberRole}` : undefined
       },
       {
         headers: {
@@ -298,7 +299,7 @@ async function createCircleMember(
     // Step 2: Build the Kin's identity through all initialization messages
     console.log('Starting build iterations...');
     for (let i = 0; i < initializationMessages.length; i++) {
-      await buildCircleMember(kinId, i);
+      await buildCircleMember(kinId, i, false, memberName, role);
       // Add a small delay between builds to prevent rate limiting
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
