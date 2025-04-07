@@ -29,28 +29,32 @@
       "name": "Sarah",
       "weeksAtStart": 16,
       "color": "from-blue-300 to-blue-400",
-      "role": "Intuitive Eating"
+      "role": "Intuitive Eating",
+      "voiceId": "OYTbf65OHHFELVut7v2H"
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 8,
       "color": "from-rose-300 to-rose-400",
-      "role": "Self-Acceptance"
+      "role": "Self-Acceptance",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 52,
       "color": "from-green-300 to-green-400",
-      "role": "Recovery Guide"
+      "role": "Recovery Guide",
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 78,
       "color": "from-purple-300 to-purple-400",
-      "role": "Wellness Coach"
+      "role": "Wellness Coach",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"
     }
   ]
 }

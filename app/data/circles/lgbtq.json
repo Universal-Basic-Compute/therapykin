@@ -29,28 +29,32 @@
       "name": "Sarah",
       "weeksAtStart": 12,
       "color": "from-blue-300 to-blue-400",
-      "role": "Coming Out Journey"
+      "role": "Coming Out Journey",
+      "voiceId": "OYTbf65OHHFELVut7v2H"
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 24,
       "color": "from-rose-300 to-rose-400",
-      "role": "Gender Explorer"
+      "role": "Gender Explorer",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 36,
       "color": "from-green-300 to-green-400",
-      "role": "Workplace Navigator"
+      "role": "Workplace Navigator",
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 156,
       "color": "from-purple-300 to-purple-400",
-      "role": "Community Guide"
+      "role": "Community Guide",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"
     }
   ]
 }

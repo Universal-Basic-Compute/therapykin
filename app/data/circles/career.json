@@ -28,28 +28,32 @@
       "name": "Sarah",
       "weeksAtStart": 12,
       "color": "from-blue-300 to-blue-400",
-      "role": "Industry Changer"
+      "role": "Industry Changer",
+      "voiceId": "OYTbf65OHHFELVut7v2H"
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 28,
       "color": "from-green-300 to-green-400",
-      "role": "Work-Life Balance"
+      "role": "Work-Life Balance",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 8,
       "color": "from-rose-300 to-rose-400",
-      "role": "Entrepreneur"
+      "role": "Entrepreneur",
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 52,
       "color": "from-purple-300 to-purple-400",
-      "role": "Career Mentor"
+      "role": "Career Mentor",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"
     }
   ]
 }

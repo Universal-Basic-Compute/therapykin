@@ -29,28 +29,32 @@
       "name": "Sarah",
       "weeksAtStart": 12,
       "color": "from-blue-300 to-blue-400",
-      "role": "Embracing Imperfection"
+      "role": "Embracing Imperfection",
+      "voiceId": "OYTbf65OHHFELVut7v2H"
     },
     {
       "id": "alex",
       "name": "Alex",
       "weeksAtStart": 8,
       "color": "from-rose-300 to-rose-400",
-      "role": "Managing Imposter Syndrome"
+      "role": "Managing Imposter Syndrome",
+      "voiceId": "wgHvco1wiREKN0BdyVx5"
     },
     {
       "id": "mike",
       "name": "Mike",
       "weeksAtStart": 24,
       "color": "from-green-300 to-green-400",
-      "role": "Balanced Achievement"
+      "role": "Balanced Achievement",
+      "voiceId": "zQzvQBubVkDWYuqJYMFn"
     },
     {
       "id": "lisa",
       "name": "Lisa",
       "weeksAtStart": 52,
       "color": "from-purple-300 to-purple-400",
-      "role": "Self-Compassion Guide"
+      "role": "Self-Compassion Guide",
+      "voiceId": "BL7YSL1bAkmW8U0JnU8o"
     }
   ]
 }
