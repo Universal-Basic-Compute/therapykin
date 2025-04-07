@@ -55,6 +55,7 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [talkerStack, setTalkerStack] = useState<Talker[]>([]);
   const [isProcessingTalk, setIsProcessingTalk] = useState(false);
+  const initialMessageSentRef = useRef(false);
 
   // Define members at the top of component
   const members: Member[] = React.useMemo(() => {
@@ -366,13 +367,15 @@ ${relevantHistory}`;
 
   useEffect(() => {
     const sendInitialMessage = async () => {
-      if (messages.length > 0) {
-        console.log('Messages already exist, skipping initial message');
+      // Check if initial message was already sent
+      if (initialMessageSentRef.current || messages.length > 0) {
+        console.log('Initial message already sent, skipping');
         return;
       }
 
       try {
         setIsLoading(true);
+        initialMessageSentRef.current = true; // Mark as sent immediately
         
         const presentMembers = members
           .filter(m => !m.isDotted)
@@ -421,13 +424,17 @@ ${relevantHistory}`;
 
       } catch (error) {
         console.error('Error sending initial message:', error);
+        initialMessageSentRef.current = false; // Reset on error
       } finally {
         setIsLoading(false);
       }
     };
 
-    sendInitialMessage();
-  }, [members, circleId, circleData, processNextTalker, textToSpeech, playAudio]);
+    // Only send initial message if we have members and circleId
+    if (members.length > 0 && circleId) {
+      sendInitialMessage();
+    }
+  }, [circleId]); // Reduce dependencies to just circleId
 
   // Initialize talker stack
   useEffect(() => {
