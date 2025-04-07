@@ -181,27 +181,29 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
       setIsProcessingTalk(true);
       setIsLoadingResponse(true);
 
-      // Get available members (excluding 'you' and empty slots)
+      // Get available members (excluding empty slots and 'you')
       const availableMembers = members.filter(member => {
-        // Log each member being filtered
         console.log('Filtering member:', member);
-    
+        
         return (
-          member.id !== 'you' && // Not the user
-          member.id !== 'empty' && // Not empty slots
-          member.name && // Has a name
-          !member.isDotted // Not a dotted placeholder
+          member.id !== 'you' && 
+          member.id !== 'empty' &&
+          member.name && 
+          !member.isDotted &&
+          member.id !== 'therapist' // Exclude therapist from regular rotation
         );
       });
 
-      console.log('Members before filtering:', members);
-      console.log('Available members after filtering:', availableMembers);
+      console.log('Available members for talking:', availableMembers);
 
-      console.log('Available members for talking:', availableMembers.map(m => ({
-        id: m.id,
-        name: m.name,
-        role: m.role
-      })));
+      // If no regular members available, use therapist
+      if (availableMembers.length === 0) {
+        const therapist = members.find(m => m.id === 'therapist');
+        if (therapist) {
+          console.log('No regular members available, using therapist:', therapist);
+          availableMembers.push(therapist);
+        }
+      }
 
       if (availableMembers.length === 0) {
         console.error('No members available to talk. Current members:', members);
@@ -209,6 +211,10 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
         setIsLoadingResponse(false);
         return;
       }
+
+      // Get next speaker using currentSpeakerIndex with modulo to stay in bounds
+      const nextTalker = availableMembers[currentSpeakerIndex % availableMembers.length];
+      console.log(`Processing next talker: ${nextTalker.name}`);
 
       // Get next speaker using currentSpeakerIndex
       const nextTalker = availableMembers[currentSpeakerIndex];
