@@ -184,11 +184,6 @@ export default function CircleLayout({ activeSpeaker, onSpeakerChange, isPeekMod
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 1000; // 1 second
 
-  // First declare both functions
-  const processNextTalker = useCallback(async () => {
-    // Implementation will be added later
-  }, []); // Empty dependencies for now
-
   const checkForMentionsAndQuestions = useCallback((message: string) => {
     // Check if the message directly mentions "you" or asks a question
     const containsYouMention = /\byou\b/i.test(message);
