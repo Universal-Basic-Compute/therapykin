@@ -156,13 +156,8 @@ async function createCircleMember(
       }
     );
 
-    const createKinResponse = response.data as CreateKinResponse;
-
-    if (!createKinResponse.id) {
-      throw new Error('Failed to get Kin ID from creation response');
-    }
-
-    const kinId = createKinResponse.id;
+    // The Kin ID is the same as the prefixed name we sent
+    const kinId = prefixedName;
     console.log(`Successfully created Kin with ID: ${kinId}`);
 
     // Step 2: Build the Kin's identity through all initialization messages
