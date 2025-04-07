@@ -42,12 +42,6 @@
       "weeksAtStart": 520,
       "color": "from-purple-300 to-purple-400",
       "role": "Experienced Parent"
-    },
-    {
-      "id": "drj",
-      "name": "Dr. J",
-      "role": "Parenting Specialist",
-      "color": "from-blue-500 to-blue-600"
     }
   ]
 }

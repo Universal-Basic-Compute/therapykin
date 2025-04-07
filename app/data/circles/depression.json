@@ -42,12 +42,6 @@
       "weeksAtStart": 156,
       "color": "from-purple-300 to-purple-400",
       "role": "Long-term Wellness"
-    },
-    {
-      "id": "drj",
-      "name": "Dr. J",
-      "role": "Depression Specialist",
-      "color": "from-blue-500 to-blue-600"
     }
   ]
 }

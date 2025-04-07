@@ -42,12 +42,6 @@
       "weeksAtStart": 78,
       "color": "from-purple-300 to-purple-400",
       "role": "Meaning Guide"
-    },
-    {
-      "id": "drj",
-      "name": "Dr. J",
-      "role": "Purpose Specialist",
-      "color": "from-blue-500 to-blue-600"
     }
   ]
 }

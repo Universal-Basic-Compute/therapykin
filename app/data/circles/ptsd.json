@@ -42,12 +42,6 @@
       "weeksAtStart": 104,
       "color": "from-purple-300 to-purple-400",
       "role": "Recovery Guide"
-    },
-    {
-      "id": "drj",
-      "name": "Dr. J",
-      "role": "Trauma Specialist",
-      "color": "from-blue-500 to-blue-600"
     }
   ]
 }

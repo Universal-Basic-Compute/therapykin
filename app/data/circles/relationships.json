@@ -42,12 +42,6 @@
       "weeksAtStart": 48,
       "color": "from-purple-300 to-purple-400",
       "role": "Healthy Patterns"
-    },
-    {
-      "id": "drj",
-      "name": "Dr. J",
-      "role": "Relationship Specialist",
-      "color": "from-blue-500 to-blue-600"
     }
   ]
 }

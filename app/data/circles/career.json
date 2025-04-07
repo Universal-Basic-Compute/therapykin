@@ -41,12 +41,6 @@
       "weeksAtStart": 52,
       "color": "from-purple-300 to-purple-400",
       "role": "Career Mentor"
-    },
-    {
-      "id": "drj",
-      "name": "Dr. J",
-      "role": "Career Specialist",
-      "color": "from-blue-500 to-blue-600"
     }
   ]
 }

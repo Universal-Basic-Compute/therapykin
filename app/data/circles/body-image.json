@@ -42,12 +42,6 @@
       "weeksAtStart": 78,
       "color": "from-purple-300 to-purple-400",
       "role": "Wellness Coach"
-    },
-    {
-      "id": "drj",
-      "name": "Dr. J",
-      "role": "Body Image Specialist",
-      "color": "from-blue-500 to-blue-600"
     }
   ]
 }
