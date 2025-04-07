@@ -543,6 +543,21 @@ ${relevantHistory}`;
   }, [isInitialized, circleId]); // Remove other dependencies
 
 
+  // Function to check for mentions and questions
+  const checkForMentionsAndQuestions = useCallback((message: string) => {
+    // Check if the message directly mentions "you" or asks a question
+    const containsYouMention = /\byou\b/i.test(message);
+    const containsQuestion = /\?/.test(message);
+
+    // If either condition is met, schedule the next message with a shorter delay
+    if (containsYouMention || containsQuestion) {
+      console.log('Message contains direct mention or question, reducing delay');
+      setTimeout(() => {
+        processNextTalker();
+      }, 1000); // Reduced delay for interactive messages
+    }
+  }, [processNextTalker]);
+
   // Average reading speed constant
   const CHARS_PER_SECOND = 25; // About 300 words per minute
 
