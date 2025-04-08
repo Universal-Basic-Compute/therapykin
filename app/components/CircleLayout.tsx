@@ -179,8 +179,8 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
         role: member.role || null
       }));
     
-    // Create the system message for the therapist
-    const systemMessage = `<system>Based on the conversation, who should talk next? Answer only with the ID in a JSON format. Available speakers: ${JSON.stringify(availableSpeakers)}</system>`;
+    // Create the system message for the therapist - now asking for an explanation
+    const systemMessage = `<system>Based on the conversation, who should talk next? First provide a brief explanation of your choice (1-2 sentences), then answer with the ID in a JSON format. Available speakers: ${JSON.stringify(availableSpeakers)}</system>`;
     
     // Include all messages in the conversation history
     const conversationHistory = messages.map(msg => {
@@ -222,11 +222,26 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
     let nextSpeakerId = null;
     
     try {
-      // Try to parse the response as JSON
-      const responseJson = JSON.parse(data.response);
-      if (responseJson && responseJson.id) {
-        nextSpeakerId = responseJson.id;
-        console.log('Therapist chose next speaker (JSON format):', nextSpeakerId);
+      // Extract the explanation part (everything before the JSON)
+      const jsonStartIndex = data.response.indexOf('{');
+      if (jsonStartIndex > 0) {
+        const explanation = data.response.substring(0, jsonStartIndex).trim();
+        console.log('Therapist explanation:', explanation);
+        
+        // Parse the JSON part
+        const jsonPart = data.response.substring(jsonStartIndex);
+        const responseJson = JSON.parse(jsonPart);
+        if (responseJson && responseJson.id) {
+          nextSpeakerId = responseJson.id;
+          console.log('Therapist chose next speaker (JSON format):', nextSpeakerId);
+        }
+      } else {
+        // Try to parse the whole response as JSON (fallback)
+        const responseJson = JSON.parse(data.response);
+        if (responseJson && responseJson.id) {
+          nextSpeakerId = responseJson.id;
+          console.log('Therapist chose next speaker (JSON format, no explanation):', nextSpeakerId);
+        }
       }
     } catch (parseError) {
       console.log('Could not parse response as JSON, trying regex...');
