@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession } from '@/app/utils/auth';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/utils/auth';
 import { getBridge, updateBridge, deleteBridge } from '@/app/utils/airtable';
 
 export async function GET(
@@ -8,7 +9,7 @@ export async function GET(
 ) {
   try {
     // Get the user from the session
-    const session = await getSession();
+    const session = await getServerSession(authOptions);
     
     if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -49,7 +50,7 @@ export async function PUT(
 ) {
   try {
     // Get the user from the session
-    const session = await getSession();
+    const session = await getServerSession(authOptions);
     
     if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -108,7 +109,7 @@ export async function DELETE(
 ) {
   try {
     // Get the user from the session
-    const session = await getSession();
+    const session = await getServerSession(authOptions);
     
     if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
