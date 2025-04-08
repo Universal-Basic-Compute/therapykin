@@ -956,7 +956,7 @@ export default function CircleLayout({
           return;
         }
 
-        const systemMessage = `<system>You are ${circleData?.therapist?.name || 'Therapist'}${circleData?.therapist?.role ? `, ${circleData?.therapist?.role}` : ''}. \nWelcome everyone to this group therapy session. Present members: ${presentMembers.join(', ')}</system>`;
+        const systemMessage = `<system>You are ${circleData?.therapist?.name || 'Therapist'}${circleData?.therapist?.role ? `, ${circleData?.therapist?.role}` : ''}. \nStart with a warm greeting like "Hello everyone" and welcome everyone to this group therapy session. Introduce yourself briefly as the group facilitator. Present members: ${presentMembers.join(', ')}</system>`;
         
         // Determine if this is a hero's journey circle
         const isHerosJourneyCircle = ['addiction', 'depression', 'ptsd', 'life-purpose'].includes(circleId);
