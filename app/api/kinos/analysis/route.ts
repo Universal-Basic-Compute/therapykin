@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       content,
       attachments: attachments || [],
       images: images || [],
-      model: "claude-3-5-haiku-latest",
+      model: "claude-3-7-sonnet-latest",
       history_length: 25,
       min_files,
       max_files
