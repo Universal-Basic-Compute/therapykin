@@ -194,17 +194,14 @@ export default function CircleLayout({
       }
     ]);
     
-    // Set the user message as pending to be processed next
-    userMessagePendingRef.current = true;
-    userMessageContentRef.current = message;
-    
     // Clear the input field
     onMessageChange('');
     
-    // If audio is currently playing, wait for it to finish
-    // Otherwise, process the user message immediately
+    // If no audio is playing, continue with the normal conversation flow
     if (!isPlaying) {
-      processUserMessage();
+      setTimeout(() => {
+        processNextTalkerRef.current?.();
+      }, 1000); // Small delay before continuing
     }
   };
   const [showJoinModal, setShowJoinModal] = React.useState(false);
@@ -284,75 +281,8 @@ export default function CircleLayout({
   const processNextTalkerRef = useRef<() => Promise<void>>(() => Promise.resolve());
   const checkForMentionsAndQuestionsRef = useRef<(message: string) => void>(() => {});
   
-  // Add a new function to process user messages
-  const processUserMessage = async () => {
-    if (!userMessagePendingRef.current) return;
-    
-    try {
-      setIsProcessingTalk(true);
-      setIsLoadingResponse(true);
-      
-      // Get the therapist from the members
-      const therapist = members.find(m => m.id === 'therapist');
-      if (!therapist) {
-        console.error('No therapist found in members');
-        return;
-      }
-      
-      // Construct the system message with the user's message
-      const systemMessage = `<system>User message: ${userMessageContentRef.current}</system>`;
-      
-      // Make API request for therapist response
-      const response = await fetch('/api/kinos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: systemMessage,
-          firstName: 'Circle',
-          specialist: circleData?.specialist || 'generalist',
-          pseudonym: `circle-${circleId}-therapist`
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
-      
-      const data = await response.json();
-      const audioUrl = await textToSpeech(data.response, 'therapist');
-      const messageId = `response-${Date.now()}`;
-      
-      // Add the therapist's response to messages
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: data.response,
-          id: messageId,
-          sender: therapist.name,
-          memberId: 'therapist',
-          audio: audioUrl
-        }
-      ]);
-      
-      // Reset the user message pending flag
-      userMessagePendingRef.current = false;
-      
-      // Play the audio response
-      if (audioUrl) {
-        playAudio(audioUrl, messageId);
-      }
-      
-    } catch (error) {
-      console.error('Error processing user message:', error);
-      userMessagePendingRef.current = false;
-    } finally {
-      setIsProcessingTalk(false);
-      setIsLoadingResponse(false);
-    }
-  };
+  // We're removing the processUserMessage function as we're no longer forcing
+  // the therapist to respond immediately after a user message
 
   // Define checkForMentionsAndQuestions implementation
   checkForMentionsAndQuestionsRef.current = (message: string) => {
@@ -581,17 +511,10 @@ export default function CircleLayout({
           setCurrentPlayingId(null);
           URL.revokeObjectURL(normalizedUrl);
           
-          // Check if there's a pending user message
-          if (userMessagePendingRef.current) {
-            setTimeout(() => {
-              processUserMessage();
-            }, AUDIO_BUFFER_TIME);
-          } else {
-            // Otherwise, continue with the normal flow
-            setTimeout(() => {
-              processNextTalkerRef.current?.();
-            }, AUDIO_BUFFER_TIME);
-          }
+          // Continue with the normal flow
+          setTimeout(() => {
+            processNextTalkerRef.current?.();
+          }, AUDIO_BUFFER_TIME);
         };
 
         audioRef.current.onerror = () => {
