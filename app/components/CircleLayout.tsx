@@ -505,18 +505,6 @@ export default function CircleLayout({
       const nextTalker = availableMembers[currentSpeakerIndex % availableMembers.length];
       console.log(`Processing next talker: ${nextTalker.name}`);
 
-      // Construct the basic system message (without the guidelines)
-      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
-This is a group therapy circle about ${circleData?.name || 'support'}.</system>`;
-
-      // Move the guidelines to the addSystem parameter
-      const addSystem = `IMPORTANT GUIDELINES:
-1. Respond to the conversation naturally and briefly (1-3 sentences)
-2. Build upon what others have said rather than repeating similar points
-3. Bring new perspectives or personal experiences related to the topic
-4. If someone asked a question, try to address it if others haven't already
-5. Stay authentic to your character's background and recovery stage`;
-
       // Find the last message from this kin
       const lastMessageIndex = messages.findLastIndex(msg => msg.memberId === nextTalker.id);
     
@@ -527,13 +515,28 @@ This is a group therapy circle about ${circleData?.name || 'support'}.</system>`
         : messages;
     
       // Create a conversation history string from relevant messages
-      const conversationHistory = relevantMessages.map(msg => {
+      const lastMessagesText = relevantMessages.map(msg => {
         const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
         return `${speaker}: ${msg.content}`;
       }).join('\n\n');
 
-      // Combine system message with conversation history
-      const fullPrompt = `${systemMessage}\n\n${conversationHistory}`;
+      // Construct the basic system message with the last messages included
+      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
+This is a group therapy circle about ${circleData?.name || 'support'}.
+
+Last messages since you last spoke:
+${lastMessagesText}</system>`;
+
+      // Move the guidelines to the addSystem parameter
+      const addSystem = `IMPORTANT GUIDELINES:
+1. Respond to the conversation naturally and briefly (1-3 sentences)
+2. Build upon what others have said rather than repeating similar points
+3. Bring new perspectives or personal experiences related to the topic
+4. If someone asked a question, try to address it if others haven't already
+5. Stay authentic to your character's background and recovery stage`;
+
+      // Use the system message directly as the content
+      const fullPrompt = systemMessage;
 
       // Make API request and get response
       const response = await fetch('/api/kinos', {
@@ -642,18 +645,6 @@ This is a group therapy circle about ${circleData?.name || 'support'}.</system>`
       const nextTalker = availableMembers[speakerIndex % availableMembers.length];
       console.log(`Preparing message for next talker: ${nextTalker.name}`);
 
-      // Construct the basic system message (without the guidelines)
-      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
-This is a group therapy circle about ${circleData?.name || 'support'}.</system>`;
-
-      // Move the guidelines to the addSystem parameter
-      const addSystem = `IMPORTANT GUIDELINES:
-1. Respond to the conversation naturally and briefly (1-3 sentences)
-2. Build upon what others have said rather than repeating similar points
-3. Bring new perspectives or personal experiences related to the topic
-4. If someone asked a question, try to address it if others haven't already
-5. Stay authentic to your character's background and recovery stage`;
-
       // Find the last message from this kin
       const lastMessageIndex = messages.findLastIndex(msg => msg.memberId === nextTalker.id);
     
@@ -664,16 +655,31 @@ This is a group therapy circle about ${circleData?.name || 'support'}.</system>`
         : messages;
     
       // Create a conversation history string from relevant messages
-      const conversationHistory = relevantMessages.map(msg => {
+      const lastMessagesText = relevantMessages.map(msg => {
         const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
         return `${speaker}: ${msg.content}`;
       }).join('\n\n');
 
-      // Log the conversation history being sent
-      console.log(`Sending conversation history for ${nextTalker.name}:`, conversationHistory);
+      // Construct the basic system message with the last messages included
+      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
+This is a group therapy circle about ${circleData?.name || 'support'}.
 
-      // Combine system message with conversation history
-      const fullPrompt = `${systemMessage}\n\n${conversationHistory}`;
+Last messages since you last spoke:
+${lastMessagesText}</system>`;
+
+      // Move the guidelines to the addSystem parameter
+      const addSystem = `IMPORTANT GUIDELINES:
+1. Respond to the conversation naturally and briefly (1-3 sentences)
+2. Build upon what others have said rather than repeating similar points
+3. Bring new perspectives or personal experiences related to the topic
+4. If someone asked a question, try to address it if others haven't already
+5. Stay authentic to your character's background and recovery stage`;
+
+      // Log the conversation history being sent
+      console.log(`Sending last messages for ${nextTalker.name}:`, lastMessagesText);
+
+      // Use the system message directly as the content
+      const fullPrompt = systemMessage;
 
       // Make API request and get response
       const response = await fetch('/api/kinos', {
