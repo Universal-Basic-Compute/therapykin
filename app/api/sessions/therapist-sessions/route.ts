@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
     const pastSessions: Array<{
       id: string;
       clientId: string;
+      pseudonym: string;
       clientColor: string;
       timestamp: string;
       minutesActive: number;
@@ -55,7 +56,8 @@ export async function GET(request: NextRequest) {
       if (sessionDate < now) {
         pastSessions.push({
           id: record.id,
-          clientId: record.fields.Pseudonym || clientIdentifier.name,
+          clientId: clientIdentifier.name,
+          pseudonym: record.fields.Pseudonym || clientIdentifier.name,
           clientColor: clientIdentifier.color,
           timestamp: record.fields.CreatedAt,
           minutesActive: minutesActive,

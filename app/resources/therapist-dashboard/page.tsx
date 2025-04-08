@@ -23,6 +23,7 @@ interface TherapistStats {
 interface ClientData {
   id: string;
   name: string;
+  pseudonym: string;
   color: string;
   totalSessions: number;
   recentSessions: number;
@@ -282,7 +283,7 @@ export default function TherapistDashboard() {
   }, [user, activeTab]);
 
   // Generate client insights using KinOS engine
-  const generateClientInsights = async (clientId: string, clientName: string) => {
+  const generateClientInsights = async (clientId: string, clientName: string, pseudonym: string) => {
     setInsightsModal({
       isOpen: true,
       clientId,
@@ -293,8 +294,7 @@ export default function TherapistDashboard() {
     });
     
     try {
-      // Use clientId directly as it's already the pseudonym/kin
-      const response = await fetch(`/v2/blueprints/therapykinherosjourney/kins/${clientId}/analysis`, {
+      const response = await fetch(`/v2/blueprints/therapykinherosjourney/kins/${pseudonym}/analysis`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -542,7 +542,7 @@ export default function TherapistDashboard() {
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     <button 
-                                      onClick={() => generateClientInsights(client.id, client.name)}
+                                      onClick={() => generateClientInsights(client.id, client.name, client.pseudonym)}
                                       className="text-sm px-3 py-1 border border-[var(--primary)]/50 text-[var(--primary)] rounded hover:bg-[var(--primary)]/10"
                                     >
                                       AI Insights
