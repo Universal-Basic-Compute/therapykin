@@ -122,8 +122,8 @@ export default function Bridges() {
             <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Unique Benefits</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-border border-l-4 border-[var(--primary)]">
-                <h3 className="text-xl font-semibold mb-3 flex items-center text-[var(--primary)]">
+              <div className="card p-6 hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-semibold mb-3 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -134,8 +134,8 @@ export default function Bridges() {
                 </p>
               </div>
               
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-border border-l-4 border-[var(--primary-dark)]">
-                <h3 className="text-xl font-semibold mb-3 flex items-center text-[var(--primary-dark)]">
+              <div className="card p-6 hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-semibold mb-3 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
@@ -146,8 +146,8 @@ export default function Bridges() {
                 </p>
               </div>
               
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-border border-l-4 border-[var(--accent)]">
-                <h3 className="text-xl font-semibold mb-3 flex items-center text-[var(--accent)]">
+              <div className="card p-6 hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-semibold mb-3 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
@@ -158,8 +158,8 @@ export default function Bridges() {
                 </p>
               </div>
               
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-border border-l-4 border-[var(--warm)]">
-                <h3 className="text-xl font-semibold mb-3 flex items-center text-[var(--warm)]">
+              <div className="card p-6 hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-semibold mb-3 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                   </svg>
@@ -170,8 +170,8 @@ export default function Bridges() {
                 </p>
               </div>
               
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-border border-l-4 border-[var(--primary)]">
-                <h3 className="text-xl font-semibold mb-3 flex items-center text-[var(--primary)]">
+              <div className="card p-6 hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-semibold mb-3 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
@@ -182,8 +182,8 @@ export default function Bridges() {
                 </p>
               </div>
               
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-border border-l-4 border-[var(--primary-dark)]">
-                <h3 className="text-xl font-semibold mb-3 flex items-center text-[var(--primary-dark)]">
+              <div className="card p-6 hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-semibold mb-3 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
@@ -198,36 +198,36 @@ export default function Bridges() {
           
           {/* Bridges Programs */}
           <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] text-transparent bg-clip-text">Bridges Programs</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Bridges Programs</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale bg-gradient-to-br from-[var(--background)] to-[var(--primary)]/5">
+              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] rounded-full flex items-center justify-center mr-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-[var(--primary-dark)]">Relationship Renewal</h3>
+                    <h3 className="text-xl font-semibold">Relationship Renewal</h3>
                     <p className="text-foreground/60 italic">For couples seeking to strengthen their connection</p>
                   </div>
                 </div>
                 <ul className="space-y-2 text-foreground/70">
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     8-week structured program
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Focus on communication patterns, emotional needs, and shared vision
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Optional transition to couples therapy preparation
@@ -235,33 +235,33 @@ export default function Bridges() {
                 </ul>
               </div>
               
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale bg-gradient-to-br from-[var(--background)] to-[var(--primary-dark)]/5">
+              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[var(--primary-dark)] to-[var(--accent)] rounded-full flex items-center justify-center mr-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-[var(--accent)]">Family Harmony</h3>
+                    <h3 className="text-xl font-semibold">Family Harmony</h3>
                     <p className="text-foreground/60 italic">For parent-child, sibling, or extended family relationships</p>
                   </div>
                 </div>
                 <ul className="space-y-2 text-foreground/70">
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary-dark)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Adaptable program for different family dynamics
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary-dark)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Age-appropriate approaches for younger participants
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary-dark)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Focus on boundaries, understanding, and mutual respect
@@ -269,33 +269,33 @@ export default function Bridges() {
                 </ul>
               </div>
               
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale bg-gradient-to-br from-[var(--background)] to-[var(--accent)]/5">
+              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--warm)] rounded-full flex items-center justify-center mr-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-[var(--warm)]">Workplace Resolution</h3>
+                    <h3 className="text-xl font-semibold">Workplace Resolution</h3>
                     <p className="text-foreground/60 italic">For colleagues working through professional conflicts</p>
                   </div>
                 </div>
                 <ul className="space-y-2 text-foreground/70">
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--accent)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Professional context-sensitive facilitation
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--accent)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Focus on productive collaboration and clear expectations
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--accent)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Integration with organizational values and objectives
@@ -303,33 +303,33 @@ export default function Bridges() {
                 </ul>
               </div>
               
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale bg-gradient-to-br from-[var(--background)] to-[var(--warm)]/5">
+              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[var(--warm)] to-[var(--primary)] rounded-full flex items-center justify-center mr-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-[var(--primary)]">Friendship Repair</h3>
+                    <h3 className="text-xl font-semibold">Friendship Repair</h3>
                     <p className="text-foreground/60 italic">For friends navigating challenges or growing apart</p>
                   </div>
                 </div>
                 <ul className="space-y-2 text-foreground/70">
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--warm)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Flexible format for various friendship dynamics
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--warm)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Focus on mutual understanding and evolving relationships
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--warm)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Options for either reconnection or healthy closure
@@ -397,50 +397,47 @@ export default function Bridges() {
             <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Success Stories</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="card p-6 card-hover-rotate shadow-depth">
+              <div className="card p-6 shadow-depth">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] rounded-full flex items-center justify-center mr-4 shadow-lg">
-                    <span className="text-xl font-bold text-white">S</span>
+                  <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
+                    <span className="text-xl font-bold">S</span>
                   </div>
                   <div>
-                    <h3 className="font-medium text-[var(--primary-dark)]">Sarah K.</h3>
+                    <h3 className="font-medium">Sarah K.</h3>
                     <p className="text-sm text-foreground/60">Mother-Daughter Relationship</p>
                   </div>
                 </div>
-                <blockquote className="text-foreground/80 italic relative pl-4">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[var(--primary)] to-[var(--primary-dark)] rounded-full"></div>
+                <blockquote className="text-foreground/80 italic">
                   "After months of tension, my mother and I couldn't have a conversation without arguing. TherapyKin Bridges helped us understand each other's concerns without the immediate emotional reactions. Now we can actually talk again."
                 </blockquote>
               </div>
               
-              <div className="card p-6 card-hover-rotate shadow-depth">
+              <div className="card p-6 shadow-depth">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[var(--primary-dark)] to-[var(--accent)] rounded-full flex items-center justify-center mr-4 shadow-lg">
-                    <span className="text-xl font-bold text-white">M</span>
+                  <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
+                    <span className="text-xl font-bold">M</span>
                   </div>
                   <div>
-                    <h3 className="font-medium text-[var(--accent)]">Marcus T.</h3>
+                    <h3 className="font-medium">Marcus T.</h3>
                     <p className="text-sm text-foreground/60">Business Partnership</p>
                   </div>
                 </div>
-                <blockquote className="text-foreground/80 italic relative pl-4">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[var(--primary-dark)] to-[var(--accent)] rounded-full"></div>
+                <blockquote className="text-foreground/80 italic">
                   "My business partner and I had different visions for our company that were creating constant friction. The Bridge process helped us articulate our perspectives clearly and find common ground that saved our business and friendship."
                 </blockquote>
               </div>
               
-              <div className="card p-6 card-hover-rotate shadow-depth">
+              <div className="card p-6 shadow-depth">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--warm)] rounded-full flex items-center justify-center mr-4 shadow-lg">
-                    <span className="text-xl font-bold text-white">E</span>
+                  <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
+                    <span className="text-xl font-bold">E</span>
                   </div>
                   <div>
-                    <h3 className="font-medium text-[var(--warm)]">Elena R.</h3>
+                    <h3 className="font-medium">Elena R.</h3>
                     <p className="text-sm text-foreground/60">Marriage Reconciliation</p>
                   </div>
                 </div>
-                <blockquote className="text-foreground/80 italic relative pl-4">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[var(--accent)] to-[var(--warm)] rounded-full"></div>
+                <blockquote className="text-foreground/80 italic">
                   "My husband and I were considering separation after 12 years. Traditional counseling felt intimidating, but Bridges gave us a way to express things we'd been afraid to say face-to-face. It wasn't easy, but we're now rebuilding with a stronger foundation."
                 </blockquote>
               </div>
