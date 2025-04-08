@@ -181,6 +181,9 @@ export default function CircleLayout({
     e.preventDefault();
     if (!message.trim()) return;
     
+    // Set flag to cancel any pending AI message
+    shouldCancelNextAiMessageRef.current = true;
+    
     // Add the user message to the messages array
     const userMessageId = `user-${Date.now()}`;
     setMessages(prev => [
@@ -250,6 +253,9 @@ export default function CircleLayout({
           playAudio(audioUrl, messageId);
         }
         
+        // Reset the cancel flag after therapist responds
+        shouldCancelNextAiMessageRef.current = false;
+        
         // Continue with the normal conversation flow after therapist responds
         setTimeout(() => {
           processNextTalkerRef.current?.();
@@ -257,6 +263,8 @@ export default function CircleLayout({
         
       } catch (error) {
         console.error('Error processing user message:', error);
+        // Reset the cancel flag on error
+        shouldCancelNextAiMessageRef.current = false;
         // Continue with normal flow even if there's an error
         setTimeout(() => {
           processNextTalkerRef.current?.();
@@ -291,6 +299,8 @@ export default function CircleLayout({
   const initialMessageSentRef = useRef(false);
   // We're keeping these refs but they won't be used for forcing therapist responses
   const [userMessagePendingRef, userMessageContentRef] = [useRef(false), useRef('')];
+  // Add a new ref to track if we should cancel the next AI message
+  const shouldCancelNextAiMessageRef = useRef(false);
 
   // Define members at the top of component
   const members: Member[] = React.useMemo(() => {
@@ -383,6 +393,12 @@ export default function CircleLayout({
   };
 
   processNextTalkerRef.current = async () => {
+    // Check if we should cancel this message due to a user message
+    if (shouldCancelNextAiMessageRef.current) {
+      console.log('Canceling AI message because user sent a message');
+      return;
+    }
+
     if (isProcessingTalk || isPlaying) {
       console.log('Already processing talk or audio playing, skipping');
       return;
@@ -440,6 +456,14 @@ export default function CircleLayout({
 
       const data = await response.json();
       
+      // Check again if we should cancel this message
+      if (shouldCancelNextAiMessageRef.current) {
+        console.log('Canceling AI message after API response because user sent a message');
+        setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
+        return;
+      }
+      
       // Generate audio for TTS
       const audioUrl = await textToSpeech(data.response, nextTalker.id);
       const messageId = `msg-${Date.now()}`;
@@ -449,6 +473,14 @@ export default function CircleLayout({
         await new Promise(resolve => {
           audioRef.current!.addEventListener('ended', resolve, { once: true });
         });
+      }
+
+      // Check one more time if we should cancel this message
+      if (shouldCancelNextAiMessageRef.current) {
+        console.log('Canceling AI message before adding to UI because user sent a message');
+        setIsProcessingTalk(false);
+        setIsLoadingResponse(false);
+        return;
       }
 
       // Now that previous audio is done, update messages and play new audio
