@@ -210,8 +210,17 @@ export default function CircleLayout({
           return;
         }
         
-        // Construct the system message with the new format
-        const systemMessage = `<system>You are ${therapist.name}${therapist.role ? `, ${therapist.role}` : ''}. \nRespond to the user's message: "${message}"</system>`;
+        // Create a conversation history string from previous messages
+        const conversationHistory = messages.map(msg => {
+          const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
+          return `${speaker}: ${msg.content}`;
+        }).join('\n\n');
+        
+        // Add the current user message to the history
+        const fullHistory = `${conversationHistory}\n\nYou: ${message}`;
+        
+        // Construct the system message with the new format and include conversation history
+        const systemMessage = `<system>You are ${therapist.name}${therapist.role ? `, ${therapist.role}` : ''}. \nRespond to the conversation naturally and briefly.</system>\n\n${fullHistory}`;
         
         // Make API request for therapist response
         const response = await fetch('/api/kinos', {
@@ -436,6 +445,15 @@ export default function CircleLayout({
       // Construct the system message with the new format
       const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. \nRespond to the conversation naturally and briefly.</system>`;
 
+      // Create a conversation history string from previous messages
+      const conversationHistory = messages.map(msg => {
+        const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
+        return `${speaker}: ${msg.content}`;
+      }).join('\n\n');
+
+      // Combine system message with conversation history
+      const fullPrompt = `${systemMessage}\n\n${conversationHistory}`;
+
       // Make API request and get response
       const response = await fetch('/api/kinos', {
         method: 'POST',
@@ -443,7 +461,7 @@ export default function CircleLayout({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          content: systemMessage,
+          content: fullPrompt,
           firstName: 'Circle', 
           specialist: circleData?.specialist || 'generalist',
           pseudonym: `circle-${circleId}-${nextTalker.id}`
