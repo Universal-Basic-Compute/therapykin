@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Link from "next/link";
+import { generatePseudonymFromEmail } from '@/app/utils/pseudonyms';
 
 interface TherapistStats {
   activeClients: number;
