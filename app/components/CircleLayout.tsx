@@ -179,7 +179,7 @@ export default function CircleLayout({
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim() || isPeekMode) return;
+    if (!message.trim()) return;
     
     // Add the user message to the messages array
     const userMessageId = `user-${Date.now()}`;
@@ -829,15 +829,14 @@ export default function CircleLayout({
                   type="text"
                   value={message}
                   onChange={(e) => onMessageChange(e.target.value)}
-                  placeholder={isPeekMode ? "Join to participate..." : "Type your message..."}
-                  disabled={isPeekMode}
+                  placeholder="Type your message..."
                   className="flex-grow px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
                 <button
                   type="submit"
-                  disabled={!message.trim() || isPeekMode}
+                  disabled={!message.trim()}
                   className={`px-4 py-2 rounded-full ${
-                    !message.trim() || isPeekMode
+                    !message.trim()
                       ? 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed'
                       : 'bg-[var(--primary)] hover:bg-[var(--primary-dark)]'
                   } text-white transition-colors`}

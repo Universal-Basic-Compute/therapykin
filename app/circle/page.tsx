@@ -55,12 +55,9 @@ export default function CirclePage() {
     }
   }, [searchParams]);
 
-  // Prevent scrolling on this page and check for peek mode
+  // Prevent scrolling on this page
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    const searchParams = new URLSearchParams(window.location.search);
-    const mode = searchParams.get('mode');
-    setIsPeekMode(mode === 'peek');
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -125,7 +122,7 @@ export default function CirclePage() {
           <CircleLayout 
             activeSpeaker={activeSpeaker}
             onSpeakerChange={setActiveSpeaker}
-            isPeekMode={isPeekMode}
+            isPeekMode={false}
             circleId={circleName}
             circleMembers={circleData?.members || []}
             circleData={circleData}
