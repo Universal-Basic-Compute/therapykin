@@ -43,6 +43,11 @@ function BridgeChatSession() {
   const [voiceMode, setVoiceMode] = useState(true);
   const [autoIllustrate, setAutoIllustrate] = useState(false);
   
+  // Add effect to debug settings state
+  useEffect(() => {
+    console.log('Settings collapsed state:', settingsCollapsed);
+  }, [settingsCollapsed]);
+  
   // Use our custom hooks
   const { 
     chatHistory, 
