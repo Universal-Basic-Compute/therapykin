@@ -783,16 +783,19 @@ export default function CircleLayout({
   const playAudio = async (audioUrl: string, messageId: string) => {
     if (audioRef.current) {
       try {
-        // If something is already playing, wait for it to finish
+        // Check if something is already playing
         if (isPlaying) {
-          await new Promise((resolve) => {
-            audioRef.current!.addEventListener('ended', resolve, { once: true });
-            audioRef.current!.addEventListener('error', resolve, { once: true });
-          });
+          console.log('Audio already playing, waiting for it to finish before playing next audio');
+          // Store this audio to be played next, but don't interrupt current playback
+          nextPreparedMessageRef.current = {
+            messageId,
+            audioUrl
+          };
+          return; // Exit without interrupting current playback
         }
 
-        // Pause any current playback
-        audioRef.current.pause();
+        // If nothing is playing, proceed with playback
+        console.log(`Playing audio for message: ${messageId}`);
         
         // Normalize the audio before playing
         const normalizedUrl = await normalizeAudio(audioUrl);
