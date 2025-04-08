@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSearchParams } from 'next/navigation';
 import Header from '../../components/Header';
@@ -8,9 +8,6 @@ import ChatContainer from '../../components/chat/ChatContainer';
 import MessageInput from '../../components/chat/MessageInput';
 import ChatHeader from '../../components/chat/ChatHeader';
 import ChatSettings from '../../components/chat/ChatSettings';
-import BridgeParticipantCard from '../../components/bridges/BridgeParticipantCard';
-import BridgeMediationControls from '../../components/bridges/BridgeMediationControls';
-import BridgeProgress from '../../components/bridges/BridgeProgress';
 import { useChat } from '../../hooks/useChat';
 import { useVoiceRecording } from '../../hooks/useVoiceRecording';
 import { useTextToSpeech } from '../../hooks/useTextToSpeech';
@@ -41,15 +38,7 @@ function BridgeChatSession() {
   const searchParams = useSearchParams();
   const bridgeId = searchParams.get('bridgeId');
   
-  // State for bridge-specific features
-  const [otherParticipant, setOtherParticipant] = useState<any>(null);
-  const [isLoadingParticipant, setIsLoadingParticipant] = useState(true);
-  const [mediationLevel, setMediationLevel] = useState<'light' | 'balanced' | 'directive'>('balanced');
-  const [bridgeProgress, setBridgeProgress] = useState(0);
-  const [relationshipType, setRelationshipType] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [milestones, setMilestones] = useState<any[]>([]);
-  const [nextSteps, setNextSteps] = useState<string[]>([]);
+  // State for settings
   const [settingsCollapsed, setSettingsCollapsed] = useState(true);
   const [voiceMode, setVoiceMode] = useState(true);
   const [autoIllustrate, setAutoIllustrate] = useState(false);
@@ -103,71 +92,6 @@ function BridgeChatSession() {
   // Message input state
   const [message, setMessage] = useState('');
   
-  // Fetch bridge details
-  useEffect(() => {
-    if (!bridgeId || !user) return;
-    
-    async function fetchBridgeDetails() {
-      setIsLoadingParticipant(true);
-      try {
-        // This would be a real API call in production
-        // For now, we'll simulate it with a timeout
-        setTimeout(() => {
-          setOtherParticipant({
-            id: 'participant-123',
-            name: 'Alex Johnson',
-            status: 'online',
-            lastActive: new Date().toISOString()
-          });
-          
-          setRelationshipType('Family Relationship');
-          setStartDate(new Date().toISOString());
-          setBridgeProgress(35);
-          setMilestones([
-            {
-              id: 'milestone-1',
-              title: 'Initial Connection',
-              description: 'Both participants joined the bridge',
-              completed: true,
-              date: new Date().toISOString()
-            },
-            {
-              id: 'milestone-2',
-              title: 'Shared Perspectives',
-              description: 'Each person shared their viewpoint',
-              completed: true,
-              date: new Date().toISOString()
-            },
-            {
-              id: 'milestone-3',
-              title: 'Common Ground',
-              description: 'Identify areas of agreement',
-              completed: false
-            },
-            {
-              id: 'milestone-4',
-              title: 'Action Plan',
-              description: 'Create a plan for moving forward',
-              completed: false
-            }
-          ]);
-          
-          setNextSteps([
-            'Discuss a specific situation where you felt misunderstood',
-            'Share what you appreciate about each other',
-            'Identify one small change each person could make'
-          ]);
-          
-          setIsLoadingParticipant(false);
-        }, 1500);
-      } catch (error) {
-        console.error('Error fetching bridge details:', error);
-        setIsLoadingParticipant(false);
-      }
-    }
-    
-    fetchBridgeDetails();
-  }, [bridgeId, user]);
   
   // Function to handle sending a message
   const handleSendMessage = async (text: string) => {
@@ -224,30 +148,6 @@ function BridgeChatSession() {
     setAutoIllustrate(enabled);
   };
   
-  // Handle mediation level change
-  const handleChangeMediationLevel = (level: 'light' | 'balanced' | 'directive') => {
-    setMediationLevel(level);
-    // In a real implementation, we would send this to the API
-    console.log(`Changed mediation level to: ${level}`);
-  };
-  
-  // Handle request clarification
-  const handleRequestClarification = () => {
-    // In a real implementation, we would send this to the API
-    console.log('Requested clarification');
-  };
-  
-  // Handle request private session
-  const handleRequestPrivateSession = () => {
-    // In a real implementation, we would send this to the API
-    console.log('Requested private session');
-  };
-  
-  // Handle flag sensitive topic
-  const handleFlagSensitiveTopic = (topic: string) => {
-    // In a real implementation, we would send this to the API
-    console.log(`Flagged sensitive topic: ${topic}`);
-  };
   
   // Loading state
   if (loading) {
@@ -270,7 +170,7 @@ function BridgeChatSession() {
       
       <ChatHeader 
         title="Bridge Session" 
-        subtitle={otherParticipant ? `Connected with ${otherParticipant.name}` : 'Loading participant...'}
+        subtitle="AI-facilitated communication bridge"
         sessionStartTime={sessionStartTime}
         minutesActive={minutesActive}
         sessionLength={60} // Bridges can have longer sessions
@@ -291,36 +191,13 @@ function BridgeChatSession() {
             />
           </div>
           
-          {/* Right Column - Bridge-specific components */}
+          {/* Right Column - Settings only */}
           <div className="md:w-1/4 md:max-w-xs flex flex-col gap-4">
-            {/* Bridge Participant Card */}
-            <BridgeParticipantCard 
-              participant={otherParticipant}
-              isLoading={isLoadingParticipant}
-            />
-            
-            {/* Bridge Mediation Controls */}
-            <BridgeMediationControls 
-              mediationLevel={mediationLevel}
-              onChangeMediationLevel={handleChangeMediationLevel}
-              onRequestClarification={handleRequestClarification}
-              onRequestPrivateSession={handleRequestPrivateSession}
-              onFlagSensitiveTopic={handleFlagSensitiveTopic}
-            />
-            
-            {/* Bridge Progress */}
-            <BridgeProgress 
-              progress={bridgeProgress}
-              milestones={milestones}
-              relationshipType={relationshipType}
-              startDate={startDate}
-              nextSteps={nextSteps}
-            />
             
             {/* Settings toggle button */}
             <button 
               onClick={() => setSettingsCollapsed(!settingsCollapsed)}
-              className="w-full mt-3 p-2 rounded-lg bg-[var(--primary)]/20 hover:bg-[var(--primary)]/30 transition-colors flex items-center justify-center text-sm font-medium text-[var(--primary)]"
+              className="w-full p-2 rounded-lg bg-[var(--primary)]/20 hover:bg-[var(--primary)]/30 transition-colors flex items-center justify-center text-sm font-medium text-[var(--primary)]"
             >
               {settingsCollapsed ? (
                 <>
@@ -461,7 +338,7 @@ function BridgeChatSession() {
         toggleCamera={toggleCamera}
         capturedImage={capturedImage}
         discardImage={discardImage}
-        placeholder="Type your message here... Your bridge partner will see a mediated version."
+        placeholder="Type your message here..."
         isMediaRecorderSupported={isMediaRecorderSupported}
       />
     </div>
