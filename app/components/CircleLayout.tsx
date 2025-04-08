@@ -640,8 +640,16 @@ IMPORTANT GUIDELINES:
       const nextTalker = availableMembers[speakerIndex % availableMembers.length];
       console.log(`Preparing message for next talker: ${nextTalker.name}`);
 
-      // Construct the system message with the new format
-      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. \nRespond to the conversation naturally and briefly.</system>`;
+      // Construct the system message with the new format and detailed guidelines
+      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
+This is a group therapy circle about ${circleData?.name || 'support'}.
+
+IMPORTANT GUIDELINES:
+1. Respond to the conversation naturally and briefly (1-3 sentences)
+2. Build upon what others have said rather than repeating similar points
+3. Bring new perspectives or personal experiences related to the topic
+4. If someone asked a question, try to address it if others haven't already
+5. Stay authentic to your character's background and recovery stage</system>`;
 
       // Find the last message from this kin
       const lastMessageIndex = messages.findLastIndex(msg => msg.memberId === nextTalker.id);
