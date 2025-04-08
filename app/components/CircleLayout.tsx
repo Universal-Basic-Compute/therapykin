@@ -200,110 +200,17 @@ export default function CircleLayout({
     // Clear the input field
     onMessageChange('');
     
-    // Send the message to the API
-    const sendUserMessage = async () => {
-      try {
-        // Get the therapist from the members
-        const therapist = members.find(m => m.id === 'therapist');
-        if (!therapist) {
-          console.error('No therapist found in members');
-          return;
-        }
-        
-        // Find the last message from the therapist
-        const lastTherapistMessageIndex = messages.findLastIndex(msg => msg.memberId === 'therapist');
+    // Reset the cancel flag after adding the user message
+    shouldCancelNextAiMessageRef.current = false;
     
-        // Get all messages SINCE the last message from the therapist (not including it)
-        // If no previous message from the therapist, include all messages
-        const relevantMessages = lastTherapistMessageIndex >= 0 
-          ? messages.slice(lastTherapistMessageIndex + 1) // Get messages AFTER the last message from the therapist
-          : messages;
-    
-        // Create a conversation history string from relevant messages
-        const conversationHistory = relevantMessages.map(msg => {
-          const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
-          return `${speaker}: ${msg.content}`;
-        }).join('\n\n');
-    
-        // Add the current user message to the history
-        const fullHistory = `${conversationHistory}\n\nYou: ${message}`;
-    
-        // Construct the system message with the new format and include conversation history
-        const systemMessage = `<system>You are ${therapist.name}${therapist.role ? `, ${therapist.role}` : ''}. \nRespond to the conversation naturally and briefly.</system>\n\n${fullHistory}`;
-        
-        // Make API request for therapist response
-        const response = await fetch('/api/kinos', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            content: systemMessage,
-            firstName: 'Circle',
-            specialist: circleData?.specialist || 'generalist',
-            pseudonym: `circle-${circleId}-therapist`
-          }),
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to get response');
-        }
-        
-        const data = await response.json();
-        const audioUrl = await textToSpeech(data.response, 'therapist');
-        const messageId = `response-${Date.now()}`;
-        
-        // Add the therapist's response to messages
-        setMessages(prev => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: data.response,
-            id: messageId,
-            sender: therapist.name,
-            memberId: 'therapist',
-            audio: audioUrl
-          }
-        ]);
-        
-        // Play the audio response
-        if (audioUrl) {
-          playAudio(audioUrl, messageId);
-        }
-        
-        // Reset the cancel flag after therapist responds
-        shouldCancelNextAiMessageRef.current = false;
-        
-        // Continue with the normal conversation flow after therapist responds
-        setTimeout(() => {
-          processNextTalkerRef.current?.();
-        }, 1000);
-        
-      } catch (error) {
-        console.error('Error processing user message:', error);
-        // Reset the cancel flag on error
-        shouldCancelNextAiMessageRef.current = false;
-        // Continue with normal flow even if there's an error
-        setTimeout(() => {
-          processNextTalkerRef.current?.();
-        }, 1000);
-      }
-    };
-    
-    // Send the message if no audio is playing
+    // Continue with the normal conversation flow
+    // If no audio is playing, trigger the next speaker
     if (!isPlaying) {
-      sendUserMessage();
-    } else {
-      // If audio is playing, wait for it to finish
-      const currentAudio = audioRef.current;
-      if (currentAudio) {
-        const handleAudioEnd = () => {
-          sendUserMessage();
-          currentAudio.removeEventListener('ended', handleAudioEnd);
-        };
-        currentAudio.addEventListener('ended', handleAudioEnd);
-      }
+      setTimeout(() => {
+        processNextTalkerRef.current?.();
+      }, 1000);
     }
+    // If audio is playing, the next speaker will be triggered when the audio ends
   };
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
