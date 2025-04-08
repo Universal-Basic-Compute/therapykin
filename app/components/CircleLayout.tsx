@@ -210,15 +210,24 @@ export default function CircleLayout({
           return;
         }
         
-        // Create a conversation history string from previous messages
-        const conversationHistory = messages.map(msg => {
+        // Find the last message from the therapist
+        const lastTherapistMessageIndex = messages.findLastIndex(msg => msg.memberId === 'therapist');
+    
+        // Get conversation history up to the last message from the therapist
+        // If no previous message from the therapist, include all messages
+        const relevantMessages = lastTherapistMessageIndex >= 0 
+          ? messages.slice(0, lastTherapistMessageIndex + 1) 
+          : messages;
+    
+        // Create a conversation history string from relevant messages
+        const conversationHistory = relevantMessages.map(msg => {
           const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
           return `${speaker}: ${msg.content}`;
         }).join('\n\n');
-        
+    
         // Add the current user message to the history
         const fullHistory = `${conversationHistory}\n\nYou: ${message}`;
-        
+    
         // Construct the system message with the new format and include conversation history
         const systemMessage = `<system>You are ${therapist.name}${therapist.role ? `, ${therapist.role}` : ''}. \nRespond to the conversation naturally and briefly.</system>\n\n${fullHistory}`;
         
@@ -445,8 +454,17 @@ export default function CircleLayout({
       // Construct the system message with the new format
       const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. \nRespond to the conversation naturally and briefly.</system>`;
 
-      // Create a conversation history string from previous messages
-      const conversationHistory = messages.map(msg => {
+      // Find the last message from this kin
+      const lastMessageIndex = messages.findLastIndex(msg => msg.memberId === nextTalker.id);
+      
+      // Get conversation history up to the last message from this kin
+      // If no previous message from this kin, include all messages
+      const relevantMessages = lastMessageIndex >= 0 
+        ? messages.slice(0, lastMessageIndex + 1) 
+        : messages;
+      
+      // Create a conversation history string from relevant messages
+      const conversationHistory = relevantMessages.map(msg => {
         const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
         return `${speaker}: ${msg.content}`;
       }).join('\n\n');
