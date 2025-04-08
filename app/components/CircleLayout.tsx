@@ -188,6 +188,8 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
         role: member.role || null
       }));
     
+    console.log('Available speakers for therapist to choose from:', availableSpeakers);
+    
     // Create the system message for the therapist
     const systemMessage = `<system>Based on the conversation, who should talk next? Answer only with the ID in a JSON format. Available speakers: ${JSON.stringify(availableSpeakers)}</system>`;
     
@@ -199,6 +201,8 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
     
     // Combine system message with conversation history
     const fullPrompt = `${systemMessage}\n\n${conversationHistory}`;
+    
+    console.log('Asking therapist who should speak next...');
     
     // Make API request to the analysis endpoint
     const response = await fetch('/api/kinos/analysis', {
@@ -221,27 +225,41 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
     }
     
     const data = await response.json();
-    console.log('Therapist analysis response:', data);
+    console.log('Therapist analysis raw response:', data.response);
     
     // Parse the response to get the next speaker ID
+    let nextSpeakerId = null;
+    
     try {
       // Try to parse the response as JSON
       const responseJson = JSON.parse(data.response);
       if (responseJson && responseJson.id) {
-        return responseJson.id;
+        nextSpeakerId = responseJson.id;
+        console.log('Therapist chose next speaker (JSON format):', nextSpeakerId);
       }
     } catch (parseError) {
+      console.log('Could not parse response as JSON, trying regex...');
       // If parsing fails, try to extract the ID using regex
       const idMatch = data.response.match(/"id"\s*:\s*"([^"]+)"/);
       if (idMatch && idMatch[1]) {
-        return idMatch[1];
+        nextSpeakerId = idMatch[1];
+        console.log('Therapist chose next speaker (regex match):', nextSpeakerId);
       }
     }
     
     // If we couldn't get a valid speaker ID, return a random one
-    console.warn('Could not determine next speaker from therapist response, selecting randomly');
-    const randomIndex = Math.floor(Math.random() * availableSpeakers.length);
-    return availableSpeakers[randomIndex].id;
+    if (!nextSpeakerId) {
+      console.warn('Could not determine next speaker from therapist response, selecting randomly');
+      const randomIndex = Math.floor(Math.random() * availableSpeakers.length);
+      nextSpeakerId = availableSpeakers[randomIndex].id;
+      console.log('Randomly selected speaker:', nextSpeakerId);
+    }
+    
+    // Log the chosen speaker's details
+    const chosenSpeaker = availableSpeakers.find(s => s.id === nextSpeakerId);
+    console.log('Next speaker details:', chosenSpeaker);
+    
+    return nextSpeakerId;
     
   } catch (error) {
     console.error('Error asking therapist for next speaker:', error);
@@ -674,6 +692,8 @@ export default function CircleLayout({
           setCurrentPlayingId(null);
           URL.revokeObjectURL(normalizedUrl);
           
+          console.log('Audio ended, asking therapist who should speak next...');
+          
           // Continue with the normal flow, but now ask the therapist who should speak next
           setTimeout(async () => {
             // Ask the therapist who should speak next
@@ -693,16 +713,19 @@ export default function CircleLayout({
               if (nextSpeakerIndex >= 0) {
                 // Update the current speaker index
                 setCurrentSpeakerIndex(nextSpeakerIndex);
+                console.log(`Setting next speaker index to ${nextSpeakerIndex} (${availableMembers[nextSpeakerIndex].name})`);
                 
                 // Process the next talker
                 processNextTalkerRef.current?.();
               } else {
                 console.error(`Next speaker ID ${nextSpeakerId} not found in available members`);
                 // Fall back to the current speaker index
+                console.log(`Falling back to current speaker index: ${currentSpeakerIndex}`);
                 processNextTalkerRef.current?.();
               }
             } else {
               // If we couldn't get a next speaker ID, just continue with the current index
+              console.log(`No next speaker ID returned, continuing with current index: ${currentSpeakerIndex}`);
               processNextTalkerRef.current?.();
             }
           }, AUDIO_BUFFER_TIME);
