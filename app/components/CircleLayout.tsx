@@ -505,16 +505,17 @@ export default function CircleLayout({
       const nextTalker = availableMembers[currentSpeakerIndex % availableMembers.length];
       console.log(`Processing next talker: ${nextTalker.name}`);
 
-      // Construct the system message with the new format and detailed guidelines
+      // Construct the basic system message (without the guidelines)
       const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
-This is a group therapy circle about ${circleData?.name || 'support'}.
+This is a group therapy circle about ${circleData?.name || 'support'}.</system>`;
 
-IMPORTANT GUIDELINES:
+      // Move the guidelines to the addSystem parameter
+      const addSystem = `IMPORTANT GUIDELINES:
 1. Respond to the conversation naturally and briefly (1-3 sentences)
 2. Build upon what others have said rather than repeating similar points
 3. Bring new perspectives or personal experiences related to the topic
 4. If someone asked a question, try to address it if others haven't already
-5. Stay authentic to your character's background and recovery stage</system>`;
+5. Stay authentic to your character's background and recovery stage`;
 
       // Find the last message from this kin
       const lastMessageIndex = messages.findLastIndex(msg => msg.memberId === nextTalker.id);
@@ -544,7 +545,8 @@ IMPORTANT GUIDELINES:
           content: fullPrompt,
           firstName: 'Circle', 
           specialist: circleData?.specialist || 'generalist',
-          pseudonym: `circle-${circleId}-${nextTalker.id}`
+          pseudonym: `circle-${circleId}-${nextTalker.id}`,
+          addSystem: addSystem
         }),
       });
 
@@ -640,16 +642,17 @@ IMPORTANT GUIDELINES:
       const nextTalker = availableMembers[speakerIndex % availableMembers.length];
       console.log(`Preparing message for next talker: ${nextTalker.name}`);
 
-      // Construct the system message with the new format and detailed guidelines
+      // Construct the basic system message (without the guidelines)
       const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. 
-This is a group therapy circle about ${circleData?.name || 'support'}.
+This is a group therapy circle about ${circleData?.name || 'support'}.</system>`;
 
-IMPORTANT GUIDELINES:
+      // Move the guidelines to the addSystem parameter
+      const addSystem = `IMPORTANT GUIDELINES:
 1. Respond to the conversation naturally and briefly (1-3 sentences)
 2. Build upon what others have said rather than repeating similar points
 3. Bring new perspectives or personal experiences related to the topic
 4. If someone asked a question, try to address it if others haven't already
-5. Stay authentic to your character's background and recovery stage</system>`;
+5. Stay authentic to your character's background and recovery stage`;
 
       // Find the last message from this kin
       const lastMessageIndex = messages.findLastIndex(msg => msg.memberId === nextTalker.id);
@@ -679,7 +682,8 @@ IMPORTANT GUIDELINES:
           content: fullPrompt,
           firstName: 'Circle', 
           specialist: circleData?.specialist || 'generalist',
-          pseudonym: `circle-${circleId}-${nextTalker.id}`
+          pseudonym: `circle-${circleId}-${nextTalker.id}`,
+          addSystem: addSystem
         }),
       });
 
@@ -1003,7 +1007,9 @@ IMPORTANT GUIDELINES:
           return;
         }
 
-        const systemMessage = `<system>You are ${circleData?.therapist?.name || 'Therapist'}${circleData?.therapist?.role ? `, ${circleData?.therapist?.role}` : ''}. \nStart with a warm greeting like "Hello everyone" and welcome everyone to this group therapy session. Introduce yourself briefly as the group facilitator. Present members: ${presentMembers.join(', ')}</system>`;
+        const systemMessage = `<system>You are ${circleData?.therapist?.name || 'Therapist'}${circleData?.therapist?.role ? `, ${circleData?.therapist?.role}` : ''}.</system>`;
+        
+        const addSystem = `Start with a warm greeting like "Hello everyone" and welcome everyone to this group therapy session. Introduce yourself briefly as the group facilitator. Present members: ${presentMembers.join(', ')}`;
         
         // Determine if this is a hero's journey circle
         const isHerosJourneyCircle = ['addiction', 'depression', 'ptsd', 'life-purpose'].includes(circleId);
@@ -1020,7 +1026,8 @@ IMPORTANT GUIDELINES:
             content: systemMessage,
             firstName: 'Circle',
             specialist: isHerosJourneyCircle ? 'herosjourney' : 'generalist',
-            pseudonym: therapistPseudonym // Use the correct therapist pseudonym
+            pseudonym: therapistPseudonym, // Use the correct therapist pseudonym
+            addSystem: addSystem
           }),
         });
 

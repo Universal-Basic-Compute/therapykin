@@ -14,7 +14,8 @@ export async function POST(request: NextRequest) {
       screenshot = null,
       pseudonym = null,
       min_files = 1,
-      max_files = 2
+      max_files = 2,
+      addSystem = null
     } = await request.json();
     
     // Validate specialist value if provided
@@ -57,6 +58,11 @@ export async function POST(request: NextRequest) {
       min_files,
       max_files
     };
+    
+    // Add addSystem if it exists
+    if (addSystem) {
+      requestBody.addSystem = addSystem;
+    }
     
     // Add screenshot if it exists
     if (screenshot) {

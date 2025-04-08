@@ -12,7 +12,8 @@ export async function POST(request: NextRequest) {
       mode = null, 
       specialist = null,
       screenshot = null,
-      pseudonym = null
+      pseudonym = null,
+      addSystem = null
     } = await request.json();
     
     // Validate specialist value if provided
@@ -53,6 +54,11 @@ export async function POST(request: NextRequest) {
       model: "claude-3-7-sonnet-latest",
       history_length: 50
     };
+    
+    // Add addSystem if it exists
+    if (addSystem) {
+      requestBody.addSystem = addSystem;
+    }
     
     // Add screenshot if it exists
     if (screenshot) {
