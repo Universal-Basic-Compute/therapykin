@@ -41,8 +41,9 @@ export async function POST(request: NextRequest) {
     
     console.log(`Sending bridge message for user: ${firstName}, bridge: ${bridgeId}`);
     
-    // Use pseudonym directly as kinId
-    const kinId = pseudonym;
+    // Use sanitized bridge ID as the kinId
+    const sanitizedBridgeId = bridgeId.replace(/[^a-zA-Z0-9-]/g, '');
+    const kinId = sanitizedBridgeId;
     
     // Create the KinOS API URL directly
     const baseUrl = `${process.env.KINOS_API_URL}/v2/blueprints/therapykinbridge/kins/${encodeURIComponent(kinId)}/channels/${encodeURIComponent(pseudonym)}/messages`;
@@ -121,8 +122,9 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Use pseudonym if provided, otherwise use a default
-    const kinId = pseudonym || 'bridge-user';
+    // Use sanitized bridge ID as the kinId
+    const sanitizedBridgeId = bridgeId.replace(/[^a-zA-Z0-9-]/g, '');
+    const kinId = sanitizedBridgeId;
     
     // Create the KinOS API URL directly
     let baseUrl = `${process.env.KINOS_API_URL}/v2/blueprints/therapykinbridge/kins/${encodeURIComponent(kinId)}/channels/${encodeURIComponent(pseudonym)}/messages`;
