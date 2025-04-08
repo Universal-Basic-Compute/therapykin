@@ -39,6 +39,9 @@ export const sessionsTable = base('SESSIONS');
 // Get the specialists table
 export const specialistsTable = base('SPECIALISTS');
 
+// Get the bridges table
+export const bridgesTable = base('BRIDGES');
+
 // Cache for specialists to avoid frequent database calls
 let specialistsCache: Array<{id: string, name: string, description: string, sortOrder: number}> = [];
 let specialistsCacheExpiry = 0;
@@ -331,6 +334,321 @@ function escapeAirtableString(value: string): string {
   if (!value) return '';
   // Replace single quotes with escaped single quotes
   return value.replace(/'/g, "\\'");
+}
+
+// Bridge-related functions
+export interface Bridge {
+  id: string;
+  name: string;
+  description: string;
+  type: string;
+  creatorEmail: string;
+  participants: string[];
+  status: string;
+  createdAt: string;
+  lastActive: string;
+}
+
+// Get bridges by user email
+export async function getBridgesByUser(email: string): Promise<Bridge[]> {
+  try {
+    if (!email) {
+      console.error('Email is required for getBridgesByUser');
+      return [];
+    }
+    
+    const escapedEmail = escapeAirtableString(email);
+    const formula = `OR(FIND("${escapedEmail}", LOWER({Participants})), FIND("${escapedEmail}", LOWER({CreatorEmail})))`;
+    
+    const records = await bridgesTable.select({
+      filterByFormula: formula,
+      sort: [{ field: 'LastActive', direction: 'desc' }]
+    }).all();
+    
+    return records.map(record => ({
+      id: record.id,
+      name: record.fields.Name as string || '',
+      description: record.fields.Description as string || '',
+      type: record.fields.Type as string || 'relationship',
+      creatorEmail: record.fields.CreatorEmail as string || '',
+      participants: (record.fields.Participants as string || '').split(',').map(p => p.trim()),
+      status: record.fields.Status as string || 'active',
+      createdAt: record.fields.CreatedAt as string || new Date().toISOString(),
+      lastActive: record.fields.LastActive as string || new Date().toISOString()
+    }));
+  } catch (error) {
+    console.error('Error fetching bridges by user:', error);
+    return [];
+  }
+}
+
+// Get a single bridge by ID
+export async function getBridge(id: string): Promise<Bridge | null> {
+  try {
+    if (!id) {
+      console.error('Bridge ID is required for getBridge');
+      return null;
+    }
+    
+    const record = await bridgesTable.find(id);
+    
+    if (!record) {
+      return null;
+    }
+    
+    return {
+      id: record.id,
+      name: record.fields.Name as string || '',
+      description: record.fields.Description as string || '',
+      type: record.fields.Type as string || 'relationship',
+      creatorEmail: record.fields.CreatorEmail as string || '',
+      participants: (record.fields.Participants as string || '').split(',').map(p => p.trim()),
+      status: record.fields.Status as string || 'active',
+      createdAt: record.fields.CreatedAt as string || new Date().toISOString(),
+      lastActive: record.fields.LastActive as string || new Date().toISOString()
+    };
+  } catch (error) {
+    console.error('Error fetching bridge by ID:', error);
+    return null;
+  }
+}
+
+// Create a new bridge
+export async function createBridge(data: {
+  name: string;
+  description: string;
+  type: string;
+  creatorEmail: string;
+  participantEmail: string | null;
+}): Promise<Bridge | null> {
+  try {
+    const now = new Date().toISOString();
+    
+    // Initialize participants with the creator
+    let participants = [data.creatorEmail];
+    
+    // Add the participant if provided
+    if (data.participantEmail) {
+      participants.push(data.participantEmail);
+    }
+    
+    const records = await bridgesTable.create([
+      {
+        fields: {
+          Name: data.name,
+          Description: data.description,
+          Type: data.type,
+          CreatorEmail: data.creatorEmail,
+          Participants: participants.join(','),
+          Status: 'active',
+          CreatedAt: now,
+          LastActive: now
+        }
+      }
+    ]);
+    
+    if (!records || records.length === 0) {
+      throw new Error('No records returned from Airtable');
+    }
+    
+    const newBridge = records[0];
+    
+    return {
+      id: newBridge.id,
+      name: newBridge.fields.Name as string || '',
+      description: newBridge.fields.Description as string || '',
+      type: newBridge.fields.Type as string || 'relationship',
+      creatorEmail: newBridge.fields.CreatorEmail as string || '',
+      participants: (newBridge.fields.Participants as string || '').split(',').map(p => p.trim()),
+      status: newBridge.fields.Status as string || 'active',
+      createdAt: newBridge.fields.CreatedAt as string || now,
+      lastActive: newBridge.fields.LastActive as string || now
+    };
+  } catch (error) {
+    console.error('Error creating bridge:', error);
+    return null;
+  }
+}
+
+// Update a bridge
+export async function updateBridge(
+  id: string,
+  data: {
+    name?: string;
+    description?: string;
+    type?: string;
+    status?: string;
+  }
+): Promise<Bridge | null> {
+  try {
+    if (!id) {
+      console.error('Bridge ID is required for updateBridge');
+      return null;
+    }
+    
+    const now = new Date().toISOString();
+    
+    const records = await bridgesTable.update([
+      {
+        id,
+        fields: {
+          ...data,
+          LastActive: now
+        }
+      }
+    ]);
+    
+    if (!records || records.length === 0) {
+      throw new Error('No records returned from Airtable');
+    }
+    
+    const updatedBridge = records[0];
+    
+    return {
+      id: updatedBridge.id,
+      name: updatedBridge.fields.Name as string || '',
+      description: updatedBridge.fields.Description as string || '',
+      type: updatedBridge.fields.Type as string || 'relationship',
+      creatorEmail: updatedBridge.fields.CreatorEmail as string || '',
+      participants: (updatedBridge.fields.Participants as string || '').split(',').map(p => p.trim()),
+      status: updatedBridge.fields.Status as string || 'active',
+      createdAt: updatedBridge.fields.CreatedAt as string || '',
+      lastActive: updatedBridge.fields.LastActive as string || now
+    };
+  } catch (error) {
+    console.error('Error updating bridge:', error);
+    return null;
+  }
+}
+
+// Delete a bridge
+export async function deleteBridge(id: string): Promise<boolean> {
+  try {
+    if (!id) {
+      console.error('Bridge ID is required for deleteBridge');
+      return false;
+    }
+    
+    await bridgesTable.destroy(id);
+    return true;
+  } catch (error) {
+    console.error('Error deleting bridge:', error);
+    return false;
+  }
+}
+
+// Add a participant to a bridge
+export async function addParticipantToBridge(
+  id: string,
+  email: string
+): Promise<Bridge | null> {
+  try {
+    if (!id || !email) {
+      console.error('Bridge ID and email are required for addParticipantToBridge');
+      return null;
+    }
+    
+    // Get the current bridge
+    const bridge = await getBridge(id);
+    
+    if (!bridge) {
+      return null;
+    }
+    
+    // Add the new participant
+    const participants = [...bridge.participants, email];
+    
+    // Update the bridge
+    const now = new Date().toISOString();
+    
+    const records = await bridgesTable.update([
+      {
+        id,
+        fields: {
+          Participants: participants.join(','),
+          LastActive: now
+        }
+      }
+    ]);
+    
+    if (!records || records.length === 0) {
+      throw new Error('No records returned from Airtable');
+    }
+    
+    const updatedBridge = records[0];
+    
+    return {
+      id: updatedBridge.id,
+      name: updatedBridge.fields.Name as string || '',
+      description: updatedBridge.fields.Description as string || '',
+      type: updatedBridge.fields.Type as string || 'relationship',
+      creatorEmail: updatedBridge.fields.CreatorEmail as string || '',
+      participants: (updatedBridge.fields.Participants as string || '').split(',').map(p => p.trim()),
+      status: updatedBridge.fields.Status as string || 'active',
+      createdAt: updatedBridge.fields.CreatedAt as string || '',
+      lastActive: updatedBridge.fields.LastActive as string || now
+    };
+  } catch (error) {
+    console.error('Error adding participant to bridge:', error);
+    return null;
+  }
+}
+
+// Remove a participant from a bridge
+export async function removeParticipantFromBridge(
+  id: string,
+  email: string
+): Promise<Bridge | null> {
+  try {
+    if (!id || !email) {
+      console.error('Bridge ID and email are required for removeParticipantFromBridge');
+      return null;
+    }
+    
+    // Get the current bridge
+    const bridge = await getBridge(id);
+    
+    if (!bridge) {
+      return null;
+    }
+    
+    // Remove the participant
+    const participants = bridge.participants.filter(p => p !== email);
+    
+    // Update the bridge
+    const now = new Date().toISOString();
+    
+    const records = await bridgesTable.update([
+      {
+        id,
+        fields: {
+          Participants: participants.join(','),
+          LastActive: now
+        }
+      }
+    ]);
+    
+    if (!records || records.length === 0) {
+      throw new Error('No records returned from Airtable');
+    }
+    
+    const updatedBridge = records[0];
+    
+    return {
+      id: updatedBridge.id,
+      name: updatedBridge.fields.Name as string || '',
+      description: updatedBridge.fields.Description as string || '',
+      type: updatedBridge.fields.Type as string || 'relationship',
+      creatorEmail: updatedBridge.fields.CreatorEmail as string || '',
+      participants: (updatedBridge.fields.Participants as string || '').split(',').map(p => p.trim()),
+      status: updatedBridge.fields.Status as string || 'active',
+      createdAt: updatedBridge.fields.CreatedAt as string || '',
+      lastActive: updatedBridge.fields.LastActive as string || now
+    };
+  } catch (error) {
+    console.error('Error removing participant from bridge:', error);
+    return null;
+  }
 }
 
 export { base, usersTable, escapeAirtableString };
