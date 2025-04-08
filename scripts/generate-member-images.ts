@@ -1,12 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
-const KINOS_API_URL = process.env.KINOS_API_URL || 'https://api.kinos.ai';
-const KINOS_API_KEY = process.env.KINOS_API_KEY;
+import { fs, path, axios, KINOS_API_URL, KINOS_API_KEY } from './config';
 const IDEOGRAM_API_KEY = process.env.IDEOGRAM_API_KEY;
 
 interface CircleMember {
