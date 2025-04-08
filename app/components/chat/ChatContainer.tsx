@@ -57,7 +57,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
         <div className="space-y-4">
           {chatHistory
-            .filter(msg => !msg.content.includes('<system>')) // Filter out system messages
+            .filter(msg => typeof msg.content === 'string' && !msg.content.includes('<system>')) // Filter out system messages and ensure content is a string
             .map((msg) => (
               <div key={msg.id || Math.random()} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div 
