@@ -542,7 +542,11 @@ export default function TherapistDashboard() {
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     <button 
-                                      onClick={() => generateClientInsights(client.id, client.name, client.pseudonym)}
+                                      onClick={() => generateClientInsights(
+                                        client.id,
+                                        client.name,
+                                        client.pseudonym || generatePseudonymFromEmail(client.id).name
+                                      )}
                                       className="text-sm px-3 py-1 border border-[var(--primary)]/50 text-[var(--primary)] rounded hover:bg-[var(--primary)]/10"
                                     >
                                       AI Insights

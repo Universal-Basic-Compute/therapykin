@@ -50,14 +50,15 @@ export async function GET(request: NextRequest) {
       
       const sessionDate = new Date(record.fields.CreatedAt);
       const clientIdentifier = generatePseudonymFromEmail(record.fields.Email);
+      const pseudonym = record.fields.Pseudonym || clientIdentifier.name;
       const minutesActive = record.fields.MinutesActive || 0;
       
       // Only include completed sessions (in the past)
       if (sessionDate < now) {
         pastSessions.push({
           id: record.id,
-          clientId: clientIdentifier.name,
-          pseudonym: record.fields.Pseudonym || clientIdentifier.name,
+          clientId: record.fields.Email,
+          pseudonym: pseudonym,
           clientColor: clientIdentifier.color,
           timestamp: record.fields.CreatedAt,
           minutesActive: minutesActive,
