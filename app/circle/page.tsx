@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import CircleLayout from '../components/CircleLayout';
 import { useAuth } from '../contexts/AuthContext';
 import { useSearchParams } from 'next/navigation';
@@ -116,8 +117,19 @@ export default function CirclePage() {
                 <div className="flex flex-wrap gap-3 justify-center">
                   {circleData?.members?.filter((m: any) => !m.isDotted && m.id !== 'empty').map((member: any, index: number) => (
                     <div key={index} className="text-center">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--primary)]/80 to-[var(--primary-dark)]/80 flex items-center justify-center text-white font-medium mx-auto mb-1">
-                        {member.name[0]}
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-[var(--primary)]/80 to-[var(--primary-dark)]/80 flex items-center justify-center text-white font-medium mx-auto mb-1 relative">
+                        <Image
+                          src={`/members/${circleName}-${member.id}.jpg`}
+                          alt={member.name}
+                          fill
+                          className="object-cover"
+                          sizes="48px"
+                          onError={(e) => {
+                            // Fallback to first letter if image fails to load
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).parentElement!.innerHTML = member.name[0];
+                          }}
+                        />
                       </div>
                       <div className="text-xs font-medium">{member.name}</div>
                       {member.role && (
