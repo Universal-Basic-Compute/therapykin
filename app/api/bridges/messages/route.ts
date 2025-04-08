@@ -46,9 +46,9 @@ export async function POST(request: NextRequest) {
     
     // Create the KinOS API URL
     const baseUrl = createKinOsApiUrl({
-      endpoint: 'bridges/messages',
-      specialist: specialist || 'mediator',
-      kinId
+      endpoint: 'v2/blueprints/therapykinbridges/kins/' + encodeURIComponent(kinId) + '/messages',
+      specialist: null, // No specialist needed in this path structure
+      kinId: null // No kinId needed as it's already in the path
     });
     
     console.log(`Using API endpoint: ${baseUrl}`);
@@ -130,9 +130,9 @@ export async function GET(request: NextRequest) {
     
     // Create the KinOS API URL with query parameters
     const baseUrl = createKinOsApiUrl({
-      endpoint: 'bridges/messages',
-      specialist: 'mediator',
-      kinId,
+      endpoint: 'v2/blueprints/therapykinbridges/kins/' + encodeURIComponent(kinId) + '/messages',
+      specialist: null, // No specialist needed in this path structure
+      kinId: null, // No kinId needed as it's already in the path
       queryParams: { 
         bridgeId,
         ...(since ? { since } : {})
