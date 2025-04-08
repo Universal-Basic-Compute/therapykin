@@ -215,17 +215,19 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
     }
     
     const data = await response.json();
-    // Keep this important log for debugging therapist decisions
+    
+    // Log the raw response but don't display it in the chat
     console.log('Therapist analysis raw response:', data.response);
     
     // Parse the response to get the next speaker ID
     let nextSpeakerId = null;
+    let explanation = '';
     
     try {
       // Extract the explanation part (everything before the JSON)
       const jsonStartIndex = data.response.indexOf('{');
       if (jsonStartIndex > 0) {
-        const explanation = data.response.substring(0, jsonStartIndex).trim();
+        explanation = data.response.substring(0, jsonStartIndex).trim();
         console.log('Therapist explanation:', explanation);
         
         // Parse the JSON part
