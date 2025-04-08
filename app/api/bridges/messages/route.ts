@@ -44,12 +44,8 @@ export async function POST(request: NextRequest) {
     // Use pseudonym directly as kinId
     const kinId = pseudonym;
     
-    // Create the KinOS API URL
-    const baseUrl = createKinOsApiUrl({
-      endpoint: 'v2/blueprints/therapykinbridge/kins/' + encodeURIComponent(kinId) + '/channels/' + encodeURIComponent(pseudonym) + '/messages',
-      specialist: null, // No specialist needed in this path structure
-      kinId: kinId // Pass the kinId even though it's in the path
-    });
+    // Create the KinOS API URL directly
+    const baseUrl = `${process.env.KINOS_API_URL}/v2/blueprints/therapykinbridge/kins/${encodeURIComponent(kinId)}/channels/${encodeURIComponent(pseudonym)}/messages`;
     
     console.log(`Using API endpoint: ${baseUrl}`);
     
@@ -128,16 +124,16 @@ export async function GET(request: NextRequest) {
     // Use pseudonym if provided, otherwise use a default
     const kinId = pseudonym || 'bridge-user';
     
-    // Create the KinOS API URL with query parameters
-    const baseUrl = createKinOsApiUrl({
-      endpoint: 'v2/blueprints/therapykinbridge/kins/' + encodeURIComponent(kinId) + '/channels/' + encodeURIComponent(pseudonym) + '/messages',
-      specialist: null, // No specialist needed in this path structure
-      kinId: kinId, // Pass the kinId even though it's in the path
-      queryParams: { 
-        bridgeId,
-        ...(since ? { since } : {})
-      }
-    });
+    // Create the KinOS API URL directly
+    let baseUrl = `${process.env.KINOS_API_URL}/v2/blueprints/therapykinbridge/kins/${encodeURIComponent(kinId)}/channels/${encodeURIComponent(pseudonym)}/messages`;
+    
+    // Add query parameters
+    const queryParams = new URLSearchParams();
+    queryParams.append('bridgeId', bridgeId);
+    if (since) {
+      queryParams.append('since', since);
+    }
+    baseUrl += `?${queryParams.toString()}`;
     
     console.log(`Using API endpoint for bridge messages: ${baseUrl}`);
     
