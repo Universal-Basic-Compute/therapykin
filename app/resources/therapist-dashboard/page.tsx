@@ -38,6 +38,7 @@ interface InsightsModalState {
   loading: boolean;
   insights: string;
   error: string;
+  mode?: string;
 }
 
 interface SessionData {
@@ -292,12 +293,7 @@ export default function TherapistDashboard() {
     });
     
     try {
-      // Use the user's name directly from the user object
-      const userName = user?.firstName
-        ? `${user.firstName}` 
-        : 'NicolasReynolds'; // Default to NicolasReynolds if user name not available
-      
-      const response = await fetch(`/projects/therapykinherosjourney/${userName}/analysis`, {
+      const response = await fetch(`/v2/blueprints/therapykinherosjourney/kins/${clientId}/analysis`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -309,7 +305,8 @@ export default function TherapistDashboard() {
           3. Key patterns in their communication and emotional responses
           4. Potential therapeutic approaches that might be effective
           5. Areas of progress and concern to monitor`,
-          model: 'claude-3-7-sonnet-latest'
+          model: 'claude-3-5-haiku-latest',
+          addSystem: "Focus on providing actionable therapeutic insights and maintaining client confidentiality"
         })
       });
       
@@ -322,7 +319,8 @@ export default function TherapistDashboard() {
       setInsightsModal(prev => ({
         ...prev,
         loading: false,
-        insights: data.response
+        insights: data.response,
+        mode: data.mode
       }));
     } catch (error) {
       console.error('Error generating client insights:', error);
