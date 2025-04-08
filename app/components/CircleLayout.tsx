@@ -334,7 +334,7 @@ export default function CircleLayout({
             // Update the current speaker index
             setCurrentSpeakerIndex(nextSpeakerIndex);
             
-            // Process the next talker
+            // Process the next talker - this will play the audio which will trigger the next speaker selection
             processNextTalkerRef.current?.();
           } else {
             console.error(`Next speaker ID ${nextSpeakerId} not found in available members`);
@@ -347,7 +347,7 @@ export default function CircleLayout({
         }
       }, 1000);
     }
-    // If audio is playing, the next speaker will be triggered when the audio ends
+    // If audio is playing, the next speaker will be prepared when the current audio ends
   };
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -363,6 +363,8 @@ export default function CircleLayout({
   const [userMessagePendingRef, userMessageContentRef] = [useRef(false), useRef('')];
   // Add a new ref to track if we should cancel the next AI message
   const shouldCancelNextAiMessageRef = useRef(false);
+  // Add a ref to store the next prepared message
+  const nextPreparedMessageRef = useRef<{messageId: string, audioUrl: string} | null>(null);
 
   // Define members at the top of component
   const members: Member[] = React.useMemo(() => {
@@ -562,20 +564,13 @@ export default function CircleLayout({
         }
       ]);
 
-      // Update speaker index for next turn
-      setCurrentSpeakerIndex((prevIndex) => 
-        (prevIndex + 1) % availableMembers.length
-      );
-
       // Reset processing flags
       setIsProcessingTalk(false);
       setIsLoadingResponse(false);
 
-      // Play the audio, and when it starts, trigger the next message preparation
+      // Play the audio - this will trigger the next speaker selection
       if (audioUrl) {
         playAudio(audioUrl, messageId);
-        // Start preparing the next message as soon as this one starts playing
-        processNextTalkerRef.current?.();
       }
 
     } catch (error) {
@@ -599,6 +594,102 @@ export default function CircleLayout({
           processNextTalkerRef.current?.();
         }, RETRY_DELAY * 2);
       }
+    }
+  };
+
+  // Add a new function to prepare the next message without playing it
+  const prepareNextMessage = async (speakerIndex: number, availableMembers: Member[]) => {
+    // Check if we should cancel this message due to a user message
+    if (shouldCancelNextAiMessageRef.current) {
+      console.log('Canceling AI message preparation because user sent a message');
+      return;
+    }
+
+    try {
+      // Get next speaker using speakerIndex with modulo to stay in bounds
+      const nextTalker = availableMembers[speakerIndex % availableMembers.length];
+      console.log(`Preparing message for next talker: ${nextTalker.name}`);
+
+      // Construct the system message with the new format
+      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. \nRespond to the conversation naturally and briefly.</system>`;
+
+      // Find the last message from this kin
+      const lastMessageIndex = messages.findLastIndex(msg => msg.memberId === nextTalker.id);
+    
+      // Get all messages SINCE the last message from this kin (not including it)
+      // If no previous message from this kin, include all messages
+      const relevantMessages = lastMessageIndex >= 0 
+        ? messages.slice(lastMessageIndex + 1) // Get messages AFTER the last message from this kin
+        : messages;
+    
+      // Create a conversation history string from relevant messages
+      const conversationHistory = relevantMessages.map(msg => {
+        const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
+        return `${speaker}: ${msg.content}`;
+      }).join('\n\n');
+
+      // Combine system message with conversation history
+      const fullPrompt = `${systemMessage}\n\n${conversationHistory}`;
+
+      // Make API request and get response
+      const response = await fetch('/api/kinos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: fullPrompt,
+          firstName: 'Circle', 
+          specialist: circleData?.specialist || 'generalist',
+          pseudonym: `circle-${circleId}-${nextTalker.id}`
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      const data = await response.json();
+      
+      // Check again if we should cancel this message
+      if (shouldCancelNextAiMessageRef.current) {
+        console.log('Canceling AI message after API response because user sent a message');
+        return;
+      }
+      
+      // Generate audio for TTS
+      const audioUrl = await textToSpeech(data.response, nextTalker.id);
+      const messageId = `msg-${Date.now()}`;
+
+      // Check one more time if we should cancel this message
+      if (shouldCancelNextAiMessageRef.current) {
+        console.log('Canceling AI message before adding to UI because user sent a message');
+        return;
+      }
+
+      // Add the message to the UI
+      setMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: data.response,
+          id: messageId,
+          sender: nextTalker.name,
+          memberId: nextTalker.id,
+          audio: audioUrl
+        }
+      ]);
+
+      // Store the prepared message for playback when the current audio ends
+      nextPreparedMessageRef.current = {
+        messageId,
+        audioUrl
+      };
+
+      console.log(`Message prepared for ${nextTalker.name}, will play when current audio ends`);
+
+    } catch (error) {
+      console.error('[Circle] Error preparing next message:', error);
     }
   };
 
@@ -677,6 +768,47 @@ export default function CircleLayout({
         // Set up event handlers
         audioRef.current.onplay = () => {
           setIsPlaying(true);
+          
+          // As soon as audio starts playing, ask for the next speaker
+          console.log('Audio started playing, asking therapist who should speak next...');
+          askTherapistForNextSpeaker(members, messages, circleId, circleData)
+            .then(nextSpeakerId => {
+              if (nextSpeakerId) {
+                // Find the index of the next speaker in the available members
+                const availableMembers = members.filter(member => (
+                  member.id !== 'you' && 
+                  member.id !== 'empty' &&
+                  member.name && 
+                  !member.isDotted
+                ));
+                
+                const nextSpeakerIndex = availableMembers.findIndex(m => m.id === nextSpeakerId);
+                
+                if (nextSpeakerIndex >= 0) {
+                  // Update the current speaker index
+                  setCurrentSpeakerIndex(nextSpeakerIndex);
+                  console.log(`Setting next speaker index to ${nextSpeakerIndex} (${availableMembers[nextSpeakerIndex].name})`);
+                  
+                  // Prepare the next message but don't play it yet
+                  prepareNextMessage(nextSpeakerIndex, availableMembers);
+                } else {
+                  console.error(`Next speaker ID ${nextSpeakerId} not found in available members`);
+                  // Fall back to the current speaker index
+                  console.log(`Falling back to current speaker index: ${currentSpeakerIndex}`);
+                  prepareNextMessage(currentSpeakerIndex, availableMembers);
+                }
+              } else {
+                // If we couldn't get a next speaker ID, just continue with the current index
+                console.log(`No next speaker ID returned, continuing with current index: ${currentSpeakerIndex}`);
+                const availableMembers = members.filter(member => (
+                  member.id !== 'you' && 
+                  member.id !== 'empty' &&
+                  member.name && 
+                  !member.isDotted
+                ));
+                prepareNextMessage(currentSpeakerIndex, availableMembers);
+              }
+            });
         };
 
         audioRef.current.onended = () => {
@@ -684,43 +816,16 @@ export default function CircleLayout({
           setCurrentPlayingId(null);
           URL.revokeObjectURL(normalizedUrl);
           
-          console.log('Audio ended, asking therapist who should speak next...');
+          console.log('Audio ended, playing next prepared message if available');
           
-          // Continue with the normal flow, but now ask the therapist who should speak next
-          setTimeout(async () => {
-            // Ask the therapist who should speak next
-            const nextSpeakerId = await askTherapistForNextSpeaker(members, messages, circleId, circleData);
+          // Play the next prepared message if available
+          if (nextPreparedMessageRef.current) {
+            const { messageId, audioUrl } = nextPreparedMessageRef.current;
+            nextPreparedMessageRef.current = null; // Clear the prepared message
             
-            if (nextSpeakerId) {
-              // Find the index of the next speaker in the available members
-              const availableMembers = members.filter(member => (
-                member.id !== 'you' && 
-                member.id !== 'empty' &&
-                member.name && 
-                !member.isDotted
-              ));
-              
-              const nextSpeakerIndex = availableMembers.findIndex(m => m.id === nextSpeakerId);
-              
-              if (nextSpeakerIndex >= 0) {
-                // Update the current speaker index
-                setCurrentSpeakerIndex(nextSpeakerIndex);
-                console.log(`Setting next speaker index to ${nextSpeakerIndex} (${availableMembers[nextSpeakerIndex].name})`);
-                
-                // Process the next talker
-                processNextTalkerRef.current?.();
-              } else {
-                console.error(`Next speaker ID ${nextSpeakerId} not found in available members`);
-                // Fall back to the current speaker index
-                console.log(`Falling back to current speaker index: ${currentSpeakerIndex}`);
-                processNextTalkerRef.current?.();
-              }
-            } else {
-              // If we couldn't get a next speaker ID, just continue with the current index
-              console.log(`No next speaker ID returned, continuing with current index: ${currentSpeakerIndex}`);
-              processNextTalkerRef.current?.();
-            }
-          }, AUDIO_BUFFER_TIME);
+            // Play the prepared audio
+            playAudio(audioUrl, messageId);
+          }
         };
 
         audioRef.current.onerror = () => {
@@ -852,38 +957,8 @@ export default function CircleLayout({
           playAudio(audioUrl, messageId);
         }
 
-        // Add delay before starting conversation, but ask the therapist who should speak next
-        setTimeout(async () => {
-          // Ask the therapist who should speak next
-          const nextSpeakerId = await askTherapistForNextSpeaker(members, messages, circleId, circleData);
-          
-          if (nextSpeakerId) {
-            // Find the index of the next speaker in the available members
-            const availableMembers = members.filter(member => (
-              member.id !== 'you' && 
-              member.id !== 'empty' &&
-              member.name && 
-              !member.isDotted
-            ));
-            
-            const nextSpeakerIndex = availableMembers.findIndex(m => m.id === nextSpeakerId);
-            
-            if (nextSpeakerIndex >= 0) {
-              // Update the current speaker index
-              setCurrentSpeakerIndex(nextSpeakerIndex);
-              
-              // Process the next talker
-              processNextTalkerRef.current?.();
-            } else {
-              console.error(`Next speaker ID ${nextSpeakerId} not found in available members`);
-              // Fall back to the current speaker index
-              processNextTalkerRef.current?.();
-            }
-          } else {
-            // If we couldn't get a next speaker ID, just continue with the current index
-            processNextTalkerRef.current?.();
-          }
-        }, 2000);
+        // The audio playback will trigger the next speaker selection
+        // We don't need to do anything else here as the flow will continue automatically
 
       } catch (error) {
         console.error('Error sending initial message:', error);
