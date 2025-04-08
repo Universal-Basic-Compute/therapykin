@@ -116,13 +116,15 @@ export default function Header() {
               {/* Main navigation items */}
               
               {/* Circles Link */}
-              <Link href="/circles" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium">
+              <Link href="/circles" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium relative">
                 Circles
+                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-foreground/50 whitespace-nowrap">coming soon</span>
               </Link>
               
               {/* Bridges Link */}
-              <Link href="/bridges" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium">
+              <Link href="/bridges" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium relative">
                 Bridges
+                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-foreground/50 whitespace-nowrap">coming soon</span>
               </Link>
               
               {/* Our Specialists Dropdown */}
@@ -400,17 +402,19 @@ export default function Header() {
               {/* Add Circles link after specialists */}
               <Link 
                 href="/circles" 
-                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
+                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium relative"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Circles
+                <span className="text-[10px] text-foreground/50 ml-2">coming soon</span>
               </Link>
               <Link 
                 href="/bridges" 
-                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
+                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium relative"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Bridges
+                <span className="text-[10px] text-foreground/50 ml-2">coming soon</span>
               </Link>
               <Link 
                 href="/specialists/generalist" 
