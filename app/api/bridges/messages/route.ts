@@ -91,6 +91,9 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     console.log('KinOS Bridge API response:', data);
     
+    // Add a field to indicate that the message is now loaded
+    data.loading = false;
+    
     // Return the response to the client
     return NextResponse.json(data);
   } catch (error) {

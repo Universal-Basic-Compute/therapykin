@@ -68,7 +68,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                   }`}
                 >
                   {msg.loading ? (
-                    <div className="text-xs text-gray-400">...</div>
+                    <div className="text-xs text-gray-400 flex">
+                      <span className="animate-pulse">.</span>
+                      <span className="animate-pulse animation-delay-200">.</span>
+                      <span className="animate-pulse animation-delay-400">.</span>
+                    </div>
                   ) : (
                     <div>
                       <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
