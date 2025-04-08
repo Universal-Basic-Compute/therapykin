@@ -1120,8 +1120,6 @@ export default function CircleLayout({
       <div className="w-80 space-y-4">
         <h2 className="text-xl font-semibold mb-4">Circle Members</h2>
         {members.map((member, index) => {
-          const imagePath = member.id === 'you' ? '/members/default.jpg' : `/members/${circleId}-${member.id}.jpg`;
-
           return (
             <motion.div
               key={member.id}
@@ -1138,10 +1136,15 @@ export default function CircleLayout({
                     <div className={`w-full h-full rounded-full border-2 border-dashed border-[var(--primary)]/50 flex items-center justify-center`}>
                       <span className="text-xs text-[var(--primary)]/70">Join?</span>
                     </div>
+                  ) : member.id === 'you' ? (
+                    // Use a styled div for the user avatar instead of an image
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-yellow-300 to-yellow-400 flex items-center justify-center text-white font-medium">
+                      <span className="text-2xl">Y</span>
+                    </div>
                   ) : (
                     <div className="relative w-full h-full rounded-full overflow-hidden">
                       <Image
-                        src={imagePath}
+                        src={`/members/${circleId}-${member.id}.jpg`}
                         alt={member.name}
                         fill
                         className="object-cover rounded-full"
