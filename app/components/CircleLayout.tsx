@@ -1019,15 +1019,21 @@ export default function CircleLayout({
                         <>
                           {/* Profile picture */}
                           <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                            <Image
-                              src={message.memberId === 'you' 
-                                ? '/members/default.jpg'  // Use default avatar for user messages
-                                : `/members/${circleId}-${message.memberId}.jpg`}
-                              alt={message.sender || ''}
-                              fill
-                              className="object-cover"
-                              sizes="40px"
-                            />
+                            {message.memberId === 'you' ? (
+                              // Show "Y" in a circle for user messages
+                              <div className="w-full h-full rounded-full bg-gradient-to-br from-yellow-300 to-yellow-400 flex items-center justify-center text-white font-medium">
+                                Y
+                              </div>
+                            ) : (
+                              // Use image for AI members
+                              <Image
+                                src={`/members/${circleId}-${message.memberId}.jpg`}
+                                alt={message.sender || ''}
+                                fill
+                                className="object-cover"
+                                sizes="40px"
+                              />
+                            )}
                           </div>
                         
                           {/* Message content in a chat bubble */}
