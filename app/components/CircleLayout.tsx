@@ -785,7 +785,7 @@ export default function CircleLayout({
       try {
         // Check if something is already playing
         if (isPlaying) {
-          console.log('Audio already playing, waiting for it to finish before playing next audio');
+          console.log('Audio already playing, storing for later playback:', messageId);
           // Store this audio to be played next, but don't interrupt current playback
           nextPreparedMessageRef.current = {
             messageId,
@@ -867,8 +867,12 @@ export default function CircleLayout({
             
             nextPreparedMessageRef.current = null; // Clear the prepared message
             
-            // Play the prepared audio
-            playAudio(audioUrl, messageId);
+            // Play the prepared audio - but don't call playAudio recursively
+            // Instead, directly set up the audio element
+            console.log(`Playing next prepared audio for message: ${messageId}`);
+            
+            // Use a separate function to avoid recursion
+            playNextAudio(audioUrl, messageId);
           }
         };
 
@@ -882,6 +886,30 @@ export default function CircleLayout({
         await audioRef.current.play();
       } catch (err) {
         console.error('Error playing audio:', err);
+        setIsPlaying(false);
+        setCurrentPlayingId(null);
+      }
+    }
+  };
+
+  // Add a new function to play the next audio without recursion
+  const playNextAudio = async (audioUrl: string, messageId: string) => {
+    if (audioRef.current) {
+      try {
+        console.log(`Playing next audio for message: ${messageId}`);
+        
+        // Normalize the audio before playing
+        const normalizedUrl = await normalizeAudio(audioUrl);
+        
+        audioRef.current.src = normalizedUrl;
+        setCurrentPlayingId(messageId);
+        setIsPlaying(true); // Set this immediately to prevent race conditions
+        
+        // The onplay, onended, and onerror handlers are already set up in the audioRef
+        
+        await audioRef.current.play();
+      } catch (err) {
+        console.error('Error playing next audio:', err);
         setIsPlaying(false);
         setCurrentPlayingId(null);
       }
