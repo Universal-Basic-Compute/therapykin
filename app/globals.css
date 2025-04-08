@@ -685,3 +685,21 @@ sup a:hover {
   animation: float-slow 10s ease-in-out infinite;
   animation-delay: -4s;
 }
+
+@keyframes float {
+  0% { transform: translateY(-3px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(-3px); }
+}
+
+@keyframes float-delayed {
+  0% { transform: translateY(-5px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(-5px); }
+}
+
+@keyframes float-slow {
+  0% { transform: translateY(-2px); }
+  50% { transform: translateY(-7px); }
+  100% { transform: translateY(-2px); }
+}
