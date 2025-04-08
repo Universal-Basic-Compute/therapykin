@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/utils/auth';
+import { getCurrentUser } from '@/app/utils/auth';
 import { createBridge, getBridgesByUser } from '@/app/utils/airtable';
 
 export async function GET(request: NextRequest) {
   try {
-    // Get the user from the session
-    const session = await getServerSession(authOptions);
+    // Get the current user
+    const user = await getCurrentUser();
     
-    if (!session || !session.user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
     // Get bridges for the user
-    const bridges = await getBridgesByUser(session.user.email);
+    const bridges = await getBridgesByUser(user.email);
     
     return NextResponse.json({ bridges });
   } catch (error) {
@@ -27,10 +26,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Get the user from the session
-    const session = await getServerSession(authOptions);
+    // Get the current user
+    const user = await getCurrentUser();
     
-    if (!session || !session.user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -50,7 +49,7 @@ export async function POST(request: NextRequest) {
       name,
       description: description || '',
       type: type || 'relationship',
-      creatorEmail: session.user.email,
+      creatorEmail: user.email,
       participantEmail: participantEmail || null,
     });
     

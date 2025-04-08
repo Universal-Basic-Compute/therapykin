@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/utils/auth';
+import { getCurrentUser } from '@/app/utils/auth';
 import { getBridge, updateBridge, deleteBridge } from '@/app/utils/airtable';
 
 export async function GET(
@@ -8,10 +7,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Get the user from the session
-    const session = await getServerSession(authOptions);
+    // Get the current user
+    const user = await getCurrentUser();
     
-    if (!session || !session.user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -27,7 +26,7 @@ export async function GET(
     }
     
     // Check if user has access to this bridge
-    if (!bridge.participants.includes(session.user.email)) {
+    if (!bridge.participants.includes(user.email)) {
       return NextResponse.json(
         { error: 'You do not have access to this bridge' },
         { status: 403 }
@@ -49,10 +48,10 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Get the user from the session
-    const session = await getServerSession(authOptions);
+    // Get the current user
+    const user = await getCurrentUser();
     
-    if (!session || !session.user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -79,7 +78,7 @@ export async function PUT(
     }
     
     // Check if user has access to this bridge
-    if (!existingBridge.participants.includes(session.user.email)) {
+    if (!existingBridge.participants.includes(user.email)) {
       return NextResponse.json(
         { error: 'You do not have access to this bridge' },
         { status: 403 }
@@ -108,10 +107,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Get the user from the session
-    const session = await getServerSession(authOptions);
+    // Get the current user
+    const user = await getCurrentUser();
     
-    if (!session || !session.user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -127,7 +126,7 @@ export async function DELETE(
     }
     
     // Check if user is the creator of this bridge
-    if (bridge.creatorEmail !== session.user.email) {
+    if (bridge.creatorEmail !== user.email) {
       return NextResponse.json(
         { error: 'Only the creator can delete this bridge' },
         { status: 403 }
