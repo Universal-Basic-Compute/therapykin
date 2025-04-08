@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       if (sessionDate < now) {
         pastSessions.push({
           id: record.id,
-          clientId: clientIdentifier.name,
+          clientId: record.fields.Pseudonym || clientIdentifier.name,
           clientColor: clientIdentifier.color,
           timestamp: record.fields.CreatedAt,
           minutesActive: minutesActive,
