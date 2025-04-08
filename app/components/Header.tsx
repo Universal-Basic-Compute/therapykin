@@ -120,6 +120,11 @@ export default function Header() {
                 Circles
               </Link>
               
+              {/* Bridges Link */}
+              <Link href="/bridges" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium">
+                Bridges
+              </Link>
+              
               {/* Our Specialists Dropdown */}
               <div className="relative" ref={specialistsDropdownRef}>
                 <button 
@@ -399,6 +404,13 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Circles
+              </Link>
+              <Link 
+                href="/bridges" 
+                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Bridges
               </Link>
               <Link 
                 href="/specialists/generalist" 
