@@ -299,7 +299,7 @@ export default function TherapistDashboard() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: `Please provide a comprehensive analysis of client ${clientName}. Include: 
+          message: `Please provide a comprehensive analysis of client ${clientId}. Include: 
           1. An overview of their recent therapy sessions
           2. A detailed psychological profile based on session content
           3. Key patterns in their communication and emotional responses
