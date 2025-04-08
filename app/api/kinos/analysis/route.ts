@@ -94,8 +94,12 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     console.log('KinOS API analysis response:', data);
     
-    // Return the response to the client
-    return NextResponse.json(data);
+    // Return the response to the client, but ensure we're only returning the necessary data
+    // This prevents the raw analysis response from being displayed in the UI
+    return NextResponse.json({
+      response: data.response,
+      isAnalysis: true // Add a flag to indicate this is an analysis response
+    });
   } catch (error) {
     console.error('Error proxying analysis request to KinOS:', error);
     
