@@ -116,14 +116,15 @@ export default function Header() {
               {/* Main navigation items */}
               
               {/* Circles Link */}
-              <Link href="/circles" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium relative">
+              <Link href="/circles" className="text-yellow-500 dark:text-yellow-400 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium relative">
                 Circles
-                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-yellow-500 dark:text-yellow-400 whitespace-nowrap font-medium">coming soon</span>
+                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-gray-500 dark:text-gray-400 whitespace-nowrap font-medium">coming soon</span>
               </Link>
               
               {/* Bridges Link */}
-              <Link href="/bridges" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium">
+              <Link href="/bridges" className="text-yellow-500 dark:text-yellow-400 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium relative">
                 Bridges
+                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-gray-500 dark:text-gray-400 whitespace-nowrap font-medium">coming soon</span>
               </Link>
               
               {/* Our Specialists Dropdown */}
@@ -407,19 +408,19 @@ export default function Header() {
               {/* Add Circles link after specialists */}
               <Link 
                 href="/circles" 
-                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium relative"
+                className="text-yellow-500 dark:text-yellow-400 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium relative"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Circles
-                <span className="text-[10px] text-yellow-500 dark:text-yellow-400 ml-2 font-medium">coming soon</span>
+                <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-2 font-medium">coming soon</span>
               </Link>
               <Link 
                 href="/bridges" 
-                className="text-foreground/70 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium relative"
+                className="text-yellow-500 dark:text-yellow-400 hover:text-[var(--primary)] block px-3 py-2 text-base font-medium relative"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Bridges
-                <span className="text-[10px] text-yellow-500 dark:text-yellow-400 ml-2 font-medium">coming soon</span>
+                <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-2 font-medium">coming soon</span>
               </Link>
               <Link 
                 href="/specialists/generalist" 
