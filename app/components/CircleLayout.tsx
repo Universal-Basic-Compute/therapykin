@@ -682,13 +682,19 @@ export default function CircleLayout({
         }
       ]);
 
-      // Store the prepared message for playback when the current audio ends
-      nextPreparedMessageRef.current = {
-        messageId,
-        audioUrl
-      };
-
-      console.log(`Message prepared for ${nextTalker.name}, will play when current audio ends`);
+      // Check if audio is currently playing
+      if (isPlaying) {
+        // If audio is playing, store the prepared message for later playback
+        nextPreparedMessageRef.current = {
+          messageId,
+          audioUrl
+        };
+        console.log(`Message prepared for ${nextTalker.name}, will play when current audio ends`);
+      } else {
+        // If no audio is playing, play this message immediately
+        console.log(`No audio playing, playing message from ${nextTalker.name} immediately`);
+        playAudio(audioUrl, messageId);
+      }
 
     } catch (error) {
       console.error('[Circle] Error preparing next message:', error);
