@@ -27,6 +27,7 @@ export default function CirclePage() {
   const [activeSpeaker, setActiveSpeaker] = useState('Maria');
   const [isPeekMode, setIsPeekMode] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
   const [circleData, setCircleData] = useState<any>(null);
   const [message, setMessage] = useState('');
 
@@ -57,15 +58,88 @@ export default function CirclePage() {
 
   // Prevent scrolling on this page
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = showWelcomeModal ? 'hidden' : 'hidden';
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, []);
+  }, [showWelcomeModal]);
 
 
   return (
     <div className="h-screen w-screen bg-gradient-radial from-[var(--background)] via-[var(--background-alt)] to-[var(--background)] overflow-hidden relative">
+      {/* Welcome Modal */}
+      {showWelcomeModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-[var(--background)] rounded-lg shadow-xl max-w-2xl w-full p-8">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-[var(--primary)] mb-2">
+                Welcome to {circleData?.name || 'Circle Chat'}
+              </h2>
+              <div className="flex justify-center mb-4">
+                <span className="px-2 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-sm">
+                  AI Support Circle
+                </span>
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <p className="text-foreground/80 mb-4">
+                {circleData?.description || 'Join this supportive circle to connect with others facing similar challenges.'}
+              </p>
+              
+              <div className="bg-[var(--background-alt)] p-4 rounded-lg mb-4">
+                <h3 className="font-medium mb-2 text-[var(--primary)]">How This Works:</h3>
+                <ul className="space-y-2 text-foreground/70">
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+                    </svg>
+                    <span>You can actively participate by typing messages in the chat</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+                    </svg>
+                    <span>Or you can simply listen to the conversation if you prefer</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+                    </svg>
+                    <span>Everything is completely private - no other humans will see your messages</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-[var(--accent)]/10 p-4 rounded-lg">
+                <h3 className="font-medium mb-2 text-[var(--accent)]">Circle Members:</h3>
+                <div className="flex flex-wrap gap-3 justify-center">
+                  {circleData?.members?.filter((m: any) => !m.isDotted && m.id !== 'empty').map((member: any, index: number) => (
+                    <div key={index} className="text-center">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--primary)]/80 to-[var(--primary-dark)]/80 flex items-center justify-center text-white font-medium mx-auto mb-1">
+                        {member.name[0]}
+                      </div>
+                      <div className="text-xs font-medium">{member.name}</div>
+                      {member.role && (
+                        <div className="text-xs text-foreground/60">{member.role}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShowWelcomeModal(false)}
+                className="px-8 py-3 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary-dark)] transition-colors font-medium"
+              >
+                Start Circle
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {showJoinModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-[var(--background)] rounded-lg shadow-xl max-w-md w-full p-6">
