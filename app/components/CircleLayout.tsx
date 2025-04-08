@@ -210,8 +210,8 @@ export default function CircleLayout({
           return;
         }
         
-        // Construct the system message with the user's message
-        const systemMessage = `<system>User message: ${message}</system>`;
+        // Construct the system message with the new format
+        const systemMessage = `<system>You are ${therapist.name}${therapist.role ? `, ${therapist.role}` : ''}. \nRespond to the user's message: "${message}"</system>`;
         
         // Make API request for therapist response
         const response = await fetch('/api/kinos', {
@@ -433,8 +433,8 @@ export default function CircleLayout({
       const nextTalker = availableMembers[currentSpeakerIndex % availableMembers.length];
       console.log(`Processing next talker: ${nextTalker.name}`);
 
-      // Construct the system message
-      const systemMessage = `<system>Continuing group therapy conversation. Current speaker: ${nextTalker.name}${nextTalker.role ? ` (${nextTalker.role})` : ''}</system>`;
+      // Construct the system message with the new format
+      const systemMessage = `<system>You are ${nextTalker.name}${nextTalker.role ? `, ${nextTalker.role}` : ''}. \nRespond to the conversation naturally and briefly.</system>`;
 
       // Make API request and get response
       const response = await fetch('/api/kinos', {
@@ -758,7 +758,7 @@ export default function CircleLayout({
           return;
         }
 
-        const systemMessage = `<system>New group therapy session started. Present members: ${presentMembers.join(', ')}</system>`;
+        const systemMessage = `<system>You are ${circleData?.therapist?.name || 'Therapist'}${circleData?.therapist?.role ? `, ${circleData?.therapist?.role}` : ''}. \nWelcome everyone to this group therapy session. Present members: ${presentMembers.join(', ')}</system>`;
         
         // Determine if this is a hero's journey circle
         const isHerosJourneyCircle = ['addiction', 'depression', 'ptsd', 'life-purpose'].includes(circleId);
