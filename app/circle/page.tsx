@@ -28,6 +28,7 @@ export default function CirclePage() {
   const [isPeekMode, setIsPeekMode] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [circleData, setCircleData] = useState<any>(null);
+  const [message, setMessage] = useState('');
 
   // Add useEffect to load circle data
   useEffect(() => {
@@ -128,6 +129,8 @@ export default function CirclePage() {
             circleId={circleName}
             circleMembers={circleData?.members || []}
             circleData={circleData}
+            message={message}
+            onMessageChange={setMessage}
           />
         </div>
       </div>

@@ -181,9 +181,31 @@ export default function CircleLayout({
     e.preventDefault();
     if (!message.trim() || isPeekMode) return;
     
-    // Handle message submission here
-    console.log('Message submitted:', message);
+    // Add the user message to the messages array
+    const userMessageId = `user-${Date.now()}`;
+    setMessages(prev => [
+      ...prev,
+      {
+        role: 'user',
+        content: message,
+        id: userMessageId,
+        sender: 'You',
+        memberId: 'you'
+      }
+    ]);
+    
+    // Set the user message as pending to be processed next
+    userMessagePendingRef.current = true;
+    userMessageContentRef.current = message;
+    
+    // Clear the input field
     onMessageChange('');
+    
+    // If audio is currently playing, wait for it to finish
+    // Otherwise, process the user message immediately
+    if (!isPlaying) {
+      processUserMessage();
+    }
   };
   const [showJoinModal, setShowJoinModal] = React.useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -195,6 +217,8 @@ export default function CircleLayout({
   const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>(0);
   const [isProcessingTalk, setIsProcessingTalk] = useState(false);
   const initialMessageSentRef = useRef(false);
+  const userMessagePendingRef = useRef(false);
+  const userMessageContentRef = useRef('');
 
   // Define members at the top of component
   const members: Member[] = React.useMemo(() => {
@@ -259,6 +283,76 @@ export default function CircleLayout({
   // Create refs to hold the function implementations
   const processNextTalkerRef = useRef<() => Promise<void>>(() => Promise.resolve());
   const checkForMentionsAndQuestionsRef = useRef<(message: string) => void>(() => {});
+  
+  // Add a new function to process user messages
+  const processUserMessage = async () => {
+    if (!userMessagePendingRef.current) return;
+    
+    try {
+      setIsProcessingTalk(true);
+      setIsLoadingResponse(true);
+      
+      // Get the therapist from the members
+      const therapist = members.find(m => m.id === 'therapist');
+      if (!therapist) {
+        console.error('No therapist found in members');
+        return;
+      }
+      
+      // Construct the system message with the user's message
+      const systemMessage = `<system>User message: ${userMessageContentRef.current}</system>`;
+      
+      // Make API request for therapist response
+      const response = await fetch('/api/kinos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: systemMessage,
+          firstName: 'Circle',
+          specialist: circleData?.specialist || 'generalist',
+          pseudonym: `circle-${circleId}-therapist`
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+      
+      const data = await response.json();
+      const audioUrl = await textToSpeech(data.response, 'therapist');
+      const messageId = `response-${Date.now()}`;
+      
+      // Add the therapist's response to messages
+      setMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: data.response,
+          id: messageId,
+          sender: therapist.name,
+          memberId: 'therapist',
+          audio: audioUrl
+        }
+      ]);
+      
+      // Reset the user message pending flag
+      userMessagePendingRef.current = false;
+      
+      // Play the audio response
+      if (audioUrl) {
+        playAudio(audioUrl, messageId);
+      }
+      
+    } catch (error) {
+      console.error('Error processing user message:', error);
+      userMessagePendingRef.current = false;
+    } finally {
+      setIsProcessingTalk(false);
+      setIsLoadingResponse(false);
+    }
+  };
 
   // Define checkForMentionsAndQuestions implementation
   checkForMentionsAndQuestionsRef.current = (message: string) => {
@@ -487,10 +581,17 @@ export default function CircleLayout({
           setCurrentPlayingId(null);
           URL.revokeObjectURL(normalizedUrl);
           
-          // Add delay before processing next talker
-          setTimeout(() => {
-            processNextTalkerRef.current?.();
-          }, AUDIO_BUFFER_TIME);
+          // Check if there's a pending user message
+          if (userMessagePendingRef.current) {
+            setTimeout(() => {
+              processUserMessage();
+            }, AUDIO_BUFFER_TIME);
+          } else {
+            // Otherwise, continue with the normal flow
+            setTimeout(() => {
+              processNextTalkerRef.current?.();
+            }, AUDIO_BUFFER_TIME);
+          }
         };
 
         audioRef.current.onerror = () => {
@@ -711,7 +812,7 @@ export default function CircleLayout({
       <div className="flex-grow">
         <div className="card h-full bg-white dark:bg-gray-800 shadow-lg p-6">
           <div className="h-full flex flex-col">
-            <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 overflow-y-auto">
+            <div className="flex-grow bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 overflow-y-auto mb-4">
               {isLoading ? (
                 <div className="flex justify-start">
                   <div className="assistant-message-bubble rounded-lg p-4 max-w-[80%] relative">
@@ -795,6 +896,32 @@ export default function CircleLayout({
                   ))}
                 </div>
               )}
+            </div>
+            
+            <div className="mt-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+              <form onSubmit={handleSubmit} className="flex gap-2">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => onMessageChange(e.target.value)}
+                  placeholder={isPeekMode ? "Join to participate..." : "Type your message..."}
+                  disabled={isPeekMode}
+                  className="flex-grow px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                />
+                <button
+                  type="submit"
+                  disabled={!message.trim() || isPeekMode}
+                  className={`px-4 py-2 rounded-full ${
+                    !message.trim() || isPeekMode
+                      ? 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed'
+                      : 'bg-[var(--primary)] hover:bg-[var(--primary-dark)]'
+                  } text-white transition-colors`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </form>
             </div>
           </div>
         </div>
