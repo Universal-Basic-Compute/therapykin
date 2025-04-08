@@ -293,6 +293,7 @@ export default function TherapistDashboard() {
     });
     
     try {
+      // Use clientId directly as it's already the pseudonym/kin
       const response = await fetch(`/v2/blueprints/therapykinherosjourney/kins/${clientId}/analysis`, {
         method: 'POST',
         headers: {
