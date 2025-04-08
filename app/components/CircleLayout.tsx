@@ -669,6 +669,9 @@ This is a group therapy circle about ${circleData?.name || 'support'}.</system>`
         return `${speaker}: ${msg.content}`;
       }).join('\n\n');
 
+      // Log the conversation history being sent
+      console.log(`Sending conversation history for ${nextTalker.name}:`, conversationHistory);
+
       // Combine system message with conversation history
       const fullPrompt = `${systemMessage}\n\n${conversationHistory}`;
 
@@ -709,35 +712,28 @@ This is a group therapy circle about ${circleData?.name || 'support'}.</system>`
         return;
       }
 
+      // Create the new message object
+      const newMessage = {
+        role: 'assistant' as const,
+        content: data.response,
+        id: messageId,
+        sender: nextTalker.name,
+        memberId: nextTalker.id,
+        audio: audioUrl
+      };
+
       // Check if audio is currently playing
       if (isPlaying) {
         // If audio is playing, store the prepared message for later display and playback
         nextPreparedMessageRef.current = {
           messageId,
           audioUrl,
-          messageData: {
-            role: 'assistant',
-            content: data.response,
-            id: messageId,
-            sender: nextTalker.name,
-            memberId: nextTalker.id,
-            audio: audioUrl
-          }
+          messageData: newMessage
         };
         console.log(`Message prepared for ${nextTalker.name}, will display and play when current audio ends`);
       } else {
         // If no audio is playing, add to UI and play immediately
-        setMessages(prev => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: data.response,
-            id: messageId,
-            sender: nextTalker.name,
-            memberId: nextTalker.id,
-            audio: audioUrl
-          }
-        ]);
+        setMessages(prev => [...prev, newMessage]);
         
         console.log(`No audio playing, playing message from ${nextTalker.name} immediately`);
         playAudio(audioUrl, messageId);
@@ -829,7 +825,7 @@ This is a group therapy circle about ${circleData?.name || 'support'}.</system>`
           
           // As soon as audio starts playing, ask for the next speaker
           console.log('Audio started playing, asking therapist who should speak next...');
-          askTherapistForNextSpeaker(members, messages, circleId, circleData)
+          askTherapistForNextSpeaker(members, [...messages], circleId, circleData) // Pass a copy of messages
             .then(nextSpeakerId => {
               if (nextSpeakerId) {
                 // Find the index of the next speaker in the available members
