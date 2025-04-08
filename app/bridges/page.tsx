@@ -12,13 +12,13 @@ export default function Bridges() {
       
       <main className="flex-grow pt-24 pb-16 px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Hero Section with colorful gradient background */}
-          <div className="text-center mb-16 p-8 rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 to-[var(--warm)]/20 shadow-depth">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-[var(--primary)] via-[var(--accent)] to-[var(--warm)] text-transparent bg-clip-text">TherapyKin Bridges</h1>
+          {/* Hero Section with simplified background */}
+          <div className="text-center mb-16 p-8 rounded-2xl bg-[var(--background-alt)] shadow-depth">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[var(--primary)]">TherapyKin Bridges</h1>
             <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
               Healing Connections Through AI Facilitation
             </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] mx-auto my-8"></div>
+            <div className="w-24 h-1 bg-[var(--primary)] mx-auto my-8"></div>
             
             {/* Decorative bridge illustration */}
             <div className="relative h-40 md:h-60 mt-8 overflow-hidden">
@@ -65,7 +65,7 @@ export default function Bridges() {
           
           {/* How It Works */}
           <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-transparent bg-clip-text">How Bridges Works</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">How Bridges Works</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="card p-6 text-center hover:shadow-lg transition-shadow card-hover-lift">
@@ -119,7 +119,7 @@ export default function Bridges() {
           
           {/* Unique Benefits */}
           <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-[var(--warm)] to-[var(--primary-dark)] text-transparent bg-clip-text">Unique Benefits</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Unique Benefits</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="card p-6 hover:shadow-lg transition-shadow card-hover-border border-l-4 border-[var(--primary)]">
@@ -341,7 +341,7 @@ export default function Bridges() {
           
           {/* How to Begin */}
           <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-transparent bg-clip-text">How to Begin</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">How to Begin</h2>
             
             <div className="card p-8 shadow-depth bg-gradient-to-br from-[var(--background)] to-[var(--background-alt)]">
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -394,7 +394,7 @@ export default function Bridges() {
           
           {/* Success Stories */}
           <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-[var(--warm)] to-[var(--accent)] text-transparent bg-clip-text">Success Stories</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Success Stories</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="card p-6 card-hover-rotate shadow-depth">
@@ -449,7 +449,7 @@ export default function Bridges() {
           
           {/* Expert Validation */}
           <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-[var(--primary-dark)] to-[var(--primary)] text-transparent bg-clip-text">Expert Validation</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Expert Validation</h2>
             
             <div className="card p-8 shadow-depth bg-gradient-to-br from-[var(--background)] to-[var(--background-alt)]">
               <p className="text-foreground/80 mb-6 text-center max-w-4xl mx-auto">
@@ -505,135 +505,21 @@ export default function Bridges() {
             </div>
           </section>
           
-          {/* Pricing */}
-          <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-[var(--accent)] to-[var(--warm)] text-transparent bg-clip-text">Pricing</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-glow">
-                <div className="bg-gradient-to-br from-[var(--primary)]/10 to-[var(--primary)]/20 -mx-6 -mt-6 px-6 pt-6 pb-4 rounded-t-lg">
-                  <h3 className="text-xl font-semibold mb-2 text-[var(--primary)]">Essential Bridge</h3>
-                  <p className="text-3xl font-bold mb-1">$89<span className="text-lg font-normal text-foreground/60">/month per person</span></p>
-                </div>
-                <ul className="space-y-2 text-foreground/70 mb-6 mt-6">
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Weekly facilitated exchanges
-                  </li>
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Basic communication tools
-                  </li>
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Core mediation features
-                  </li>
-                </ul>
-                <Link href="/bridges/start?plan=essential" className="btn-secondary w-full block text-center border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)]/10">
-                  Select Plan
-                </Link>
-              </div>
-              
-              <div className="card p-6 border-2 border-[var(--primary-dark)] hover:shadow-lg transition-shadow card-hover-glow relative transform scale-105 shadow-depth">
-                <div className="absolute top-0 right-0 bg-gradient-to-r from-[var(--primary-dark)] to-[var(--accent)] text-white text-xs font-bold px-3 py-1 -mt-2 -mr-2 rounded-full shadow-lg">
-                  MOST POPULAR
-                </div>
-                <div className="bg-gradient-to-br from-[var(--primary-dark)]/10 to-[var(--primary-dark)]/20 -mx-6 -mt-6 px-6 pt-6 pb-4 rounded-t-lg">
-                  <h3 className="text-xl font-semibold mb-2 text-[var(--primary-dark)]">Advanced Bridge</h3>
-                  <p className="text-3xl font-bold mb-1">$129<span className="text-lg font-normal text-foreground/60">/month per person</span></p>
-                </div>
-                <ul className="space-y-2 text-foreground/70 mb-6 mt-6">
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary-dark)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Unlimited facilitated exchanges
-                  </li>
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary-dark)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Enhanced communication analysis
-                  </li>
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary-dark)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Personalized skill development
-                  </li>
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary-dark)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Comprehensive progress tracking
-                  </li>
-                </ul>
-                <Link href="/bridges/start?plan=advanced" className="btn-primary w-full block text-center bg-gradient-to-r from-[var(--primary-dark)] to-[var(--accent)] hover:opacity-90">
-                  Select Plan
-                </Link>
-              </div>
-              
-              <div className="card p-6 hover:shadow-lg transition-shadow card-hover-glow">
-                <div className="bg-gradient-to-br from-[var(--accent)]/10 to-[var(--warm)]/20 -mx-6 -mt-6 px-6 pt-6 pb-4 rounded-t-lg">
-                  <h3 className="text-xl font-semibold mb-2 text-[var(--warm)]">Professional Bridge</h3>
-                  <p className="text-3xl font-bold mb-1">$199<span className="text-lg font-normal text-foreground/60">/month per person</span></p>
-                </div>
-                <ul className="space-y-2 text-foreground/70 mb-6 mt-6">
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--warm)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    All Advanced features
-                  </li>
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--warm)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Priority response time
-                  </li>
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--warm)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Specialized workplace or family modules
-                  </li>
-                  <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--warm)] mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Optional integration with in-person therapy
-                  </li>
-                </ul>
-                <Link href="/bridges/start?plan=professional" className="btn-secondary w-full block text-center border-[var(--warm)] text-[var(--warm)] hover:bg-[var(--warm)]/10">
-                  Select Plan
-                </Link>
-              </div>
-            </div>
-          </section>
+          {/* Pricing section removed */}
           
           {/* CTA */}
           <section className="mb-16">
-            <div className="card p-8 bg-gradient-to-r from-[var(--primary)]/10 via-[var(--accent)]/10 to-[var(--warm)]/10 text-center shadow-depth overflow-hidden relative">
-              {/* Decorative elements */}
-              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[var(--primary)]/20 to-transparent rounded-full -translate-x-16 -translate-y-16"></div>
-              <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-[var(--warm)]/20 to-transparent rounded-full translate-x-16 translate-y-16"></div>
-              
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-[var(--primary)] via-[var(--accent)] to-[var(--warm)] text-transparent bg-clip-text relative z-10">Begin Your Bridge Journey Today</h2>
+            <div className="card p-8 bg-[var(--background-alt)] text-center shadow-depth overflow-hidden relative">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[var(--primary)] relative z-10">Begin Your Bridge Journey Today</h2>
               <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto relative z-10">
                 Difficult relationships don't have to remain that way. 
                 Take the first step toward better understanding.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
-                <Link href="/bridges/start" className="btn-primary px-8 py-3 text-lg bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] hover:opacity-90 shadow-lg">
+                <Link href="/bridges/start" className="btn-primary px-8 py-3 text-lg">
                   Start My Bridge
                 </Link>
-                <Link href="/bridges/learn-more" className="btn-secondary px-8 py-3 text-lg border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10">
+                <Link href="/bridges/learn-more" className="btn-secondary px-8 py-3 text-lg">
                   Learn More
                 </Link>
               </div>
