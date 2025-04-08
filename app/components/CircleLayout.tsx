@@ -366,7 +366,18 @@ export default function CircleLayout({
   // Add a new ref to track if we should cancel the next AI message
   const shouldCancelNextAiMessageRef = useRef(false);
   // Add a ref to store the next prepared message
-  const nextPreparedMessageRef = useRef<{messageId: string, audioUrl: string} | null>(null);
+  const nextPreparedMessageRef = useRef<{
+    messageId: string, 
+    audioUrl: string,
+    messageData?: {
+      role: 'assistant',
+      content: string,
+      id: string,
+      sender: string,
+      memberId: string,
+      audio: string
+    }
+  } | null>(null);
 
   // Define members at the top of component
   const members: Member[] = React.useMemo(() => {
@@ -669,29 +680,36 @@ export default function CircleLayout({
         return;
       }
 
-      // Add the message to the UI
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: data.response,
-          id: messageId,
-          sender: nextTalker.name,
-          memberId: nextTalker.id,
-          audio: audioUrl
-        }
-      ]);
-
       // Check if audio is currently playing
       if (isPlaying) {
-        // If audio is playing, store the prepared message for later playback
+        // If audio is playing, store the prepared message for later display and playback
         nextPreparedMessageRef.current = {
           messageId,
-          audioUrl
+          audioUrl,
+          messageData: {
+            role: 'assistant',
+            content: data.response,
+            id: messageId,
+            sender: nextTalker.name,
+            memberId: nextTalker.id,
+            audio: audioUrl
+          }
         };
-        console.log(`Message prepared for ${nextTalker.name}, will play when current audio ends`);
+        console.log(`Message prepared for ${nextTalker.name}, will display and play when current audio ends`);
       } else {
-        // If no audio is playing, play this message immediately
+        // If no audio is playing, add to UI and play immediately
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: data.response,
+            id: messageId,
+            sender: nextTalker.name,
+            memberId: nextTalker.id,
+            audio: audioUrl
+          }
+        ]);
+        
         console.log(`No audio playing, playing message from ${nextTalker.name} immediately`);
         playAudio(audioUrl, messageId);
       }
@@ -828,7 +846,13 @@ export default function CircleLayout({
           
           // Play the next prepared message if available
           if (nextPreparedMessageRef.current) {
-            const { messageId, audioUrl } = nextPreparedMessageRef.current;
+            const { messageId, audioUrl, messageData } = nextPreparedMessageRef.current;
+            
+            // Add the message to the UI now that the current audio has finished
+            if (messageData) {
+              setMessages(prev => [...prev, messageData]);
+            }
+            
             nextPreparedMessageRef.current = null; // Clear the prepared message
             
             // Play the prepared audio
