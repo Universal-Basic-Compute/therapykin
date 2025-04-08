@@ -179,8 +179,12 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
         role: member.role || null
       }));
     
-    // Create the system message for the therapist - now asking for an explanation
-    const systemMessage = `<system>Based on the conversation, who should talk next? First provide a brief explanation of your choice (1-2 sentences), then answer with the ID in a JSON format. Available speakers: ${JSON.stringify(availableSpeakers)}</system>`;
+    // Get the last message to include in the prompt
+    const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+    const lastMessageText = lastMessage ? `Last message was from ${lastMessage.sender}: "${lastMessage.content}"` : '';
+    
+    // Create the system message for the therapist - now asking for an explanation and including last message
+    const systemMessage = `<system>Based on the conversation, who should talk next? First provide a brief explanation of your choice (1-2 sentences), then answer with the ID in a JSON format. ${lastMessageText} Available speakers: ${JSON.stringify(availableSpeakers)}</system>`;
     
     // Include all messages in the conversation history
     const conversationHistory = messages.map(msg => {
@@ -215,6 +219,11 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
     }
     
     const data = await response.json();
+    
+    // Check if this is an analysis response (should have isAnalysis flag)
+    if (!data.isAnalysis) {
+      console.error('Response from analysis endpoint is missing isAnalysis flag');
+    }
     
     // Log the raw response but don't display it in the chat
     console.log('Therapist analysis raw response:', data.response);
