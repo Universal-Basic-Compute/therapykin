@@ -214,8 +214,8 @@ export default function CircleLayout({
   const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>(0);
   const [isProcessingTalk, setIsProcessingTalk] = useState(false);
   const initialMessageSentRef = useRef(false);
-  const userMessagePendingRef = useRef(false);
-  const userMessageContentRef = useRef('');
+  // We're keeping these refs but they won't be used for forcing therapist responses
+  const [userMessagePendingRef, userMessageContentRef] = [useRef(false), useRef('')];
 
   // Define members at the top of component
   const members: Member[] = React.useMemo(() => {
