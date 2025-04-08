@@ -118,13 +118,13 @@ export default function Header() {
               {/* Circles Link */}
               <Link href="/circles" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium relative">
                 Circles
-                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-foreground/50 whitespace-nowrap">coming soon</span>
+                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-yellow-500 dark:text-yellow-400 whitespace-nowrap font-medium">coming soon</span>
               </Link>
               
               {/* Bridges Link */}
               <Link href="/bridges" className="text-foreground/70 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium relative">
                 Bridges
-                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-foreground/50 whitespace-nowrap">coming soon</span>
+                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-yellow-500 dark:text-yellow-400 whitespace-nowrap font-medium">coming soon</span>
               </Link>
               
               {/* Our Specialists Dropdown */}
@@ -406,7 +406,7 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Circles
-                <span className="text-[10px] text-foreground/50 ml-2">coming soon</span>
+                <span className="text-[10px] text-yellow-500 dark:text-yellow-400 ml-2 font-medium">coming soon</span>
               </Link>
               <Link 
                 href="/bridges" 
@@ -414,7 +414,7 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Bridges
-                <span className="text-[10px] text-foreground/50 ml-2">coming soon</span>
+                <span className="text-[10px] text-yellow-500 dark:text-yellow-400 ml-2 font-medium">coming soon</span>
               </Link>
               <Link 
                 href="/specialists/generalist" 
