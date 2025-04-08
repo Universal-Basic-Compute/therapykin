@@ -164,6 +164,91 @@ const logMembersAndStack = (members: Member[], stack: Talker[]) => {
   console.log('Current talker stack:', stack);
 };
 
+// Function to ask the therapist who should speak next
+const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessage[], circleId: string, circleData: any) => {
+  try {
+    // Get the therapist from the members
+    const therapist = members.find(m => m.id === 'therapist');
+    if (!therapist) {
+      console.error('No therapist found in members');
+      return null;
+    }
+    
+    // Create a list of available speakers (excluding empty slots and 'you')
+    const availableSpeakers = members
+      .filter(member => (
+        member.id !== 'empty' &&
+        member.id !== 'you' &&
+        member.name && 
+        !member.isDotted
+      ))
+      .map(member => ({
+        id: member.id,
+        name: member.name,
+        role: member.role || null
+      }));
+    
+    // Create the system message for the therapist
+    const systemMessage = `<system>Based on the conversation, who should talk next? Answer only with the ID in a JSON format. Available speakers: ${JSON.stringify(availableSpeakers)}</system>`;
+    
+    // Include all messages in the conversation history
+    const conversationHistory = messages.map(msg => {
+      const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
+      return `${speaker}: ${msg.content}`;
+    }).join('\n\n');
+    
+    // Combine system message with conversation history
+    const fullPrompt = `${systemMessage}\n\n${conversationHistory}`;
+    
+    // Make API request to the analysis endpoint
+    const response = await fetch('/api/kinos/analysis', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content: fullPrompt,
+        firstName: 'Circle',
+        specialist: circleData?.specialist || 'generalist',
+        pseudonym: `circle-${circleId}-therapist`,
+        min_files: 1,
+        max_files: 2
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to get next speaker analysis');
+    }
+    
+    const data = await response.json();
+    console.log('Therapist analysis response:', data);
+    
+    // Parse the response to get the next speaker ID
+    try {
+      // Try to parse the response as JSON
+      const responseJson = JSON.parse(data.response);
+      if (responseJson && responseJson.id) {
+        return responseJson.id;
+      }
+    } catch (parseError) {
+      // If parsing fails, try to extract the ID using regex
+      const idMatch = data.response.match(/"id"\s*:\s*"([^"]+)"/);
+      if (idMatch && idMatch[1]) {
+        return idMatch[1];
+      }
+    }
+    
+    // If we couldn't get a valid speaker ID, return a random one
+    console.warn('Could not determine next speaker from therapist response, selecting randomly');
+    const randomIndex = Math.floor(Math.random() * availableSpeakers.length);
+    return availableSpeakers[randomIndex].id;
+    
+  } catch (error) {
+    console.error('Error asking therapist for next speaker:', error);
+    return null;
+  }
+};
+
 export default function CircleLayout({ 
   activeSpeaker, 
   onSpeakerChange, 
@@ -204,10 +289,38 @@ export default function CircleLayout({
     shouldCancelNextAiMessageRef.current = false;
     
     // Continue with the normal conversation flow
-    // If no audio is playing, trigger the next speaker
+    // If no audio is playing, ask the therapist who should speak next
     if (!isPlaying) {
-      setTimeout(() => {
-        processNextTalkerRef.current?.();
+      setTimeout(async () => {
+        // Ask the therapist who should speak next
+        const nextSpeakerId = await askTherapistForNextSpeaker(members, messages, circleId, circleData);
+        
+        if (nextSpeakerId) {
+          // Find the index of the next speaker in the available members
+          const availableMembers = members.filter(member => (
+            member.id !== 'you' && 
+            member.id !== 'empty' &&
+            member.name && 
+            !member.isDotted
+          ));
+          
+          const nextSpeakerIndex = availableMembers.findIndex(m => m.id === nextSpeakerId);
+          
+          if (nextSpeakerIndex >= 0) {
+            // Update the current speaker index
+            setCurrentSpeakerIndex(nextSpeakerIndex);
+            
+            // Process the next talker
+            processNextTalkerRef.current?.();
+          } else {
+            console.error(`Next speaker ID ${nextSpeakerId} not found in available members`);
+            // Fall back to the current speaker index
+            processNextTalkerRef.current?.();
+          }
+        } else {
+          // If we couldn't get a next speaker ID, just continue with the current index
+          processNextTalkerRef.current?.();
+        }
       }, 1000);
     }
     // If audio is playing, the next speaker will be triggered when the audio ends
@@ -561,9 +674,37 @@ export default function CircleLayout({
           setCurrentPlayingId(null);
           URL.revokeObjectURL(normalizedUrl);
           
-          // Continue with the normal flow
-          setTimeout(() => {
-            processNextTalkerRef.current?.();
+          // Continue with the normal flow, but now ask the therapist who should speak next
+          setTimeout(async () => {
+            // Ask the therapist who should speak next
+            const nextSpeakerId = await askTherapistForNextSpeaker(members, messages, circleId, circleData);
+            
+            if (nextSpeakerId) {
+              // Find the index of the next speaker in the available members
+              const availableMembers = members.filter(member => (
+                member.id !== 'you' && 
+                member.id !== 'empty' &&
+                member.name && 
+                !member.isDotted
+              ));
+              
+              const nextSpeakerIndex = availableMembers.findIndex(m => m.id === nextSpeakerId);
+              
+              if (nextSpeakerIndex >= 0) {
+                // Update the current speaker index
+                setCurrentSpeakerIndex(nextSpeakerIndex);
+                
+                // Process the next talker
+                processNextTalkerRef.current?.();
+              } else {
+                console.error(`Next speaker ID ${nextSpeakerId} not found in available members`);
+                // Fall back to the current speaker index
+                processNextTalkerRef.current?.();
+              }
+            } else {
+              // If we couldn't get a next speaker ID, just continue with the current index
+              processNextTalkerRef.current?.();
+            }
           }, AUDIO_BUFFER_TIME);
         };
 
@@ -746,9 +887,37 @@ export default function CircleLayout({
           playAudio(audioUrl, messageId);
         }
 
-        // Add delay before starting conversation
-        setTimeout(() => {
-          processNextTalkerRef.current?.();
+        // Add delay before starting conversation, but ask the therapist who should speak next
+        setTimeout(async () => {
+          // Ask the therapist who should speak next
+          const nextSpeakerId = await askTherapistForNextSpeaker(members, messages, circleId, circleData);
+          
+          if (nextSpeakerId) {
+            // Find the index of the next speaker in the available members
+            const availableMembers = members.filter(member => (
+              member.id !== 'you' && 
+              member.id !== 'empty' &&
+              member.name && 
+              !member.isDotted
+            ));
+            
+            const nextSpeakerIndex = availableMembers.findIndex(m => m.id === nextSpeakerId);
+            
+            if (nextSpeakerIndex >= 0) {
+              // Update the current speaker index
+              setCurrentSpeakerIndex(nextSpeakerIndex);
+              
+              // Process the next talker
+              processNextTalkerRef.current?.();
+            } else {
+              console.error(`Next speaker ID ${nextSpeakerId} not found in available members`);
+              // Fall back to the current speaker index
+              processNextTalkerRef.current?.();
+            }
+          } else {
+            // If we couldn't get a next speaker ID, just continue with the current index
+            processNextTalkerRef.current?.();
+          }
         }, 2000);
 
       } catch (error) {
