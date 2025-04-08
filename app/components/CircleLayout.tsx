@@ -213,10 +213,10 @@ export default function CircleLayout({
         // Find the last message from the therapist
         const lastTherapistMessageIndex = messages.findLastIndex(msg => msg.memberId === 'therapist');
     
-        // Get conversation history up to the last message from the therapist
+        // Get all messages SINCE the last message from the therapist (not including it)
         // If no previous message from the therapist, include all messages
         const relevantMessages = lastTherapistMessageIndex >= 0 
-          ? messages.slice(0, lastTherapistMessageIndex + 1) 
+          ? messages.slice(lastTherapistMessageIndex + 1) // Get messages AFTER the last message from the therapist
           : messages;
     
         // Create a conversation history string from relevant messages
@@ -456,13 +456,13 @@ export default function CircleLayout({
 
       // Find the last message from this kin
       const lastMessageIndex = messages.findLastIndex(msg => msg.memberId === nextTalker.id);
-      
-      // Get conversation history up to the last message from this kin
+    
+      // Get all messages SINCE the last message from this kin (not including it)
       // If no previous message from this kin, include all messages
       const relevantMessages = lastMessageIndex >= 0 
-        ? messages.slice(0, lastMessageIndex + 1) 
+        ? messages.slice(lastMessageIndex + 1) // Get messages AFTER the last message from this kin
         : messages;
-      
+    
       // Create a conversation history string from relevant messages
       const conversationHistory = relevantMessages.map(msg => {
         const speaker = msg.memberId === 'you' ? 'You' : msg.sender;
