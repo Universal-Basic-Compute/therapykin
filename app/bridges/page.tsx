@@ -512,12 +512,9 @@ export default function Bridges() {
                 Difficult relationships don't have to remain that way. 
                 Take the first step toward better understanding.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
-                <Link href="/bridges/start" className="btn-primary px-8 py-3 text-lg">
+              <div className="flex justify-center relative z-10">
+                <Link href="/my-bridges" className="btn-primary px-8 py-3 text-lg">
                   Start My Bridge
-                </Link>
-                <Link href="/bridges/learn-more" className="btn-secondary px-8 py-3 text-lg">
-                  Learn More
                 </Link>
               </div>
             </div>
