@@ -197,11 +197,86 @@ export default function CircleLayout({
     // Clear the input field
     onMessageChange('');
     
-    // If no audio is playing, continue with the normal conversation flow
+    // Send the message to the API
+    const sendUserMessage = async () => {
+      try {
+        // Get the therapist from the members
+        const therapist = members.find(m => m.id === 'therapist');
+        if (!therapist) {
+          console.error('No therapist found in members');
+          return;
+        }
+        
+        // Construct the system message with the user's message
+        const systemMessage = `<system>User message: ${message}</system>`;
+        
+        // Make API request for therapist response
+        const response = await fetch('/api/kinos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content: systemMessage,
+            firstName: 'Circle',
+            specialist: circleData?.specialist || 'generalist',
+            pseudonym: `circle-${circleId}-therapist`
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to get response');
+        }
+        
+        const data = await response.json();
+        const audioUrl = await textToSpeech(data.response, 'therapist');
+        const messageId = `response-${Date.now()}`;
+        
+        // Add the therapist's response to messages
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: data.response,
+            id: messageId,
+            sender: therapist.name,
+            memberId: 'therapist',
+            audio: audioUrl
+          }
+        ]);
+        
+        // Play the audio response
+        if (audioUrl) {
+          playAudio(audioUrl, messageId);
+        }
+        
+        // Continue with the normal conversation flow after therapist responds
+        setTimeout(() => {
+          processNextTalkerRef.current?.();
+        }, 1000);
+        
+      } catch (error) {
+        console.error('Error processing user message:', error);
+        // Continue with normal flow even if there's an error
+        setTimeout(() => {
+          processNextTalkerRef.current?.();
+        }, 1000);
+      }
+    };
+    
+    // Send the message if no audio is playing
     if (!isPlaying) {
-      setTimeout(() => {
-        processNextTalkerRef.current?.();
-      }, 1000); // Small delay before continuing
+      sendUserMessage();
+    } else {
+      // If audio is playing, wait for it to finish
+      const currentAudio = audioRef.current;
+      if (currentAudio) {
+        const handleAudioEnd = () => {
+          sendUserMessage();
+          currentAudio.removeEventListener('ended', handleAudioEnd);
+        };
+        currentAudio.addEventListener('ended', handleAudioEnd);
+      }
     }
   };
   const [showJoinModal, setShowJoinModal] = React.useState(false);
