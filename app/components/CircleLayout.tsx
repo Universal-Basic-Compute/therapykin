@@ -761,7 +761,9 @@ export default function CircleLayout({
                           {/* Profile picture */}
                           <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                             <Image
-                              src={`/members/${circleId}-${message.memberId}.jpg`}
+                              src={message.memberId === 'you' 
+                                ? '/members/default.jpg'  // Use default avatar for user messages
+                                : `/members/${circleId}-${message.memberId}.jpg`}
                               alt={message.sender || ''}
                               fill
                               className="object-cover"
