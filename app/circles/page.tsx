@@ -158,17 +158,11 @@ export default function CirclesPage() {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Link 
-                      href={`/circle?name=${circle.id}&mode=peek`}
-                      className="flex-1 px-4 py-2 rounded-lg bg-[var(--primary)] text-white text-center hover:bg-[var(--primary-dark)] transition-colors"
-                    >
-                      Peek In
-                    </Link>
                     <button 
                       disabled
-                      className="flex-1 px-4 py-2 rounded-lg border border-[var(--primary)]/20 text-foreground/40 text-center cursor-not-allowed relative group"
+                      className="flex-1 px-4 py-2 rounded-lg bg-[var(--primary)]/20 text-foreground/40 text-center cursor-not-allowed relative group"
                     >
-                      Create Your Circle
+                      Peek In
                       <span className="absolute -top-2 -right-2 text-xs px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
                         Coming Soon
                       </span>
