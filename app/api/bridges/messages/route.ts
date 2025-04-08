@@ -91,11 +91,17 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     console.log('KinOS Bridge API response:', data);
     
-    // Add a field to indicate that the message is now loaded
-    data.loading = false;
+    // Formatez correctement la réponse pour l'affichage
+    const formattedResponse = {
+      role: 'assistant',
+      content: data.content || data.text || data.message || 'No response content',
+      id: `assistant-${Date.now()}`,
+      loading: false,
+      timestamp: new Date().toISOString()
+    };
     
-    // Return the response to the client
-    return NextResponse.json(data);
+    // Return the formatted response to the client
+    return NextResponse.json(formattedResponse);
   } catch (error) {
     console.error('Error proxying request to KinOS Bridge API:', error);
     
@@ -161,7 +167,18 @@ export async function GET(request: NextRequest) {
     }
     
     const data = await response.json();
-    return NextResponse.json(data);
+    
+    // Formatez les messages pour l'affichage
+    const formattedMessages = Array.isArray(data.messages) 
+      ? data.messages.map(msg => ({
+          role: msg.role || (msg.sender === 'user' ? 'user' : 'assistant'),
+          content: msg.content || msg.text || msg.message || '',
+          id: msg.id || `msg-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+          timestamp: msg.timestamp || new Date().toISOString()
+        }))
+      : [];
+    
+    return NextResponse.json({ messages: formattedMessages });
   } catch (error) {
     console.error('Error fetching messages from KinOS Bridge API:', error);
     return NextResponse.json(
