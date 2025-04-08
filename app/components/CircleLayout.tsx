@@ -153,16 +153,7 @@ const memberVariants: Variants = {
   hover: { scale: 1.02, transition: { duration: 0.2 } }
 };
 
-// Debug logging helper
-const logMembersAndStack = (members: Member[], stack: Talker[]) => {
-  console.log('Current members:', members.map(m => ({
-    id: m.id,
-    name: m.name,
-    role: m.role,
-    isDotted: m.isDotted
-  })));
-  console.log('Current talker stack:', stack);
-};
+// Debug logging helper - removed excessive logging
 
 // Function to ask the therapist who should speak next
 const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessage[], circleId: string, circleData: any) => {
@@ -188,8 +179,6 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
         role: member.role || null
       }));
     
-    console.log('Available speakers for therapist to choose from:', availableSpeakers);
-    
     // Create the system message for the therapist
     const systemMessage = `<system>Based on the conversation, who should talk next? Answer only with the ID in a JSON format. Available speakers: ${JSON.stringify(availableSpeakers)}</system>`;
     
@@ -202,6 +191,7 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
     // Combine system message with conversation history
     const fullPrompt = `${systemMessage}\n\n${conversationHistory}`;
     
+    // Keep this important log for tracking conversation flow
     console.log('Asking therapist who should speak next...');
     
     // Make API request to the analysis endpoint
@@ -225,6 +215,7 @@ const askTherapistForNextSpeaker = async (members: Member[], messages: ChatMessa
     }
     
     const data = await response.json();
+    // Keep this important log for debugging therapist decisions
     console.log('Therapist analysis raw response:', data.response);
     
     // Parse the response to get the next speaker ID
@@ -362,16 +353,10 @@ export default function CircleLayout({
   const members: Member[] = React.useMemo(() => {
     // Only create members array when we have circle data
     if (!circleData || circleMembers.length === 0) {
-      console.log('Waiting for circle data before creating members array');
       return [];
     }
 
     const therapist = circleData?.therapist;
-    console.log('Creating members array with:', {
-      therapist,
-      circleMembers,
-      isPeekMode
-    });
 
     // Filter out empty slots but keep regular members
     const regularMembers = circleMembers.filter(member => 
@@ -379,8 +364,6 @@ export default function CircleLayout({
       member.name && // Ensure member has a name
       !member.isDotted // Ensure not a placeholder
     );
-    
-    console.log('Regular members:', regularMembers);
 
     if (isPeekMode) {
       const allMembers = [
@@ -392,7 +375,6 @@ export default function CircleLayout({
           onClick: () => setShowJoinModal(true)
         }))
       ];
-      console.log('Final members array (peek mode):', allMembers);
       return allMembers;
     } else {
       const youMember: Member = {
@@ -407,7 +389,6 @@ export default function CircleLayout({
         youMember,
         ...regularMembers
       ];
-      console.log('Final members array (regular mode):', allMembers);
       return allMembers;
     }
   }, [isPeekMode, circleMembers, circleData?.therapist]);
@@ -467,16 +448,12 @@ export default function CircleLayout({
       setIsLoadingResponse(true);
 
       // Get available members (excluding empty slots and 'you')
-      const availableMembers = members.filter(member => {
-        console.log('Filtering member:', member);
-        
-        return (
-          member.id !== 'you' && 
-          member.id !== 'empty' &&
-          member.name && 
-          !member.isDotted
-        );
-      });
+      const availableMembers = members.filter(member => (
+        member.id !== 'you' && 
+        member.id !== 'empty' &&
+        member.name && 
+        !member.isDotted
+      ));
 
       if (availableMembers.length === 0) {
         console.error('No members available to talk. Current members:', members);
@@ -774,50 +751,14 @@ export default function CircleLayout({
   }, []);
 
 
-  // Add more detailed logging
-  console.log('CircleLayout props:', {
-    activeSpeaker,
-    isPeekMode,
-    circleMembers,
-    circleId,
-    circleData,
-    memberCount: circleMembers?.length || 0
-  });
-
-  // Log each member's details
-  circleMembers?.forEach(member => {
-    console.log('Member details:', {
-      id: member.id,
-      name: member.name,
-      role: member.role,
-      isTherapist: member.id === 'therapist'
-    });
-  });
-
-  // Log members array after processing
-  console.log('Processed members array:', members.map(m => ({
-    id: m.id,
-    name: m.name,
-    role: m.role,
-    isDotted: m.isDotted,
-    color: m.color
-  })));
+  // Removed excessive logging
 
 
   // Add effect to wait for circle data
   useEffect(() => {
     if (circleData && circleMembers.length > 0) {
-      console.log('Circle data and members loaded:', {
-        circleData,
-        memberCount: circleMembers.length
-      });
       setIsCircleDataLoaded(true);
       setIsInitialized(true);
-    } else {
-      console.log('Waiting for circle data and members:', {
-        hasCircleData: !!circleData,
-        memberCount: circleMembers.length
-      });
     }
   }, [circleData, circleMembers]);
 
@@ -845,20 +786,9 @@ export default function CircleLayout({
         setIsLoading(true);
         initialMessageSentRef.current = true;
         
-        // Log the members we're working with
-        console.log('Sending initial message with members:', members);
-        
         const presentMembers = members
-          .filter(m => {
-            console.log('Filtering member:', m);
-            return !m.isDotted && m.name && m.id !== 'empty'; // Only include valid members
-          })
-          .map(m => {
-            console.log('Mapping member:', m);
-            return `${m.name}${m.role ? ` (${m.role})` : ''}`;
-          });
-
-        console.log('Present members for initial message:', presentMembers);
+          .filter(m => !m.isDotted && m.name && m.id !== 'empty')
+          .map(m => `${m.name}${m.role ? ` (${m.role})` : ''}`);
         
         if (presentMembers.length === 0) {
           console.error('No valid members found for initial message');
@@ -869,12 +799,9 @@ export default function CircleLayout({
         
         // Determine if this is a hero's journey circle
         const isHerosJourneyCircle = ['addiction', 'depression', 'ptsd', 'life-purpose'].includes(circleId);
-        
+    
         // Use the correct pseudonym format for the therapist
         const therapistPseudonym = `${circleId}-therapist`;
-        
-        console.log(`Sending initial message for ${isHerosJourneyCircle ? 'Hero\'s Journey' : 'regular'} circle: ${circleId}`);
-        console.log('Using system message:', systemMessage);
         
         const response = await fetch('/api/kinos', {
           method: 'POST',
@@ -1098,12 +1025,6 @@ export default function CircleLayout({
         <h2 className="text-xl font-semibold mb-4">Circle Members</h2>
         {members.map((member, index) => {
           const imagePath = member.id === 'you' ? '/members/default.jpg' : `/members/${circleId}-${member.id}.jpg`;
-          console.log('Loading image for member:', {
-            memberId: member.id,
-            memberName: member.name,
-            imagePath,
-            circleId
-          });
 
           return (
             <motion.div
@@ -1130,17 +1051,7 @@ export default function CircleLayout({
                         className="object-cover rounded-full"
                         sizes="64px"
                         onError={(e) => {
-                          console.error('Error loading image:', {
-                            memberId: member.id,
-                            imagePath,
-                            error: e
-                          });
-                        }}
-                        onLoad={() => {
-                          console.log('Successfully loaded image:', {
-                            memberId: member.id,
-                            imagePath
-                          });
+                          console.error('Error loading image for member:', member.id);
                         }}
                       />
                     </div>
