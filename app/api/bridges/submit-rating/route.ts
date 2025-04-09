@@ -1,7 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/authOptions';
 import { getBridge, updateBridge } from '@/app/utils/airtable';
+
+// Add this interface to define the Bridge type with ratings
+interface Bridge {
+  id: string;
+  name?: string;
+  description?: string;
+  type?: string;
+  status?: string;
+  participants?: string[];
+  ratings?: string;
+  creatorEmail?: string;
+  createdAt?: string;
+  lastActive?: string;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,7 +48,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Get the bridge to verify it exists
-    const bridge = await getBridge(bridgeId);
+    const bridge = await getBridge(bridgeId) as Bridge;
     if (!bridge) {
       return NextResponse.json(
         { error: 'Bridge not found' },
@@ -83,7 +97,7 @@ export async function POST(request: NextRequest) {
     // Update the bridge
     await updateBridge(bridgeId, {
       ratings: JSON.stringify(ratings)
-    });
+    } as any); // Use type assertion here
     
     return NextResponse.json({ success: true });
   } catch (error) {
