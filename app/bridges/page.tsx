@@ -93,13 +93,6 @@ export default function Bridges() {
                 </p>
               </div>
             </div>
-            
-            {/* Connection lines between steps */}
-            <div className="hidden lg:block relative h-10 -mt-[6.5rem] mb-16">
-              <div className="absolute top-1/2 left-[24%] right-[24%] h-1 border-b-2 border-dashed border-[var(--primary-dark)]/50"></div>
-              <div className="absolute top-1/2 left-[49%] right-[49%] h-1 border-b-2 border-dashed border-[var(--accent)]/50"></div>
-              <div className="absolute top-1/2 left-[74%] right-[24%] h-1 border-b-2 border-dashed border-[var(--warm)]/50"></div>
-            </div>
           </section>
           
           {/* Unique Benefits */}
