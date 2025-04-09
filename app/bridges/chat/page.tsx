@@ -182,9 +182,10 @@ function BridgeChatSession() {
         sessionLength={60} // Bridges can have longer sessions
         backLink="/bridges"
         backText=""
+        className="fixed top-0 left-0 right-0 z-20 bg-[var(--background)]"
       />
       
-      <main className="flex-grow pt-24 pb-24 px-4 relative">
+      <main className="flex-grow pt-32 pb-24 px-4 relative">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 h-[calc(100vh-200px)]">
           {/* Main Chat Area */}
           <div className={`flex-grow flex flex-col ${settingsCollapsed ? 'md:w-3/4' : 'md:w-2/3'}`}>
@@ -212,7 +213,7 @@ function BridgeChatSession() {
                 setSettingsCollapsed(!settingsCollapsed);
                 console.log('New state:', !settingsCollapsed);
               }}
-              className="w-full p-2 rounded-lg bg-[var(--primary)] hover:bg-[var(--primary-dark)] transition-colors flex items-center justify-center text-sm font-medium text-white"
+              className="w-full p-2 mt-4 rounded-lg bg-[var(--primary)] hover:bg-[var(--primary-dark)] transition-colors flex items-center justify-center text-sm font-medium text-white"
             >
               {settingsCollapsed ? (
                 <>
