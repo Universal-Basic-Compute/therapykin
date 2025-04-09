@@ -38,6 +38,17 @@ function BridgeChatSession() {
   const searchParams = useSearchParams();
   const bridgeId = searchParams.get('bridgeId');
   
+  // State for ratings
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [ratingSubmitted, setRatingSubmitted] = useState(false);
+  const [overallRating, setOverallRating] = useState(3);
+  const [understandingEmpathy, setUnderstandingEmpathy] = useState(3);
+  const [helpfulnessOfAdvice, setHelpfulnessOfAdvice] = useState(3);
+  const [sessionFlow, setSessionFlow] = useState(3);
+  const [rememberingContext, setRememberingContext] = useState(3);
+  const [feedbackComments, setFeedbackComments] = useState('');
+  const [isSubmittingRating, setIsSubmittingRating] = useState(false);
+  
   // State for settings
   const [settingsCollapsed, setSettingsCollapsed] = useState(true);
   const [voiceMode, setVoiceMode] = useState(true);
