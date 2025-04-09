@@ -173,7 +173,7 @@ function BridgeChatSession() {
       (async () => {
         try {
           // Create a system message to start the session
-          const systemMessage = "<system>New bridge session started</system>";
+          const systemMessage = `<system>New bridge session started with ${user.firstName}</system>`;
           
           // Send the message to the API
           const response = await fetch('/api/bridges/messages', {
