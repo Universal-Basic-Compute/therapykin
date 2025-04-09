@@ -62,39 +62,6 @@ function BridgeChatSession() {
     console.log('Settings collapsed state:', settingsCollapsed);
   }, [settingsCollapsed]);
   
-  // Add effect to automatically play audio for new assistant messages
-  useEffect(() => {
-    // Check if there are any messages and if voice mode is enabled
-    if (chatHistory.length > 0 && voiceMode) {
-      // Get the last message
-      const lastMessage = chatHistory[chatHistory.length - 1];
-      
-      // Only auto-play if it's an assistant message, not loading, and doesn't already have audio
-      if (lastMessage.role === 'assistant' && !lastMessage.loading && !lastMessage.audio) {
-        // Generate and play audio for the message
-        (async () => {
-          try {
-            const audioUrl = await textToSpeech(lastMessage.content);
-            if (audioUrl) {
-              // Update the message with the audio URL
-              setChatHistory(prev => 
-                prev.map(m => 
-                  m.id === lastMessage.id 
-                    ? { ...m, audio: audioUrl }
-                    : m
-                )
-              );
-              // Play the audio
-              playAudio(audioUrl, lastMessage.id || 'unknown');
-            }
-          } catch (error) {
-            console.error('Error auto-playing message audio:', error);
-          }
-        })();
-      }
-    }
-  }, [chatHistory, voiceMode, textToSpeech, playAudio, setChatHistory]); // Dependencies
-  
   // Use our custom hooks
   const { 
     chatHistory, 
@@ -141,6 +108,39 @@ function BridgeChatSession() {
     captureImage,
     discardImage
   } = useCamera();
+  
+  // Add effect to automatically play audio for new assistant messages
+  useEffect(() => {
+    // Check if there are any messages and if voice mode is enabled
+    if (chatHistory.length > 0 && voiceMode) {
+      // Get the last message
+      const lastMessage = chatHistory[chatHistory.length - 1];
+      
+      // Only auto-play if it's an assistant message, not loading, and doesn't already have audio
+      if (lastMessage.role === 'assistant' && !lastMessage.loading && !lastMessage.audio) {
+        // Generate and play audio for the message
+        (async () => {
+          try {
+            const audioUrl = await textToSpeech(lastMessage.content);
+            if (audioUrl) {
+              // Update the message with the audio URL
+              setChatHistory(prev => 
+                prev.map(m => 
+                  m.id === lastMessage.id 
+                    ? { ...m, audio: audioUrl }
+                    : m
+                )
+              );
+              // Play the audio
+              playAudio(audioUrl, lastMessage.id || 'unknown');
+            }
+          } catch (error) {
+            console.error('Error auto-playing message audio:', error);
+          }
+        })();
+      }
+    }
+  }, [chatHistory, voiceMode, textToSpeech, playAudio, setChatHistory]); // Dependencies
   
   // Message input state
   const [message, setMessage] = useState('');
