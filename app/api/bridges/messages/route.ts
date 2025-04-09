@@ -136,7 +136,7 @@ export async function GET(request: NextRequest) {
     const kinId = sanitizedBridgeId;
     
     // Create the KinOS API URL directly
-    let baseUrl = `${process.env.KINOS_API_URL}/v2/blueprints/therapykinbridge/kins/${encodeURIComponent(kinId)}/channels/${encodeURIComponent(pseudonym)}/messages`;
+    let baseUrl = `${process.env.KINOS_API_URL}/v2/blueprints/therapykinbridge/kins/${encodeURIComponent(kinId)}/channels/${encodeURIComponent(pseudonym || 'default')}/messages`;
     
     // Add query parameters
     const queryParams = new URLSearchParams();
@@ -170,7 +170,7 @@ export async function GET(request: NextRequest) {
     
     // Formatez les messages pour l'affichage
     const formattedMessages = Array.isArray(data.messages) 
-      ? data.messages.map(msg => ({
+      ? data.messages.map((msg: any) => ({
           role: msg.role || (msg.sender === 'user' ? 'user' : 'assistant'),
           content: msg.content || msg.text || msg.message || '',
           id: msg.id || `msg-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,

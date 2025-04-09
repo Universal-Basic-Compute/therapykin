@@ -87,6 +87,7 @@ function BridgeChatSession() {
   const {
     cameraEnabled,
     cameraError,
+    setCameraError,
     capturedImage,
     videoRef,
     toggleCamera,
