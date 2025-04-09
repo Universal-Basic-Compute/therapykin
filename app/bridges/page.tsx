@@ -10,10 +10,10 @@ export default function Bridges() {
     <div className="flex flex-col min-h-screen">
       <Header />
       
-      <main className="flex-grow pt-24 pb-16 px-4">
+      <main className="flex-grow pt-32 pb-24 px-4">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section with background image */}
-          <div className="text-center mb-16 rounded-2xl shadow-depth relative overflow-hidden">
+          <div className="text-center mb-32 rounded-2xl shadow-depth relative overflow-hidden">
             {/* Background image */}
             <div className="absolute inset-0 w-full h-full">
               <Image 
@@ -49,10 +49,10 @@ export default function Bridges() {
           </div>
           
           {/* How It Works */}
-          <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">How Bridges Works</h2>
+          <section className="mb-24">
+            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center text-[var(--primary)]">How Bridges Works</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="card p-6 text-center hover:shadow-lg transition-shadow card-hover-lift">
                 <div className="w-16 h-16 bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <span className="text-2xl font-bold text-white">1</span>
@@ -103,8 +103,8 @@ export default function Bridges() {
           </section>
           
           {/* Unique Benefits */}
-          <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Unique Benefits</h2>
+          <section className="mb-24">
+            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center text-[var(--primary)]">Unique Benefits</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="card p-6 hover:shadow-lg transition-shadow">
@@ -182,10 +182,10 @@ export default function Bridges() {
           </section>
           
           {/* Bridges Programs */}
-          <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Bridges Programs</h2>
+          <section className="mb-24">
+            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center text-[var(--primary)]">Bridges Programs</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="card p-6 hover:shadow-lg transition-shadow card-hover-scale">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
@@ -325,8 +325,8 @@ export default function Bridges() {
           </section>
           
           {/* How to Begin */}
-          <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">How to Begin</h2>
+          <section className="mb-24">
+            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center text-[var(--primary)]">How to Begin</h2>
             
             <div className="card p-8 shadow-depth bg-gradient-to-br from-[var(--background)] to-[var(--background-alt)]">
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -378,10 +378,10 @@ export default function Bridges() {
           </section>
           
           {/* Success Stories */}
-          <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Success Stories</h2>
+          <section className="mb-24">
+            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center text-[var(--primary)]">Success Stories</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="card p-6 shadow-depth">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-[var(--background-alt)] rounded-full flex items-center justify-center mr-4 shadow-lg">
@@ -430,15 +430,15 @@ export default function Bridges() {
           </section>
           
           {/* Expert Validation */}
-          <section className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[var(--primary)]">Expert Validation</h2>
+          <section className="mb-24">
+            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center text-[var(--primary)]">Expert Validation</h2>
             
             <div className="card p-8 shadow-depth bg-gradient-to-br from-[var(--background)] to-[var(--background-alt)]">
               <p className="text-foreground/80 mb-6 text-center max-w-4xl mx-auto">
                 TherapyKin Bridges was developed in consultation with relationship therapists, communication experts, and conflict resolution specialists to ensure it follows best practices in:
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
                 <div className="flex flex-col items-center text-center">
                   <div className="w-16 h-16 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/40 rounded-full flex items-center justify-center mb-3 shadow-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -490,7 +490,7 @@ export default function Bridges() {
           {/* Pricing section removed */}
           
           {/* CTA */}
-          <section className="mb-16">
+          <section className="mb-24">
             <div className="card p-8 bg-[var(--background-alt)] text-center shadow-depth overflow-hidden relative">
               <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[var(--primary)] relative z-10">Begin Your Bridge Journey Today</h2>
               <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto relative z-10">
