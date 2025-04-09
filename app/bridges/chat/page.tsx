@@ -121,16 +121,10 @@ function BridgeChatSession() {
     console.log('Settings collapsed state:', settingsCollapsed);
   }, [settingsCollapsed]);
   
-  // Effect to show rating modal when session ends
-  useEffect(() => {
-    // Check if session has reached 60 minutes
-    if (sessionStartTime && minutesActive >= 60 && !ratingSubmitted && !showRatingModal) {
-      console.log('Session has ended, showing rating modal');
-      setShowRatingModal(true);
-    }
-  }, [sessionStartTime, minutesActive, ratingSubmitted, showRatingModal]);
+  // Message input state
+  const [message, setMessage] = useState('');
   
-  // Use our custom hooks
+  // Use our custom hooks - MUST BE BEFORE any useEffect that uses its values
   const { 
     chatHistory, 
     setChatHistory,
@@ -143,6 +137,15 @@ function BridgeChatSession() {
     specialist: 'mediator',
     bridgeId
   });
+  
+  // Effect to show rating modal when session ends
+  useEffect(() => {
+    // Check if session has reached 60 minutes
+    if (sessionStartTime && minutesActive >= 60 && !ratingSubmitted && !showRatingModal) {
+      console.log('Session has ended, showing rating modal');
+      setShowRatingModal(true);
+    }
+  }, [sessionStartTime, minutesActive, ratingSubmitted, showRatingModal]);
   
   const {
     isRecording,
@@ -294,10 +297,6 @@ function BridgeChatSession() {
       })();
     }
   }, [user, bridgeId, chatHistory.length, isSendingMessage, voiceMode, textToSpeech, playAudio]);
-  
-  // Message input state
-  const [message, setMessage] = useState('');
-  
   
   // Function to handle sending a message
   const handleSendMessage = async (text: string) => {
