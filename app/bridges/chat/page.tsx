@@ -200,10 +200,19 @@ function BridgeChatSession() {
           {/* Right Column - Settings only */}
           <div className="md:w-1/4 md:max-w-xs flex flex-col gap-4">
             
+            {/* Debug message - can be removed after fixing */}
+            <div className="text-xs text-foreground/60 mb-2">
+              Settings state: {settingsCollapsed ? 'Collapsed' : 'Expanded'}
+            </div>
+            
             {/* Settings toggle button */}
             <button 
-              onClick={() => setSettingsCollapsed(!settingsCollapsed)}
-              className="w-full p-2 rounded-lg bg-[var(--primary)]/20 hover:bg-[var(--primary)]/30 transition-colors flex items-center justify-center text-sm font-medium text-[var(--primary)]"
+              onClick={() => {
+                console.log('Current state:', settingsCollapsed);
+                setSettingsCollapsed(!settingsCollapsed);
+                console.log('New state:', !settingsCollapsed);
+              }}
+              className="w-full p-2 rounded-lg bg-[var(--primary)] hover:bg-[var(--primary-dark)] transition-colors flex items-center justify-center text-sm font-medium text-white"
             >
               {settingsCollapsed ? (
                 <>
@@ -224,19 +233,21 @@ function BridgeChatSession() {
             
             {/* Settings Panel - Shown/hidden based on settingsCollapsed state */}
             {!settingsCollapsed && (
-              <ChatSettings
-                voiceMode={voiceMode}
-                toggleVoiceMode={toggleVoiceMode}
-                selectedVoice={selectedVoice}
-                updatePreferredVoice={setSelectedVoice}
-                voiceOptions={voiceOptions}
-                cameraEnabled={cameraEnabled}
-                toggleCamera={toggleCamera}
-                autoIllustrate={autoIllustrate}
-                updateAutoIllustratePreference={updateAutoIllustratePreference}
-                collapsed={settingsCollapsed}
-                toggleCollapsed={() => setSettingsCollapsed(true)}
-              />
+              <div className="card bg-[var(--background-alt)] border border-[var(--primary)]/20 rounded-lg shadow-lg">
+                <ChatSettings
+                  voiceMode={voiceMode}
+                  toggleVoiceMode={toggleVoiceMode}
+                  selectedVoice={selectedVoice}
+                  updatePreferredVoice={setSelectedVoice}
+                  voiceOptions={voiceOptions}
+                  cameraEnabled={cameraEnabled}
+                  toggleCamera={toggleCamera}
+                  autoIllustrate={autoIllustrate}
+                  updateAutoIllustratePreference={updateAutoIllustratePreference}
+                  collapsed={settingsCollapsed}
+                  toggleCollapsed={() => setSettingsCollapsed(true)}
+                />
+              </div>
             )}
             
             {/* Camera Display */}
