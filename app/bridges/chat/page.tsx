@@ -181,7 +181,7 @@ function BridgeChatSession() {
         minutesActive={minutesActive}
         sessionLength={60} // Bridges can have longer sessions
         backLink="/bridges"
-        backText="Back to Bridges"
+        backText=""
       />
       
       <main className="flex-grow pt-24 pb-24 px-4 relative">
