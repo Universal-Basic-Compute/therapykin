@@ -30,10 +30,15 @@ export default function Bridges() {
             {/* Content on top of the image */}
             <div className="relative z-10 p-16 md:p-24 min-h-[400px] md:min-h-[500px] flex flex-col items-center justify-center">
               <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white">TherapyKin Bridges</h1>
-              <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              <p className="text-xl text-white/90 max-w-3xl mx-auto mb-8">
                 Healing Connections Through AI Facilitation
               </p>
-              <div className="w-24 h-1 bg-white mx-auto my-10"></div>
+              <div className="w-24 h-1 bg-white mx-auto my-8"></div>
+              
+              {/* Add this button */}
+              <Link href="/my-bridges" className="btn-primary bg-white text-[var(--primary)] hover:bg-white/90 px-8 py-3 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                Start My Bridge
+              </Link>
             </div>
           </div>
           
