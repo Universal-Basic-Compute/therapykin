@@ -28,12 +28,12 @@ export default function Bridges() {
             </div>
             
             {/* Content on top of the image */}
-            <div className="relative z-10 p-8 md:p-16">
-              <h1 className="text-3xl md:text-5xl font-bold mb-4 text-white">TherapyKin Bridges</h1>
+            <div className="relative z-10 p-16 md:p-24 min-h-[400px] md:min-h-[500px] flex flex-col items-center justify-center">
+              <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white">TherapyKin Bridges</h1>
               <p className="text-xl text-white/90 max-w-3xl mx-auto">
                 Healing Connections Through AI Facilitation
               </p>
-              <div className="w-24 h-1 bg-white mx-auto my-8"></div>
+              <div className="w-24 h-1 bg-white mx-auto my-10"></div>
             </div>
           </div>
           
