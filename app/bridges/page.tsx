@@ -1,16 +1,48 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Bridges() {
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  const copyPageLink = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 2000);
+      })
+      .catch(err => {
+        console.error('Failed to copy link: ', err);
+      });
+  };
+  
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
       
       <main className="flex-grow pt-32 pb-24 px-4">
+        {/* Floating Copy Link Button */}
+        <div className="fixed bottom-8 right-8 z-50">
+          <button 
+            onClick={copyPageLink}
+            className="group flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            <span className="text-lg font-medium">
+              {linkCopied ? 'Link Copied!' : 'Copy Link'}
+            </span>
+            <span className="absolute -top-2 -right-2 flex h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-6 w-6 bg-white/30"></span>
+            </span>
+          </button>
+        </div>
         <div className="max-w-6xl mx-auto">
           {/* Hero Section with background image */}
           <div className="text-center mb-32 rounded-2xl shadow-depth relative overflow-hidden">
