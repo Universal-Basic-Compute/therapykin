@@ -57,7 +57,8 @@ export async function POST(request: NextRequest) {
       images: images || [],
       model: "claude-3-7-sonnet-latest",
       history_length: 50,
-      bridgeId
+      bridgeId,
+      addContext: "channels/" // Add this line to include all channel messages in context
     };
     
     // Add mode if it exists
@@ -141,6 +142,7 @@ export async function GET(request: NextRequest) {
     // Add query parameters
     const queryParams = new URLSearchParams();
     queryParams.append('bridgeId', bridgeId);
+    queryParams.append('addContext', 'channels/'); // Add this line to include all channel messages in context
     if (since) {
       queryParams.append('since', since);
     }
