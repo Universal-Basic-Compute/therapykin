@@ -12,6 +12,7 @@ interface ChatHeaderProps {
   sessionEnded?: boolean;
   backLink?: string;
   backText?: string;
+  className?: string; // Add this line to accept className prop
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
@@ -22,7 +23,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   minutesActive = 0,
   sessionEnded = false,
   backLink = "/dashboard",
-  backText = "Back to Dashboard"
+  backText = "Back to Dashboard",
+  className
 }) => {
   // Helper function to determine the session phase based on dynamic session length
   const getSessionPhase = (startTime: Date) => {
@@ -49,7 +51,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   };
 
   return (
-    <div className="fixed top-16 left-0 right-0 z-10 bg-[var(--background)] border-b border-black/5 dark:border-white/5 p-4">
+    <div className={`fixed top-16 left-0 right-0 z-10 bg-[var(--background)] border-b border-black/5 dark:border-white/5 p-4 ${className || ''}`}>
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
         <div>
           <h1 className="text-xl font-bold text-[var(--primary)]">{title}</h1>
