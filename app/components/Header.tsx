@@ -124,7 +124,6 @@ export default function Header() {
               {/* Bridges Link */}
               <Link href="/bridges" className="text-yellow-500 dark:text-yellow-400 hover:text-[var(--primary)] px-3 py-2 text-sm font-medium relative">
                 Bridges
-                <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 text-[10px] text-gray-500 dark:text-gray-400 whitespace-nowrap font-medium">coming soon</span>
               </Link>
               
               {/* Our Specialists Dropdown */}
@@ -420,7 +419,6 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Bridges
-                <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-2 font-medium">coming soon</span>
               </Link>
               <Link 
                 href="/specialists/generalist" 
