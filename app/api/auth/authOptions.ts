@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { getUserByEmail } from "@/app/utils/airtable";
+import { getUserByEmail } from "@/app/utils/airtable-auth";
 
 export const authOptions: NextAuthOptions = {
   providers: [
