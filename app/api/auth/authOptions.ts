@@ -3,6 +3,48 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { getUserByEmail } from "@/app/utils/airtable-auth";
 
+// Extend the default NextAuth types
+import { JWT } from "next-auth/jwt";
+import { Session } from "next-auth";
+
+// Extend the JWT type
+declare module "next-auth/jwt" {
+  interface JWT {
+    id?: string;
+    firstName?: string;
+    lastName?: string;
+    isAdmin?: boolean;
+    isTherapist?: string | boolean;
+    pseudonym?: string;
+  }
+}
+
+// Extend the Session User type
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id?: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      firstName?: string;
+      lastName?: string;
+      isAdmin?: boolean;
+      isTherapist?: string | boolean;
+      pseudonym?: string;
+    }
+  }
+  
+  interface User {
+    id?: string;
+    firstName?: string;
+    lastName?: string;
+    isAdmin?: boolean;
+    isTherapist?: string | boolean;
+    pseudonym?: string;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
