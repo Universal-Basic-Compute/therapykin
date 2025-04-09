@@ -142,6 +142,91 @@ function BridgeChatSession() {
     }
   }, [chatHistory, voiceMode, textToSpeech, playAudio, setChatHistory]); // Dependencies
   
+  // Add effect to send initial system message when entering a bridge session
+  useEffect(() => {
+    // Only send the initial message if we have a user, bridgeId, and chatHistory is empty
+    if (user && bridgeId && chatHistory.length === 0 && !isSendingMessage) {
+      console.log('Sending initial bridge session message');
+      
+      // Show loading indicator
+      setChatHistory([
+        { 
+          role: 'assistant', 
+          content: '...', 
+          id: 'initial-loading',
+          loading: true
+        }
+      ]);
+      
+      // Get the user's pseudonym or generate one if missing
+      let userPseudonym = user?.pseudonym || '';
+      if (!userPseudonym) {
+        console.log('Pseudonym missing for user:', user.email);
+        // You would need to import the generatePseudonymFromEmail function
+        // const generatedPseudonym = generatePseudonymFromEmail(user.email || '');
+        // userPseudonym = generatedPseudonym.name;
+        userPseudonym = user.firstName || 'User'; // Fallback if no pseudonym generation function
+        console.log(`Using fallback pseudonym for user: ${userPseudonym}`);
+      }
+      
+      // Send the "New bridge session started" message
+      (async () => {
+        try {
+          // Create a system message to start the session
+          const systemMessage = "<system>New bridge session started</system>";
+          
+          // Send the message to the API
+          const response = await fetch('/api/bridges/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              content: systemMessage,
+              firstName: user.firstName,
+              pseudonym: userPseudonym,
+              bridgeId: bridgeId,
+              mode: 'bridge_opening'
+            }),
+          });
+          
+          if (!response.ok) {
+            throw new Error(`Failed to send initial message: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          console.log('Initial bridge message response:', data);
+          
+          // Update chat history with the response
+          const audioUrl = voiceMode ? await textToSpeech(data.content) : '';
+          setChatHistory([
+            { 
+              role: 'assistant', 
+              content: data.content,
+              id: 'initial-' + Date.now(),
+              audio: audioUrl
+            }
+          ]);
+            
+          // Play audio if voice mode is enabled
+          if (voiceMode && audioUrl) {
+            playAudio(audioUrl, 'initial-' + Date.now());
+          }
+        } catch (error) {
+          console.error('Error sending initial bridge message:', error);
+          // Update with error message
+          setChatHistory([
+            { 
+              role: 'assistant', 
+              content: "I'm sorry, I encountered an error starting the bridge session. Please try again.",
+              id: 'error-' + Date.now()
+            }
+          ]);
+        }
+      })();
+    }
+  }, [user, bridgeId, chatHistory.length, isSendingMessage, voiceMode, textToSpeech, playAudio]);
+  
   // Message input state
   const [message, setMessage] = useState('');
   
