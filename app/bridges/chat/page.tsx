@@ -57,10 +57,67 @@ function BridgeChatSession() {
       });
   };
   
+  // Function to submit rating
+  const submitRating = async () => {
+    if (!bridgeId) return;
+    
+    setIsSubmittingRating(true);
+    
+    try {
+      const response = await fetch('/api/bridges/submit-rating', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bridgeId,
+          overallRating,
+          understandingEmpathy,
+          helpfulnessOfAdvice,
+          sessionFlow,
+          rememberingContext,
+          comments: feedbackComments
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to submit rating: ${response.status}`);
+      }
+      
+      console.log('Bridge session rating submitted successfully');
+      setRatingSubmitted(true);
+      setShowRatingModal(false);
+      
+      // Add a thank you message to the chat
+      setChatHistory(prev => [
+        ...prev,
+        { 
+          role: 'assistant', 
+          content: "Thank you for your feedback! Your rating helps us improve the bridge experience.",
+          id: 'rating-thanks-' + Date.now()
+        }
+      ]);
+    } catch (error) {
+      console.error('Error submitting bridge session rating:', error);
+      alert('Failed to submit your feedback. Please try again.');
+    } finally {
+      setIsSubmittingRating(false);
+    }
+  };
+  
   // Add effect to debug settings state
   useEffect(() => {
     console.log('Settings collapsed state:', settingsCollapsed);
   }, [settingsCollapsed]);
+  
+  // Effect to show rating modal when session ends
+  useEffect(() => {
+    // Check if session has reached 60 minutes
+    if (sessionStartTime && minutesActive >= 60 && !ratingSubmitted && !showRatingModal) {
+      console.log('Session has ended, showing rating modal');
+      setShowRatingModal(true);
+    }
+  }, [sessionStartTime, minutesActive, ratingSubmitted, showRatingModal]);
   
   // Use our custom hooks
   const { 
@@ -495,6 +552,187 @@ function BridgeChatSession() {
           </div>
         </div>
       </main>
+      
+      {/* Rating Modal */}
+      {showRatingModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-[var(--background)] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-[var(--primary)]">Rate Your Bridge Session</h2>
+                <button 
+                  onClick={() => setShowRatingModal(false)}
+                  className="text-foreground/60 hover:text-foreground"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <p className="mb-6 text-foreground/70">
+                Your feedback helps us improve the bridge experience. All ratings are confidential.
+              </p>
+              
+              <div className="space-y-6">
+                {/* Overall Rating */}
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Overall Experience</h3>
+                  <div className="flex gap-2 justify-center">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <button
+                        key={rating}
+                        onClick={() => setOverallRating(rating)}
+                        className={`w-12 h-12 rounded-full flex items-center justify-center text-xl transition-all ${
+                          rating <= overallRating
+                            ? 'bg-yellow-400 text-yellow-900'
+                            : 'bg-[var(--background-alt)] text-foreground/40'
+                        }`}
+                      >
+                        ★
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Understanding & Empathy */}
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h3 className="text-lg font-medium">Understanding & Empathy</h3>
+                    <span className="text-sm text-foreground/70">
+                      {understandingEmpathy === 1 ? 'Poor' : 
+                       understandingEmpathy === 2 ? 'Fair' :
+                       understandingEmpathy === 3 ? 'Good' :
+                       understandingEmpathy === 4 ? 'Very Good' : 'Excellent'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={understandingEmpathy}
+                    onChange={(e) => setUnderstandingEmpathy(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-foreground/60">
+                    <span>Poor</span>
+                    <span>Excellent</span>
+                  </div>
+                </div>
+                
+                {/* Helpfulness of Advice */}
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h3 className="text-lg font-medium">Helpfulness of Advice</h3>
+                    <span className="text-sm text-foreground/70">
+                      {helpfulnessOfAdvice === 1 ? 'Not Helpful' : 
+                       helpfulnessOfAdvice === 2 ? 'Slightly Helpful' :
+                       helpfulnessOfAdvice === 3 ? 'Helpful' :
+                       helpfulnessOfAdvice === 4 ? 'Very Helpful' : 'Extremely Helpful'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={helpfulnessOfAdvice}
+                    onChange={(e) => setHelpfulnessOfAdvice(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-foreground/60">
+                    <span>Not Helpful</span>
+                    <span>Very Helpful</span>
+                  </div>
+                </div>
+                
+                {/* Session Flow & Navigation */}
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h3 className="text-lg font-medium">Session Flow & Navigation</h3>
+                    <span className="text-sm text-foreground/70">
+                      {sessionFlow === 1 ? 'Confusing' : 
+                       sessionFlow === 2 ? 'Somewhat Clear' :
+                       sessionFlow === 3 ? 'Clear' :
+                       sessionFlow === 4 ? 'Very Clear' : 'Intuitive'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={sessionFlow}
+                    onChange={(e) => setSessionFlow(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-foreground/60">
+                    <span>Confusing</span>
+                    <span>Intuitive</span>
+                  </div>
+                </div>
+                
+                {/* Remembering Previous Context */}
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h3 className="text-lg font-medium">Remembering Previous Context</h3>
+                    <span className="text-sm text-foreground/70">
+                      {rememberingContext === 1 ? 'Poor Memory' : 
+                       rememberingContext === 2 ? 'Some Memory' :
+                       rememberingContext === 3 ? 'Good Memory' :
+                       rememberingContext === 4 ? 'Very Good Memory' : 'Excellent Memory'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={rememberingContext}
+                    onChange={(e) => setRememberingContext(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-foreground/60">
+                    <span>Poor Memory</span>
+                    <span>Excellent Memory</span>
+                  </div>
+                </div>
+                
+                {/* Additional Comments */}
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Additional Comments</h3>
+                  <textarea
+                    value={feedbackComments}
+                    onChange={(e) => setFeedbackComments(e.target.value)}
+                    placeholder="What went well? What could be improved?"
+                    className="w-full p-3 border border-black/10 dark:border-white/10 rounded-lg bg-[var(--background)] min-h-[100px]"
+                  />
+                </div>
+                
+                <div className="flex justify-end gap-4 mt-6">
+                  <button
+                    onClick={() => setShowRatingModal(false)}
+                    className="btn-secondary"
+                  >
+                    Skip for Now
+                  </button>
+                  <button
+                    onClick={submitRating}
+                    disabled={isSubmittingRating}
+                    className="btn-primary flex items-center"
+                  >
+                    {isSubmittingRating ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        Submitting...
+                      </>
+                    ) : (
+                      'Submit Feedback'
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Message Input */}
       <MessageInput 
