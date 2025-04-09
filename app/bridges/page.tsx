@@ -4,6 +4,7 @@ import React from 'react';
 import Header from '../components/Header';
 import Link from 'next/link';
 import Image from 'next/image';
+import Image from 'next/image';
 
 export default function Bridges() {
   return (
@@ -12,43 +13,28 @@ export default function Bridges() {
       
       <main className="flex-grow pt-24 pb-16 px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Hero Section with simplified background */}
-          <div className="text-center mb-16 p-8 rounded-2xl bg-[var(--background-alt)] shadow-depth">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[var(--primary)]">TherapyKin Bridges</h1>
-            <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
-              Healing Connections Through AI Facilitation
-            </p>
-            <div className="w-24 h-1 bg-[var(--primary)] mx-auto my-8"></div>
+          {/* Hero Section with background image */}
+          <div className="text-center mb-16 rounded-2xl shadow-depth relative overflow-hidden">
+            {/* Background image */}
+            <div className="absolute inset-0 w-full h-full">
+              <Image 
+                src="/bridges/hero.png" 
+                alt="Bridges Hero" 
+                fill 
+                className="object-cover"
+                priority
+              />
+              {/* Optional overlay to ensure text readability */}
+              <div className="absolute inset-0 bg-black/30"></div>
+            </div>
             
-            {/* Decorative bridge illustration */}
-            <div className="relative h-40 md:h-60 mt-8 overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full max-w-2xl relative">
-                  {/* Bridge arch */}
-                  <div className="h-32 md:h-40 w-full border-t-8 border-[var(--primary)] rounded-[50%] relative overflow-hidden">
-                    {/* Bridge supports */}
-                    <div className="absolute left-1/4 top-0 h-32 md:h-40 w-2 bg-[var(--primary)]"></div>
-                    <div className="absolute left-2/4 top-0 h-32 md:h-40 w-2 bg-[var(--primary)]"></div>
-                    <div className="absolute left-3/4 top-0 h-32 md:h-40 w-2 bg-[var(--primary)]"></div>
-                    
-                    {/* Animated figures on the bridge */}
-                    <div className="absolute left-1/4 top-0 animate-float">
-                      <div className="w-6 h-6 rounded-full bg-[var(--accent)] shadow-lg transform -translate-y-3"></div>
-                    </div>
-                    <div className="absolute right-1/4 top-0 animate-float-delayed">
-                      <div className="w-6 h-6 rounded-full bg-[var(--warm)] shadow-lg transform -translate-y-3"></div>
-                    </div>
-                    
-                    {/* Connection line between figures */}
-                    <div className="absolute top-0 left-0 right-0 h-1 border-b-2 border-dashed border-[var(--primary-dark)]/50"></div>
-                  </div>
-                  
-                  {/* Water-like waves beneath the bridge */}
-                  <div className="absolute bottom-0 left-0 right-0 h-12 bg-[var(--primary)]/20 rounded-t-3xl"></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-[var(--primary)]/30 rounded-t-3xl"></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-4 bg-[var(--primary)]/40 rounded-t-3xl"></div>
-                </div>
-              </div>
+            {/* Content on top of the image */}
+            <div className="relative z-10 p-8 md:p-16">
+              <h1 className="text-3xl md:text-5xl font-bold mb-4 text-white">TherapyKin Bridges</h1>
+              <p className="text-xl text-white/90 max-w-3xl mx-auto">
+                Healing Connections Through AI Facilitation
+              </p>
+              <div className="w-24 h-1 bg-white mx-auto my-8"></div>
             </div>
           </div>
           
