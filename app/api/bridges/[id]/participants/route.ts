@@ -4,9 +4,8 @@ import { getBridge, addParticipantToBridge, removeParticipantFromBridge } from '
 
 export async function POST(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
   
   try {
     // Get the current user
@@ -28,7 +27,7 @@ export async function POST(
     }
     
     // Get the bridge
-    const bridge = await getBridge(id);
+    const bridge = await getBridge(params.id);
     
     // Check if bridge exists
     if (!bridge) {
@@ -55,7 +54,7 @@ export async function POST(
     }
     
     // Add participant to the bridge
-    const updatedBridge = await addParticipantToBridge(id, email);
+    const updatedBridge = await addParticipantToBridge(params.id, email);
     
     return NextResponse.json({ bridge: updatedBridge });
   } catch (error) {
@@ -69,9 +68,8 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
   
   try {
     // Get the current user
@@ -93,7 +91,7 @@ export async function DELETE(
     }
     
     // Get the bridge
-    const bridge = await getBridge(id);
+    const bridge = await getBridge(params.id);
     
     // Check if bridge exists
     if (!bridge) {
@@ -128,7 +126,7 @@ export async function DELETE(
     }
     
     // Remove participant from the bridge
-    const updatedBridge = await removeParticipantFromBridge(id, email);
+    const updatedBridge = await removeParticipantFromBridge(params.id, email);
     
     return NextResponse.json({ bridge: updatedBridge });
   } catch (error) {
