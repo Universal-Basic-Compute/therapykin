@@ -4,9 +4,9 @@ import { getBridge, addParticipantToBridge, removeParticipantFromBridge } from '
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Record<string, string> }
+  context: { params: { id: string } }
 ) {
-  const bridgeId = params.id;
+  const bridgeId = context.params.id;
   
   try {
     // Get the current user
@@ -69,9 +69,9 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Record<string, string> }
+  context: { params: { id: string } }
 ) {
-  const bridgeId = params.id;
+  const bridgeId = context.params.id;
   
   try {
     // Get the current user
