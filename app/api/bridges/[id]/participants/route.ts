@@ -4,7 +4,7 @@ import { getBridge, addParticipantToBridge, removeParticipantFromBridge } from '
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Record<string, string> }
 ) {
   const bridgeId = params.id;
   
@@ -69,7 +69,7 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Record<string, string> }
 ) {
   const bridgeId = params.id;
   
