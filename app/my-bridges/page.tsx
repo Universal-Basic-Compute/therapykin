@@ -130,7 +130,8 @@ export default function MyBridges() {
       setIsUpdatingBridge(true);
       setError(null);
       
-      const response = await fetch(`/api/bridges/${editingBridge.id}`, {
+      // Use query parameter instead of path parameter
+      const response = await fetch(`/api/bridges?bridgeId=${editingBridge.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -175,7 +176,8 @@ export default function MyBridges() {
     try {
       setError(null);
       
-      const response = await fetch(`/api/bridges/${bridgeId}`, {
+      // Use query parameter instead of path parameter
+      const response = await fetch(`/api/bridges?bridgeId=${bridgeId}`, {
         method: 'DELETE',
       });
       

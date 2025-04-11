@@ -2,13 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/app/utils/auth';
 import { getBridge, updateBridge, deleteBridge } from '@/app/utils/airtable';
 
-export async function GET(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
-  const { id } = context.params;
-  
+export async function GET(request: NextRequest) {
   try {
+    // Get the bridgeId from query parameters
+    const searchParams = request.nextUrl.searchParams;
+    const bridgeId = searchParams.get('bridgeId');
+    
+    if (!bridgeId) {
+      return NextResponse.json(
+        { error: 'Bridge ID is required' },
+        { status: 400 }
+      );
+    }
+    
     // Get the current user
     const user = await getCurrentUser();
     
@@ -17,7 +23,7 @@ export async function GET(
     }
     
     // Get the bridge
-    const bridge = await getBridge(id);
+    const bridge = await getBridge(bridgeId);
     
     // Check if bridge exists
     if (!bridge) {
@@ -45,13 +51,19 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
-  const { id } = context.params;
-  
+export async function PUT(request: NextRequest) {
   try {
+    // Get the bridgeId from query parameters
+    const searchParams = request.nextUrl.searchParams;
+    const bridgeId = searchParams.get('bridgeId');
+    
+    if (!bridgeId) {
+      return NextResponse.json(
+        { error: 'Bridge ID is required' },
+        { status: 400 }
+      );
+    }
+    
     // Get the current user
     const user = await getCurrentUser();
     
@@ -71,7 +83,7 @@ export async function PUT(
     }
     
     // Get the bridge
-    const existingBridge = await getBridge(id);
+    const existingBridge = await getBridge(bridgeId);
     
     // Check if bridge exists
     if (!existingBridge) {
@@ -90,7 +102,7 @@ export async function PUT(
     }
     
     // Update the bridge
-    const updatedBridge = await updateBridge(id, {
+    const updatedBridge = await updateBridge(bridgeId, {
       name,
       description: description || '',
       type: type || 'relationship',
@@ -106,13 +118,19 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
-  const { id } = context.params;
-  
+export async function DELETE(request: NextRequest) {
   try {
+    // Get the bridgeId from query parameters
+    const searchParams = request.nextUrl.searchParams;
+    const bridgeId = searchParams.get('bridgeId');
+    
+    if (!bridgeId) {
+      return NextResponse.json(
+        { error: 'Bridge ID is required' },
+        { status: 400 }
+      );
+    }
+    
     // Get the current user
     const user = await getCurrentUser();
     
@@ -121,7 +139,7 @@ export async function DELETE(
     }
     
     // Get the bridge
-    const bridge = await getBridge(id);
+    const bridge = await getBridge(bridgeId);
     
     // Check if bridge exists
     if (!bridge) {
@@ -140,7 +158,7 @@ export async function DELETE(
     }
     
     // Delete the bridge
-    await deleteBridge(id);
+    await deleteBridge(bridgeId);
     
     return NextResponse.json({ success: true });
   } catch (error) {
