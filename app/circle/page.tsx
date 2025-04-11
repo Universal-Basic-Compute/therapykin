@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import CircleLayout from '../components/CircleLayout';
 import { useAuth } from '../contexts/AuthContext';
@@ -21,7 +21,8 @@ import perfectionismCircle from '../data/circles/perfectionism.json';
 import relationshipsCircle from '../data/circles/relationships.json';
 import socialAnxietyCircle from '../data/circles/social-anxiety.json';
 
-export default function CirclePage() {
+// Create a client component that uses useSearchParams
+function CircleContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const circleName = searchParams.get('name') || '';
@@ -64,7 +65,6 @@ export default function CirclePage() {
       document.body.style.overflow = 'unset';
     };
   }, [showWelcomeModal]);
-
 
   return (
     <div className="h-screen w-screen bg-gradient-radial from-[var(--background)] via-[var(--background-alt)] to-[var(--background)] overflow-hidden relative">
@@ -218,6 +218,21 @@ export default function CirclePage() {
         </div>
       </div>
 
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function CirclePage() {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Suspense fallback={
+        <div className="flex justify-center items-center h-[100vh]">
+          <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      }>
+        <CircleContent />
+      </Suspense>
     </div>
   );
 }
