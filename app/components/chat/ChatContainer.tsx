@@ -71,10 +71,10 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                   }`}
                 >
                   {msg.loading ? (
-                    <div className="flex items-center space-x-1 py-2">
-                      <div className="w-3 h-3 bg-[var(--primary)]/60 rounded-full animate-bounce"></div>
-                      <div className="w-3 h-3 bg-[var(--primary)]/60 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-3 h-3 bg-[var(--primary)]/60 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    <div className="flex items-center space-x-1 py-1">
+                      <div className="w-2 h-2 bg-[var(--primary)]/60 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-[var(--primary)]/60 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-[var(--primary)]/60 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                     </div>
                   ) : (
                     <div>
