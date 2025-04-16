@@ -251,7 +251,7 @@ export default function MyBridges() {
     try {
       setError(null);
       
-      const response = await fetch(`/api/bridges/${bridgeId}/participants`, {
+      const response = await fetch(`/api/bridges/participants?bridgeId=${bridgeId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
