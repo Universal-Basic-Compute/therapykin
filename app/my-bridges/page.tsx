@@ -309,6 +309,22 @@ export default function MyBridges() {
         return 'Custom Bridge';
     }
   };
+  
+  // Get bridge type color
+  const getBridgeTypeColor = (type: string) => {
+    switch (type) {
+      case 'relationship':
+        return 'border-t-4 border-t-[var(--primary)]'; // Teal for relationship bridges
+      case 'family':
+        return 'border-t-4 border-t-[var(--primary-light)]'; // Light green for family bridges
+      case 'workplace':
+        return 'border-t-4 border-t-[var(--primary-dark)]'; // Purple for workplace bridges
+      case 'friendship':
+        return 'border-t-4 border-t-[var(--accent)]'; // Yellow for friendship bridges
+      default:
+        return 'border-t-4 border-t-[var(--accent-light)]'; // Orange/pink for other types
+    }
+  };
 
   if (loading) {
     return (
@@ -626,7 +642,7 @@ export default function MyBridges() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {bridges.map(bridge => (
-                <div key={bridge.id} className="card p-6 hover:shadow-lg transition-shadow">
+                <div key={bridge.id} className={`card p-6 hover:shadow-lg transition-shadow ${getBridgeTypeColor(bridge.type)}`}>
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h2 className="text-xl font-semibold">{bridge.name}</h2>
