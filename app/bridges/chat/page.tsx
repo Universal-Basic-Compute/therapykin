@@ -337,10 +337,153 @@ function BridgeChatSession() {
   
   // Function to generate illustration for a message
   const generateIllustrationForMessage = async (content: string, id: string) => {
-    // This would be implemented similar to the chat page
-    // For now, we'll just log it
-    console.log(`Generating illustration for message: ${id}`);
-    console.log(`Content: ${content}`);
+    try {
+      // Make sure we have the user object
+      if (!user) {
+        console.error('Cannot generate illustration: user is not authenticated');
+        return;
+      }
+      
+      // Store the current scroll position before updating the UI
+      const chatContainer = document.querySelector('.overflow-y-auto');
+      const scrollPosition = chatContainer?.scrollTop || 0;
+      
+      // Immediately update the UI to show the loading animation
+      setChatHistory(prev => 
+        prev.map(msg => 
+          msg.id === id 
+            ? { ...msg, generatingImage: true, imageLoaded: false }
+            : msg
+        )
+      );
+      
+      // Restore the scroll position after the UI update
+      setTimeout(() => {
+        if (chatContainer) {
+          chatContainer.scrollTop = scrollPosition;
+        }
+      }, 50);
+      
+      // Check if pseudonym exists, if not try to get it or generate it
+      let userPseudonym = user.pseudonym;
+      if (!userPseudonym) {
+        console.log('Pseudonym missing for user:', user.email);
+        
+        // Generate a pseudonym from the email
+        const generatedPseudonym = generatePseudonymFromEmail(user.email || '');
+        userPseudonym = generatedPseudonym.name;
+        console.log(`Generated pseudonym for user: ${userPseudonym}`);
+        
+        // Save this pseudonym to the user's record
+        try {
+          const response = await fetch('/api/users/update-pseudonym', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              pseudonym: userPseudonym
+            }),
+          });
+          
+          if (response.ok) {
+            console.log('Saved generated pseudonym to user record');
+          } else {
+            console.error('Failed to save generated pseudonym');
+          }
+        } catch (error) {
+          console.error('Error saving generated pseudonym:', error);
+        }
+      }
+      
+      if (!userPseudonym) {
+        console.error('Cannot generate illustration: unable to get or generate pseudonym');
+        return;
+      }
+      
+      console.log(`Requesting illustration for message: ${id} with pseudonym: ${userPseudonym}`);
+      
+      // Create a prompt for the image based on the message content
+      const prompt = `<system>Please generate an illustration based on this text: ${content}
+
+Important style requirements:
+- Use a soothing pencil style illustration
+- Incorporate the site's color palette: white, teal, light green, purple, violet, yellow, and orange
+- Keep the style clean, modern, and therapeutic
+- Ensure the image feels calming and supportive</system>`;
+      
+      // Log the pseudonym being used
+      console.log(`Using pseudonym for illustration: ${userPseudonym}`);
+      
+      // Send the request to KinOS
+      const response = await fetch('/api/kinos/image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: prompt,
+          firstName: user.firstName,
+          specialist: 'mediator', // Use mediator for bridge chats
+          pseudonym: userPseudonym // Use the correct pseudonym
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to generate illustration: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Image generation response:', data);
+      
+      // Check if we have a valid image URL
+      if (data.result?.data?.[0]?.url) {
+        const imageUrl = data.result.data[0].url;
+        console.log(`Successfully received image URL: ${imageUrl}`);
+        
+        // Store the current scroll position again before updating
+        const currentScrollPosition = chatContainer?.scrollTop || 0;
+        
+        // Update the message with the generated image but keep generatingImage true until it loads
+        setChatHistory(prev => 
+          prev.map(msg => 
+            msg.id === id 
+              ? { ...msg, image: imageUrl, generatingImage: false }
+              : msg
+          )
+        );
+        
+        // Restore the scroll position after the UI update
+        setTimeout(() => {
+          if (chatContainer) {
+            chatContainer.scrollTop = currentScrollPosition;
+          }
+        }, 50);
+        
+        console.log(`Added illustration to message: ${id}`);
+      } else {
+        // If there's an error, remove the loading state
+        setChatHistory(prev => 
+          prev.map(msg => 
+            msg.id === id 
+              ? { ...msg, generatingImage: false }
+              : msg
+          )
+        );
+        console.error('No valid image URL in the response:', data);
+      }
+    } catch (error) {
+      // If there's an error, remove the loading state
+      setChatHistory(prev => 
+        prev.map(msg => 
+          msg.id === id 
+            ? { ...msg, generatingImage: false }
+            : msg
+        )
+      );
+      console.error('Error generating illustration:', error);
+      alert('Failed to generate illustration. Please try again.');
+    }
   };
   
   // Toggle voice mode
