@@ -14,6 +14,7 @@ import { useTextToSpeech } from '../../hooks/useTextToSpeech';
 import { useCamera } from '../../hooks/useCamera';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import { Suspense } from 'react';
+import { generatePseudonymFromEmail } from '../../utils/pseudonyms';
 
 // Voice options
 const voiceOptions = [
