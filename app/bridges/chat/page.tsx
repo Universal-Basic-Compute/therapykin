@@ -124,12 +124,14 @@ function BridgeChatSession() {
   // Message input state
   const [message, setMessage] = useState('');
   
+  // Add state to track if a message is being sent
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+  
   // Use our custom hooks - MUST BE BEFORE any useEffect that uses its values
   const { 
     chatHistory, 
     setChatHistory,
     sendMessage: sendChatMessage,
-    isSendingMessage,
     sessionStartTime,
     minutesActive
   } = useChat({
@@ -300,6 +302,9 @@ function BridgeChatSession() {
   
   // Function to handle sending a message
   const handleSendMessage = async (text: string) => {
+    // Set sending flag
+    setIsSendingMessage(true);
+    
     // Capture image if camera is enabled
     let screenshot = capturedImage;
     if (cameraEnabled && !capturedImage) {
@@ -312,8 +317,15 @@ function BridgeChatSession() {
     // Reset message input immediately
     setMessage('');
     
-    // Send the message
-    await sendChatMessage(messageToSend, screenshot);
+    try {
+      // Send the message
+      await sendChatMessage(messageToSend, screenshot);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      // Reset sending flag
+      setIsSendingMessage(false);
+    }
     
     // Add safety timeout to ensure isSendingMessage is reset
     setTimeout(() => {
