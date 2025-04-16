@@ -27,25 +27,33 @@ export async function POST(request: NextRequest) {
     
     // Log minimal information in production
     if (process.env.NODE_ENV === 'development') {
-      console.log(`STT request: Processing audio file of type ${file.type}, size ${file.size} bytes`);
+      console.log(`STT request: Processing audio file of type ${fileToSend.type} (original type: ${file.type}), size ${fileToSend.size} bytes`);
     } else {
-      console.log(`STT request: Processing ${file.size} bytes audio file`);
+      console.log(`STT request: Processing ${fileToSend.size} bytes audio file of type ${fileToSend.type}`);
     }
     
-    // If file has no type, try to infer it from the filename
+    // If file has no type or is octet-stream, try to infer the correct type
     let fileToSend: File | Blob = file;
-    if (file instanceof File && !file.type) {
+    if (file instanceof File && (!file.type || file.type === 'audio/octet-stream')) {
       const fileName = file.name || '';
       const fileExt = fileName.split('.').pop()?.toLowerCase();
       
       if (fileExt) {
-        // Create a new blob with the correct type
+        // Create a new blob with the correct type based on extension
         if (fileExt === 'webm') {
           fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/webm' });
         } else if (fileExt === 'mp4' || fileExt === 'm4a') {
           fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/mp4' });
         } else if (fileExt === 'wav') {
           fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/wav' });
+        }
+      } else {
+        // If no extension, try to detect based on device
+        const userAgent = request.headers.get('user-agent') || '';
+        if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+          // iOS devices typically use m4a format
+          fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/mp4' });
+          console.log('iOS device detected, assuming audio/mp4 format');
         }
       }
     }
