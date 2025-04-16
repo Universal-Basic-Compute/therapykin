@@ -18,15 +18,19 @@ interface ChatMessage {
 interface BridgeChatContainerProps {
   chatHistory: ChatMessage[];
   playMessageAudio?: (msg: ChatMessage) => void;
+  generateIllustrationForMessage?: (content: string, id: string) => void;
   currentPlayingId?: string | null;
   isPlaying?: boolean;
+  collapsed?: boolean;
 }
 
 const BridgeChatContainer: React.FC<BridgeChatContainerProps> = ({
   chatHistory,
   playMessageAudio,
   currentPlayingId,
-  isPlaying
+  isPlaying,
+  generateIllustrationForMessage,
+  collapsed = false
 }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +56,7 @@ const BridgeChatContainer: React.FC<BridgeChatContainerProps> = ({
   }, [chatHistory]);
 
   return (
-    <div className="flex-grow card overflow-hidden">
+    <div className={`flex-grow card overflow-hidden ${collapsed ? 'md:w-full' : ''}`}>
       <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
         <div className="space-y-4">
           {chatHistory
@@ -95,32 +99,55 @@ const BridgeChatContainer: React.FC<BridgeChatContainerProps> = ({
                         </div>
                       )}
                     
-                      {msg.role === 'assistant' && playMessageAudio && (
+                      {msg.role === 'assistant' && (
                         <div className="mt-2 flex justify-end space-x-2">
-                          {currentPlayingId === msg.id ? (
+                          {playMessageAudio && (
+                            currentPlayingId === msg.id ? (
+                              <button 
+                                onClick={() => {
+                                  // Stop audio logic would be handled by the parent component
+                                }}
+                                className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                </svg>
+                                Stop
+                              </button>
+                            ) : (
+                              <button 
+                                onClick={() => playMessageAudio(msg)}
+                                className="text-xs opacity-70 hover:opacity-100 flex items-center"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Listen
+                              </button>
+                            )
+                          )}
+                          
+                          {/* Add Illustrate button if function is provided */}
+                          {generateIllustrationForMessage && !msg.image && !msg.generatingImage && (
                             <button 
-                              onClick={() => {
-                                // Stop audio logic would be handled by the parent component
-                              }}
+                              onClick={() => generateIllustrationForMessage(msg.content, msg.id || 'unknown')}
                               className="text-xs opacity-70 hover:opacity-100 flex items-center"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
-                              Stop
+                              Illustrate
                             </button>
-                          ) : (
-                            <button 
-                              onClick={() => playMessageAudio(msg)}
-                              className="text-xs opacity-70 hover:opacity-100 flex items-center"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          )}
+                          {msg.generatingImage && (
+                            <span className="text-xs opacity-70 flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
-                              Listen
-                            </button>
+                              Creating...
+                            </span>
                           )}
                         </div>
                       )}

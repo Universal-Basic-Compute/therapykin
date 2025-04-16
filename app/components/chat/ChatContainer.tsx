@@ -12,6 +12,7 @@ interface ChatMessage {
   generatingImage?: boolean;
   imageLoaded?: boolean;
   skipAutoIllustrate?: boolean;
+  timestamp?: string;
 }
 
 interface ChatContainerProps {
@@ -20,6 +21,7 @@ interface ChatContainerProps {
   generateIllustrationForMessage?: (content: string, id: string) => void;
   currentPlayingId?: string | null;
   isPlaying?: boolean;
+  collapsed?: boolean;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
@@ -27,7 +29,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   playMessageAudio,
   generateIllustrationForMessage,
   currentPlayingId,
-  isPlaying
+  isPlaying,
+  collapsed = false
 }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +56,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   }, [chatHistory]);
 
   return (
-    <div className="flex-grow card overflow-hidden">
+    <div className={`flex-grow card overflow-hidden ${collapsed ? 'md:w-full' : ''}`}>
       <div className="h-full overflow-y-auto p-4 pb-16" style={{ scrollbarWidth: 'thin' }}>
         <div className="space-y-4">
           {chatHistory

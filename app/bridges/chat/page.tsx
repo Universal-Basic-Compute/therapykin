@@ -394,6 +394,7 @@ function BridgeChatSession() {
               generateIllustrationForMessage={generateIllustrationForMessage}
               currentPlayingId={currentPlayingId}
               isPlaying={isPlaying}
+              collapsed={settingsCollapsed}
             />
           </div>
           
