@@ -25,13 +25,6 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Log minimal information in production
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`STT request: Processing audio file of type ${fileToSend.type} (original type: ${file.type}), size ${fileToSend.size} bytes`);
-    } else {
-      console.log(`STT request: Processing ${fileToSend.size} bytes audio file of type ${fileToSend.type}`);
-    }
-    
     // If file has no type or is octet-stream, try to infer the correct type
     let fileToSend: File | Blob = file;
     if (file instanceof File && (!file.type || file.type === 'audio/octet-stream')) {
@@ -56,6 +49,13 @@ export async function POST(request: NextRequest) {
           console.log('iOS device detected, assuming audio/mp4 format');
         }
       }
+    }
+    
+    // Log minimal information in production
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`STT request: Processing audio file of type ${fileToSend.type} (original type: ${file.type}), size ${fileToSend.size} bytes`);
+    } else {
+      console.log(`STT request: Processing ${fileToSend.size} bytes audio file of type ${fileToSend.type}`);
     }
     
     // Get optional parameters
