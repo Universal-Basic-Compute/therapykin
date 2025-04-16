@@ -306,11 +306,25 @@ function BridgeChatSession() {
       screenshot = await captureImage();
     }
     
-    // Send the message
-    await sendChatMessage(text || '', screenshot);
+    // Store the message to send
+    const messageToSend = text || '';
     
-    // Clear the message input and captured image
+    // Reset message input immediately
     setMessage('');
+    
+    // Send the message
+    await sendChatMessage(messageToSend, screenshot);
+    
+    // Add safety timeout to ensure isSendingMessage is reset
+    setTimeout(() => {
+      if (isSendingMessage) {
+        console.log('Forcing isSendingMessage reset');
+        // Force reset if still sending after 5 seconds
+        setIsSendingMessage(false);
+      }
+    }, 5000);
+    
+    // Clear the captured image
     discardImage();
   };
   
