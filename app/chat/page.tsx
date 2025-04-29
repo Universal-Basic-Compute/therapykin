@@ -14,7 +14,7 @@ import { generatePseudonymFromEmail } from '../utils/pseudonyms';
 declare global {
   interface Window {
     streamingCallbacks: {
-      [key: string]: (chunk: string, fullText: string) => void;
+      [key: string]: (chunk: string, fullText: string, isComplete?: boolean) => void;
     };
   }
 }
@@ -1332,21 +1332,36 @@ function ChatSessionWithSearchParams() {
           
           // Set up the streaming callback
           if (typeof window !== 'undefined') {
-            window.streamingCallbacks[streamingMessageId] = (chunk, fullText) => {
+            window.streamingCallbacks[streamingMessageId] = (chunk, fullText, isComplete) => {
+              // Clear the timeout on each chunk received
+              clearTimeout(streamingTimeout);
+              
+              console.log(`Received chunk: ${chunk.substring(0, 20)}... (${chunk.length} chars)`);
+              console.log(`Full text so far: ${fullText.length} chars`);
+              
               // Update the chat history with each chunk
-              setChatHistory(prev => 
-                prev.map(msg => 
+              setChatHistory(prev => {
+                // Find the message to update
+                const messageToUpdate = prev.find(msg => msg.id === loadingId);
+                if (!messageToUpdate) {
+                  console.warn(`Message with ID ${loadingId} not found in chat history`);
+                  return prev;
+                }
+                
+                return prev.map(msg => 
                   msg.id === loadingId 
                     ? { 
                         role: 'assistant', 
                         content: fullText, 
                         id: loadingId, 
                         loading: false,
-                        skipAutoIllustrate: true // Add flag to prevent duplicate illustration
+                        skipAutoIllustrate: true, // Add flag to prevent duplicate illustration
+                        animating: !isComplete, // Stop animating when complete
+                        lastChunk: isComplete ? '' : chunk // Clear the chunk when complete
                       }
                     : msg
-                )
-              );
+                );
+              });
             };
           }
           
@@ -2202,7 +2217,7 @@ Important style requirements:
           if (window.streamingCallbacks && window.streamingCallbacks[streamingMessageId]) {
             console.warn('Streaming timeout reached, cleaning up callback');
             delete window.streamingCallbacks[streamingMessageId];
-        
+            
             // Update the UI to show that we're no longer waiting for streaming
             setChatHistory(prev => 
               prev.map(msg => 
@@ -2218,16 +2233,16 @@ Important style requirements:
             );
           }
         }, 30000); // 30 second timeout
-    
+        
         // Make sure the callback is registered with the correct ID
         console.log(`Registering streaming callback for message ID: ${streamingMessageId}`);
-        window.streamingCallbacks[streamingMessageId] = (chunk, fullText) => {
+        window.streamingCallbacks[streamingMessageId] = (chunk, fullText, isComplete) => {
           // Clear the timeout on each chunk received
           clearTimeout(streamingTimeout);
-      
+          
           console.log(`Received chunk: ${chunk.substring(0, 20)}... (${chunk.length} chars)`);
           console.log(`Full text so far: ${fullText.length} chars`);
-      
+          
           // Update the chat history with each chunk
           setChatHistory(prev => {
             // Find the message to update
@@ -2236,7 +2251,7 @@ Important style requirements:
               console.warn(`Message with ID ${loadingId} not found in chat history`);
               return prev;
             }
-        
+            
             return prev.map(msg => 
               msg.id === loadingId 
                 ? { 
@@ -2244,7 +2259,9 @@ Important style requirements:
                     content: fullText, 
                     id: loadingId, 
                     loading: false,
-                    skipAutoIllustrate: true // Add flag to prevent duplicate illustration
+                    skipAutoIllustrate: true, // Add flag to prevent duplicate illustration
+                    animating: !isComplete, // Stop animating when complete
+                    lastChunk: isComplete ? '' : chunk // Clear the chunk when complete
                   }
                 : msg
             );
@@ -2751,7 +2768,25 @@ Important style requirements:
                         <div className="text-xs text-gray-400">...</div>
                       ) : (
                         <div>
-                          <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
+                          {msg.role === 'assistant' && msg.animating ? (
+                            <p className="text-bubble whitespace-pre-wrap typing-container">
+                              {/* Split the content into already displayed text and new chunk */}
+                              {msg.content.substring(0, msg.content.length - (msg.lastChunk?.length || 0))}
+                              {/* Animate each character in the new chunk */}
+                              {msg.lastChunk?.split('').map((char, i) => (
+                                <span 
+                                  key={`${msg.id}-${msg.content.length}-${i}`}
+                                  className="animate-typing-char"
+                                  style={{ animationDelay: `${i * 15}ms` }}
+                                >
+                                  {char}
+                                </span>
+                              ))}
+                              <span className="typing-cursor"></span>
+                            </p>
+                          ) : (
+                            <p className="text-bubble whitespace-pre-wrap">{msg.content}</p>
+                          )}
                       
                           {/* Display image if available with slide-down animation */}
                           {msg.image && (

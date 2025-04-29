@@ -302,6 +302,12 @@ export async function sendMessageToKinOS(
                     if (window.streamingCallbacks) {
                       // Clean up the callback with the message ID from the API
                       if (messageId && window.streamingCallbacks[messageId]) {
+                        // Call the callback one last time with a special flag to indicate completion
+                        try {
+                          window.streamingCallbacks[messageId](textChunk, fullText, true);
+                        } catch (callbackError) {
+                          console.error('Error in final streaming callback:', callbackError);
+                        }
                         delete window.streamingCallbacks[messageId];
                       }
                       
@@ -309,6 +315,12 @@ export async function sendMessageToKinOS(
                       const streamingCallbackKeys = Object.keys(window.streamingCallbacks);
                       streamingCallbackKeys.forEach(key => {
                         if (key.startsWith('streaming-')) {
+                          try {
+                            // Call the callback one last time with a special flag to indicate completion
+                            window.streamingCallbacks[key]('', fullText, true);
+                          } catch (callbackError) {
+                            console.error('Error in final streaming callback:', callbackError);
+                          }
                           delete window.streamingCallbacks[key];
                         }
                       });
