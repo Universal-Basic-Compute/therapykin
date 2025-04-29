@@ -1298,6 +1298,9 @@ function ChatSessionWithSearchParams() {
           { role: 'assistant', content: '', id: loadingId, loading: true }
         ]);
       
+        // Create a unique message ID for this streaming response
+        const streamingMessageId = `streaming-${loadingId}`;
+      
         try {
           // Use the user's pseudonym or generate one if missing
           let userPseudonym = user?.pseudonym || '';
@@ -2232,9 +2235,6 @@ Important style requirements:
         }
       }
       console.log(`Using pseudonym for message: ${userPseudonym}`);
-      
-      // Create a unique message ID for this streaming response
-      const streamingMessageId = `streaming-${loadingId}`;
       
       // Create a unique message ID for this streaming response
       const streamingMessageId = `streaming-${loadingId}`;
