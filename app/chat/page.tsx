@@ -1287,12 +1287,7 @@ function ChatSessionWithSearchParams() {
         // Clear the captured image after sending
         setCapturedImage(null);
         
-        // Set loading state for assistant response
-        const loadingId = Date.now().toString();
-        setChatHistory(prev => [
-          ...prev,
-          { role: 'assistant', content: '', id: loadingId, loading: true }
-        ]);
+        // The loadingId is now defined earlier in the function
         
         try {
           // Use the user's pseudonym or generate one if missing
@@ -2228,6 +2223,18 @@ Important style requirements:
         }
       }
       console.log(`Using pseudonym for message: ${userPseudonym}`);
+      
+      // Create a unique message ID for this streaming response
+      const streamingMessageId = `streaming-${loadingId}`;
+      
+      // Create a unique ID for the loading message
+      const loadingId = Date.now().toString();
+      
+      // Set loading state for assistant response
+      setChatHistory(prev => [
+        ...prev,
+        { role: 'assistant', content: '', id: loadingId, loading: true }
+      ]);
       
       // Create a unique message ID for this streaming response
       const streamingMessageId = `streaming-${loadingId}`;
