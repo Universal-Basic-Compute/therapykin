@@ -733,16 +733,6 @@ sup a:hover {
   animation: blink 1s step-end infinite;
 }
 
-/* Loading dots animation */
-@keyframes dotFade {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
-
-@keyframes dotScale {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-}
 
 .loading-dots span {
   display: inline-block;
