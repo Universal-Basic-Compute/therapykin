@@ -43,7 +43,7 @@ export default function ApiReference() {
       const data = await response.json();
       setTestResponse(data);
     } catch (error) {
-      setTestResponse({ error: (error as Error).message });
+      setTestResponse({ error: (error as Error).message } as any);
     }
   };
 
