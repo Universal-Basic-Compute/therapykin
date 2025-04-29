@@ -733,6 +733,39 @@ sup a:hover {
   animation: blink 1s step-end infinite;
 }
 
+/* Add this to app/globals.css */
+@keyframes dotFade {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes dotScale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.loading-dots span {
+  display: inline-block;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-name: dotFade, dotScale;
+  animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-name: dotFade, dotScale;
+  animation-delay: 0.2s;
+  margin: 0 4px;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-name: dotFade, dotScale;
+  animation-delay: 0.4s;
+}
 
 .animate-float {
   animation: float 6s ease-in-out infinite;

@@ -2765,7 +2765,9 @@ Important style requirements:
                         }`}
                       >
                       {msg.loading ? (
-                        <div className="text-xs text-gray-400">...</div>
+                        <div className="text-sm text-foreground/60 loading-dots py-2">
+                          <span>.</span><span>.</span><span>.</span>
+                        </div>
                       ) : (
                         <div>
                           {msg.role === 'assistant' && msg.animating ? (
