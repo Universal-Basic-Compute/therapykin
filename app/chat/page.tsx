@@ -10,6 +10,20 @@ import { createSession, getOngoingSession } from '../utils/airtable';
 import { fetchSpecialists, isValidSpecialist } from '../utils/client-specialists';
 import { generatePseudonymFromEmail } from '../utils/pseudonyms';
 
+// Add global type for streaming callbacks
+declare global {
+  interface Window {
+    streamingCallbacks: {
+      [key: string]: (chunk: string, fullText: string) => void;
+    };
+  }
+}
+
+// Initialize the streaming callbacks object
+if (typeof window !== 'undefined') {
+  window.streamingCallbacks = window.streamingCallbacks || {};
+}
+
 interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
@@ -1277,7 +1291,7 @@ function ChatSessionWithSearchParams() {
         const loadingId = Date.now().toString();
         setChatHistory(prev => [
           ...prev,
-          { role: 'assistant', content: '...', id: loadingId, loading: true }
+          { role: 'assistant', content: '', id: loadingId, loading: true }
         ]);
         
         try {
@@ -1313,7 +1327,30 @@ function ChatSessionWithSearchParams() {
           }
           console.log(`Using pseudonym for voice message: ${userPseudonym}`);
           
-          // Send message to KinOS API
+          // Create a unique message ID for this streaming response
+          const streamingMessageId = `streaming-${loadingId}`;
+          
+          // Set up the streaming callback
+          if (typeof window !== 'undefined') {
+            window.streamingCallbacks[streamingMessageId] = (chunk, fullText) => {
+              // Update the chat history with each chunk
+              setChatHistory(prev => 
+                prev.map(msg => 
+                  msg.id === loadingId 
+                    ? { 
+                        role: 'assistant', 
+                        content: fullText, 
+                        id: loadingId, 
+                        loading: false,
+                        skipAutoIllustrate: true // Add flag to prevent duplicate illustration
+                      }
+                    : msg
+                )
+              );
+            };
+          }
+          
+          // Send message to KinOS API with streaming
           const response = await sendMessageToKinOS(
             data.text,
             user?.firstName || 'Guest',
@@ -1331,7 +1368,7 @@ function ChatSessionWithSearchParams() {
             audioUrl = await textToSpeech(response);
           }
           
-          // Update chat history with the response
+          // Update chat history with the final response and audio
           setChatHistory(prev => 
             prev.map(msg => 
               msg.id === loadingId 
@@ -1394,6 +1431,14 @@ function ChatSessionWithSearchParams() {
     } finally {
       // Reset sending flag when done
       setIsSendingMessage(false);
+    
+      // Clean up the streaming callback
+      if (typeof window !== 'undefined' && window.streamingCallbacks) {
+        const streamingMessageId = `streaming-${loadingId}`;
+        if (window.streamingCallbacks[streamingMessageId]) {
+          delete window.streamingCallbacks[streamingMessageId];
+        }
+      }
     }
   };
 
@@ -2111,7 +2156,7 @@ Important style requirements:
     const loadingId = Date.now().toString();
     setChatHistory(prev => [
       ...prev,
-      { role: 'assistant', content: '...', id: loadingId, loading: true }
+      { role: 'assistant', content: '', id: loadingId, loading: true }
     ]);
     
     try {
@@ -2149,7 +2194,30 @@ Important style requirements:
       }
       console.log(`Using pseudonym for message: ${userPseudonym}`);
       
-      // Send message to KinOS API
+      // Create a unique message ID for this streaming response
+      const streamingMessageId = `streaming-${loadingId}`;
+      
+      // Set up the streaming callback
+      if (typeof window !== 'undefined') {
+        window.streamingCallbacks[streamingMessageId] = (chunk, fullText) => {
+          // Update the chat history with each chunk
+          setChatHistory(prev => 
+            prev.map(msg => 
+              msg.id === loadingId 
+                ? { 
+                    role: 'assistant', 
+                    content: fullText, 
+                    id: loadingId, 
+                    loading: false,
+                    skipAutoIllustrate: true // Add flag to prevent duplicate illustration
+                  }
+                : msg
+            )
+          );
+        };
+      }
+      
+      // Send message to KinOS API with streaming
       const response = await sendMessageToKinOS(
         userMessage,
         user?.firstName || 'Guest',
@@ -2161,7 +2229,7 @@ Important style requirements:
         userPseudonym // Use the generated or existing pseudonym
       );
       
-      console.log(`Received response from KinOS after sending message${screenshot ? ' with screenshot' : ''}`);
+      console.log(`Received complete response from KinOS after sending message${screenshot ? ' with screenshot' : ''}`);
       
       // If voice mode is enabled, convert response to speech
       let audioUrl = '';
@@ -2169,7 +2237,7 @@ Important style requirements:
         audioUrl = await textToSpeech(response);
       }
       
-      // Update chat history with the response
+      // Update chat history with the final response and audio
       setChatHistory(prev => 
         prev.map(msg => 
           msg.id === loadingId 
@@ -2210,6 +2278,14 @@ Important style requirements:
     } finally {
       // Reset sending flag when done
       setIsSendingMessage(false);
+        
+      // Clean up the streaming callback
+      if (typeof window !== 'undefined' && window.streamingCallbacks) {
+        const streamingMessageId = `streaming-${loadingId}`;
+        if (window.streamingCallbacks[streamingMessageId]) {
+          delete window.streamingCallbacks[streamingMessageId];
+        }
+      }
     }
   };
 

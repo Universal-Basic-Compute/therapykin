@@ -52,7 +52,8 @@ export async function POST(request: NextRequest) {
       attachments: attachments || [],
       images: images || [],
       model: "claude-3-7-sonnet-latest",
-      history_length: 50
+      history_length: 50,
+      stream: true // Enable streaming
     };
     
     // Add addSystem if it exists
@@ -92,12 +93,50 @@ export async function POST(request: NextRequest) {
       throw new Error(`KinOS API returned status ${response.status}`);
     }
 
-    // Get the response from KinOS API
-    const data = await response.json();
-    console.log('KinOS API response:', data);
-    
-    // Return the response to the client
-    return NextResponse.json(data);
+    // For streaming responses, we need to forward the stream to the client
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('text/event-stream')) {
+      // Create a TransformStream to process the events
+      const { readable, writable } = new TransformStream();
+      
+      // Process the stream from KinOS API
+      const reader = response.body?.getReader();
+      const writer = writable.getWriter();
+      
+      // Start processing the stream in the background
+      if (reader) {
+        (async () => {
+          try {
+            const decoder = new TextDecoder();
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              
+              // Forward the chunk directly
+              await writer.write(value);
+            }
+          } catch (error) {
+            console.error('Error processing stream:', error);
+          } finally {
+            writer.close();
+          }
+        })();
+      }
+      
+      // Return the stream to the client
+      return new Response(readable, {
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+        },
+      });
+    } else {
+      // For non-streaming responses, return as JSON
+      const data = await response.json();
+      console.log('KinOS API response:', data);
+      return NextResponse.json(data);
+    }
   } catch (error) {
     console.error('Error proxying request to KinOS:', error);
     

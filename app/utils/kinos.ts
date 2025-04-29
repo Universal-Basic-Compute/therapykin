@@ -140,6 +140,7 @@ export async function sendMessageToKinOS(
       screenshot: screenshot ? '[screenshot data]' : null // Don't log the full screenshot data
     }));
     
+    // Use fetch with streaming support
     const response = await fetch('/api/kinos', {
       method: 'POST',
       headers: {
@@ -154,35 +155,125 @@ export async function sendMessageToKinOS(
       throw new Error(`API request failed with status ${response.status}`);
     }
 
-    const data: KinOSResponse = await response.json();
-    console.log('KinOS response data:', data);
-    
-    // Check if the response contains the expected data
-    if (data.status === 'completed' && data.response) {
-      return data.response;
-    } else if (data.response) {
-      // If we have a response but status isn't 'completed', still use the response
-      console.log('KinOS returned response with unexpected status:', data.status);
-      return data.response;
-    } else if (typeof data === 'string') {
-      // Handle case where the response might be a direct string
-      return data;
-    } else if (data.message_id) {
-      // If we only have a message_id, try to fetch the response
-      return await pollForResponse(data.message_id, firstName, 10, 1000, specialist || 'generalist', pseudonym);
+    // Check if the response is a stream
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('text/event-stream')) {
+      // Return a promise that resolves with the full text when streaming is complete
+      // but also provides a callback for incremental updates
+      return new Promise((resolve, reject) => {
+        let fullText = '';
+        let messageId = '';
+        
+        // Create a reader for the stream
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder();
+        
+        // Function to process the stream
+        async function processStream() {
+          if (!reader) {
+            reject(new Error('Stream reader is null'));
+            return;
+          }
+          
+          let buffer = '';
+          
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              
+              // Decode the chunk and add it to our buffer
+              buffer += decoder.decode(value, { stream: true });
+              
+              // Process complete events in the buffer
+              let eventEnd = buffer.indexOf("\n\n");
+              while (eventEnd > -1) {
+                const eventText = buffer.substring(0, eventEnd);
+                buffer = buffer.substring(eventEnd + 2);
+                
+                // Parse the event
+                const eventLines = eventText.split('\n');
+                if (eventLines.length < 2) continue;
+                
+                const eventTypeLine = eventLines[0];
+                const eventDataLine = eventLines[1];
+                
+                if (!eventTypeLine.startsWith('event: ') || !eventDataLine.startsWith('data: ')) continue;
+                
+                const eventType = eventTypeLine.substring(7); // Remove "event: "
+                const eventData = JSON.parse(eventDataLine.substring(6)); // Remove "data: "
+                
+                // Handle different event types
+                if (eventType === 'message_start' && eventData.message && eventData.message.id) {
+                  messageId = eventData.message.id;
+                } else if (eventType === 'content_block_delta' && 
+                           eventData.delta && 
+                           eventData.delta.type === 'text_delta') {
+                  // Append the text chunk
+                  const textChunk = eventData.delta.text;
+                  fullText += textChunk;
+                  
+                  // Call the onChunk callback if provided
+                  if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
+                    window.streamingCallbacks[messageId](textChunk, fullText);
+                  }
+                } else if (eventType === 'message_stop') {
+                  // Streaming is complete
+                  resolve(fullText);
+                  
+                  // Clean up the callback
+                  if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
+                    delete window.streamingCallbacks[messageId];
+                  }
+                  
+                  return;
+                }
+              }
+            }
+            
+            // If we get here, the stream ended without a message_stop event
+            resolve(fullText);
+          } catch (error) {
+            console.error('Error processing stream:', error);
+            reject(error);
+          }
+        }
+        
+        // Start processing the stream
+        processStream();
+      });
     } else {
-      // For development/testing, provide a mock response when the API doesn't return expected format
-      console.log('KinOS API returned unexpected data format:', data);
+      // For non-streaming responses, handle as before
+      const data: KinOSResponse = await response.json();
+      console.log('KinOS response data:', data);
       
-      // Simple mock responses based on user input
-      if (content.toLowerCase().includes('hello') || content.toLowerCase().includes('hi')) {
-        return "Hello! I'm TherapyKin. How are you feeling today?";
-      } else if (content.toLowerCase().includes('anxious') || content.toLowerCase().includes('anxiety')) {
-        return "I'm sorry to hear you're feeling anxious. Let's explore that a bit. Can you tell me more about what's causing your anxiety?";
-      } else if (content.toLowerCase().includes('sad') || content.toLowerCase().includes('depressed')) {
-        return "I understand that feeling sad can be really difficult. Would you like to talk about what's contributing to these feelings?";
+      // Check if the response contains the expected data
+      if (data.status === 'completed' && data.response) {
+        return data.response;
+      } else if (data.response) {
+        // If we have a response but status isn't 'completed', still use the response
+        console.log('KinOS returned response with unexpected status:', data.status);
+        return data.response;
+      } else if (typeof data === 'string') {
+        // Handle case where the response might be a direct string
+        return data;
+      } else if (data.message_id) {
+        // If we only have a message_id, try to fetch the response
+        return await pollForResponse(data.message_id, firstName, 10, 1000, specialist || 'generalist', pseudonym);
       } else {
-        return "Thank you for sharing that with me. Can you tell me more about how that's been affecting you?";
+        // For development/testing, provide a mock response when the API doesn't return expected format
+        console.log('KinOS API returned unexpected data format:', data);
+        
+        // Simple mock responses based on user input
+        if (content.toLowerCase().includes('hello') || content.toLowerCase().includes('hi')) {
+          return "Hello! I'm TherapyKin. How are you feeling today?";
+        } else if (content.toLowerCase().includes('anxious') || content.toLowerCase().includes('anxiety')) {
+          return "I'm sorry to hear you're feeling anxious. Let's explore that a bit. Can you tell me more about what's causing your anxiety?";
+        } else if (content.toLowerCase().includes('sad') || content.toLowerCase().includes('depressed')) {
+          return "I understand that feeling sad can be really difficult. Would you like to talk about what's contributing to these feelings?";
+        } else {
+          return "Thank you for sharing that with me. Can you tell me more about how that's been affecting you?";
+        }
       }
     }
   } catch (error) {
