@@ -34,6 +34,8 @@ interface ChatMessage {
   generatingImage?: boolean; // Add this to track if an image is being generated
   imageLoaded?: boolean; // Add this to track when the image has loaded
   skipAutoIllustrate?: boolean; // Add this to skip auto-illustration for certain messages
+  animating?: boolean; // Add this to track if the message is currently animating
+  lastChunk?: string; // Add this to store the last chunk of text for animation
 }
 
 // Component that uses useSearchParams
@@ -1287,8 +1289,15 @@ function ChatSessionWithSearchParams() {
         // Clear the captured image after sending
         setCapturedImage(null);
         
-        // The loadingId is now defined earlier in the function
-        
+        // Create a unique ID for the loading message
+        const loadingId = Date.now().toString();
+      
+        // Set loading state for assistant response
+        setChatHistory(prev => [
+          ...prev,
+          { role: 'assistant', content: '', id: loadingId, loading: true }
+        ]);
+      
         try {
           // Use the user's pseudonym or generate one if missing
           let userPseudonym = user?.pseudonym || '';
@@ -1298,7 +1307,7 @@ function ChatSessionWithSearchParams() {
             const generatedPseudonym = generatePseudonymFromEmail(user?.email || '');
             userPseudonym = generatedPseudonym.name;
             console.log(`Generated pseudonym for user: ${userPseudonym}`);
-            
+          
             // Save this pseudonym to the user's record
             try {
               const response = await fetch('/api/users/update-pseudonym', {
@@ -1310,7 +1319,7 @@ function ChatSessionWithSearchParams() {
                   pseudonym: userPseudonym
                 }),
               });
-              
+            
               if (response.ok) {
                 console.log('Saved generated pseudonym to user record');
               } else {
@@ -1321,7 +1330,7 @@ function ChatSessionWithSearchParams() {
             }
           }
           console.log(`Using pseudonym for voice message: ${userPseudonym}`);
-          
+        
           // Create a unique message ID for this streaming response
           const streamingMessageId = `streaming-${loadingId}`;
           
@@ -2226,15 +2235,6 @@ Important style requirements:
       
       // Create a unique message ID for this streaming response
       const streamingMessageId = `streaming-${loadingId}`;
-      
-      // Create a unique ID for the loading message
-      const loadingId = Date.now().toString();
-      
-      // Set loading state for assistant response
-      setChatHistory(prev => [
-        ...prev,
-        { role: 'assistant', content: '', id: loadingId, loading: true }
-      ]);
       
       // Create a unique message ID for this streaming response
       const streamingMessageId = `streaming-${loadingId}`;

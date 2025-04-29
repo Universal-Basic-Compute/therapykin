@@ -304,7 +304,7 @@ export async function sendMessageToKinOS(
                       if (messageId && window.streamingCallbacks[messageId]) {
                         // Call the callback one last time with a special flag to indicate completion
                         try {
-                          window.streamingCallbacks[messageId](textChunk, fullText, true);
+                          window.streamingCallbacks[messageId]('', fullText, true);
                         } catch (callbackError) {
                           console.error('Error in final streaming callback:', callbackError);
                         }
