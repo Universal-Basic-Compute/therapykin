@@ -1362,34 +1362,32 @@ function ChatSessionWithSearchParams() {
             userPseudonym // Use the generated or existing pseudonym
           );
           
-          // If voice mode is enabled, convert response to speech
-          let audioUrl = '';
+          // Generate TTS in the background after streaming is complete
           if (voiceMode) {
-            audioUrl = await textToSpeech(response);
+            textToSpeech(response).then(audioUrl => {
+              if (audioUrl) {
+                // Update the message with the audio URL when it's ready
+                setChatHistory(prev => 
+                  prev.map(msg => 
+                    msg.id === loadingId 
+                      ? { 
+                          ...msg,
+                          audio: audioUrl
+                        }
+                      : msg
+                  )
+                );
+                
+                // Play audio when it's ready
+                playAudio(audioUrl, loadingId);
+              }
+            }).catch(error => {
+              console.error('Error generating TTS:', error);
+            });
           }
           
-          // Update chat history with the final response and audio
-          setChatHistory(prev => 
-            prev.map(msg => 
-              msg.id === loadingId 
-                ? { 
-                    role: 'assistant', 
-                    content: response, 
-                    id: loadingId, 
-                    loading: false, 
-                    audio: audioUrl,
-                    skipAutoIllustrate: true // Add flag to prevent duplicate illustration
-                  }
-                : msg
-            )
-          );
-          
-          // Play audio if voice mode is enabled
-          if (voiceMode && audioUrl) {
-            playAudio(audioUrl, loadingId);
-          }
-          
-          // Save the conversation to local storage or your backend if needed
+          // The UI is already updated by the streaming callback, so we don't need to update it again
+          // Just save the conversation to local storage or your backend
           saveConversation([
             ...chatHistory,
             { 
@@ -1397,7 +1395,7 @@ function ChatSessionWithSearchParams() {
               content: screenshot ? `${data.text} [Image attached]` : data.text, 
               id: userMessageId 
             },
-            { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
+            { role: 'assistant', content: response, id: loadingId, loading: false }
           ]);
         } catch (error) {
           console.error('Error getting response:', error);
@@ -2257,37 +2255,37 @@ Important style requirements:
       console.log(`Received complete response from KinOS after sending message${screenshot ? ' with screenshot' : ''}`);
       
       // If voice mode is enabled, convert response to speech
-      let audioUrl = '';
+      // But don't wait for this to update the UI
       if (voiceMode) {
-        audioUrl = await textToSpeech(response);
+        // Generate TTS in the background
+        textToSpeech(response).then(audioUrl => {
+          if (audioUrl) {
+            // Update the message with the audio URL when it's ready
+            setChatHistory(prev => 
+              prev.map(msg => 
+                msg.id === loadingId 
+                  ? { 
+                      ...msg,
+                      audio: audioUrl
+                    }
+                  : msg
+              )
+            );
+            
+            // Play audio when it's ready
+            playAudio(audioUrl, loadingId);
+          }
+        }).catch(error => {
+          console.error('Error generating TTS:', error);
+        });
       }
       
-      // Update chat history with the final response and audio
-      setChatHistory(prev => 
-        prev.map(msg => 
-          msg.id === loadingId 
-            ? { 
-                role: 'assistant', 
-                content: response, 
-                id: loadingId, 
-                loading: false, 
-                audio: audioUrl,
-                skipAutoIllustrate: true // Add flag to prevent duplicate illustration
-              }
-            : msg
-        )
-      );
-      
-      // Play audio if voice mode is enabled
-      if (voiceMode && audioUrl) {
-        playAudio(audioUrl, loadingId);
-      }
-      
-      // Save the conversation to local storage or your backend if needed
+      // The UI is already updated by the streaming callback, so we don't need to update it again
+      // Just save the conversation to local storage or your backend
       saveConversation([
         ...chatHistory.filter(msg => msg.id !== loadingId),
         { role: 'user', content: userMessage || (screenshot ? '[Image sent]' : ''), id: userMessageId },
-        { role: 'assistant', content: response, id: loadingId, loading: false, audio: audioUrl }
+        { role: 'assistant', content: response, id: loadingId, loading: false }
       ]);
     } catch (error) {
       console.error('Error getting response:', error);
