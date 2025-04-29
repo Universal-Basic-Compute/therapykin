@@ -226,75 +226,78 @@ export async function sendMessageToKinOS(
             
               // Process complete events in the buffer
               try {
-              let eventEnd = buffer.indexOf("\n\n");
-              let processedEvents = 0;
-              const MAX_EVENTS_PER_CYCLE = 100; // Prevent infinite loops
-              
-              while (eventEnd > -1 && processedEvents < MAX_EVENTS_PER_CYCLE) {
-                processedEvents++;
+                let eventEnd = buffer.indexOf("\n\n");
+                let processedEvents = 0;
+                const MAX_EVENTS_PER_CYCLE = 100; // Prevent infinite loops
                 
-                const eventText = buffer.substring(0, eventEnd);
-                buffer = buffer.substring(eventEnd + 2);
-              
-                // Parse the event
-                const eventLines = eventText.split('\n');
-                if (eventLines.length < 2) continue;
-              
-                const eventTypeLine = eventLines[0];
-                const eventDataLine = eventLines[1];
-              
-                if (!eventTypeLine.startsWith('event: ') || !eventDataLine.startsWith('data: ')) continue;
-              
-                const eventType = eventTypeLine.substring(7); // Remove "event: "
-                let eventData;
-                try {
-                  eventData = JSON.parse(eventDataLine.substring(6)); // Remove "data: "
-                } catch (error) {
-                  console.error('Error parsing event data:', error, eventDataLine);
-                  continue; // Skip this event if parsing fails
-                }
+                while (eventEnd > -1 && processedEvents < MAX_EVENTS_PER_CYCLE) {
+                  processedEvents++;
+                  
+                  const eventText = buffer.substring(0, eventEnd);
+                  buffer = buffer.substring(eventEnd + 2);
                 
-                // Handle different event types
-                if (eventType === 'message_start' && eventData.message && eventData.message.id) {
-                  messageId = eventData.message.id;
-                  console.log(`Streaming started with message ID: ${messageId}`);
-                } else if (eventType === 'content_block_delta' && 
-                           eventData.delta && 
-                           eventData.delta.type === 'text_delta') {
-                  // Append the text chunk
-                  const textChunk = eventData.delta.text;
-                  fullText += textChunk;
+                  // Parse the event
+                  const eventLines = eventText.split('\n');
+                  if (eventLines.length < 2) continue;
                 
-                  // Call the onChunk callback if provided
-                  if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
-                    try {
-                      window.streamingCallbacks[messageId](textChunk, fullText);
-                    } catch (callbackError) {
-                      console.error('Error in streaming callback:', callbackError);
+                  const eventTypeLine = eventLines[0];
+                  const eventDataLine = eventLines[1];
+                
+                  if (!eventTypeLine.startsWith('event: ') || !eventDataLine.startsWith('data: ')) continue;
+                
+                  const eventType = eventTypeLine.substring(7); // Remove "event: "
+                  let eventData;
+                  try {
+                    eventData = JSON.parse(eventDataLine.substring(6)); // Remove "data: "
+                  } catch (error) {
+                    console.error('Error parsing event data:', error, eventDataLine);
+                    continue; // Skip this event if parsing fails
+                  }
+                  
+                  // Handle different event types
+                  if (eventType === 'message_start' && eventData.message && eventData.message.id) {
+                    messageId = eventData.message.id;
+                    console.log(`Streaming started with message ID: ${messageId}`);
+                  } else if (eventType === 'content_block_delta' && 
+                             eventData.delta && 
+                             eventData.delta.type === 'text_delta') {
+                    // Append the text chunk
+                    const textChunk = eventData.delta.text;
+                    fullText += textChunk;
+                  
+                    // Call the onChunk callback if provided
+                    if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
+                      try {
+                        window.streamingCallbacks[messageId](textChunk, fullText);
+                      } catch (callbackError) {
+                        console.error('Error in streaming callback:', callbackError);
+                      }
                     }
+                  } else if (eventType === 'message_stop') {
+                    // Streaming is complete
+                    console.log(`Streaming completed for message ID: ${messageId}`);
+                    resolve(fullText);
+                  
+                    // Clean up the callback
+                    if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
+                      delete window.streamingCallbacks[messageId];
+                    }
+                  
+                    return;
+                  } else if (eventType === 'error') {
+                    console.error('Stream error event received:', eventData);
+                    reject(new Error(eventData.error || 'Unknown streaming error'));
+                    return;
                   }
-                } else if (eventType === 'message_stop') {
-                  // Streaming is complete
-                  console.log(`Streaming completed for message ID: ${messageId}`);
-                  resolve(fullText);
-                
-                  // Clean up the callback
-                  if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
-                    delete window.streamingCallbacks[messageId];
-                  }
-                
-                  return;
-                } else if (eventType === 'error') {
-                  console.error('Stream error event received:', eventData);
-                  reject(new Error(eventData.error || 'Unknown streaming error'));
-                  return;
+                  
+                  eventEnd = buffer.indexOf("\n\n");
                 }
                 
-                eventEnd = buffer.indexOf("\n\n");
-              }
-              
-              if (processedEvents >= MAX_EVENTS_PER_CYCLE) {
-                console.warn('Reached maximum events per processing cycle');
+                if (processedEvents >= MAX_EVENTS_PER_CYCLE) {
+                  console.warn('Reached maximum events per processing cycle');
+                }
+              } catch (processingError) {
+                console.error('Error processing events:', processingError);
               }
             }
             
