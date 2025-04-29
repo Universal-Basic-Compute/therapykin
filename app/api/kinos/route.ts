@@ -96,45 +96,78 @@ export async function POST(request: NextRequest) {
     // For streaming responses, we need to forward the stream to the client
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('text/event-stream')) {
-      // Create a TransformStream to process the events
-      const { readable, writable } = new TransformStream();
-      
-      // Process the stream from KinOS API
-      const reader = response.body?.getReader();
-      const writer = writable.getWriter();
-      
-      // Start processing the stream in the background
-      if (reader) {
-        (async () => {
-          try {
-            const decoder = new TextDecoder();
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
+      try {
+        // Create a TransformStream to process the events
+        const { readable, writable } = new TransformStream();
+        
+        // Process the stream from KinOS API
+        const reader = response.body?.getReader();
+        const writer = writable.getWriter();
+        
+        // Start processing the stream in the background
+        if (reader) {
+          (async () => {
+            try {
+              const decoder = new TextDecoder();
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                  console.log('Stream reading complete');
+                  break;
+                }
+                
+                // Forward the chunk directly with error handling
+                try {
+                  await writer.write(value);
+                } catch (writeError) {
+                  console.error('Error writing to stream:', writeError);
+                  break;
+                }
+              }
+            } catch (error) {
+              console.error('Error processing stream:', error);
               
-              // Forward the chunk directly
-              await writer.write(value);
+              // Send an error event to the client
+              try {
+                const errorEvent = `event: error\ndata: ${JSON.stringify({error: error instanceof Error ? error.message : 'Unknown streaming error'})}\n\n`;
+                await writer.write(new TextEncoder().encode(errorEvent));
+              } catch (writeError) {
+                console.error('Error sending error event:', writeError);
+              }
+            } finally {
+              try {
+                writer.close();
+              } catch (closeError) {
+                console.error('Error closing writer:', closeError);
+              }
             }
-          } catch (error) {
-            console.error('Error processing stream:', error);
-            
-            // Send an error event to the client
-            const errorEvent = `event: error\ndata: ${JSON.stringify({error: error instanceof Error ? error.message : 'Unknown streaming error'})}\n\n`;
-            await writer.write(new TextEncoder().encode(errorEvent));
-          } finally {
-            writer.close();
-          }
-        })();
+          })();
+        } else {
+          // If there's no reader, send an error event
+          const writer = writable.getWriter();
+          const errorEvent = `event: error\ndata: ${JSON.stringify({error: 'No stream reader available'})}\n\n`;
+          await writer.write(new TextEncoder().encode(errorEvent));
+          writer.close();
+        }
+        
+        // Return the stream to the client
+        return new Response(readable, {
+          headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+          },
+        });
+      } catch (streamError) {
+        console.error('Error setting up stream:', streamError);
+        return NextResponse.json(
+          { 
+            error: 'Failed to set up streaming response',
+            details: streamError instanceof Error ? streamError.message : 'Unknown error'
+          },
+          { status: 500 }
+        );
       }
-      
-      // Return the stream to the client
-      return new Response(readable, {
-        headers: {
-          'Content-Type': 'text/event-stream',
-          'Cache-Control': 'no-cache',
-          'Connection': 'keep-alive',
-        },
-      });
     } else {
       // For non-streaming responses, return as JSON
       const data = await response.json();

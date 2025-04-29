@@ -177,15 +177,55 @@ export async function sendMessageToKinOS(
         
           let buffer = '';
         
+          let lastProcessedTime = Date.now();
+          const MAX_PROCESSING_TIME = 10000; // 10 seconds timeout
+
           try {
             while (true) {
+              // Check for timeout
+              if (Date.now() - lastProcessedTime > MAX_PROCESSING_TIME) {
+                console.warn('Stream processing timeout reached');
+                resolve(fullText); // Resolve with what we have so far
+                return;
+              }
+
               const { done, value } = await reader.read();
-              if (done) break;
-            
+              if (done) {
+                console.log('Stream reading complete');
+                
+                // Process any remaining data in the buffer
+                if (buffer.length > 0) {
+                  console.log('Processing remaining buffer data');
+                  try {
+                    // Try to extract any complete events from the buffer
+                    let eventEnd = buffer.indexOf("\n\n");
+                    while (eventEnd > -1) {
+                      // Process event...
+                      buffer = buffer.substring(eventEnd + 2);
+                      eventEnd = buffer.indexOf("\n\n");
+                    }
+                  } catch (error) {
+                    console.error('Error processing final buffer:', error);
+                  }
+                }
+                
+                resolve(fullText);
+                return;
+              }
+
+              // Update last processed time
+              lastProcessedTime = Date.now();
+              
               // Decode the chunk and add it to our buffer
-              buffer += decoder.decode(value, { stream: true });
+              try {
+                buffer += decoder.decode(value, { stream: true });
+              } catch (decodeError) {
+                console.error('Error decoding stream chunk:', decodeError);
+                continue;
+              }
             
               // Process complete events in the buffer
+              try {
               let eventEnd = buffer.indexOf("\n\n");
               while (eventEnd > -1) {
                 const eventText = buffer.substring(0, eventEnd);

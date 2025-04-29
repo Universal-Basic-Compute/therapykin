@@ -2199,7 +2199,32 @@ Important style requirements:
       
       // Set up the streaming callback
       if (typeof window !== 'undefined') {
+        // Set a timeout to clean up the callback if streaming takes too long
+        const streamingTimeout = setTimeout(() => {
+          if (window.streamingCallbacks && window.streamingCallbacks[streamingMessageId]) {
+            console.warn('Streaming timeout reached, cleaning up callback');
+            delete window.streamingCallbacks[streamingMessageId];
+            
+            // Update the UI to show that we're no longer waiting for streaming
+            setChatHistory(prev => 
+              prev.map(msg => 
+                msg.id === loadingId 
+                  ? { 
+                      role: 'assistant', 
+                      content: msg.content || 'I apologize, but there was an issue with my response. Please try again.', 
+                      id: loadingId, 
+                      loading: false
+                    }
+                  : msg
+              )
+            );
+          }
+        }, 30000); // 30 second timeout
+        
         window.streamingCallbacks[streamingMessageId] = (chunk, fullText) => {
+          // Clear the timeout on each chunk received
+          clearTimeout(streamingTimeout);
+          
           // Update the chat history with each chunk
           setChatHistory(prev => 
             prev.map(msg => 
