@@ -176,6 +176,7 @@ export async function sendMessageToKinOS(
           }
         
           let buffer = '';
+          console.log(`Starting stream processing. Will use message ID: ${messageId || 'unknown'}`);
         
           let lastProcessedTime = Date.now();
           const MAX_PROCESSING_TIME = 10000; // 10 seconds timeout
@@ -266,23 +267,54 @@ export async function sendMessageToKinOS(
                     fullText += textChunk;
                   
                     // Call the onChunk callback if provided
-                    if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
-                      try {
-                        window.streamingCallbacks[messageId](textChunk, fullText);
-                      } catch (callbackError) {
-                        console.error('Error in streaming callback:', callbackError);
+                    if (window.streamingCallbacks) {
+                      // First try with the message ID from the API
+                      if (messageId && window.streamingCallbacks[messageId]) {
+                        try {
+                          window.streamingCallbacks[messageId](textChunk, fullText);
+                        } catch (callbackError) {
+                          console.error('Error in streaming callback with message ID:', callbackError);
+                        }
+                      } 
+                      // Then try with the streaming message ID format
+                      else {
+                        // Look for a callback with the streaming- prefix
+                        const streamingCallbackKeys = Object.keys(window.streamingCallbacks);
+                        const streamingKey = streamingCallbackKeys.find(key => key.startsWith('streaming-'));
+                        
+                        if (streamingKey) {
+                          try {
+                            console.log(`Using fallback streaming key: ${streamingKey}`);
+                            window.streamingCallbacks[streamingKey](textChunk, fullText);
+                          } catch (callbackError) {
+                            console.error('Error in streaming callback with fallback key:', callbackError);
+                          }
+                        } else {
+                          console.warn('No suitable streaming callback found. Available keys:', streamingCallbackKeys);
+                        }
                       }
                     }
                   } else if (eventType === 'message_stop') {
                     // Streaming is complete
                     console.log(`Streaming completed for message ID: ${messageId}`);
-                    resolve(fullText);
-                  
-                    // Clean up the callback
-                    if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
-                      delete window.streamingCallbacks[messageId];
+                    
+                    // Clean up all possible callbacks
+                    if (window.streamingCallbacks) {
+                      // Clean up the callback with the message ID from the API
+                      if (messageId && window.streamingCallbacks[messageId]) {
+                        delete window.streamingCallbacks[messageId];
+                      }
+                      
+                      // Also clean up any streaming- prefixed callbacks
+                      const streamingCallbackKeys = Object.keys(window.streamingCallbacks);
+                      streamingCallbackKeys.forEach(key => {
+                        if (key.startsWith('streaming-')) {
+                          delete window.streamingCallbacks[key];
+                        }
+                      });
                     }
-                  
+                    
+                    resolve(fullText);
                     return;
                   } else if (eventType === 'error') {
                     console.error('Stream error event received:', eventData);
