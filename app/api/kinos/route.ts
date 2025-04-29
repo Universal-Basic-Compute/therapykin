@@ -117,6 +117,10 @@ export async function POST(request: NextRequest) {
             }
           } catch (error) {
             console.error('Error processing stream:', error);
+            
+            // Send an error event to the client
+            const errorEvent = `event: error\ndata: ${JSON.stringify({error: error instanceof Error ? error.message : 'Unknown streaming error'})}\n\n`;
+            await writer.write(new TextEncoder().encode(errorEvent));
           } finally {
             writer.close();
           }

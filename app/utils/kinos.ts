@@ -167,65 +167,77 @@ export async function sendMessageToKinOS(
         // Create a reader for the stream
         const reader = response.body?.getReader();
         const decoder = new TextDecoder();
-        
+      
         // Function to process the stream
         async function processStream() {
           if (!reader) {
             reject(new Error('Stream reader is null'));
             return;
           }
-          
+        
           let buffer = '';
-          
+        
           try {
             while (true) {
               const { done, value } = await reader.read();
               if (done) break;
-              
+            
               // Decode the chunk and add it to our buffer
               buffer += decoder.decode(value, { stream: true });
-              
+            
               // Process complete events in the buffer
               let eventEnd = buffer.indexOf("\n\n");
               while (eventEnd > -1) {
                 const eventText = buffer.substring(0, eventEnd);
                 buffer = buffer.substring(eventEnd + 2);
-                
+              
                 // Parse the event
                 const eventLines = eventText.split('\n');
                 if (eventLines.length < 2) continue;
-                
+              
                 const eventTypeLine = eventLines[0];
                 const eventDataLine = eventLines[1];
-                
+              
                 if (!eventTypeLine.startsWith('event: ') || !eventDataLine.startsWith('data: ')) continue;
-                
+              
                 const eventType = eventTypeLine.substring(7); // Remove "event: "
-                const eventData = JSON.parse(eventDataLine.substring(6)); // Remove "data: "
+                let eventData;
+                try {
+                  eventData = JSON.parse(eventDataLine.substring(6)); // Remove "data: "
+                } catch (error) {
+                  console.error('Error parsing event data:', error, eventDataLine);
+                  continue; // Skip this event if parsing fails
+                }
                 
                 // Handle different event types
                 if (eventType === 'message_start' && eventData.message && eventData.message.id) {
                   messageId = eventData.message.id;
+                  console.log(`Streaming started with message ID: ${messageId}`);
                 } else if (eventType === 'content_block_delta' && 
                            eventData.delta && 
                            eventData.delta.type === 'text_delta') {
                   // Append the text chunk
                   const textChunk = eventData.delta.text;
                   fullText += textChunk;
-                  
+                
                   // Call the onChunk callback if provided
                   if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
                     window.streamingCallbacks[messageId](textChunk, fullText);
                   }
                 } else if (eventType === 'message_stop') {
                   // Streaming is complete
+                  console.log(`Streaming completed for message ID: ${messageId}`);
                   resolve(fullText);
-                  
+                
                   // Clean up the callback
                   if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
                     delete window.streamingCallbacks[messageId];
                   }
-                  
+                
+                  return;
+                } else if (eventType === 'error') {
+                  console.error('Stream error event received:', eventData);
+                  reject(new Error(eventData.error || 'Unknown streaming error'));
                   return;
                 }
               }
