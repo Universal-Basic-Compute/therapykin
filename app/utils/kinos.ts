@@ -227,7 +227,12 @@ export async function sendMessageToKinOS(
               // Process complete events in the buffer
               try {
               let eventEnd = buffer.indexOf("\n\n");
-              while (eventEnd > -1) {
+              let processedEvents = 0;
+              const MAX_EVENTS_PER_CYCLE = 100; // Prevent infinite loops
+              
+              while (eventEnd > -1 && processedEvents < MAX_EVENTS_PER_CYCLE) {
+                processedEvents++;
+                
                 const eventText = buffer.substring(0, eventEnd);
                 buffer = buffer.substring(eventEnd + 2);
               
@@ -262,7 +267,11 @@ export async function sendMessageToKinOS(
                 
                   // Call the onChunk callback if provided
                   if (window.streamingCallbacks && window.streamingCallbacks[messageId]) {
-                    window.streamingCallbacks[messageId](textChunk, fullText);
+                    try {
+                      window.streamingCallbacks[messageId](textChunk, fullText);
+                    } catch (callbackError) {
+                      console.error('Error in streaming callback:', callbackError);
+                    }
                   }
                 } else if (eventType === 'message_stop') {
                   // Streaming is complete
@@ -280,6 +289,12 @@ export async function sendMessageToKinOS(
                   reject(new Error(eventData.error || 'Unknown streaming error'));
                   return;
                 }
+                
+                eventEnd = buffer.indexOf("\n\n");
+              }
+              
+              if (processedEvents >= MAX_EVENTS_PER_CYCLE) {
+                console.warn('Reached maximum events per processing cycle');
               }
             }
             
