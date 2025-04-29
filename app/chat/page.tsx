@@ -1297,6 +1297,15 @@ function ChatSessionWithSearchParams() {
           ...prev,
           { role: 'assistant', content: '', id: loadingId, loading: true }
         ]);
+        
+        // Create a unique ID for the loading message
+        const loadingId = Date.now().toString();
+      
+        // Set loading state for assistant response
+        setChatHistory(prev => [
+          ...prev,
+          { role: 'assistant', content: '', id: loadingId, loading: true }
+        ]);
       
         // Create a unique message ID for this streaming response
         const streamingMessageId = `streaming-${loadingId}`;
