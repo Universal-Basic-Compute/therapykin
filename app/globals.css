@@ -733,7 +733,7 @@ sup a:hover {
   animation: blink 1s step-end infinite;
 }
 
-/* Add this to app/globals.css */
+/* Loading dots animation */
 @keyframes dotFade {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 1; }
