@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log(`Updating session ${sessionId} with image URL: ${imageUrl}`);
+    console.log(`Updating session ${sessionId} with image URL: ${imageUrl.substring(0, 50)}...`);
     
     // Update the session record in Airtable
     try {
