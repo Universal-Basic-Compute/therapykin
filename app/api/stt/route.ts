@@ -4,65 +4,94 @@ export async function POST(request: NextRequest) {
   try {
     // Check if the request is multipart/form-data
     const contentType = request.headers.get('content-type') || '';
-    if (!contentType.includes('multipart/form-data')) {
+    console.log('Received STT request with content type:', contentType);
+    
+    // More flexible content type checking
+    if (!contentType.includes('multipart/form-data') && !contentType.includes('audio/')) {
       console.error('Invalid content type:', contentType);
       return NextResponse.json(
-        { error: 'Content type must be multipart/form-data' },
+        { error: 'Content type must be multipart/form-data or audio/*' },
         { status: 400 }
       );
     }
     
-    // Parse the form data
-    const formData = await request.formData();
+    let audioBlob: Blob;
     
-    // Get the audio file
-    const file = formData.get('file');
-    if (!file || !(file instanceof Blob)) {
-      console.error('No audio file provided or invalid file');
+    // Handle different request formats
+    if (contentType.includes('multipart/form-data')) {
+      // Parse the form data
+      try {
+        const formData = await request.formData();
+        console.log('Form data keys:', [...formData.keys()]);
+        
+        // Get the audio file
+        const file = formData.get('file');
+        if (!file || !(file instanceof Blob)) {
+          console.error('No audio file provided or invalid file in form data');
+          return NextResponse.json(
+            { error: 'No audio file provided or invalid file' },
+            { status: 400 }
+          );
+        }
+        
+        audioBlob = file;
+      } catch (formError) {
+        console.error('Error parsing form data:', formError);
+        return NextResponse.json(
+          { error: 'Failed to parse form data', details: formError instanceof Error ? formError.message : 'Unknown error' },
+          { status: 400 }
+        );
+      }
+    } else if (contentType.includes('audio/')) {
+      // Direct audio content
+      try {
+        audioBlob = await request.blob();
+        if (audioBlob.size === 0) {
+          console.error('Empty audio blob received');
+          return NextResponse.json(
+            { error: 'Empty audio data received' },
+            { status: 400 }
+          );
+        }
+      } catch (blobError) {
+        console.error('Error reading request as blob:', blobError);
+        return NextResponse.json(
+          { error: 'Failed to read audio data', details: blobError instanceof Error ? blobError.message : 'Unknown error' },
+          { status: 400 }
+        );
+      }
+    } else {
+      // This shouldn't happen due to the earlier check, but just in case
       return NextResponse.json(
-        { error: 'No audio file provided or invalid file' },
+        { error: 'Unsupported content type' },
         { status: 400 }
       );
     }
+    
+    // Log audio blob details
+    console.log(`Processing audio: size=${audioBlob.size} bytes, type=${audioBlob.type}`);
     
     // If file has no type or is octet-stream, try to infer the correct type
-    let fileToSend: File | Blob = file;
-    if (file instanceof File && (!file.type || file.type === 'audio/octet-stream')) {
-      const fileName = file.name || '';
-      const fileExt = fileName.split('.').pop()?.toLowerCase();
-      
-      if (fileExt) {
-        // Create a new blob with the correct type based on extension
-        if (fileExt === 'webm') {
-          fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/webm' });
-        } else if (fileExt === 'mp4' || fileExt === 'm4a') {
-          fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/mp4' });
-        } else if (fileExt === 'wav') {
-          fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/wav' });
-        }
+    let fileToSend: Blob = audioBlob;
+    if (!audioBlob.type || audioBlob.type === 'audio/octet-stream') {
+      // Try to determine the type from the request content-type
+      if (contentType.includes('audio/webm')) {
+        fileToSend = new Blob([await audioBlob.arrayBuffer()], { type: 'audio/webm' });
+      } else if (contentType.includes('audio/mp4') || contentType.includes('audio/m4a')) {
+        fileToSend = new Blob([await audioBlob.arrayBuffer()], { type: 'audio/mp4' });
+      } else if (contentType.includes('audio/wav')) {
+        fileToSend = new Blob([await audioBlob.arrayBuffer()], { type: 'audio/wav' });
       } else {
-        // If no extension, try to detect based on device
-        const userAgent = request.headers.get('user-agent') || '';
-        if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
-          // iOS devices typically use m4a format
-          fileToSend = new Blob([await file.arrayBuffer()], { type: 'audio/mp4' });
-          console.log('iOS device detected, assuming audio/mp4 format');
-        }
+        // Default to webm for unknown types
+        fileToSend = new Blob([await audioBlob.arrayBuffer()], { type: 'audio/webm' });
       }
+      console.log(`Inferred audio type: ${fileToSend.type}`);
     }
     
-    // Log minimal information in production
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`STT request: Processing audio file of type ${fileToSend.type} (original type: ${file.type}), size ${fileToSend.size} bytes`);
-    } else {
-      console.log(`STT request: Processing ${fileToSend.size} bytes audio file of type ${fileToSend.type}`);
-    }
-    
-    // Get optional parameters
-    const model = formData.get('model') || 'whisper-1';
-    const language = formData.get('language') || 'en';
-    const prompt = formData.get('prompt') || '';
-    const responseFormat = formData.get('response_format') || 'json';
+    // Get optional parameters from query string for direct audio uploads
+    const url = new URL(request.url);
+    const model = url.searchParams.get('model') || 'whisper-1';
+    const language = url.searchParams.get('language') || 'en';
     
     // Determine the base URL based on environment
     const baseUrl = process.env.KINOS_STT_API_URL || (
@@ -74,16 +103,10 @@ export async function POST(request: NextRequest) {
     // Create a new FormData object to send to the KinOS API
     const kinosFormData = new FormData();
     kinosFormData.append('file', fileToSend);
-    kinosFormData.append('model', model as string);
-    kinosFormData.append('language', language as string);
+    kinosFormData.append('model', model);
+    kinosFormData.append('language', language);
     
-    if (prompt) {
-      kinosFormData.append('prompt', prompt as string);
-    }
-    
-    if (responseFormat) {
-      kinosFormData.append('response_format', responseFormat as string);
-    }
+    console.log(`Sending STT request to ${baseUrl}`);
     
     // Call STT API
     const response = await fetch(baseUrl, {
@@ -95,20 +118,21 @@ export async function POST(request: NextRequest) {
       }
     });
     
-    // Log minimal response info
+    // Log response status
     console.log(`STT API response status: ${response.status}`);
     
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`STT API error (${response.status}): ${errorText}`);
       return NextResponse.json(
-        { error: 'Failed to transcribe audio' },
+        { error: 'Failed to transcribe audio', details: errorText },
         { status: response.status }
       );
     }
     
     // Get the transcription result
     const data = await response.json();
+    console.log('Transcription result:', data);
     
     // Return the transcription
     return NextResponse.json({

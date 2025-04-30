@@ -15,30 +15,15 @@ function handleCors(request: NextRequest) {
     const headers = new Headers();
     
     // Get the origin from the request
-    const origin = request.headers.get('origin') || '';
+    const origin = request.headers.get('origin') || '*';
     
-    // Define allowed origins
-    const allowedOrigins = [
-      'http://localhost:8081',
-      'http://localhost:3000',
-      'capacitor://localhost',
-      'http://localhost',
-      'https://therapykin.ai'
-    ];
+    // Always allow any origin for API routes
+    headers.set('Access-Control-Allow-Origin', origin);
     
-    // Check if the origin is allowed
-    const isAllowedOrigin = allowedOrigins.includes(origin);
+    // Allow credentials
+    headers.set('Access-Control-Allow-Credentials', 'true');
     
-    // Set the appropriate Access-Control-Allow-Origin header
-    if (isAllowedOrigin) {
-      headers.set('Access-Control-Allow-Origin', origin);
-      // Always allow credentials for these trusted origins
-      headers.set('Access-Control-Allow-Credentials', 'true');
-    } else {
-      // For non-listed origins, use a wildcard but don't allow credentials
-      headers.set('Access-Control-Allow-Origin', '*');
-    }
-    
+    // Set allowed methods and headers
     headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
     
