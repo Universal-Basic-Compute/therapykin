@@ -24,6 +24,7 @@ function handleCors(request: NextRequest) {
     headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     headers.set('Access-Control-Allow-Credentials', 'true');
+    headers.set('Access-Control-Expose-Headers', 'Authorization');
     
     // Handle preflight requests
     if (request.method === 'OPTIONS') {
@@ -47,8 +48,17 @@ export async function middleware(request: NextRequest) {
     return corsHeaders;
   }
   
-  // Get token from cookie
-  const token = request.cookies.get('auth_token')?.value;
+  // Get token from cookie or Authorization header
+  let token = request.cookies.get('auth_token')?.value;
+  
+  // If no token in cookie, check Authorization header (for mobile clients)
+  if (!token) {
+    const authHeader = request.headers.get('Authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7); // Remove 'Bearer ' prefix
+      console.log('Using token from Authorization header');
+    }
+  }
   
   // Check if the path is a protected route
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || 

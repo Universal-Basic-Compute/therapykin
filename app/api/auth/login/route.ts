@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const token = generateToken(user.id, user.email);
     console.log('Token generated successfully');
     
-    // Set cookie
+    // Set cookie for web clients
     await setAuthCookie(token);
     console.log('Auth cookie set');
     
@@ -50,7 +50,8 @@ export async function POST(request: NextRequest) {
         id: user.id,
         email: user.email,
         firstName: user.firstName
-      }
+      },
+      token: token // Include the token in the response for mobile clients
     });
   } catch (error) {
     logError('Login: Authentication failed', error);
