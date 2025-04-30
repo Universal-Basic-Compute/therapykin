@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
               email: userFromToken.email,
               firstName: userFromToken.firstName,
               pseudonym: userFromToken.fields?.Pseudonym as string || null,
+              Pseudonym: userFromToken.fields?.Pseudonym as string || null, // Add this line with capital P
               isTherapist: userFromToken.fields?.IsTherapist === true || 
                           userFromToken.fields?.IsTherapist === "true" || 
                           userFromToken.fields?.IsTherapist === 1 || 
