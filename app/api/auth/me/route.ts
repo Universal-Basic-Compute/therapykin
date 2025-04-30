@@ -15,10 +15,10 @@ export async function GET(request: NextRequest) {
         
         // Verify the token and get the payload
         const payload = await verifyToken(token);
-        if (payload && payload.email) {
+        if (payload && typeof payload.email === 'string') {
           // If token is valid, get the user by email
           const { getUserByEmail } = await import('@/app/utils/auth');
-          const userFromToken = await getUserByEmail(String(payload.email));
+          const userFromToken = await getUserByEmail(payload.email);
           
           if (userFromToken) {
             // Create a user object similar to what getCurrentUser returns
@@ -44,6 +44,8 @@ export async function GET(request: NextRequest) {
               } : null
             };
           }
+        } else {
+          console.log('Invalid token payload: missing or invalid email');
         }
       }
     }
