@@ -17,11 +17,11 @@ export async function GET(request: NextRequest) {
         const payload = await verifyToken(token);
         if (payload && payload.email) {
           // If token is valid and email exists, get the user by email
-          const { getUserByEmail } = await import('@/app/utils/auth');
-          // Use type assertion to bypass the type check
-          const userFromToken = await getUserByEmail(payload.email as string);
-          
-          if (userFromToken) {
+          const { getUserByEmailOrThrow } = await import('@/app/utils/auth');
+          try {
+            // Use the non-nullable version that throws an error if user not found
+            const userFromToken = await getUserByEmailOrThrow(payload.email as string);
+            
             // Create a user object similar to what getCurrentUser returns
             user = {
               id: userFromToken.id,
@@ -44,6 +44,9 @@ export async function GET(request: NextRequest) {
                 currentPeriodEnd: userFromToken.fields.SubscriptionCurrentPeriodEnd as number,
               } : null
             };
+          } catch (error) {
+            console.error('Error fetching user from token:', error);
+            // Continue with user as null, which will be handled below
           }
         } else {
           console.log('Invalid token payload: missing or invalid email');
