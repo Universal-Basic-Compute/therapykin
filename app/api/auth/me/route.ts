@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
         
         // Verify the token and get the payload
         const payload = await verifyToken(token);
-        if (payload) {
-          // If token is valid, get the user by email
+        if (payload && payload.email) {
+          // If token is valid and email exists, get the user by email
           const { getUserByEmail } = await import('@/app/utils/auth');
           // Use type assertion to bypass the type check
           const userFromToken = await getUserByEmail(payload.email as string);
