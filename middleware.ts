@@ -32,14 +32,11 @@ function handleCors(request: NextRequest) {
     // Set the appropriate Access-Control-Allow-Origin header
     if (isAllowedOrigin) {
       headers.set('Access-Control-Allow-Origin', origin);
-    } else {
-      // For non-listed origins, you can either deny them or use a wildcard
-      headers.set('Access-Control-Allow-Origin', '*');
-    }
-    
-    // Allow credentials for specific origins
-    if (isAllowedOrigin) {
+      // Always allow credentials for these trusted origins
       headers.set('Access-Control-Allow-Credentials', 'true');
+    } else {
+      // For non-listed origins, use a wildcard but don't allow credentials
+      headers.set('Access-Control-Allow-Origin', '*');
     }
     
     headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');

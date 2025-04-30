@@ -60,9 +60,11 @@ export async function POST(request: NextRequest) {
     );
     
     // Add CORS headers for mobile apps
-    response.headers.set('Access-Control-Allow-Origin', '*');
+    const origin = request.headers.get('origin') || '*';
+    response.headers.set('Access-Control-Allow-Origin', origin);
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
     
     return response;
   } catch (error: any) {
