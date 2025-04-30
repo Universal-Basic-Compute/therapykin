@@ -107,6 +107,15 @@ export async function getUserByEmail(email: string) {
   }
 }
 
+// Get user by email or throw an error if not found
+export async function getUserByEmailOrThrow(email: string) {
+  const user = await getUserByEmail(email);
+  if (!user) {
+    throw new Error(`User with email ${email} not found`);
+  }
+  return user;
+}
+
 // Create a new user
 export async function createUser(userData: {
   email: string;
