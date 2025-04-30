@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
         if (payload && payload.email) {
           // If token is valid, get the user by email
           const { getUserByEmail } = await import('@/app/utils/auth');
-          const userFromToken = await getUserByEmail(payload.email as string);
+          const userFromToken = await getUserByEmail(String(payload.email));
           
           if (userFromToken) {
             // Create a user object similar to what getCurrentUser returns
