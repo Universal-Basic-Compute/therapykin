@@ -22,7 +22,7 @@ try {
   // Provide a fallback to prevent crashes with type assertion
   base = {
     table: () => ({
-      select: () => ({ firstPage: async () => [] }),
+      select: () => ({ firstPage: async (): Promise<any[]> => [] }),
       find: async () => ({ fields: {} }),
       create: async () => { throw new Error('Airtable not properly initialized'); },
       update: async () => { throw new Error('Airtable not properly initialized'); },
