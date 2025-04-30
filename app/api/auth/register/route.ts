@@ -44,18 +44,27 @@ export async function POST(request: NextRequest) {
     await setAuthCookie(token);
     console.log('Auth cookie set for new user');
     
-    return NextResponse.json(
+    // Create the response object
+    const response = NextResponse.json(
       { 
         message: 'User registered successfully',
         user: {
           id: user.id,
           email: user.email,
           firstName: user.firstName,
+          pseudonym: null // New users don't have a pseudonym yet
         },
         token: token // Include the token in the response for mobile clients
       },
       { status: 201 }
     );
+    
+    // Add CORS headers for mobile apps
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    return response;
   } catch (error: any) {
     // Handle specific known errors
     if (error.message === 'User with this email already exists') {

@@ -9,20 +9,34 @@ if (!process.env.JWT_SECRET) {
 
 // Function to handle CORS
 function handleCors(request: NextRequest) {
-  // Check if the request is from localhost:8081
+  // Get the origin from the request
   const origin = request.headers.get('origin');
   
-  // Only add CORS headers for API routes and specific origins
-  if (request.nextUrl.pathname.startsWith('/api') && 
-      (origin === 'http://localhost:8081' || origin === 'http://localhost:3000')) {
-    
+  // Only add CORS headers for API routes
+  if (request.nextUrl.pathname.startsWith('/api')) {
     // Create a new response headers object
     const headers = new Headers();
     
+    // List of allowed origins
+    const allowedOrigins = [
+      'http://localhost:8081',
+      'http://localhost:3000',
+      'capacitor://localhost',
+      'http://localhost',
+      'https://therapykin.ai'
+    ];
+    
+    // Set the appropriate origin or * for development
+    const allowedOrigin = origin && allowedOrigins.includes(origin) 
+      ? origin 
+      : process.env.NODE_ENV === 'development' 
+        ? '*' 
+        : 'https://therapykin.ai';
+    
     // Add CORS headers
-    headers.set('Access-Control-Allow-Origin', origin);
+    headers.set('Access-Control-Allow-Origin', allowedOrigin);
     headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
     headers.set('Access-Control-Allow-Credentials', 'true');
     headers.set('Access-Control-Expose-Headers', 'Authorization');
     

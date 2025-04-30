@@ -50,13 +50,23 @@ export async function GET(request: NextRequest) {
     
     if (!user) {
       console.log('No authenticated user found via cookie or Authorization header');
-      return NextResponse.json(
+      
+      // Create a response with appropriate CORS headers for mobile apps
+      const response = NextResponse.json(
         { error: 'Not authenticated' },
         { status: 401 }
       );
+      
+      // Add CORS headers for mobile apps
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      
+      return response;
     }
     
-    return NextResponse.json({
+    // Create a successful response
+    const response = NextResponse.json({
       user: {
         id: user.id,
         email: user.email,
@@ -64,6 +74,13 @@ export async function GET(request: NextRequest) {
         pseudonym: user.pseudonym || null
       }
     });
+    
+    // Add CORS headers for mobile apps
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    return response;
   } catch (error) {
     console.error('Auth check error:', error);
     return NextResponse.json(
