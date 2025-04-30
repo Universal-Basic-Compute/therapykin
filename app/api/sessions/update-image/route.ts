@@ -30,7 +30,10 @@ export async function POST(request: NextRequest) {
       throw updateError; // Re-throw to be caught by the outer try/catch
     }
     
-    return NextResponse.json({ success: true });
+    // Create the response with success message
+    const response = NextResponse.json({ success: true });
+    
+    return response;
   } catch (error) {
     console.error('Error updating session image:', error);
     

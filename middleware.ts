@@ -14,8 +14,34 @@ function handleCors(request: NextRequest) {
     // Create a new response headers object
     const headers = new Headers();
     
-    // Allow all origins for API routes
-    headers.set('Access-Control-Allow-Origin', '*');
+    // Get the origin from the request
+    const origin = request.headers.get('origin') || '';
+    
+    // Define allowed origins
+    const allowedOrigins = [
+      'http://localhost:8081',
+      'http://localhost:3000',
+      'capacitor://localhost',
+      'http://localhost',
+      'https://therapykin.ai'
+    ];
+    
+    // Check if the origin is allowed
+    const isAllowedOrigin = allowedOrigins.includes(origin);
+    
+    // Set the appropriate Access-Control-Allow-Origin header
+    if (isAllowedOrigin) {
+      headers.set('Access-Control-Allow-Origin', origin);
+    } else {
+      // For non-listed origins, you can either deny them or use a wildcard
+      headers.set('Access-Control-Allow-Origin', '*');
+    }
+    
+    // Allow credentials for specific origins
+    if (isAllowedOrigin) {
+      headers.set('Access-Control-Allow-Credentials', 'true');
+    }
+    
     headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
     

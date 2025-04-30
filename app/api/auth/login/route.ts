@@ -56,11 +56,6 @@ export async function POST(request: NextRequest) {
       token: token // Include the token in the response for mobile clients
     });
     
-    // Add CORS headers for mobile apps
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    
     return response;
   } catch (error) {
     logError('Login: Authentication failed', error);
